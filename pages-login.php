@@ -2,8 +2,8 @@
 require 'db.php';
 
 if(isset($_POST["submit"])){
-  $email= $_POST["email"];
-  $password=$_POST["password"];
+  $email= mysqli_real_escape_string($conn, $_POST["email"]);
+  $password=mysqli_real_escape_string($conn, $_POST["password"]);
   
   $result = mysqli_query($conn, "SELECT * FROM register WHERE email = '$email' ");
 
@@ -91,7 +91,7 @@ else{
                     <p class="text-center small">Enter your email & password to login</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" method="post">
+                  <form class="row g-3 needs-validation" method="post" action="<?php echo htmlspecialchars ($_SERVER["PHP_SELF"]);?>">
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>

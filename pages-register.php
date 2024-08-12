@@ -6,15 +6,30 @@ if(!empty($_SESSION["id"])){
 require 'db.php';
 
 if(isset($_POST["submit"])){
-    $name= $_POST["name"];
-    $email= $_POST["email"];
-    $password= $_POST["password"];
+    $name= mysqli_real_escape_string($conn, $_POST["name"]);
+    $email= mysqli_real_escape_string($conn, $_POST["email"]);
+    $password= mysqli_real_escape_string($conn, $_POST["password"]);
 
         $query="INSERT INTO register VALUES('', '$name', '$email', '$password')";
         mysqli_query($conn, $query);
         echo " <script> alert('Signed up successfully'); </script>";
 }
 
+// define variables and set to empty values
+$name = $email = $password= "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $name = test_input($_POST["name"]);
+  $email = test_input($_POST["email"]);
+  $password = test_input($_POST["password"]);
+}
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
 
 
 ?>

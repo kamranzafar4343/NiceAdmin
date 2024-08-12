@@ -4,6 +4,7 @@ if(!empty($_SESSION["id"])){
 }
 
 require 'db.php';
+
 if(isset($_POST["submit"])){
     $name= $_POST["name"];
     $email= $_POST["email"];
@@ -13,6 +14,9 @@ if(isset($_POST["submit"])){
         mysqli_query($conn, $query);
         echo " <script> alert('Signed up successfully'); </script>";
 }
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -81,7 +85,7 @@ if(isset($_POST["submit"])){
                     <p class="text-center small">Enter your personal details to create account</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" method="post" action="">
+                  <form class="row g-3 needs-validation" method="post" action="<?php echo htmlspecialchars ($_SERVER["PHP_SELF"]);?>">
                     <div class="col-12">
                       <label for="name" class="form-label">Your Name</label>
                       <input type="text" name="name" class="form-control" id="name" required>

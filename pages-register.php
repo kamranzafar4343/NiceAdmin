@@ -4,34 +4,27 @@ if(!empty($_SESSION["id"])){
 }
 
 require 'db.php';
-
 if(isset($_POST["submit"])){
-    $name= mysqli_real_escape_string($conn, $_POST["name"]);
-    $email= mysqli_real_escape_string($conn, $_POST["email"]);
-    $password= mysqli_real_escape_string($conn, $_POST["password"]);
+  $name = mysqli_real_escape_string($conn, $_POST["name"]);
+  $email = mysqli_real_escape_string($conn, $_POST["email"]);
+  $password = mysqli_real_escape_string($conn, $_POST["password"]);
 
-        $query="INSERT INTO register VALUES('', '$name', '$email', '$password')";
-        mysqli_query($conn, $query);
-        echo " <script> alert('Signed up successfully'); </script>";
+
+  // Check if the email already exists in the database
+  $checkEmailQuery = "SELECT * FROM register WHERE email='$email'";
+  $result = mysqli_query($conn, $checkEmailQuery);
+
+  if(mysqli_num_rows($result) > 0){
+      $errMessage=  "Email already exist, please use a different email";
+      echo "$errMessage";
+  } else {
+      // If email does not exist, proceed with insertion
+      $query = "INSERT INTO register VALUES('', '$name', '$email', '$password')";
+      mysqli_query($conn, $query);
+      $succMessage= "Signed up successfully";
+      echo "$succMessage";
+  }
 }
-
-// define variables and set to empty values
-$name = $email = $password= "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $name = test_input($_POST["name"]);
-  $email = test_input($_POST["email"]);
-  $password = test_input($_POST["password"]);
-}
-
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +93,7 @@ function test_input($data) {
                     <p class="text-center small">Enter your personal details to create account</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" method="post" action="<?php echo htmlspecialchars ($_SERVER["PHP_SELF"]);?>">
+                  <form class="row g-3 needs-validation" id="userForm" method="post" action="<?php echo htmlspecialchars ($_SERVER["PHP_SELF"]);?>">
                     <div class="col-12">
                       <label for="name" class="form-label">Your Name</label>
                       <input type="text" name="name" class="form-control" id="name" required>
@@ -165,9 +158,11 @@ function test_input($data) {
   <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+</script>
 
 </body>
 

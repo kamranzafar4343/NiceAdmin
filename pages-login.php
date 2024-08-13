@@ -23,6 +23,22 @@ else{
   echo "<script> alert('User not registered'); </script>";
 }
 }
+
+// define variables and set to empty values
+$email = $password= "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $email = test_input($_POST["email"]);
+  $password = test_input($_POST["password"]);
+}
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -91,7 +107,7 @@ else{
                     <p class="text-center small">Enter your email & password to login</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" method="post" action="<?php echo htmlspecialchars ($_SERVER["PHP_SELF"]);?>">
+                  <form class="row g-3 needs-validation"  method="post" action="<?php echo htmlspecialchars ($_SERVER["PHP_SELF"]);?>">
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>

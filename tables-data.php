@@ -1,3 +1,15 @@
+<?php
+
+session_start();
+include 'db.php'; // Include the database connection
+
+$sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
+$result = $conn->query($sql);
+
+?>
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,6 +20,9 @@
   <title>Tables / Data - NiceAdmin Bootstrap Template</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
+
+
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Favicons -->
   <link href="assets/img/favicon.png" rel="icon">
@@ -25,6 +40,20 @@
   <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <style>
+        /* Custom CSS to decrease font size of the table */
+        .custom{
+            font-size: 0.9rem; /* Adjust as needed */
+            font-family: monospace;
+        }
+        .company-name{
+          font-size: 1rem;
+        }
+        .company-title{
+          font-size: 1.1rem;
+        }
+    </style>
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
@@ -281,14 +310,14 @@
         </a>
       </li><!-- End Dashboard Nav -->
 
-      
+
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-data.html">
+            <a href="tables-data.php">
               <i class="bi bi-circle"></i><span>Company</span>
             </a>
           </li>
@@ -399,9 +428,10 @@
             </a>
           </li>
         </ul>
-      </li><!-- End Forms Nav -->
-<!-- 
-      <li class="nav-item">
+      </li>
+      <!-- End Forms Nav -->
+      <!-- 
+           <li class="nav-item">
         <a class="nav-link " data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -518,7 +548,11 @@
 
     </ul>
 
-  </aside><!-- End Sidebar-->
+  </aside>
+  
+  
+  <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
+
 
   <main id="main" class="main">
 
@@ -527,8 +561,8 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-          <li class="breadcrumb-item">Company</li>
-          <li class="breadcrumb-item active">Data</li>
+          <li class="breadcrumb-item">Tables</li>
+          <li class="breadcrumb-item active">Company</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -537,80 +571,39 @@
       <div class="row">
         <div class="col-lg-12">
 
-              <!-- Table with stripped rows -->
-              <table class="table datatable">
-                <thead>
-                  <tr>
-                    <th>
-                      <b>N</b>ame
-                    </th>
-                    <th>Ext.</th>
-                    <th>City</th>
-                    <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
-                    <th>Completion</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Unity Pugh</td>
-                    <td>9958</td>
-                    <td>Curicó</td>
-                    <td>2005/02/11</td>
-                    <td>37%</td>
-                  </tr>
-                  <tr>
-                    <td>Theodore Duran</td>
-                    <td>8971</td>
-                    <td>Dhanbad</td>
-                    <td>1999/04/07</td>
-                    <td>97%</td>
-                  </tr>
-                  <tr>
-                    <td>Kylie Bishop</td>
-                    <td>3147</td>
-                    <td>Norman</td>
-                    <td>2005/09/08</td>
-                    <td>63%</td>
-                  </tr>
-                  <tr>
-                    <td>Willow Gilliam</td>
-                    <td>3497</td>
-                    <td>Amqui</td>
-                    <td>2009/29/11</td>
-                    <td>30%</td>
-                  </tr>
-                  <tr>
-                    <td>Blossom Dickerson</td>
-                    <td>5018</td>
-                    <td>Kempten</td>
-                    <td>2006/11/09</td>
-                    <td>17%</td>
-                  </tr>
-                  <tr>
-                    
-                    <td>Hop Bass</td>
-                    <td>1024</td>
-                    <td>Westerlo</td>
-                    <td>2012/25/09</td>
-                    <td>85%</td>
-                  </tr>
-                  <tr>
-                    <td>Kalia Diaz</td>
-                    <td>9184</td>
-                    <td>Ichalkaranji</td>
-                    <td>2013/26/06</td>
-                    <td>92%</td>
-                  </tr>
-                  
-        
-                </tbody>
-              </table>
-              <!-- End Table with stripped rows -->
-
-            </div>
-          </div>
+          <?php
+          if ($result->num_rows > 0) {
+            // Output data for each row
+            echo "<table class='table table-bordered datatable custom'><thead><tr>";
+            echo "<th>Comp ID</th><th class='company-title'>Comp Name</th><th>Phone</th><th>Email</th><th>Password</th><th>Image</th><th>City</th><th>State</th><th>Country</th><th>Registration</th><th>Expiry</th>";
+            echo "</tr></thead><tbody>";
+          
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row["comp_id"]) . "</td>";
+                echo "<td class='company-name'><b>" . htmlspecialchars($row["comp_name"]) . "</b></td>";
+                echo "<td>" . htmlspecialchars($row["phone"]) . "</td> ";
+                echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
+                echo "<td><img src='" .$row["image"] . "' alt='Image' width='50'></td>";
+                echo "<td>" . htmlspecialchars($row["city"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["state"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["country"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
+                echo "</tr>";
+            }
+          
+            echo "</tbody></table>";
+          } else {
+            echo "";
+          }
+          ?>
 
         </div>
+      </div>
+
+      </div>
       </div>
     </section>
 

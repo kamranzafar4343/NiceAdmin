@@ -1,5 +1,4 @@
 <?php
-
 include 'db.php'; // Include the database connection
 
 $sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
@@ -396,6 +395,7 @@ $result = $conn->query($sql);
         </ul>
 
 
+
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -629,12 +629,12 @@ $result = $conn->query($sql);
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Company</h1>
+      <h1>Branches</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.php">Home</a></li>
           <li class="breadcrumb-item">Tables</li>
-          <li class="breadcrumb-item active">Company</li>
+          <li class="breadcrumb-item active">Branches</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->

@@ -214,7 +214,7 @@
 
         if ($conn->query($sql) === TRUE) {
             echo "Record updated successfully.";
-            header("location:tables-data.php");
+            //header("location:tables-data.php");
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
@@ -713,7 +713,7 @@
 
 
 <section class="container my-5 d-flex justify-content-center">
-    <div class="card shadow-lg my-0" style="width: 60%; border: none; box-shadow:none; border:none;">
+    <div class="card shadow-lg " style="width: 60%; border: none; box-shadow:none; border:none;">
         <div class="card-body">
             <h5 class="card-title text-center">Update Company Information</h5>
             <form class="row g-3" action="" method="POST" enctype="multipart/form-data">

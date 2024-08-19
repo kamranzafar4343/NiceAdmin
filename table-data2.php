@@ -411,7 +411,7 @@ $result = $conn->query($sql);
         </ul>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="table-data2.php">
+            <a href="table-data2.php" class="active">
               <i class="bi bi-circle"></i><span>Branches</span>
             </a>
           </li>

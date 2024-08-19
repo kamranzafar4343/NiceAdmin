@@ -400,7 +400,7 @@ $result = $conn->query($sql);
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-data.php">
+            <a href="tables-data.php" class="active">
               <i class="bi bi-circle"></i><span>Company</span>
             </a>
           </li>
@@ -660,7 +660,16 @@ $result = $conn->query($sql);
     <section class="section">
       <button type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-2">Add Company</button>
       <br>
-
+      <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+            
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Company added successfully!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <br>
+            <?php endif; ?>
       <div class="row">
         <div class="col-lg-12">
 

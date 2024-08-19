@@ -39,7 +39,25 @@ $result = $conn->query($sql);
   <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+  <link rel="stylesheet" href="css/owl.carousel.min.css">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  <!-- Style -->
+  <link rel="stylesheet" href="css/style.css">
   <style>
     /* Custom CSS to decrease font size of the table */
     .custom {
@@ -640,6 +658,9 @@ $result = $conn->query($sql);
     </div><!-- End Page Title -->
 
     <section class="section">
+      <button type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-2">Add Company</button>
+      <br>
+
       <div class="row">
         <div class="col-lg-12">
 
@@ -647,7 +668,7 @@ $result = $conn->query($sql);
           if ($result->num_rows > 0) {
             // Output data for each row
             echo "<table class='table table-bordered datatable custom'><thead><tr>";
-            echo "<th>Comp ID</th><th class='company-title'>Comp Name</th><th>Phone</th><th>Email</th><th>Password</th><th>Image</th><th>City</th><th>State</th><th>Country</th><th>Registration</th><th>Expiry</th>";
+            echo "<th>Comp ID</th><th class='company-title'>Comp Name</th><th>Phone</th><th>Email</th><th>Password</th><th>Image</th><th>City</th><th>State</th><th>Country</th><th>Registration</th><th>Expiry</th><th>Action</th>";
             echo "</tr></thead><tbody>";
 
             while ($row = $result->fetch_assoc()) {
@@ -660,16 +681,35 @@ $result = $conn->query($sql);
                   <?php echo $row['comp_name']; ?>
                 </a>
               </td>
-          <?php
+              <?php
               echo "<td>" . htmlspecialchars($row["phone"]) . "</td> ";
               echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
               echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
-              echo "<td><img src='" . $row["image"] . "' alt='Image' width='50'></td>";
+              ?>
+
+              <td>
+                <div class="image-circle">
+                  <img src="<?php echo $row['image']; ?>" width="70px" alt="image" id="image-<?php echo $row['comp_id']; ?>" style="cursor:pointer;">
+                  <input type="file" id="file-<?php echo $row['comp_id']; ?>" style="display:none;" onchange="uploadImage(<?php echo $row['comp_id']; ?>)" />
+                </div>
+              </td>
+              <?php
               echo "<td>" . htmlspecialchars($row["city"]) . "</td>";
               echo "<td>" . htmlspecialchars($row["state"]) . "</td>";
               echo "<td>" . htmlspecialchars($row["country"]) . "</td>";
               echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
               echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
+
+              ?>
+              <td>
+                <div style="display: flex; gap: 5px;">
+                  <a class="btn btn-info" style="padding-bottom: 0px;" href="update.php?id=<?php echo $row['comp_id']; ?>">Edit</a>
+                  <a class="btn btn-danger mt-1" href="delete.php?id=<?php echo $row['comp_id']; ?>">Delete</a>
+                </div>
+              </td>
+
+          <?php
+
               echo "</tr>";
             }
 
@@ -713,9 +753,43 @@ $result = $conn->query($sql);
   <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <script>
+    //click on the picture to update with ajax
+    $(document).on('click', 'img', function() {
+      $(this).next('input[type="file"]').click();
+    });
+
+    function uploadImage(comp_id) {
+      var fileInput = document.getElementById('file-' + comp_id);
+      var file = fileInput.files[0];
+      var formData = new FormData();
+      formData.append('image', file);
+      formData.append('comp_id', comp_id);
+
+      $.ajax({
+        url: 'update_image.php',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          // Update the image source with the new image path
+          $('#image-' + comp_id).attr('src', response);
+        },
+        error: function() {
+          alert('Image upload failed. Please try again.');
+        }
+      });
+    }
+  </script>
 
 </body>
 

@@ -909,7 +909,7 @@
                   <div class="activite-label">32 min</div>
                   <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
                   <div class="activity-content">
-                    Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo officiis</a> beatae
+                    Mcdonalds, a new company added by <a href="#" class="fw-bold text-dark">Admin</a>
                   </div>
                 </div><!-- End activity item-->
 
@@ -917,7 +917,7 @@
                   <div class="activite-label">56 min</div>
                   <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
                   <div class="activity-content">
-                    Voluptatem blanditiis blanditiis eveniet
+                    Employees information of <a href="#" class="fw-bold text-dark">Ferozsons</a> updated!
                   </div>
                 </div><!-- End activity item-->
 
@@ -925,7 +925,7 @@
                   <div class="activite-label">2 hrs</div>
                   <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
                   <div class="activity-content">
-                    Voluptates corrupti molestias voluptatem
+                    Two branches deleted and one updated!
                   </div>
                 </div><!-- End activity item-->
 
@@ -933,7 +933,7 @@
                   <div class="activite-label">1 day</div>
                   <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
                   <div class="activity-content">
-                    Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a> tempore
+                    Fingerprints of employee  <a href="#" class="fw-bold text-dark">#1219 added.</a> successfully
                   </div>
                 </div><!-- End activity item-->
 

@@ -1,7 +1,7 @@
 <?php
 include 'db.php'; // Include the database connection
 
-$sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
+$sql = "SELECT * FROM branch";
 $result = $conn->query($sql);
 
 ?>
@@ -19,7 +19,25 @@ $result = $conn->query($sql);
   <meta content="" name="description">
   <meta content="" name="keywords">
 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+  <link rel="stylesheet" href="css/owl.carousel.min.css">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  <!-- Style -->
+  <link rel="stylesheet" href="css/style.css">
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Favicons -->
@@ -53,6 +71,11 @@ $result = $conn->query($sql);
 
     .company-title {
       font-size: 1.1rem;
+    }
+
+    .burger {
+      left: -10px;
+      top: -20px;
     }
 
     /* Define the pulse animation */
@@ -640,6 +663,7 @@ $result = $conn->query($sql);
     </div><!-- End Page Title -->
 
     <section class="section">
+    <button type="button" onclick="window.location.href = 'createBranch.php';" class="btn btn-primary mb-2">Add Branch</button>
       <div class="row">
         <div class="col-lg-12">
 
@@ -647,29 +671,35 @@ $result = $conn->query($sql);
           if ($result->num_rows > 0) {
             // Output data for each row
             echo "<table class='table table-bordered datatable custom'><thead><tr>";
-            echo "<th>Comp ID</th><th class='company-title'>Comp Name</th><th>Phone</th><th>Email</th><th>Password</th><th>Image</th><th>City</th><th>State</th><th>Country</th><th>Registration</th><th>Expiry</th>";
+            echo "<th>Company ID</th>
+                    <th>branch id</th>
+                    <th>Contact person name</th>
+                    <th>contact person resignation</th>
+                    <th>phone</th>
+                    <th>city</th>
+                    <th>state</th>
+                    <th>country</th>
+                    <th>action</th>";
             echo "</tr></thead><tbody>";
 
             while ($row = $result->fetch_assoc()) {
               echo "<tr>";
-              echo "<td>" . htmlspecialchars($row["comp_id"]) . "</td>";
+              echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
           ?>
+          <?php
+              echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td> ";
+              echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
+              echo "<td>" . htmlspecialchars($row["ContactPersonResignation"]) . "</td>";
+              echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
+              echo "<td>" . htmlspecialchars($row["City"]) . "</td>";
+              echo "<td>" . htmlspecialchars($row["State"]) . "</td>";
+              echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
+              ?>
               <td>
-
-                <a class="company-name" href="company_detail.php?id=<?php echo $row['comp_id']; ?>">
-                  <?php echo $row['comp_name']; ?>
-                </a>
+                <a class="btn btn-danger" href="branchDelete.php?id=<?php echo $row['compID_FK']; ?>">
+                Delete</a>
               </td>
           <?php
-              echo "<td>" . htmlspecialchars($row["phone"]) . "</td> ";
-              echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
-              echo "<td><img src='" . $row["image"] . "' alt='Image' width='50'></td>";
-              echo "<td>" . htmlspecialchars($row["city"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["state"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["country"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
               echo "</tr>";
             }
 
@@ -713,10 +743,25 @@ $result = $conn->query($sql);
   <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script>
+    const dataTable = new simpleDatatables.DataTable("#myTable2", {
+      searchable: false,
+      fixedHeight: true,
+    })
+  </script>
+
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js">
+  </script>
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 
+<script>
+
+</script>
 </body>
 
 </html>

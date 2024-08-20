@@ -222,6 +222,7 @@ h6 {
   border: none;
   border-radius: 5px;
   box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+  background-color: white;
 }
 
 .card-header,
@@ -233,8 +234,8 @@ h6 {
 }
 
 .card-title {
-  padding: 20px 0 15px 0;
-  font-size: 18px;
+  padding: 20px 0 0px 0;
+  font-size: 23px;
   font-weight: 500;
   color: #012970;
   font-family: "Poppins", sans-serif;
@@ -602,9 +603,9 @@ h6 {
   top: 60px;
   left: 0;
   bottom: 0;
-  width: 300px;
+  width: 240px;
   z-index: 996;
-  transition: all 0.3s;
+  transition: all 0.5s;
   padding: 20px;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -633,7 +634,7 @@ h6 {
 
   #main,
   #footer {
-    margin-left: 300px;
+    margin-left: 240px;
   }
 }
 
@@ -930,6 +931,33 @@ h6 {
 
 .dashboard .recent-sales .dataTable-top {
   padding: 0 0 10px 0;
+}
+
+
+.datatable-selector {
+	padding: 4px;
+	font-size:0.8rem;
+}
+
+.datatable-selector label{
+  font-size:0.8rem;
+  margin-right:50px;
+}
+
+.datatable-top{
+  width: 122%;
+
+}
+
+.datatable-input {
+	padding: 4px 10px;
+	width:240px;
+	height:33px;
+	font-size: 0.8rem;
+  margin-left: 100px;
+}
+.datatable-search{
+  margin-left:150px;
 }
 
 .dashboard .recent-sales .dataTable-bottom {

@@ -59,7 +59,7 @@ if (isset($_POST['submit'])) {
     $sql = "INSERT INTO `compani` (`comp_name`, `phone`, `email`, `password`, `image`, `city`, `state`, `country`, `registration`, `expiry`) 
             VALUES ('$comp_name', '$phone', '$email', '$password', '$img_des', '$city', '$state', '$country', '$registration', '$expiry')";
     
-    if ($conn->query($sql) === TRUE) {
+    if ($conn -> query ($sql) === TRUE) {
         echo "New record created successfully.";
         header("Location: tables-data.php");
         exit; // Make sure to exit after redirecting

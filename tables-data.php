@@ -7,8 +7,6 @@ $result = $conn->query($sql);
 
 ?>
 
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -60,18 +58,17 @@ $result = $conn->query($sql);
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* Custom CSS to decrease font size of the table */
+    
+    .pagetitle{
+    display: flex;
+    width: 989px;
+    flex-direction: column;
+
+    }
+    
     .custom {
       font-size: 0.9rem;
       /* Adjust as needed */
-      font-family: monospace;
-    }
-
-    .company-name {
-      font-size: 1rem;
-    }
-
-    .company-title {
-      font-size: 1.1rem;
     }
 
     /* Define the pulse animation */
@@ -113,6 +110,9 @@ $result = $conn->query($sql);
       display: inline-block;
       transition: color 0.3s ease;
     }
+    .pagetitleinside{
+    padding-left: 600px;
+    }
 
     .company-name:hover {
       color: #007bff;
@@ -135,8 +135,20 @@ $result = $conn->query($sql);
 
       box-sizing: border-box;
     }
+    .custom-header {
+        background-color: lightgrey; /* Light gray background */
+        color: #343a40;            /* Dark text color */
+        font-weight: bold;         /* Bold text */
+        text-align: center;        /* Center align text */
+        border-bottom: 2px solid black; /* Bottom border */
+    }
+    .headerbox{
+      display: flex;
+    }
+    .pagetitleinside button{
+      width: 150px;
+    }
   </style>
-  </styl>
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
@@ -388,202 +400,17 @@ $result = $conn->query($sql);
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="index.php">
-          <i class="bi bi-grid"></i>
+          <i class="ri-home-8-line"></i>
           <span>Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
 
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
+        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
+          <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
         </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="tables-data.php" class="active">
-              <i class="bi bi-circle"></i><span>Company</span>
-            </a>
-          </li>
-        </ul>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="table-data2.php">
-              <i class="bi bi-circle"></i><span>Branches</span>
-            </a>
-          </li>
-        </ul>
-
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="components-alerts.html">
-              <i class="bi bi-circle"></i><span>Alerts</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-accordion.html">
-              <i class="bi bi-circle"></i><span>Accordion</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-badges.html">
-              <i class="bi bi-circle"></i><span>Badges</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-breadcrumbs.html">
-              <i class="bi bi-circle"></i><span>Breadcrumbs</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-buttons.html">
-              <i class="bi bi-circle"></i><span>Buttons</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-cards.html">
-              <i class="bi bi-circle"></i><span>Cards</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-carousel.html">
-              <i class="bi bi-circle"></i><span>Carousel</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-list-group.html">
-              <i class="bi bi-circle"></i><span>List group</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-modal.html">
-              <i class="bi bi-circle"></i><span>Modal</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-tabs.html">
-              <i class="bi bi-circle"></i><span>Tabs</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-pagination.html">
-              <i class="bi bi-circle"></i><span>Pagination</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-progress.html">
-              <i class="bi bi-circle"></i><span>Progress</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-spinners.html">
-              <i class="bi bi-circle"></i><span>Spinners</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-tooltips.html">
-              <i class="bi bi-circle"></i><span>Tooltips</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Components Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="forms-elements.html">
-              <i class="bi bi-circle"></i><span>Form Elements</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-layouts.html">
-              <i class="bi bi-circle"></i><span>Form Layouts</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-editors.html">
-              <i class="bi bi-circle"></i><span>Form Editors</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-validation.html">
-              <i class="bi bi-circle"></i><span>Form Validation</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <!-- End Forms Nav -->
-      <!-- 
-           <li class="nav-item">
-        <a class="nav-link " data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>General Tables</span>
-            </a>
-          </li>
-          <li>
-            <a href="tables-data.html" class="active">
-              <i class="bi bi-circle"></i><span>Data Tables</span>
-            </a>
-          </li>
-        </ul>
-      </li>End Tables Nav
- -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="charts-chartjs.html">
-              <i class="bi bi-circle"></i><span>Chart.js</span>
-            </a>
-          </li>
-          <li>
-            <a href="charts-apexcharts.html">
-              <i class="bi bi-circle"></i><span>ApexCharts</span>
-            </a>
-          </li>
-          <li>
-            <a href="charts-echarts.html">
-              <i class="bi bi-circle"></i><span>ECharts</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Charts Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="icons-bootstrap.html">
-              <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
-            </a>
-          </li>
-          <li>
-            <a href="icons-remix.html">
-              <i class="bi bi-circle"></i><span>Remix Icons</span>
-            </a>
-          </li>
-          <li>
-            <a href="icons-boxicons.html">
-              <i class="bi bi-circle"></i><span>Boxicons</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Icons Nav -->
+      </li><!-- End Tables Nav -->
 
       <li class="nav-heading">Pages</li>
 
@@ -592,28 +419,18 @@ $result = $conn->query($sql);
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
-      </li><!-- End Profile Page Nav -->
+      </li>
+      <!-- End Profile Page Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-faq.php">
-          <i class="bi bi-question-circle"></i>
-          <span>F.A.Q</span>
-        </a>
-      </li><!-- End F.A.Q Page Nav -->
+      
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-contact.php">
-          <i class="bi bi-envelope"></i>
-          <span>Contact</span>
-        </a>
-      </li><!-- End Contact Page Nav -->
-
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="pages-register.php">
           <i class="bi bi-card-list"></i>
           <span>Register</span>
         </a>
-      </li><!-- End Register Page Nav -->
+      </li> -->
+      <!-- End Register Page Nav -->
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-login.php">
@@ -622,19 +439,13 @@ $result = $conn->query($sql);
         </a>
       </li><!-- End Login Page Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-error-404.html">
-          <i class="bi bi-dash-circle"></i>
-          <span>Error 404</span>
-        </a>
-      </li><!-- End Error 404 Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-blank.html">
-          <i class="bi bi-file-earmark"></i>
-          <span>Blank</span>
+        <a class="nav-link collapsed" href="pages-contact.php">
+          <i class="bi bi-envelope"></i>
+          <span>Contact</span>
         </a>
-      </li><!-- End Blank Page Nav -->
+      </li><!-- End Contact Page Nav -->
 
     </ul>
 
@@ -646,20 +457,28 @@ $result = $conn->query($sql);
 
   <main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>Company</h1>
-      <nav>
+
+  <div class="headerbox">
+  <div class="pagetitle">
+      <h1>Companies</h1>
+      <br>
+       <div>
+    <nav class="mt-0">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-          <li class="breadcrumb-item">Tables</li>
-          <li class="breadcrumb-item active">Company</li>
+          <li class="breadcrumb-item">Company</li>
+          <li class="breadcrumb-item active">Details</li>
         </ol>
       </nav>
+    </div>
+      
     </div><!-- End Page Title -->
+   
+    <div  class="pagetitleinside mt-1"><button type="button" onclick="window.location.href = 'create.php';" class="btn btn-outline-primary mb-3">Add Company</button>
+    </div>
+  </div>
 
     <section class="section">
-      <button type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-2">Add Company</button>
-      <br>
+      
       <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
             
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -671,13 +490,14 @@ $result = $conn->query($sql);
             <br>
             <?php endif; ?>
       <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-10">
 
           <?php
           if ($result->num_rows > 0) {
             // Output data for each row
-            echo "<table class='table table-bordered datatable custom'><thead><tr>";
-            echo "<th>Comp ID</th><th class='company-title'>Comp Name</th><th>Phone</th><th>Email</th><th>Password</th><th>Image</th><th>City</th><th>State</th><th>Country</th><th>Registration</th><th>Expiry</th><th>Action</th>";
+            echo "<table class='datatable custom'><thead><tr>";
+            echo "<th class='custom-header'>#</th><th class='custom-header'>Name</th><th class='custom-header'>Phone</th><th class='custom-header'>Email</th><th class='custom-header'>Password</th><th class='custom-header'>Image</th><th class='custom-header'>City</th>
+            <th class='custom-header'>State</th><th class='custom-header'>Country</th><th class='custom-header'>Registration</th><th class='custom-header'>Expiry</th><th class='custom-header'>Action</th>";
             echo "</tr></thead><tbody>";
 
             while ($row = $result->fetch_assoc()) {
@@ -698,7 +518,7 @@ $result = $conn->query($sql);
 
               <td>
                 <div class="image-circle">
-                  <img src="<?php echo $row['image']; ?>" width="70px" alt="image" id="image-<?php echo $row['comp_id']; ?>" style="cursor:pointer;">
+                  <img src="<?php echo $row['image']; ?>" width="60px" alt="image" id="image-<?php echo $row['comp_id']; ?>" style="cursor:pointer;">
                   <input type="file" id="file-<?php echo $row['comp_id']; ?>" style="display:none;" onchange="uploadImage(<?php echo $row['comp_id']; ?>)" />
                 </div>
               </td>
@@ -712,8 +532,8 @@ $result = $conn->query($sql);
               ?>
               <td>
                 <div style="display: flex; gap: 5px;">
-                  <a class="btn btn-info" style="padding-bottom: 0px;" href="update.php?id=<?php echo $row['comp_id']; ?>">Edit</a>
-                  <a class="btn btn-danger mt-1" href="delete.php?id=<?php echo $row['comp_id']; ?>">Delete</a>
+                  <a class="btn-sm btn-outline-info" style="padding-bottom: 0px;" href="update.php?id=<?php echo $row['comp_id']; ?>">Edit</a>
+                  <a class="btn-sm btn-outline-danger" href="delete.php?id=<?php echo $row['comp_id']; ?>">Delete</a>
                 </div>
               </td>
 

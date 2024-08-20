@@ -955,6 +955,7 @@ h6 {
 	height:33px;
 	font-size: 0.8rem;
   margin-left: 100px;
+  outline: none;
 }
 .datatable-search{
   margin-left:150px;

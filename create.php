@@ -460,9 +460,9 @@
 
     <!--form--------------------------------------form--------------------------------------->
     
-    <div class="container d-flex justify-content-center my-4">
-        <div class="card custom-card">
-        <h1 class="card-title ml-3">Create Company</h1>
+    <div class="container d-flex justify-content-center my-4 ">
+        <div class="card custom-card ">
+        <h5 class="card-title ml-4">Create Company </h5>
             <div class="card-body">
                 <br>
                 <!-- Multi Columns Form -->
@@ -478,6 +478,10 @@
                     <div class="col-md-6">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email" required>
+                       
+                        <div id="emailFeedback" class="invalid-feedback">
+                <!-- Error message will be displayed here -->
+            </div>
                     </div>
                     <div class="col-md-6">
                         <label for="password" class="form-label">Password</label>
@@ -546,7 +550,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (response === 'exists') {
                     $('#email').addClass('is-invalid');
-                    $('#emailFeedback').text('Email already exists');
+                    $('#emailFeedback').text('Email already exists. Please use another email.');
                 } else {
                     $('#email').removeClass('is-invalid');
                     $('#emailFeedback').text('');

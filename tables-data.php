@@ -46,7 +46,7 @@ $result = $conn->query($sql);
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
 
   <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="fonts/icomoon/style.css">
 
   <link rel="stylesheet" href="css/owl.carousel.min.css">
@@ -58,16 +58,17 @@ $result = $conn->query($sql);
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* Custom CSS to decrease font size of the table */
-    
-    .pagetitle{
-    display: flex;
-    width: 989px;
-    flex-direction: column;
+
+    .pagetitle {
+      display: flex;
+      width: 989px;
+      flex-direction: column;
 
     }
-    
+
     .custom {
       font-size: 0.9rem;
+      border-radius: 2%;
       /* Adjust as needed */
     }
 
@@ -110,15 +111,17 @@ $result = $conn->query($sql);
       display: inline-block;
       transition: color 0.3s ease;
     }
-    .pagetitleinside{
-    padding-left: 600px;
+
+    .pagetitleinside {
+      padding-left: 600px;
     }
 
-    .company-name:hover {
-      color: #007bff;
-      /* Change color on hover */
-      animation: pulse 10s ease-in-out;
-      /* Apply the pulse animation on hover */
+    .datatable-dropdown label {
+      font-size: 0.9rem;
+    }
+
+    .datatable-info {
+      display: none;
     }
 
     .company-name:active {
@@ -135,18 +138,50 @@ $result = $conn->query($sql);
 
       box-sizing: border-box;
     }
+
     .custom-header {
-        background-color: lightgrey; /* Light gray background */
-        color: #343a40;            /* Dark text color */
-        font-weight: bold;         /* Bold text */
-        text-align: center;        /* Center align text */
-        border-bottom: 2px solid black; /* Bottom border */
+      background-color: whitesmoke;
+      /* Light gray background */
+      color: #343a40;
+      /* Dark text color */
+      font-weight: bold;
+      /* Bold text */
+      text-align: center;
+      /* Center align text */
+      padding: 10px;
+      /* Bottom border */
     }
-    .headerbox{
+    .custom-header-expiry{
+      white-space: nowrap;
+      background-color: whitesmoke;
+      /* Light gray background */
+      color: #343a40;
+      /* Dark text color */
+      font-weight: bold;
+      /* Bold text */
+      /* Center align text */
+  
+      /* Bottom border */
+    }
+
+    .headerbox {
       display: flex;
     }
-    .pagetitleinside button{
+
+    .pagetitleinside button {
       width: 150px;
+    }
+
+    .datatable-pagination {
+      margin-left: 50px;
+    }
+
+    .datatable-top {
+      margin: 0;
+    }
+
+    .datatable-bottom {
+      width: 122%;
     }
   </style>
 
@@ -422,7 +457,7 @@ $result = $conn->query($sql);
       </li>
       <!-- End Profile Page Nav -->
 
-      
+
 
       <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="pages-register.php">
@@ -458,46 +493,47 @@ $result = $conn->query($sql);
   <main id="main" class="main">
 
 
-  <div class="headerbox">
-  <div class="pagetitle">
-      <h1>Companies</h1>
-      <br>
-       <div>
-    <nav class="mt-0">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">Company</li>
-          <li class="breadcrumb-item active">Details</li>
-        </ol>
-      </nav>
+    <div class="headerbox">
+      <div class="pagetitle">
+        <h1>Companies</h1>
+        <br>
+        <div>
+          <nav class="mt-0">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">Company</li>
+              <li class="breadcrumb-item active">Details</li>
+            </ol>
+          </nav>
+        </div>
+
+      </div><!-- End Page Title -->
+
+      <div class="pagetitleinside mt-1"><button type="button" onclick="window.location.href = 'create.php';" class="btn btn-outline-primary mb-3">Add Company</button>
+      </div>
     </div>
-      
-    </div><!-- End Page Title -->
-   
-    <div  class="pagetitleinside mt-1"><button type="button" onclick="window.location.href = 'create.php';" class="btn btn-outline-primary mb-3">Add Company</button>
-    </div>
-  </div>
 
     <section class="section">
-      
+
       <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-            
+
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                Company added successfully!
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <br>
-            <?php endif; ?>
+          Company added successfully!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <br>
+      <?php endif; ?>
       <div class="row">
         <div class="col-lg-10">
 
           <?php
           if ($result->num_rows > 0) {
             // Output data for each row
-            echo "<table class='datatable custom'><thead><tr>";
-            echo "<th class='custom-header'>#</th><th class='custom-header'>Name</th><th class='custom-header'>Phone</th><th class='custom-header'>Email</th><th class='custom-header'>Password</th><th class='custom-header'>Image</th><th class='custom-header'>City</th>
-            <th class='custom-header'>State</th><th class='custom-header'>Country</th><th class='custom-header'>Registration</th><th class='custom-header'>Expiry</th><th class='custom-header'>Action</th>";
+            echo "<table class='datatable custom' id='example' style='background-color: #ffffff;'><thead><tr>";
+            echo "<th class='custom-header'>#</th><th class='custom-header '>Name</th><th class='custom-header'>Logo</th><th class='custom-header'>Phone</th><th class='custom-header'>Email</th><th class='custom-header'>Password</th><th class='custom-header'>City</th>
+           
+            <th class='custom-header'>Country</th><th class='custom-header-expiry'>Expiry date</th><th class='custom-header'>Action</th>";
             echo "</tr></thead><tbody>";
 
             while ($row = $result->fetch_assoc()) {
@@ -506,16 +542,10 @@ $result = $conn->query($sql);
           ?>
               <td>
 
-                <a class="company-name" href="company_detail.php?id=<?php echo $row['comp_id']; ?>">
+                <a class="text-primary fw-bold" href="company_detail.php?id=<?php echo $row['comp_id']; ?>">
                   <?php echo $row['comp_name']; ?>
                 </a>
               </td>
-              <?php
-              echo "<td>" . htmlspecialchars($row["phone"]) . "</td> ";
-              echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
-              ?>
-
               <td>
                 <div class="image-circle">
                   <img src="<?php echo $row['image']; ?>" width="60px" alt="image" id="image-<?php echo $row['comp_id']; ?>" style="cursor:pointer;">
@@ -523,17 +553,21 @@ $result = $conn->query($sql);
                 </div>
               </td>
               <?php
+              echo "<td>" . htmlspecialchars($row["phone"]) . "</td> ";
+              echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+              echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
+              
               echo "<td>" . htmlspecialchars($row["city"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["state"]) . "</td>";
+             // echo "<td>" . htmlspecialchars($row["state"]) . "</td>";
               echo "<td>" . htmlspecialchars($row["country"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
+           //   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
               echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
 
               ?>
               <td>
                 <div style="display: flex; gap: 5px;">
-                  <a class="btn-sm btn-outline-info" style="padding-bottom: 0px;" href="update.php?id=<?php echo $row['comp_id']; ?>">Edit</a>
-                  <a class="btn-sm btn-outline-danger" href="delete.php?id=<?php echo $row['comp_id']; ?>">Delete</a>
+                  <a type="button" class="btn btn-success btn-info" style="padding-bottom: 0px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                  <a type="button" class="btn btn-danger btn-floating" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i class="fa-solid fa-trash"></i></a>
                 </div>
               </td>
 
@@ -618,7 +652,38 @@ $result = $conn->query($sql);
         }
       });
     }
+    import {
+      Ripple,
+      initMDB
+    } from "mdb-ui-kit";
+
+    initMDB({
+      Ripple
+    });
+
+    // function confirmDelete() {
+    //     // Display a confirmation dialog
+    //     var confirmation = confirm("Are you sure you want to delete this record?");
+
+    //     if (confirmation) {
+    //         // User clicked OK, proceed with deletion
+    //         deleteRecord();
+    //     } else {
+    //         // User clicked Cancel, do nothing
+    //         console.log("Record deletion canceled.");
+    //     }
+    // }
+
+    // function deleteRecord() {
+    //     // Your deletion logic here
+    //     console.log("Record deleted.");
+    //     // Example: You might want to make an AJAX request to delete the record from the server
+    //     // fetch('/delete-record', { method: 'POST' }).then(response => response.json()).then(data => console.log(data));
+    // }
+
+    
   </script>
+  
 
 </body>
 

@@ -84,6 +84,11 @@
             left: -10px;
             top: -20px;
         }
+        .headerimg{
+            margin-top: 100px;
+            margin-left: 260px;
+        }
+
 
         /* Define the pulse animation */
         @keyframes pulse {
@@ -149,7 +154,7 @@
 
         .custom-card {
             width: 100%;
-            margin-top: 60px;
+            margin-top: 64px;
             margin-left: 290px;
             box-shadow: none;
             
@@ -459,10 +464,15 @@
 
 
     <!--form--------------------------------------form--------------------------------------->
-    
-    <div class="container d-flex justify-content-center my-4 ">
-        <div class="card custom-card ">
-        <h5 class="card-title ml-4">Create Company </h5>
+    <!-- Start Header form -->
+  <div class="headerimg text-center">
+    <img src="image/create.png" alt="network-logo" width="72" height="72" />
+    <h2>Create Company</h2>
+  </div>
+  <!-- End Header form -->
+    <div class="container d-flex justify-content-center">
+        <div class="card custom-card shadow-lg mt-3">
+        <!-- <h5 class="card-title ml-4">Create Company </h5> -->
             <div class="card-body">
                 <br>
                 <!-- Multi Columns Form -->

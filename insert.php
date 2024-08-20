@@ -42,7 +42,7 @@ if (isset($_POST['submit'])) {
 
     // Sanitize and set the file name and destination
     $img_name = preg_replace("/[^a-zA-Z0-9.]/", "_", basename($_FILES['image']['name']));
-    $img_des = "image/" . $img_name;
+    $img_des = "image" . $img_name;
 
     // Move the uploaded file to the destination directory
     if (!move_uploaded_file($_FILES['image']['tmp_name'], $img_des)) {

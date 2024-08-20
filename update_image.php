@@ -3,7 +3,7 @@ include "db.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $comp_id = $_POST['comp_id'];
-    $target_dir = "image/";
+    $target_dir = "image";
     $uploadOk = 1;
     $new_image_path = "";
 

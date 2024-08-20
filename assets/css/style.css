@@ -426,6 +426,34 @@ h6 {
   width: 100%;
 }
 
+.navbar-image{
+  width: 50px;
+  height: 50px;
+  margin-right: 7px;
+}
+.datatable-input {
+  padding: 4px 10px;
+  width: 240px;
+  height: 33px;
+  font-size: 0.8rem;
+  margin-left: 6px;
+  outline: none;
+  width: 100%;
+  max-width: 400px;
+  padding: 17px 21px;
+  font-size: 17px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.datatable-dropdown label {
+  visibility: collapse;
+  font-size: 0.9rem;
+}
+
 .header .search-form input {
   border: 0;
   font-size: 14px;
@@ -944,8 +972,16 @@ h6 {
   margin-right:50px;
 }
 
+.datatable-sorter::before, .datatable-sorter::after{
+  display: none;
+}
+.datatable-wrapper.no-footer .datatable-container {
+  border-bottom: 0px;
+  border:none;
+}
+
 .datatable-top{
-  width: 122%;
+  width: 1065px;
 
 }
 
@@ -996,6 +1032,43 @@ h6 {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1.25rem;
   padding-top: 15px;
+}
+@media (min-width: 1200px) {
+  .logo {
+      width: 146px;
+  }
+}
+.header .search-form {
+  visibility: collapse;
+  margin-left: 375px;
+  margin-right: -223px;
+  width: 100%;
+}
+.datatable-selector{
+  display: none;
+    color: transparent;
+    text-shadow: 0 0 0 #000; /* Optional: Makes the text readable when selected */
+
+}
+
+.header .toggle-sidebar-btn {
+  font-size: 32px;
+  padding-left: 10px;
+  cursor: pointer;
+  color: white;
+  position: absolute;
+  left: -999px;
+  visibility:hidden;
+  color: transparent;
+}
+
+.datatable-wrapper.no-footer .datatable-container {
+  border: none;
+  margin-left: -11px;
+}
+
+.datatable-selector {
+  display: none;
 }
 
 .iconslist .icon {

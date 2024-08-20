@@ -94,11 +94,12 @@
             left: -10px;
             top: -20px;
         }
-        .custom-card {
-            width: 60%;
-            margin-top: 50px;
+        .custom-card2 {
+            width: 100%;
+            margin-left: 290px;
             box-shadow: none;
             border: none;
+            
         }
 
         /* Define the pulse animation */
@@ -133,6 +134,9 @@
                 opacity: 1;
             }
         }
+        .card-title{
+            margin-bottom: 40px;
+        }
 
         .company-name {
             color: #000;
@@ -161,6 +165,9 @@
             padding: 0;
 
             box-sizing: border-box;
+        }
+        .headerimg{
+            margin-left: 290px;
         }
 
         .custom-card {
@@ -512,12 +519,18 @@
 <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
 
+  <!-- Start Header form -->
+  <div class="headerimg text-center pt-5">
+    <img src="image/update.png.png" alt="network-logo" width="72" height="72" />
+    <h2>Update Company Information</h2>
+  </div>
+  <!-- End Header form -->
 
-<section class="container my-5 d-flex justify-content-center">
-    <div class="card shadow-lg " style="width: 60%; border: none; box-shadow:none; border:none;">
+<section class="container d-flex justify-content-center my-4">
+    <div class="card custom-card2  shadow-lg" style="border: none; box-shadow:none; border:none;">
         <div class="card-body">
-            <h5 class="card-title text-center">Update Company Information</h5>
-            <form class="row g-3" action="" method="POST" enctype="multipart/form-data">
+            <!-- <h5 class="card-title">Update Company Information</h5> -->
+            <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
                 <div class="col-md-6">
                     <label class="form-label">Company name</label>
                     <input type="text" class="form-control" name="comp_name" value="<?php echo $comp_name; ?>" required>
@@ -556,7 +569,7 @@
                     <input type="date" class="form-control" name="expiry" value="<?php echo $expiry; ?>" required>
                 </div>
                 <div class="col-12 text-center">
-                    <button type="submit" class="btn btn-primary" name="update" value="update">Update</button>
+                    <button type="submit" class="btn btn-outline-primary mt-3" name="update" value="update">Update</button>
                 </div>
             </form>
         </div>

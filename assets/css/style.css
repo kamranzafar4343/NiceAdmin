@@ -430,6 +430,11 @@ h6 {
   width: 50px;
   height: 50px;
   margin-right: 7px;
+
+}
+.headerbox {
+  display: flex;
+  margin-bottom: -14px;
 }
 .datatable-input {
   padding: 4px 10px;
@@ -849,6 +854,16 @@ h6 {
   flex-grow: 0;
 }
 
+.header {
+  transition: all 1.5s;
+  z-index: 997;
+  height: 69px;
+  background-color: #fff;
+  padding-left: 25px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
 .dashboard .sales-card .card-icon {
   color: #4154f1;
   background: #f6f6fe;
@@ -975,27 +990,24 @@ h6 {
 .datatable-sorter::before, .datatable-sorter::after{
   display: none;
 }
-.datatable-wrapper.no-footer .datatable-container {
-  border-bottom: 0px;
-  border:none;
-}
+
 
 .datatable-top{
-  width: 1065px;
+  width: 1048px;
 
 }
 
 .datatable-input {
 	padding: 4px 10px;
 	width:240px;
-	height:33px;
-	font-size: 0.8rem;
-  margin-left: 100px;
+	height:38px;
+	font-size: 0.9rem;
   outline: none;
 }
 .datatable-search{
   margin-left:150px;
 }
+
 
 .dashboard .recent-sales .dataTable-bottom {
   padding: 10px 0 0 0;
@@ -1064,7 +1076,7 @@ h6 {
 
 .datatable-wrapper.no-footer .datatable-container {
   border: none;
-  margin-left: -11px;
+  margin-left: -16px;
 }
 
 .datatable-selector {

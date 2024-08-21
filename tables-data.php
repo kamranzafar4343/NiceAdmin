@@ -14,7 +14,7 @@ $result = $conn->query($sql);
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+  <title>FingerLog</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -66,11 +66,27 @@ $result = $conn->query($sql);
 
     }
 
+    .row {
+    margin-left: 52px;
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: calc(var(--bs-gutter-y)* -1);
+    margin-right: calc(var(--bs-gutter-x)* 1.5);
+    margin-left: calc(var(--bs-gutter-x)* 0.2);
+    }
     .custom {
       font-size: 0.9rem;
       border-radius: 2%;
       /* Adjust as needed */
     }
+    .datatable-container {
+  border:none;
+  margin-left: 12px;
+  margin-top: 12px;
+  /* table-layout: fixed; */
+}
 
     /* Define the pulse animation */
     @keyframes pulse {
@@ -138,19 +154,29 @@ $result = $conn->query($sql);
 
       box-sizing: border-box;
     }
+   
+    .custom {
+    font-size: 1rem;
+    border-radius: 7px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-right: 22px;
+    padding-left: 22px;
+    /* table-layout: fixed; */
+    /* width: 100%; */
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+    /* white-space: nowrap; */
+}
 
-    .custom-header {
-      background-color: white;
-      /* Light gray background */
-      color: #343a40;
-      /* Dark text color */
-      font-weight: bold;
-      /* Bold text */
-      text-align: center;
-      /* Center align text */
-      padding: 10px;
-      /* Bottom border */
+    .image-circle{
+      display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center; 
+    text-align: center;   
     }
+
+    
     .custom-header-expiry{
       white-space: nowrap;
       /* Light gray background */
@@ -172,6 +198,12 @@ $result = $conn->query($sql);
 
       display: flex;
     }
+
+.datatable-table > thead > tr > th {
+    vertical-align: bottom;
+    text-align: left;
+    border-bottom: 0px solid #d9d9d9;
+}
 
     .pagetitleinside button {
       width: 150px;
@@ -212,7 +244,7 @@ $result = $conn->query($sql);
     <img class="navbar-image" src="assets/img/logo3.png" alt="">
           
     <a href="index.php" class="logo d-flex align-items-center">
-        <span class="d-none d-lg-block">NiceAdmin</span>
+        <span class="d-none d-lg-block">FingerLog</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -364,7 +396,7 @@ $result = $conn->query($sql);
 
     <div class="headerbox">
       <div class="pagetitle">
-        <h1>Companies</h1>
+        <h1 class="mb-1">Companies</h1>
         <div>
           <nav class="mt-0">
             <ol class="breadcrumb mt-0">
@@ -399,7 +431,7 @@ $result = $conn->query($sql);
           if ($result->num_rows > 0) {
             // Output data for each row
             echo "<table class='datatable custom'  style='background-color: #ffffff;'><thead><tr>";
-            echo "<th class='custom-header'>#</th><th class='custom-header '>Name</th><th class='custom-header'>Logo</th><th class='custom-header'>Phone</th><th class='custom-header'>Email</th><th class='custom-header'>Password</th><th class='custom-header'>City</th>
+            echo "<th class='custom-header'>#</th><th class='custom-header ' scope='row'>Name</th><th class='custom-header'>Phone</th><th class='custom-header'>Email</th><th class='custom-header'>Password</th><th class='custom-header'>City</th>
            
             <th class='custom-header'>Country</th><th class='custom-header-expiry'>Expiry date</th><th class='custom-header'>Action</th>";
             echo "</tr></thead><tbody>";
@@ -414,12 +446,7 @@ $result = $conn->query($sql);
                   <?php echo $row['comp_name']; ?>
                 </a>
               </td>
-              <td>
-                <div class="image-circle">
-                  <img src="<?php echo $row['image']; ?>" width="60px" alt="image" id="image-<?php echo $row['comp_id']; ?>" style="cursor:pointer;">
-                  <input type="file" id="file-<?php echo $row['comp_id']; ?>" style="display:none;" onchange="uploadImage(<?php echo $row['comp_id']; ?>)" />
-                </div>
-              </td>
+              
               <?php
               echo "<td>" . htmlspecialchars($row["phone"]) . "</td> ";
               echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
@@ -433,9 +460,9 @@ $result = $conn->query($sql);
 
               ?>
               <td>
-                <div style="display: flex; gap: 5px;">
-                  <a type="button" class="btn btn-success btn-info" style="padding-bottom: 0px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
-                  <a type="button" class="btn btn-danger btn-floating" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i class="fa-solid fa-trash"></i></a>
+                <div style="display: flex; gap: 7px;">
+                  <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                  <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                 </div>
               </td>
 

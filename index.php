@@ -1,3 +1,19 @@
+<?php
+include 'db.php';
+
+//get total no of companies for compani card
+$query = "SELECT COUNT(*) AS count FROM compani";
+$result = mysqli_query($conn, $query);
+$row = mysqli_fetch_assoc($result);
+$companyCount = $row['count'];
+
+//get no of branches for branch card
+$queryBranches = "SELECT COUNT(*) AS branch_count FROM branch";
+$resultBranches = mysqli_query($conn, $queryBranches);
+$rowBranches = mysqli_fetch_assoc($resultBranches);
+$branchCount = $rowBranches['branch_count'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +21,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard - NiceAdmin</title>
+  <title>FingerLog</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -57,7 +73,7 @@ margin-right: 24px;
     <img class="navbar-image" src="assets/img/logo3.png" alt="">  
     <a href="index.php" class="logo d-flex align-items-center">
        
-        <span class="d-none d-lg-block">NiceAdmin</span>
+        <span class="d-none d-lg-block">FingerLog</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -243,7 +259,7 @@ margin-right: 24px;
                       <i class="ri-building-4-line"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>145</h6>
+                      <h6><?php echo $companyCount; ?></h6>
                    
                     </div>
                   </div>
@@ -277,7 +293,7 @@ margin-right: 24px;
                       <i class="ri-git-merge-fill"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>540</h6>
+                      <h6><?php echo $branchCount; ?></h6>
                      
 
                     </div>
@@ -313,7 +329,7 @@ margin-right: 24px;
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>10244</h6>
+                      <h6>0</h6>
                    
 
                     </div>
@@ -324,89 +340,6 @@ margin-right: 24px;
 
             </div><!-- End Customers Card -->
 
-            <!-- Reports -->
-            <div class="col-12">
-              <div class="card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">Reports <span>/Today</span></h5>
-
-                  <!-- Line Chart -->
-                  <div id="reportsChart"></div>
-
-                  <script>
-                    document.addEventListener("DOMContentLoaded", () => {
-                      new ApexCharts(document.querySelector("#reportsChart"), {
-                        series: [{
-                          name: 'Sales',
-                          data: [31, 40, 28, 51, 42, 82, 56],
-                        }, {
-                          name: 'Revenue',
-                          data: [11, 32, 45, 32, 34, 52, 41]
-                        }, {
-                          name: 'Customers',
-                          data: [15, 11, 32, 18, 9, 24, 11]
-                        }],
-                        chart: {
-                          height: 350,
-                          type: 'area',
-                          toolbar: {
-                            show: false
-                          },
-                        },
-                        markers: {
-                          size: 4
-                        },
-                        colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                        fill: {
-                          type: "gradient",
-                          gradient: {
-                            shadeIntensity: 1,
-                            opacityFrom: 0.3,
-                            opacityTo: 0.4,
-                            stops: [0, 90, 100]
-                          }
-                        },
-                        dataLabels: {
-                          enabled: false
-                        },
-                        stroke: {
-                          curve: 'smooth',
-                          width: 2
-                        },
-                        xaxis: {
-                          type: 'datetime',
-                          categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                        },
-                        tooltip: {
-                          x: {
-                            format: 'dd/MM/yy HH:mm'
-                          },
-                        }
-                      }).render();
-                    });
-                  </script>
-                  <!-- End Line Chart -->
-
-                </div>
-
-              </div>
-            </div><!-- End Reports -->
-
-            
 
     </section>
 

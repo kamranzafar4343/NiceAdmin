@@ -84,9 +84,24 @@
             left: -10px;
             top: -20px;
         }
-        .headerimg{
+
+        .headerimg {
             margin-top: 100px;
             margin-left: 260px;
+        }
+
+        .custom-header {
+            background-color: white;
+            /* Light gray background */
+            color: #343a40;
+            /* Dark text color */
+            font-weight: bold;
+            /* Bold text */
+            text-align: center;
+            /* Center align text */
+            padding: 14px;
+            /* Bottom border */
+            margin-left: 19px;
         }
 
 
@@ -157,7 +172,7 @@
             margin-top: 64px;
             margin-left: 290px;
             box-shadow: none;
-            
+
             border: none;
         }
     </style>
@@ -401,101 +416,101 @@
     </header><!-- End Header -->
 
     <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
+    <aside id="sidebar" class="sidebar">
 
-<ul class="sidebar-nav" id="sidebar-nav">
+        <ul class="sidebar-nav" id="sidebar-nav">
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="index.php">
-      <i class="ri-home-8-line"></i>
-      <span>Dashboard</span>
-    </a>
-  </li><!-- End Dashboard Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="index.php">
+                    <i class="ri-home-8-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
 
 
-  <li class="nav-item">
-    <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
-      <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-    </a>
-  </li><!-- End Tables Nav -->
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
+                    <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li><!-- End Tables Nav -->
 
-  <li class="nav-heading">Pages</li>
+            <li class="nav-heading">Pages</li>
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="users-profile.html">
-      <i class="bi bi-person"></i>
-      <span>Profile</span>
-    </a>
-  </li>
-  <!-- End Profile Page Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="users-profile.html">
+                    <i class="bi bi-person"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+            <!-- End Profile Page Nav -->
 
-  
 
-  <!-- <li class="nav-item">
+
+            <!-- <li class="nav-item">
     <a class="nav-link collapsed" href="pages-register.php">
       <i class="bi bi-card-list"></i>
       <span>Register</span>
     </a>
   </li> -->
-  <!-- End Register Page Nav -->
+            <!-- End Register Page Nav -->
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-login.php">
-      <i class="bi bi-box-arrow-in-right"></i>
-      <span>Login</span>
-    </a>
-  </li><!-- End Login Page Nav -->
-
-
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-contact.php">
-      <i class="bi bi-envelope"></i>
-      <span>Contact</span>
-    </a>
-  </li><!-- End Contact Page Nav -->
-
-</ul>
-
-</aside>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="pages-login.php">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>Login</span>
+                </a>
+            </li><!-- End Login Page Nav -->
 
 
-<!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="pages-contact.php">
+                    <i class="bi bi-envelope"></i>
+                    <span>Contact</span>
+                </a>
+            </li><!-- End Contact Page Nav -->
+
+        </ul>
+
+    </aside>
+
+
+    <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
 
 
     <!--form--------------------------------------form--------------------------------------->
     <!-- Start Header form -->
-  <div class="headerimg text-center">
-    <img src="image/create.png" alt="network-logo" width="72" height="72" />
-    <h2>Create Company</h2>
-  </div>
-  <!-- End Header form -->
+    <div class="headerimg text-center">
+        <img src="image/create.png" alt="network-logo" width="72" height="72" />
+        <h2>Create Company</h2>
+    </div>
+    <!-- End Header form -->
     <div class="container d-flex justify-content-center">
         <div class="card custom-card shadow-lg mt-3">
-        <!-- <h5 class="card-title ml-4">Create Company </h5> -->
+            <!-- <h5 class="card-title ml-4">Create Company </h5> -->
             <div class="card-body">
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3" action="insert.php" method="POST" enctype="multipart/form-data">
                     <div class="col-md-6">
                         <label for="comp_name" class="form-label">Company Name</label>
-                        <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s]+" title="Company name should only contain letters and spaces">
+                        <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s]+" required minlength="4" maxlength="14" title="only letters ; at least 4">
                     </div>
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="phone" name="phone" required pattern="[0-9]{10,15}" title="Phone number should be between 10 to 15 digits">
+                        <input type="text" class="form-control" id="phone" name="phone" required pattern="[0-9]{10,13}" title="Phone number should be between 10 to 15 digits">
                     </div>
                     <div class="col-md-6">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email" required>
-                       
+
                         <div id="emailFeedback" class="invalid-feedback">
-                <!-- Error message will be displayed here -->
-            </div>
+                            <!-- Error message will be displayed here -->
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required minlength="8" title="Password should be at least 8 characters long">
+                        <input type="password" class="form-control" id="password" name="password" required minlength="8" maxlength="12" title="Password should be at least 8 characters long">
                     </div>
                     <div class="col-md-6">
                         <label for="image" class="form-label">Image</label>
@@ -532,53 +547,55 @@
     </div>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="assets/vendor/echarts/echarts.min.js"></script>
-  <script src="assets/vendor/quill/quill.js"></script>
-  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script>
-    const dataTable = new simpleDatatables.DataTable("#myTable2", {
-      searchable: false,
-      fixedHeight: true,
-    })
-  </script>
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script>
+        const dataTable = new simpleDatatables.DataTable("#myTable2", {
+            searchable: false,
+            fixedHeight: true,
+        })
+    </script>
 
-<script>
-$(document).ready(function() {
-    $('#email').blur(function() {
-        var email = $(this).val();
+    <script>
+        $(document).ready(function() {
+            $('#email').blur(function() {
+                var email = $(this).val();
 
-        $.ajax({
-            url: 'check_email.php',
-            method: 'POST',
-            data: { email: email },
-            success: function(response) {
-                if (response === 'exists') {
-                    $('#email').addClass('is-invalid');
-                    $('#emailFeedback').text('Email already exists. Please use another email.');
-                } else {
-                    $('#email').removeClass('is-invalid');
-                    $('#emailFeedback').text('');
-                }
-            }
+                $.ajax({
+                    url: 'check_email.php',
+                    method: 'POST',
+                    data: {
+                        email: email
+                    },
+                    success: function(response) {
+                        if (response === 'exists') {
+                            $('#email').addClass('is-invalid');
+                            $('#emailFeedback').text('Email already exists. Please use another email.');
+                        } else {
+                            $('#email').removeClass('is-invalid');
+                            $('#emailFeedback').text('');
+                        }
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 
-  <script src="js/jquery-3.3.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js">
-  </script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js">
+    </script>
 
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
 
 
     <!-- Bootstrap JS (Optional) -->

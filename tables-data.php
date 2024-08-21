@@ -162,11 +162,17 @@ $result = $conn->query($sql);
     padding-bottom: 14px;
     padding-right: 22px;
     padding-left: 22px;
+    
     /* table-layout: fixed; */
     /* width: 100%; */
     /* overflow: hidden; */
     /* text-overflow: ellipsis; */
     /* white-space: nowrap; */
+}
+
+tbody, td, tr{
+  word-wrap: break-word;
+    max-width: 200px;
 }
 
     .image-circle{

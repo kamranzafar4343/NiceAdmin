@@ -1,12 +1,26 @@
 <?php
-include 'db.php'; // Include the database connection
+// include connection
+include 'db.php';
 
-$sql = "SELECT * FROM branch";
+// Get company ID from query string
+$company_id = $_GET['id'];
+
+// Fetch company details
+$sql = "SELECT * FROM compani WHERE comp_id = $company_id";
 $result = $conn->query($sql);
+$company = $result->fetch_assoc();
 
+// Fetch branches of the company with specific id
+// if (isset($_GET['compID_FK'])) {
+//   $compID_FK = $_GET['compID_FK'];
+//   $sql = "SELECT * FROM branch WHERE compID_FK = ?";
+//   $stmt = $conn->prepare($sql);
+//   $stmt->bind_param("i", $compID_FK);
+//   $stmt->execute();
+//   $result = $stmt->get_result();
+// }
 ?>
 
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,6 +58,9 @@ $result = $conn->query($sql);
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
+  <!-- awesome icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -55,15 +72,10 @@ $result = $conn->query($sql);
   <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
   <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
   <style>
     /* Custom CSS to decrease font size of the table */
-    .custom {
-      font-size: 0.9rem;
-      /* Adjust as needed */
-      font-family: monospace;
-    }
 
     .company-name {
       font-size: 1rem;
@@ -111,6 +123,13 @@ $result = $conn->query($sql);
       }
     }
 
+    .container-card {
+      font-size: 0.8rem;
+      color: #666666;
+      font-family: "Open Sans";
+      width: 84%;
+    }
+
     .company-name {
       color: #000;
       text-decoration: none;
@@ -132,6 +151,10 @@ $result = $conn->query($sql);
       /* Darken color on click */
     }
 
+    .pagetitleinside {
+      padding-left: 600px;
+    }
+
     * {
       margin: 0;
 
@@ -139,6 +162,31 @@ $result = $conn->query($sql);
 
       box-sizing: border-box;
     }
+
+    /* styles for card */
+    .custom {
+      font-size: 0.8rem;
+      border-radius: 7px;
+      padding-top: 14px;
+      padding-bottom: 14px;
+      padding-right: 14px;
+      padding-left: 18px;
+      margin-left: 307px;
+      /* table-layout: fixed; */
+      /* width: 100%; */
+      /* overflow: hidden; */
+      /* text-overflow: ellipsis; */
+      /* white-space: nowrap; */
+    }
+
+    tbody,
+    td,
+    tr {
+      word-wrap: break-word;
+      max-width: 200px;
+    }
+
+   
   </style>
   </styl>
 
@@ -643,6 +691,7 @@ $result = $conn->query($sql);
 
     </ul>
 
+
   </aside>
 
 
@@ -651,113 +700,190 @@ $result = $conn->query($sql);
 
   <main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>Branches</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-          <li class="breadcrumb-item">Tables</li>
-          <li class="breadcrumb-item active">Branches</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
-
-    <section class="section">
-    <button type="button" onclick="window.location.href = 'createBranch.php';" class="btn btn-primary mb-2">Add Branch</button>
-      <div class="row">
-        <div class="col-lg-12">
-
-          <?php
-          if ($result->num_rows > 0) {
-            // Output data for each row
-            echo "<table class='table table-bordered datatable custom'><thead><tr>";
-            echo "<th>Company ID</th>
-                    <th>branch id</th>
-                    <th>Contact person name</th>
-                    <th>contact person resignation</th>
-                    <th>phone</th>
-                    <th>city</th>
-                    <th>state</th>
-                    <th>country</th>
-                    <th>action</th>";
-            echo "</tr></thead><tbody>";
-
-            while ($row = $result->fetch_assoc()) {
-              echo "<tr>";
-              echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
-          ?>
-          <?php
-              echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td> ";
-              echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["ContactPersonResignation"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["City"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["State"]) . "</td>";
-              echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
-              ?>
-              <td>
-                <a class="btn btn-danger" href="branchDelete.php?id=<?php echo $row['compID_FK']; ?>">
-                Delete</a>
-              </td>
-          <?php
-              echo "</tr>";
-            }
-
-            echo "</tbody></table>";
-          } else {
-            echo "";
-          }
-          ?>
-
+    <div class="headerbox">
+      <div class="pagetitle">
+        <h1 class="mb-1">Companies</h1>
+        <div>
+          <nav class="mt-0">
+            <ol class="breadcrumb mt-0">
+              <li class="breadcrumb-item">Company</li>
+              <li class="breadcrumb-item active">Details</li>
+            </ol>
+          </nav>
         </div>
-      </div>
+      </div><!-- End Page Title -->
 
+      <div class="pagetitleinside mt-1"><button type="button" onclick="window.location.href = 'createBranch.php';" class="btn btn-outline-primary mb-3">Add Branch</button>
       </div>
-      </div>
-    </section>
-
-  </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
-    <div class="copyright">
-      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
     </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-  </footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="assets/vendor/echarts/echarts.min.js"></script>
-  <script src="assets/vendor/quill/quill.js"></script>
-  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script>
-    const dataTable = new simpleDatatables.DataTable("#myTable2", {
-      searchable: false,
-      fixedHeight: true,
-    })
-  </script>
+    <body>
+      <div class="container-card">
+        <div class="row">
+          <div class="col-md-6 col-lg-4 pb-3">
 
-  <script src="js/jquery-3.3.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js">
-  </script>
+            <!-- Copy the content below until next comment -->
+            <div class="card card-custom bg-white border-white border-0">
+              <div class="card-custom-img "></div>
+              <div class="card-custom-avatar">
+                <img class="img-fluid d-block mx-auto" src="imagebzu_logo.png" alt="Avatar" />
+              </div>
 
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+
+              <div class="card-body list-group">
+                <h4 class="card-title ml-3 d-block mx-auto" style="align-text: center;"><?php echo $company['comp_name']; ?></h4>
+      
+                <div class="card-icon text-center mb-1">
+                <a href="viewBranches.php" class="image-button cursor-pointer">
+<i class="fa-solid fa-code-branch fa-lg"></i>
+</a>
+</div>
+                <hr>
+                <ul class="list-group list-group-horizontal">
+                  <li class="list-group-item" style="color:grey;">Email</li>
+                  <li class="list-group-item" style="text-align: right;"><?php echo $company['email']; ?></li>
+                </ul>
+                <ul class="list-group list-group-horizontal-sm">
+                  
+                  <li class="list-group-item" style="color:grey;">Phone</li>
+                  <li class="list-group-item" style="text-align: right;"><?php echo $company['phone']; ?></li>
+
+                </ul>
+                <ul class="list-group list-group-horizontal-md">
+                  <li class="list-group-item" style="color:grey;">Registration Date</li>
+                  <li class="list-group-item" style="text-align: right;"><?php echo $company['registration']; ?></li>
+                </ul>
+                <ul class="list-group list-group-horizontal-lg">
+                  <li class="list-group-item" style="color:grey;">City</li>
+                  <li class="list-group-item" style="text-align: right;"><?php echo $company['city']; ?></li>
+
+                </ul>
+
+                <ul class="list-group list-group-horizontal-lg">
+                  <li class="list-group-item" style="color:grey;"  >Country</li>
+                  <li class="list-group-item" style="text-align: right;"><?php echo $company['country']; ?></li>
+
+                </ul>
+
+                <ul class="list-group list-group-horizontal-lg">
+                  <li class="list-group-item">Branches</li>
+                  <li class="list-group-item">An item</li>
+</ul>
+
+                <div class="card-footer" style="background: inherit; border-color: inherit;">
+                  <a href="#" class="btn btn-outline-primary">Branches</a>
+                </div>
+              </div>
+              <!-- Copy until here -->
+
+
+
+            </div>
+          </div>
+        </div>
+
+    </body>
+
+</html>
+<?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    Company added successfully!
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <br>
+<?php endif; ?>
+
+<div class="row">
+  <div class="col-lg-8">
+
+    <?php
+    if ($result->num_rows > 0) {
+      // Output data for each row
+      echo "<table class='datatable custom' style='background-color: #ffffff;'><thead><tr>";
+      echo "<th class='custom-header'>Company ID</th>
+          <th class='custom-header'>Branch ID</th>
+          <th class='custom-header'>Contact Person Name</th>
+          <th class='custom-header'>Contact Person Resignation</th>
+          <th class='custom-header'>Phone</th>
+          <th class='custom-header'>City</th>
+          <th class='custom-header'>State</th>
+          <th class='custom-header'>Country</th>
+          <th class='custom-header'>Action</th>";
+      echo "</tr></thead><tbody>";
+
+      while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
+        echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td> ";
+        echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
+        echo "<td>" . htmlspecialchars($row["ContactPersonResignation"]) . "</td>";
+        echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
+        echo "<td>" . htmlspecialchars($row["City"]) . "</td>";
+        echo "<td>" . htmlspecialchars($row["State"]) . "</td>";
+        echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
+    ?>
+        <td>
+          <a class="btn btn-danger" href="branchDelete.php?id=<?php echo $row['compID_FK']; ?>">Delete</a>
+        </td>
+    <?php
+        echo "</tr>";
+      }
+
+      echo "</tbody></table>";
+    } else {
+      echo "";
+    }
+    ?>
+
+  </div>
+</div>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+  <div class="copyright">
+    &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+  </div>
+  <div class="credits">
+    <!-- All the links in the footer should remain intact. -->
+    <!-- You can delete the links only if you purchased the pro version. -->
+    <!-- Licensing information: https://bootstrapmade.com/license/ -->
+    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+  </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/chart.js/chart.umd.js"></script>
+<script src="assets/vendor/echarts/echarts.min.js"></script>
+<script src="assets/vendor/quill/quill.js"></script>
+<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+<script src="assets/vendor/php-email-form/validate.js"></script>
+<script>
+  const dataTable = new simpleDatatables.DataTable("#myTable2", {
+    searchable: false,
+    fixedHeight: true,
+  })
+</script>
+
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js">
+</script>
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
 
 <script>
 

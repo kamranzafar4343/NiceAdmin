@@ -53,6 +53,25 @@ h6 {
   }
 }
 
+/*all styles of datatable*/
+
+/*all styles of datatable*/
+
+.pagetitle {
+  display: flex;
+  width: 989px;
+  flex-direction: column;
+
+}
+.pagetitleinside {
+  padding-left: 600px;
+}
+
+
+.pagetitleinside button {
+  width: 150px;
+}
+
 /*--------------------------------------------------------------
 # Page Title
 --------------------------------------------------------------*/
@@ -853,6 +872,11 @@ h6 {
   flex-shrink: 0;
   flex-grow: 0;
 }
+.list-group-item {
+  border-bottom-left-radius: var(--bs-list-group-border-radius);
+  border-top-right-radius: 0;
+  border: none;
+}
 
 .header {
   transition: all 1.5s;
@@ -868,7 +892,19 @@ h6 {
   color: #4154f1;
   background: #f6f6fe;
 }
+.img-fluid {
 
+    max-width: 47%;
+    margin-top: 20px;
+    margin-left: 1px;
+}
+.card-title {
+  padding: 5px 0 0px 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #012970;
+  /* font-family: "Poppins", sans-serif; */
+}
 .dashboard .revenue-card .card-icon {
   color: #2eca6a;
   background: #e0f8e9;

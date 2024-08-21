@@ -76,17 +76,14 @@ $result = $conn->query($sql);
     margin-right: calc(var(--bs-gutter-x)* 1.5);
     margin-left: calc(var(--bs-gutter-x)* 0.2);
     }
-    .custom {
-      font-size: 0.9rem;
-      border-radius: 2%;
-      /* Adjust as needed */
-    }
+   
     .datatable-container {
   border:none;
   margin-left: 12px;
   margin-top: 12px;
   /* table-layout: fixed; */
 }
+
 
     /* Define the pulse animation */
     @keyframes pulse {
@@ -156,7 +153,7 @@ $result = $conn->query($sql);
     }
    
     .custom {
-    font-size: 1rem;
+    font-size: 0.8rem;
     border-radius: 7px;
     padding-top: 14px;
     padding-bottom: 14px;
@@ -448,7 +445,7 @@ tbody, td, tr{
           ?>
               <td>
 
-                <a class="text-primary fw-bold" href="company_detail.php?id=<?php echo $row['comp_id']; ?>">
+                <a class="text-primary fw-bold" href="table-data2.php?id=<?php echo $row['comp_id']; ?>">
                   <?php echo $row['comp_name']; ?>
                 </a>
               </td>

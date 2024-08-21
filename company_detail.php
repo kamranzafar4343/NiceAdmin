@@ -1,26 +1,35 @@
 <?php
-include "db.php";
+include 'db.php';
+$company = null;
+$branches = [];
 
-//fetch company detail
 if (isset($_GET['id'])) {
     $company_id = $_GET['id'];
+
+    // Fetch company details
     $sql = "SELECT * FROM compani WHERE comp_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $company_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $company = $result->fetch_assoc();
-}
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $company = $result->fetch_assoc();
+    } else {
+        echo "Error executing company query: " . $stmt->error;
+    }
 
-//query to get branches of company with specific id
-if (isset($_GET['compID_FK'])) {
-    $compID_FK = $_GET['compID_FK'];
+    // Fetch branches of the company
     $sql = "SELECT * FROM branch WHERE compID_FK = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $compID_FK);
-    $stmt->execute();
-  
-    $result = $stmt->get_result();
+    $stmt->bind_param("i", $company_id);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $branches[] = $row;
+        }
+    } else {
+        echo "Error executing branch query: " . $stmt->error;
+    }
+
 }
 
 if ($stmt->execute()) {
@@ -84,7 +93,7 @@ if ($stmt->execute()) {
                 </tr>
             </thead>
             <tbody>
-                <?php if ($result->num_rows > 0) {
+                <?php if ($result-> num_rows > 0) {
                     while ($row = $result->fetch_assoc()) { ?>
                         <tr>
                             <td><?php echo $row['compID_FK']; ?></td>

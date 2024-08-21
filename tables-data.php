@@ -419,13 +419,6 @@ tbody, td, tr{
 
       <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
 
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          Company added successfully!
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <br>
       <?php endif; ?>
       <div class="row">
         <div class="col-lg-10">

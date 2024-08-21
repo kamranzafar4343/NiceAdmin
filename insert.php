@@ -60,8 +60,6 @@ if (isset($_POST['submit'])) {
             VALUES ('$comp_name', '$phone', '$email', '$password', '$img_des', '$city', '$state', '$country', '$registration', '$expiry')";
     
     if ($conn -> query ($sql) === TRUE) {
-        echo "New record created successfully.";
-        header("Location: tables-data.php");
         exit; // Make sure to exit after redirecting
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;

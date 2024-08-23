@@ -217,7 +217,7 @@ margin-right: 24px;
 
   <main id="main" class="main">
 
-    <div class="pagetitle">
+    <div class="pagetitle mt-4">
       <h1>Dashboard</h1>
       <nav>
         <ol class="breadcrumb">

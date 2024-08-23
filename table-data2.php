@@ -1,24 +1,15 @@
 <?php
-// include connection
 include 'db.php';
 
+$result = [];
+$company_data=null;
 // Get company ID from query string
 $company_id = $_GET['id'];
 
 // Fetch company details
 $sql = "SELECT * FROM compani WHERE comp_id = $company_id";
 $result = $conn->query($sql);
-$company = $result->fetch_assoc();
-
-// Fetch branches of the company with specific id
-// if (isset($_GET['compID_FK'])) {
-//   $compID_FK = $_GET['compID_FK'];
-//   $sql = "SELECT * FROM branch WHERE compID_FK = ?";
-//   $stmt = $conn->prepare($sql);
-//   $stmt->bind_param("i", $compID_FK);
-//   $stmt->execute();
-//   $result = $stmt->get_result();
-// }
+$company_data= $result->fetch_assoc();
 ?>
 
 
@@ -81,6 +72,12 @@ $company = $result->fetch_assoc();
       font-size: 1rem;
     }
 
+    .datatable-wrapper.no-footer .datatable-container {
+    border: none;
+    margin-left: -315px !important;
+    width: 700px !important;
+}
+
     .company-title {
       font-size: 1.1rem;
     }
@@ -123,11 +120,39 @@ $company = $result->fetch_assoc();
       }
     }
 
+.customImage{
+  border: 1px solid white;
+            padding-left:  18px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+       
+}
+
+    .card {
+    margin-bottom: 30px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+    background-color: white;
+font-size: 0.8rem;
+  }
+
     .container-card {
       font-size: 0.8rem;
       color: #666666;
       font-family: "Open Sans";
       width: 84%;
+    }
+
+    /* Custom CSS to place card and table side by side */
+    .side-by-side-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      /* Align items to the start of the container */
+      gap: 20px;
+      /* Space between the card and table */
     }
 
     .company-name {
@@ -162,6 +187,10 @@ $company = $result->fetch_assoc();
 
       box-sizing: border-box;
     }
+    .card-icon {
+    margin-left: 35px;
+}
+
 
     /* styles for card */
     .custom {
@@ -186,7 +215,10 @@ $company = $result->fetch_assoc();
       max-width: 200px;
     }
 
-   
+    .datatable-top {
+      margin-left: 10px !important;
+      width: 0px;
+    }
   </style>
   </styl>
 
@@ -203,506 +235,163 @@ $company = $result->fetch_assoc();
 </head>
 
 <body>
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
+<div class="d-flex align-items-center justify-content-between">
+<img class="navbar-image" src="assets/img/logo3.png" alt="">
+      
+<a href="index.php" class="logo d-flex align-items-center">
+    <span class="d-none d-lg-block">FingerLog</span>
+  </a>
+  <i class="bi bi-list toggle-sidebar-btn"></i>
+</div><!-- End Logo -->
 
-    <div class="d-flex align-items-center justify-content-between">
-      <a href="index.php" class="logo d-flex align-items-center">
-        <img src="assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">NiceAdmin</span>
+<div class="search-bar">
+  <form class="search-form d-flex align-items-center" method="POST" action="#">
+    <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+  </form>
+</div><!-- End Search Bar -->
+
+<nav class="header-nav ms-auto">
+  <ul class="d-flex align-items-center">
+
+    <li class="nav-item d-block d-lg-none">
+      <a class="nav-link nav-icon search-bar-toggle " href="#">
+        <i class="bi bi-search"></i>
       </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
+    </li><!-- End Search Icon-->
 
-    <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-      </form>
-    </div><!-- End Search Bar -->
 
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
+    </li><!-- End Messages Nav -->
 
-        <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
+    <li class="nav-item dropdown pe-3 mr-4">
+
+      <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+        <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+      </a><!-- End Profile Iamge Icon -->
+
+      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+        <li class="dropdown-header">
+          <h6>Kevin Anderson</h6>
+          <span>Web Designer</span>
+        </li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+            <i class="bi bi-person"></i>
+            <span>My Profile</span>
           </a>
-        </li><!-- End Search Icon-->
+        </li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
 
-        <li class="nav-item dropdown">
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+            <i class="bi bi-gear"></i>
+            <span>Account Settings</span>
+          </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
 
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
-          </a><!-- End Notification Icon -->
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+            <i class="bi bi-question-circle"></i>
+            <span>Need Help?</span>
+          </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
 
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-            <li class="dropdown-header">
-              You have 4 new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="#">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Sign Out</span>
+          </a>
+        </li>
 
-            <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
-              <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
-              </div>
-            </li>
+      </ul><!-- End Profile Dropdown Items -->
+    </li><!-- End Profile Nav -->
 
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+  </ul>
+</nav><!-- End Icons Navigation -->
 
-            <li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>
+</header><!-- End Header -->
 
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
 
-            <li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>
+<ul class="sidebar-nav" id="sidebar-nav">
 
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
-            </li>
-
-          </ul><!-- End Notification Dropdown Items -->
-
-        </li><!-- End Notification Nav -->
-
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-chat-left-text"></i>
-            <span class="badge bg-success badge-number">3</span>
-          </a><!-- End Messages Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-            <li class="dropdown-header">
-              You have 3 new messages
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Maria Hudson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Anna Nelson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>6 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>David Muldon</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>8 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="dropdown-footer">
-              <a href="#">Show all messages</a>
-            </li>
-
-          </ul><!-- End Messages Dropdown Items -->
-
-        </li><!-- End Messages Nav -->
-
-        <li class="nav-item dropdown pe-3">
-
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-          </a><!-- End Profile Iamge Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-person"></i>
-                <span>My Profile</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-gear"></i>
-                <span>Account Settings</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                <i class="bi bi-question-circle"></i>
-                <span>Need Help?</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
-            </li>
-
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
-
-      </ul>
-    </nav><!-- End Icons Navigation -->
-
-  </header><!-- End Header -->
-
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="index.php">
-          <i class="bi bi-grid"></i>
-          <span>Dashboard</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="index.php">
+      <i class="ri-home-8-line"></i>
+      <span>Dashboard</span>
+    </a>
+  </li><!-- End Dashboard Nav -->
 
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="tables-data.php">
-              <i class="bi bi-circle"></i><span>Company</span>
-            </a>
-          </li>
-        </ul>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="table-data2.php" class="active">
-              <i class="bi bi-circle"></i><span>Branches</span>
-            </a>
-          </li>
-        </ul>
+  <li class="nav-item">
+    <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
+      <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+    </a>
+  </li><!-- End Tables Nav -->
+
+  <li class="nav-heading">Pages</li>
+
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="users-profile.html">
+      <i class="bi bi-person"></i>
+      <span>Profile</span>
+    </a>
+  </li>
+  <!-- End Profile Page Nav -->
 
 
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="components-alerts.html">
-              <i class="bi bi-circle"></i><span>Alerts</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-accordion.html">
-              <i class="bi bi-circle"></i><span>Accordion</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-badges.html">
-              <i class="bi bi-circle"></i><span>Badges</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-breadcrumbs.html">
-              <i class="bi bi-circle"></i><span>Breadcrumbs</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-buttons.html">
-              <i class="bi bi-circle"></i><span>Buttons</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-cards.html">
-              <i class="bi bi-circle"></i><span>Cards</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-carousel.html">
-              <i class="bi bi-circle"></i><span>Carousel</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-list-group.html">
-              <i class="bi bi-circle"></i><span>List group</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-modal.html">
-              <i class="bi bi-circle"></i><span>Modal</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-tabs.html">
-              <i class="bi bi-circle"></i><span>Tabs</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-pagination.html">
-              <i class="bi bi-circle"></i><span>Pagination</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-progress.html">
-              <i class="bi bi-circle"></i><span>Progress</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-spinners.html">
-              <i class="bi bi-circle"></i><span>Spinners</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-tooltips.html">
-              <i class="bi bi-circle"></i><span>Tooltips</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Components Nav -->
+  <!-- <li class="nav-item">
+    <a class="nav-link collapsed" href="pages-register.php">
+      <i class="bi bi-card-list"></i>
+      <span>Register</span>
+    </a>
+  </li> -->
+  <!-- End Register Page Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="forms-elements.html">
-              <i class="bi bi-circle"></i><span>Form Elements</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-layouts.html">
-              <i class="bi bi-circle"></i><span>Form Layouts</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-editors.html">
-              <i class="bi bi-circle"></i><span>Form Editors</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-validation.html">
-              <i class="bi bi-circle"></i><span>Form Validation</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <!-- End Forms Nav -->
-      <!-- 
-           <li class="nav-item">
-        <a class="nav-link " data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>General Tables</span>
-            </a>
-          </li>
-          <li>
-            <a href="tables-data.html" class="active">
-              <i class="bi bi-circle"></i><span>Data Tables</span>
-            </a>
-          </li>
-        </ul>
-      </li>End Tables Nav
- -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="charts-chartjs.html">
-              <i class="bi bi-circle"></i><span>Chart.js</span>
-            </a>
-          </li>
-          <li>
-            <a href="charts-apexcharts.html">
-              <i class="bi bi-circle"></i><span>ApexCharts</span>
-            </a>
-          </li>
-          <li>
-            <a href="charts-echarts.html">
-              <i class="bi bi-circle"></i><span>ECharts</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Charts Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="icons-bootstrap.html">
-              <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
-            </a>
-          </li>
-          <li>
-            <a href="icons-remix.html">
-              <i class="bi bi-circle"></i><span>Remix Icons</span>
-            </a>
-          </li>
-          <li>
-            <a href="icons-boxicons.html">
-              <i class="bi bi-circle"></i><span>Boxicons</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Icons Nav -->
-
-      <li class="nav-heading">Pages</li>
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.html">
-          <i class="bi bi-person"></i>
-          <span>Profile</span>
-        </a>
-      </li><!-- End Profile Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-faq.php">
-          <i class="bi bi-question-circle"></i>
-          <span>F.A.Q</span>
-        </a>
-      </li><!-- End F.A.Q Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-contact.php">
-          <i class="bi bi-envelope"></i>
-          <span>Contact</span>
-        </a>
-      </li><!-- End Contact Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-register.php">
-          <i class="bi bi-card-list"></i>
-          <span>Register</span>
-        </a>
-      </li><!-- End Register Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.php">
-          <i class="bi bi-box-arrow-in-right"></i>
-          <span>Login</span>
-        </a>
-      </li><!-- End Login Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-error-404.html">
-          <i class="bi bi-dash-circle"></i>
-          <span>Error 404</span>
-        </a>
-      </li><!-- End Error 404 Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-blank.html">
-          <i class="bi bi-file-earmark"></i>
-          <span>Blank</span>
-        </a>
-      </li><!-- End Blank Page Nav -->
-
-    </ul>
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="pages-login.php">
+      <i class="bi bi-box-arrow-in-right"></i>
+      <span>Login</span>
+    </a>
+  </li><!-- End Login Page Nav -->
 
 
-  </aside>
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="pages-contact.php">
+      <i class="bi bi-envelope"></i>
+      <span>Contact</span>
+    </a>
+  </li><!-- End Contact Page Nav -->
 
+</ul>
+
+</aside>
 
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
 
   <main id="main" class="main">
-
     <div class="headerbox">
       <div class="pagetitle">
-        <h1 class="mb-1">Companies</h1>
+        <h1 class="mb-1 mt-4">Companies</h1>
         <div>
           <nav class="mt-0">
             <ol class="breadcrumb mt-0">
@@ -712,182 +401,181 @@ $company = $result->fetch_assoc();
           </nav>
         </div>
       </div><!-- End Page Title -->
-
-      <div class="pagetitleinside mt-1"><button type="button" onclick="window.location.href = 'createBranch.php';" class="btn btn-outline-primary mb-3">Add Branch</button>
+      <div class="pagetitleinside mt-1">
+        <!-- <button type="button" onclick="window.location.href = 'createBranch.php';" class="btn btn-outline-primary mb-3">Add Branch</button> -->
       </div>
     </div>
 
+    <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+      <!-- <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Company added successfully!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> -->
+      <br>
+    <?php endif; ?>
 
-    <body>
-      <div class="container-card">
-        <div class="row">
-          <div class="col-md-6 col-lg-4 pb-3">
+    <!-- Main content container -->
+    <div class="d-flex flex-wrap">
 
-            <!-- Copy the content below until next comment -->
-            <div class="card card-custom bg-white border-white border-0">
-              <div class="card-custom-img "></div>
-              <div class="card-custom-avatar">
-                <img class="img-fluid d-block mx-auto" src="imagebzu_logo.png" alt="Avatar" />
+      <!-- Card container -->
+      <div class="col-md-6 col-lg-4 pb-3">
+        <div class="card card-custom bg-white border-white border-0">
+          <div class="card-custom-img"></div>
+          <div class="card-custom-avatar">
+            <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" alt="Company Image" width="120" height="75"/>
+          </div>
+          <div class="card-body list-group">
+            <h4 class="card-title ml-3"><?php echo $company_data['comp_name']; ?></h4>
+            <br>
+            <div class="card-icon">
+              <a href="actions.php?id=<?php echo $company_data['comp_id']; ?>">  <i class="fa-solid fa-code-branch fa-xl"></i></a>
               </div>
-
-
-              <div class="card-body list-group">
-                <h4 class="card-title ml-3 d-block mx-auto" style="align-text: center;"><?php echo $company['comp_name']; ?></h4>
-      
-                <div class="card-icon text-center mb-1">
-                <a href="viewBranches.php" class="image-button cursor-pointer">
-<i class="fa-solid fa-code-branch fa-lg"></i>
-</a>
-</div>
-                <hr>
-                <ul class="list-group list-group-horizontal">
-                  <li class="list-group-item" style="color:grey;">Email</li>
-                  <li class="list-group-item" style="text-align: right;"><?php echo $company['email']; ?></li>
-                </ul>
-                <ul class="list-group list-group-horizontal-sm">
-                  
-                  <li class="list-group-item" style="color:grey;">Phone</li>
-                  <li class="list-group-item" style="text-align: right;"><?php echo $company['phone']; ?></li>
-
-                </ul>
-                <ul class="list-group list-group-horizontal-md">
-                  <li class="list-group-item" style="color:grey;">Registration Date</li>
-                  <li class="list-group-item" style="text-align: right;"><?php echo $company['registration']; ?></li>
-                </ul>
-                <ul class="list-group list-group-horizontal-lg">
-                  <li class="list-group-item" style="color:grey;">City</li>
-                  <li class="list-group-item" style="text-align: right;"><?php echo $company['city']; ?></li>
-
-                </ul>
-
-                <ul class="list-group list-group-horizontal-lg">
-                  <li class="list-group-item" style="color:grey;"  >Country</li>
-                  <li class="list-group-item" style="text-align: right;"><?php echo $company['country']; ?></li>
-
-                </ul>
-
-                <ul class="list-group list-group-horizontal-lg">
-                  <li class="list-group-item">Branches</li>
-                  <li class="list-group-item">An item</li>
-</ul>
-
-                <div class="card-footer" style="background: inherit; border-color: inherit;">
-                  <a href="#" class="btn btn-outline-primary">Branches</a>
-                </div>
-              </div>
-              <!-- Copy until here -->
-
-
-
-            </div>
+            <hr>
+            <ul class="list-group list-group-horizontal d-flex justify-content-between">
+              <li class="list-group-item" style="color:grey;  width: 30%;">Email</li>
+              <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $company_data['email']; ?></li>
+            </ul>
+            <ul class="list-group list-group-horizontal-sm d-flex justify-content-between">
+              <li class="list-group-item" style="color:grey; width: 30%;">Phone</li>
+              <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $company_data['phone']; ?></li>
+            </ul>
+            <ul class="list-group list-group-horizontal-md d-flex justify-content-between">
+              <li class="list-group-item" style="color:grey; width:50%">Reg. Date</li>
+              <li class="list-group-item" style="text-align: right;width: 55%;"><?php echo $company_data['registration']; ?></li>
+            </ul>
+            <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
+              <li class="list-group-item" style="color:grey; width: 30%;">City</li>
+              <li class="list-group-item " style="text-align: right; width: 55%;"><?php echo $company_data['city']; ?></li>
+            </ul>
+            <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
+              <li class="list-group-item" style="color:grey; width: 30%;">Country</li>
+              <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $company_data['country']; ?></li>
+            </ul>
+            <!-- <ul class="list-group list-group-horizontal-lg">
+              <li class="list-group-item">Branches</li>
+              <li class="list-group-item">An item</li>
+            </ul> -->
+            <!-- <div class="card-footer" style="background: inherit; border-color: inherit;">
+              <a href="#" class="btn btn-outline-primary">Branches</a>
+            </div> -->
           </div>
         </div>
+      </div>
 
-    </body>
+      <!-- Table container -->
+      <div class="col-md-6 col-lg-8">
+        <?php
+        // if ($result->num_rows > 0) {
+        //   echo "<table class='datatable custom' style='background-color: #ffffff;'><thead><tr>";
+        //   echo "<th class='custom-header'>Company#</th>
+        // <th class='custom-header'>Branch#</th>
+        // <th class='custom-header'>Representative</th>
+        // <th class='custom-header'>Resignation</th>
+        // <th class='custom-header'>Phone</th>
+        // <th class='custom-header'>City</th>
+        // <th class='custom-header'>State</th>
+        // <th class='custom-header'>Country</th>
+        // <th class='custom-header'>Action</th>";
+        //   echo "</tr></thead><tbody>";
 
-</html>
-<?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+          // while ($row = $result->fetch_assoc()) {
+          //   echo "<tr>";
+          //   echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
+          //   echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td>";
+          //   echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
+          //   echo "<td>" . htmlspecialchars($row["ContactPersonResignation"]) . "</td>";
+          //   echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
+          //   echo "<td>" . htmlspecialchars($row["City"]) . "</td>";
+          //   echo "<td>" . htmlspecialchars($row["State"]) . "</td>";
+          //   echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
+        ?>
+            <!-- <td>
+              <a class="btn btn-danger" href="branchDelete.php?id=<?php echo $row['compID_FK']; ?>">Delete</a>
+            </td> -->
+        <?php
+        //     echo "</tr>";
+        //   }
 
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    Company added successfully!
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <br>
-<?php endif; ?>
+        //   echo "</tbody></table>";
+        // } else {
+        //   echo "";
+        // }
+        ?>
+      </div>
 
-<div class="row">
-  <div class="col-lg-8">
+    </div>
+    <!-- End d-flex container -->
+  </main><!-- End #main -->
 
-    <?php
-    if ($result->num_rows > 0) {
-      // Output data for each row
-      echo "<table class='datatable custom' style='background-color: #ffffff;'><thead><tr>";
-      echo "<th class='custom-header'>Company ID</th>
-          <th class='custom-header'>Branch ID</th>
-          <th class='custom-header'>Contact Person Name</th>
-          <th class='custom-header'>Contact Person Resignation</th>
-          <th class='custom-header'>Phone</th>
-          <th class='custom-header'>City</th>
-          <th class='custom-header'>State</th>
-          <th class='custom-header'>Country</th>
-          <th class='custom-header'>Action</th>";
-      echo "</tr></thead><tbody>";
+  <!-- End #main -->
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-      while ($row = $result->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
-        echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td> ";
-        echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
-        echo "<td>" . htmlspecialchars($row["ContactPersonResignation"]) . "</td>";
-        echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
-        echo "<td>" . htmlspecialchars($row["City"]) . "</td>";
-        echo "<td>" . htmlspecialchars($row["State"]) . "</td>";
-        echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
-    ?>
-        <td>
-          <a class="btn btn-danger" href="branchDelete.php?id=<?php echo $row['compID_FK']; ?>">Delete</a>
-        </td>
-    <?php
-        echo "</tr>";
-      }
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script>
+    const dataTable = new simpleDatatables.DataTable("#myTable2", {
+      searchable: false,
+      fixedHeight: true,
+    })
+  </script>
 
-      echo "</tbody></table>";
-    } else {
-      echo "";
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js">
+  </script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+  <script>
+<script>
+    $(document).on('click', 'img', function() {
+      $(this).next('input[type="file"]').click();
+    });
+
+    function uploadImage(comp_id) {
+      var fileInput = document.getElementById('file-' + comp_id);
+      var file = fileInput.files[0];
+      var formData = new FormData();
+      formData.append('image', file);
+      formData.append('comp_id', comp_id);
+
+      $.ajax({
+        url: 'update_image.php',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          // Update the image source with the new image path
+          $('#image-' + comp_id).attr('src', response);
+        },
+        error: function() {
+          alert('Image upload failed. Please try again.');
+        }
+      });
     }
-    ?>
+    import {
+      Ripple,
+      initMDB
+    } from "mdb-ui-kit";
 
-  </div>
-</div>
+    initMDB({
+      Ripple
+    });
 
-</main><!-- End #main -->
-
-<!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-  <div class="copyright">
-    &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-  </div>
-  <div class="credits">
-    <!-- All the links in the footer should remain intact. -->
-    <!-- You can delete the links only if you purchased the pro version. -->
-    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-  </div>
-</footer><!-- End Footer -->
-
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-<!-- Vendor JS Files -->
-<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/vendor/chart.js/chart.umd.js"></script>
-<script src="assets/vendor/echarts/echarts.min.js"></script>
-<script src="assets/vendor/quill/quill.js"></script>
-<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-<script src="assets/vendor/tinymce/tinymce.min.js"></script>
-<script src="assets/vendor/php-email-form/validate.js"></script>
-<script>
-  const dataTable = new simpleDatatables.DataTable("#myTable2", {
-    searchable: false,
-    fixedHeight: true,
-  })
-</script>
-
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/main.js">
-</script>
-
-<!-- Template Main JS File -->
-<script src="assets/js/main.js"></script>
-
-<script>
-
-</script>
+  
+  </script>
 </body>
 
 </html>

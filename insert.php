@@ -11,6 +11,8 @@ if (isset($_POST['submit'])) {
     $emailCheckQuery = "SELECT * FROM `compani` WHERE `email` = '$email'";
     $emailCheckResult = $conn->query($emailCheckQuery);
 
+
+    //---------------------------set image variable------------------------ and its validation
     if ($emailCheckResult->num_rows > 0) {
         die("Error: The email '$email' already exists.");
     }
@@ -49,6 +51,10 @@ if (isset($_POST['submit'])) {
         die("Failed to upload image.");
     }
 
+    //------------------end---------------------------------- of image variable and its validation
+
+
+
     $city = mysqli_real_escape_string($conn, $_POST['city']);
     $state = mysqli_real_escape_string($conn, $_POST['state']);
     $country = mysqli_real_escape_string($conn, $_POST['country']);
@@ -58,13 +64,44 @@ if (isset($_POST['submit'])) {
     // Insert the record into the database
     $sql = "INSERT INTO `compani` (`comp_name`, `phone`, `email`, `password`, `image`, `city`, `state`, `country`, `registration`, `expiry`) 
             VALUES ('$comp_name', '$phone', '$email', '$password', '$img_des', '$city', '$state', '$country', '$registration', '$expiry')";
-    
-    if ($conn -> query ($sql) === TRUE) {
-        exit; // Make sure to exit after redirecting
+
+//redirect and show message
+    if (mysqli_query($conn, $sql)) {
+        $_SESSION['data_inserted'] = true;
     } else {
+        $_SESSION['data_inserted'] = false;
+
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+
+    header("location:insert.php");
+    exit();
 
     $conn->close();
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+<!--script for showing succes or error message and redirect also-->
+    <script>
+        <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
+            alert('Company Registered successfully!');
+            window.location.href = 'tables-data.php'; // Redirect to the Branches page
+            <?php unset($_SESSION['data_inserted']); // Clear the session variable 
+            ?>
+        <?php elseif (isset($_SESSION['data_inserted']) && !$_SESSION['data_inserted']): ?>
+            alert('Failed to enter new data.');
+            <?php unset($_SESSION['data_inserted']); ?>
+        <?php endif; ?>
+    </script>
+</body>
+
+</html>

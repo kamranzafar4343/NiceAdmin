@@ -102,6 +102,29 @@
             
         }
 
+        /*styles for form*/
+        .card-body {
+    padding: 0 20px 20px 20px;
+    font-size: 0.8rem;
+}
+.form-control[type=file]:not(:disabled):not([readonly]) {
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+input[type=date].form-control {
+    appearance: none;
+    font-size: 0.8rem;
+}
+@media (min-width: 1200px) {
+    .h2, h2 {
+        font-size: 1.5rem;
+    }
+}
+.headerimg h2{
+    font-family: "Nunito", sans-serif;
+    font-size: 1.5rem;
+}
+
         /* Define the pulse animation */
         @keyframes pulse {
             0% {
@@ -176,18 +199,21 @@
             box-shadow: none;
             border: none;
         }
+
     </style>
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Create Branch</title>
+    <title>Update Branch</title>
 
 </head>
 
 <body>
     <?php
     include "db.php";
+
+    //get company id for updating the specific company
     if (isset($_GET['id'])) {
         $user_id = $_GET['id'];
         $sql = "SELECT * FROM `compani` WHERE `comp_id`='$user_id'";
@@ -204,6 +230,7 @@
         $expiry = $row['expiry'];
     }
 
+    //update the record
     if (isset($_POST['update'])) {
         $user_id = $_POST['comp_id'];
         $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
@@ -521,7 +548,7 @@
 
   <!-- Start Header form -->
   <div class="headerimg text-center pt-5">
-    <img src="image/update.png.png" alt="network-logo" width="72" height="72" />
+    <img src="image/update.png.png" alt="network-logo" width="50" height="50" />
     <h2>Update Company Information</h2>
   </div>
   <!-- End Header form -->

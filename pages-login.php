@@ -71,6 +71,12 @@ function test_input($data) {
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  <style>
+    .logo img {
+    max-height: 50px;
+    margin-right: 11px;
+}
+  </style>
 
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -93,8 +99,8 @@ function test_input($data) {
 
               <div class="d-flex justify-content-center py-4">
                 <a href="index.php" class="logo d-flex align-items-center w-auto">
-                  <img src="assets/img/logo.png" alt="">
-                  <span class="d-none d-lg-block">NiceAdmin</span>
+                  <img src="assets/img/logo3.png" alt="">
+                  <span class="d-none d-lg-block">FingerLog</span>
                 </a>
               </div><!-- End Logo -->
 

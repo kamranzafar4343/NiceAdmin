@@ -105,6 +105,27 @@
         }
 
 
+        /*styles for form*/
+        .card-body {
+    padding: 0 20px 20px 20px;
+    font-size: 0.8rem;
+}
+.form-control[type=file]:not(:disabled):not([readonly]) {
+    cursor: pointer;
+    font-size: 0.8rem;
+
+}
+input[type=date].form-control {
+    appearance: none;
+    font-size: 0.8rem;
+}
+
+@media (min-width: 1200px) {
+    .h2, h2 {
+        font-size: 1.5rem;
+    }
+}
+
         /* Define the pulse animation */
         @keyframes pulse {
             0% {
@@ -481,7 +502,7 @@
     <!--form--------------------------------------form--------------------------------------->
     <!-- Start Header form -->
     <div class="headerimg text-center">
-        <img src="image/create.png" alt="network-logo" width="72" height="72" />
+    <img src="image/create.png" alt="network-logo" width="50" height="50">
         <h2>Create Company</h2>
     </div>
     <!-- End Header form -->
@@ -513,7 +534,7 @@
                         <input type="password" class="form-control" id="password" name="password" required minlength="8" maxlength="12" title="Password should be at least 8 characters long">
                     </div>
                     <div class="col-md-6">
-                        <label for="image" class="form-label">Image</label>
+                        <label for="image" class="form-label" style="font-size: 0.8rem;">Image</label>
                         <input type="file" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
                     </div>
                     <div class="col-md-6">

@@ -68,7 +68,7 @@ if ($stmt->execute()) {
     <div class="container">
         <div class="mb-3">
             <br>
-            <img class="compImage" src="<?php echo $company['image']; ?>" alt="Company Image" width="125" height="75">
+            <img class="compImage" src="<?php echo $company['image']; ?>" alt="Company Image" width="75" height="75">
         </div>
         <br>
         <h4>List of Branches</h4>

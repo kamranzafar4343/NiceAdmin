@@ -6,14 +6,14 @@ if (isset($_GET['id'])) {
 
 
     // Prepare and execute the delete query
-    $sql = "DELETE FROM `branch` WHERE `compID_FK`='$user_id'";
+    $sql = "DELETE FROM `branch` WHERE `branch_id`='$user_id'";
     
     
     if ($conn->query($sql) === TRUE) {
         
-        //echo "<script> alert('record deleted');</script>";
+        echo "<script> alert('record deleted');</script>";
 
-        header("Location: table-data2.php");
+        // header("Location: table-data2.php");
  
         
     } else {

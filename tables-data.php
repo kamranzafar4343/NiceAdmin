@@ -137,6 +137,10 @@ $result = $conn->query($sql);
       display: none;
     }
 
+    .datatable-top{
+  width: 1048px;
+
+}
     .company-name:active {
       animation: clickEffect 0.s ease;
       /* Apply the click effect animation on click */
@@ -397,14 +401,14 @@ tbody, td, tr{
   <main id="main" class="main">
 
 
-    <div class="headerbox">
+    <div class="headerbox mt-4">
       <div class="pagetitle">
         <h1 class="mb-1">Companies</h1>
         <div>
           <nav class="mt-0">
             <ol class="breadcrumb mt-0">
-              <li class="breadcrumb-item">Company</li>
-              <li class="breadcrumb-item active">Details</li>
+              <li class="breadcrumb-item">Home</li>
+              <li class="breadcrumb-item active">Companies</li>
             </ol>
           </nav>
         </div>
@@ -419,6 +423,7 @@ tbody, td, tr{
 
       <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
 
+        
       <?php endif; ?>
       <div class="row">
         <div class="col-lg-10">
@@ -500,62 +505,6 @@ tbody, td, tr{
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 
-  <script>
-    //click on the picture to update with ajax
-    $(document).on('click', 'img', function() {
-      $(this).next('input[type="file"]').click();
-    });
-
-    function uploadImage(comp_id) {
-      var fileInput = document.getElementById('file-' + comp_id);
-      var file = fileInput.files[0];
-      var formData = new FormData();
-      formData.append('image', file);
-      formData.append('comp_id', comp_id);
-
-      $.ajax({
-        url: 'update_image.php',
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-          // Update the image source with the new image path
-          $('#image-' + comp_id).attr('src', response);
-        },
-        error: function() {
-          alert('Image upload failed. Please try again.');
-        }
-      });
-    }
-    import {
-      Ripple,
-      initMDB
-    } from "mdb-ui-kit";
-
-    initMDB({
-      Ripple
-    });
-
-    // function confirmDelete() {
-    //     // Display a confirmation dialog
-    //     var confirmation = confirm("Are you sure you want to delete this record?");
-
-    //     if (confirmation) {
-    //         // User clicked OK, proceed with deletion
-    //         deleteRecord();
-    //     } else {
-    //         // User clicked Cancel, do nothing
-    //         console.log("Record deletion canceled.");
-    //     }
-    // }
-
-    // function deleteRecord() {
-    //     // Your deletion logic here
-    //     console.log("Record deleted.");
-    //     // Example: You might want to make an AJAX request to delete the record from the server
-    //     // fetch('/delete-record', { method: 'POST' }).then(response => response.json()).then(data => console.log(data));
-    // }
 
     
   </script>

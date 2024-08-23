@@ -18,6 +18,18 @@ body {
   background: #f6f9ff;
   color: #444444;
 }
+.custom2 {
+  font-size: 0.8rem;
+  border-radius: 7px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  padding-right: 22px;
+  padding-left: 22px;
+  table-layout: fixed; 
+   width: 100%; 
+   overflow: hidden; 
+
+}
 
 a {
   color: #4154f1;

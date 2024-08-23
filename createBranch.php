@@ -197,7 +197,9 @@ input[type=date].form-control {
         .card-title{
             margin-bottom: 40px;
         }
-
+.card{
+    margin-left: 145px;
+}
         .company-name {
             color: #000;
             text-decoration: none;
@@ -226,9 +228,11 @@ input[type=date].form-control {
 
             box-sizing: border-box;
         }
-        .headerimg{
-            margin-left: 290px;
+        .headerimg {
+            margin-top: 100px;
+            margin-left: 100px;
         }
+
 
         .custom-card {
             width: 60%;
@@ -400,11 +404,19 @@ End Search Bar -->
 <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
 <body>
-    
-    <section class="container my-2 w-50 p-2">
-        <form class="row g-3 p-3" action="#" method="POST">
-            <h3>Add Branch</h3>
 
+<div class="headerimg text-center">
+    <img src="image/create.png" alt="network-logo" width="50" height="50">
+        <h2>Create Branch</h2>
+    </div>
+    <!-- End Header form -->
+    <div class="container d-flex justify-content-center">
+        <div class="card custom-card shadow-lg mt-3">
+            <!-- <h5 class="card-title ml-4">Create Company </h5> -->
+            <div class="card-body">
+                <br>
+                <!-- Multi Columns Form -->
+        <form class="row g-3 p-3" action="#" method="POST">
             <!-- Company ID input (readonly) -->
             <div class="col-md-6">
                 <label class="form-label">Company ID</label>
@@ -413,37 +425,40 @@ End Search Bar -->
 
             <div class="col-md-6">
                 <label class="form-label">Contact Person Name</label>
-                <input type="text" class="form-control" name="ContactPersonName" required>
+                <input type="text" class="form-control" name="ContactPersonName" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="14" title="Only letters allowed; at least 3" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Contact Person Phone</label>
-                <input type="text" class="form-control" name="ContactPersonPhone" required>
+                <input type="text" class="form-control" name="ContactPersonPhone" required pattern="[0-9]{10,13}" title="Phone number should be between 10 to 15 digits" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Contact Person Resignation</label>
-                <input type="text" class="form-control" name="ContactPersonResignation" required>
+                <input type="text" class="form-control" name="ContactPersonResignation" required pattern="[A-Za-z\s]+" required minlength="4" maxlength="14" title="only letters ; at least 4" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">City</label>
-                <input type="text" class="form-control" name="City" required>
+                <input type="text" class="form-control" name="City" required pattern="[A-Za-z\s]+" title="City name should only contain letters and spaces" required>
             </div>
 
             <div class="col-md-6">
                 <label class="form-label">State</label>
-                <input type="text" class="form-control" name="State" required>
+                <input type="text" class="form-control" name="State" required pattern="[A-Za-z\s]+" title="State name should only contain letters and spaces" required>
             </div>
 
             <div class="col-md-6">
                 <label class="form-label">Country</label>
-                <input type="text" class="form-control" name="Country" required>
+                <input type="text" class="form-control" name="Country" required pattern="[A-Za-z\s]+" title="Country name should only contain letters and spaces" required>
             </div>
 
             <div class="col-12 d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary" name="submit" value="submit">Submit</button>
+                <button type="submit" class="btn btn-outline-primary" name="submit" value="submit">Submit</button>
             </div>
         </form>
-    </section>
+</div>
+</div>
+</div>
 
+    
     <script>
         <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
             alert('Company Registered successfully!');

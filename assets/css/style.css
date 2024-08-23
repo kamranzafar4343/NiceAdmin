@@ -75,9 +75,6 @@ h6 {
   flex-direction: column;
 
 }
-.pagetitleinside {
-  padding-left: 600px;
-}
 
 
 .pagetitleinside button {
@@ -269,6 +266,7 @@ h6 {
   font-size: 23px;
   font-weight: 500;
   color: #012970;
+  margin-top:14px;
   font-family: "Poppins", sans-serif;
 }
 
@@ -402,8 +400,8 @@ h6 {
 }
 
 .logo span {
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 800;
   color: #012970;
   font-family: "Nunito", sans-serif;
 }
@@ -458,9 +456,9 @@ h6 {
 }
 
 .navbar-image{
-  width: 50px;
-  height: 50px;
-  margin-right: 7px;
+  width: 43px;
+  height: 44px;
+  margin-right: 9px;
 
 }
 .headerbox {
@@ -1040,10 +1038,7 @@ h6 {
 }
 
 
-.datatable-top{
-  width: 1048px;
 
-}
 
 .datatable-input {
 	padding: 4px 10px;

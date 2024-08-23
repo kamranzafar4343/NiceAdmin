@@ -361,7 +361,6 @@ input[type=date].form-control {
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
 
-
     <!--form--------------------------------------form--------------------------------------->
     <!-- Start Header form -->
     <div class="headerimg text-center">
@@ -378,7 +377,7 @@ input[type=date].form-control {
                 <form class="row g-3" action="insert.php" method="POST" enctype="multipart/form-data">
                     <div class="col-md-6">
                         <label for="comp_name" class="form-label">Company Name</label>
-                        <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s]+" required minlength="4" maxlength="14" title="only letters ; at least 4">
+                        <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="14" title="only letters allowed; at least 3">
                     </div>
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Phone</label>

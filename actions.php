@@ -155,10 +155,10 @@ $result = $conn->query($sql);
       display: inline-block;
       transition: color 0.3s ease;
     }
-
-    .pagetitleinside {
-      padding-left: 600px;
-    }
+    .mt-4 {
+    margin-top: 1.5rem !important;
+    margin-right: 214px;
+}
 
     .datatable-dropdown label {
       font-size: 0.9rem;
@@ -192,12 +192,12 @@ $result = $conn->query($sql);
     border-radius: 7px;
     padding-top: 14px;
     padding-bottom: 14px;
-    padding-right: 22px;
-    padding-left: 22px;
+    padding-right: 34px;
+    padding-left: 40px;
     margin-left: 20px;
     
     /* table-layout: fixed; */
-    /* width: 100%; */
+
     /* overflow: hidden; */
     /* text-overflow: ellipsis; */
     /* white-space: nowrap; */
@@ -241,10 +241,10 @@ tbody, td, tr{
       margin-left: 50px;
     }
 
-    .datatable-top {
-      margin: 0;
-    }
-
+     .datatable-top {
+    width: 844px;
+}
+ 
     .datatable-bottom {
       width: 122%;
     }

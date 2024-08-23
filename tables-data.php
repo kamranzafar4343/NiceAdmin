@@ -137,9 +137,9 @@ $result = $conn->query($sql);
       display: none;
     }
 
-    .datatable-top{
-  width: 1048px;
-
+    .mt-1 {
+    margin-top: .25rem !important;
+    margin-right: 45px;
 }
     .company-name:active {
       animation: clickEffect 0.s ease;
@@ -161,8 +161,8 @@ $result = $conn->query($sql);
     border-radius: 7px;
     padding-top: 14px;
     padding-bottom: 14px;
-    padding-right: 22px;
-    padding-left: 22px;
+    padding-right: 32px;
+    padding-left: 32px;
     
     /* table-layout: fixed; */
     /* width: 100%; */
@@ -220,9 +220,12 @@ tbody, td, tr{
       margin-left: 50px;
     }
 
-    .datatable-top {
+    .datatable-top{
       margin: 0;
-    }
+ 
+      width: 1002px;
+
+}
 
     .datatable-bottom {
       width: 122%;
@@ -425,7 +428,7 @@ tbody, td, tr{
 
         
       <?php endif; ?>
-      <div class="row">
+      <div class="row " id="companytable">
         <div class="col-lg-10">
 
           <?php
@@ -461,7 +464,7 @@ tbody, td, tr{
 
               ?>
               <td>
-                <div style="display: flex; gap: 7px;">
+                <div style="display: flex; gap: 10px;">
                   <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
                   <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                 </div>
@@ -505,10 +508,8 @@ tbody, td, tr{
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 
-
-    
-  </script>
   
+
 
 </body>
 

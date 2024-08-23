@@ -2,14 +2,14 @@
 include 'db.php';
 
 $result = [];
-$company_data=null;
+$company_data = null;
 // Get company ID from query string
 $company_id = $_GET['id'];
 
 // Fetch company details
 $sql = "SELECT * FROM compani WHERE comp_id = $company_id";
 $result = $conn->query($sql);
-$company_data= $result->fetch_assoc();
+$company_data = $result->fetch_assoc();
 ?>
 
 
@@ -20,7 +20,7 @@ $company_data= $result->fetch_assoc();
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+  <title>Company Details</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -49,9 +49,6 @@ $company_data= $result->fetch_assoc();
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-  <!-- awesome icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -73,10 +70,10 @@ $company_data= $result->fetch_assoc();
     }
 
     .datatable-wrapper.no-footer .datatable-container {
-    border: none;
-    margin-left: -315px !important;
-    width: 700px !important;
-}
+      border: none;
+      margin-left: -315px !important;
+      width: 700px !important;
+    }
 
     .company-title {
       font-size: 1.1rem;
@@ -120,23 +117,23 @@ $company_data= $result->fetch_assoc();
       }
     }
 
-.customImage{
-  border: 1px solid white;
-            padding-left:  18px;
-            padding-top: 10px;
-            padding-bottom: 10px;
+    .customImage {
+      border: 1px solid white;
+      padding-left: 18px;
+      padding-top: 10px;
+      padding-bottom: 10px;
 
-       
-}
+
+    }
 
     .card {
-    margin-bottom: 30px;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
-    background-color: white;
-font-size: 0.8rem;
-  }
+      margin-bottom: 30px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+      background-color: white;
+      font-size: 0.8rem;
+    }
 
     .container-card {
       font-size: 0.8rem;
@@ -187,10 +184,11 @@ font-size: 0.8rem;
 
       box-sizing: border-box;
     }
-    .card-icon {
-    margin-left: 35px;
-}
 
+    .remix {
+      margin-left: 35px;
+      width: 40px;
+    }
 
     /* styles for card */
     .custom {
@@ -235,155 +233,155 @@ font-size: 0.8rem;
 </head>
 
 <body>
-<!-- ======= Header ======= -->
-<header id="header" class="header fixed-top d-flex align-items-center">
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
 
-<div class="d-flex align-items-center justify-content-between">
-<img class="navbar-image" src="assets/img/logo3.png" alt="">
-      
-<a href="index.php" class="logo d-flex align-items-center">
-    <span class="d-none d-lg-block">FingerLog</span>
-  </a>
-  <i class="bi bi-list toggle-sidebar-btn"></i>
-</div><!-- End Logo -->
+    <div class="d-flex align-items-center justify-content-between">
+      <img class="navbar-image" src="assets/img/logo3.png" alt="">
 
-<div class="search-bar">
-  <form class="search-form d-flex align-items-center" method="POST" action="#">
-    <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-  </form>
-</div><!-- End Search Bar -->
-
-<nav class="header-nav ms-auto">
-  <ul class="d-flex align-items-center">
-
-    <li class="nav-item d-block d-lg-none">
-      <a class="nav-link nav-icon search-bar-toggle " href="#">
-        <i class="bi bi-search"></i>
+      <a href="index.php" class="logo d-flex align-items-center">
+        <span class="d-none d-lg-block">FingerLog</span>
       </a>
-    </li><!-- End Search Icon-->
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
 
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
 
-    </li><!-- End Messages Nav -->
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
 
-    <li class="nav-item dropdown pe-3 mr-4">
-
-      <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-        <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-      </a><!-- End Profile Iamge Icon -->
-
-      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-        <li class="dropdown-header">
-          <h6>Kevin Anderson</h6>
-          <span>Web Designer</span>
-        </li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-            <i class="bi bi-person"></i>
-            <span>My Profile</span>
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
           </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-            <i class="bi bi-gear"></i>
-            <span>Account Settings</span>
-          </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-            <i class="bi bi-question-circle"></i>
-            <span>Need Help?</span>
-          </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="#">
-            <i class="bi bi-box-arrow-right"></i>
-            <span>Sign Out</span>
-          </a>
-        </li>
-
-      </ul><!-- End Profile Dropdown Items -->
-    </li><!-- End Profile Nav -->
-
-  </ul>
-</nav><!-- End Icons Navigation -->
-
-</header><!-- End Header -->
-
-<!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar">
-
-<ul class="sidebar-nav" id="sidebar-nav">
-
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="index.php">
-      <i class="ri-home-8-line"></i>
-      <span>Dashboard</span>
-    </a>
-  </li><!-- End Dashboard Nav -->
+        </li><!-- End Search Icon-->
 
 
-  <li class="nav-item">
-    <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
-      <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-    </a>
-  </li><!-- End Tables Nav -->
+        </li><!-- End Messages Nav -->
 
-  <li class="nav-heading">Pages</li>
+        <li class="nav-item dropdown pe-3 mr-4">
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="users-profile.html">
-      <i class="bi bi-person"></i>
-      <span>Profile</span>
-    </a>
-  </li>
-  <!-- End Profile Page Nav -->
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Kevin Anderson</h6>
+              <span>Web Designer</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                <i class="bi bi-question-circle"></i>
+                <span>Need Help?</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="index.php">
+          <i class="ri-home-8-line"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
+          <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li><!-- End Tables Nav -->
+
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li>
+      <!-- End Profile Page Nav -->
 
 
 
-  <!-- <li class="nav-item">
+      <!-- <li class="nav-item">
     <a class="nav-link collapsed" href="pages-register.php">
       <i class="bi bi-card-list"></i>
       <span>Register</span>
     </a>
   </li> -->
-  <!-- End Register Page Nav -->
+      <!-- End Register Page Nav -->
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-login.php">
-      <i class="bi bi-box-arrow-in-right"></i>
-      <span>Login</span>
-    </a>
-  </li><!-- End Login Page Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-login.php">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Login</span>
+        </a>
+      </li><!-- End Login Page Nav -->
 
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-contact.php">
-      <i class="bi bi-envelope"></i>
-      <span>Contact</span>
-    </a>
-  </li><!-- End Contact Page Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-contact.php">
+          <i class="bi bi-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </li><!-- End Contact Page Nav -->
 
-</ul>
+    </ul>
 
-</aside>
+  </aside>
 
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
@@ -424,15 +422,12 @@ font-size: 0.8rem;
         <div class="card card-custom bg-white border-white border-0">
           <div class="card-custom-img"></div>
           <div class="card-custom-avatar">
-            <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" alt="Company Image" width="120" height="75"/>
+            <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" alt="Company Image" width="120" height="75" />
           </div>
           <div class="card-body list-group">
             <h4 class="card-title ml-3"><?php echo $company_data['comp_name']; ?></h4>
-            <br>
-            <div class="card-icon">
-              <a href="actions.php?id=<?php echo $company_data['comp_id']; ?>">  <i class="fa-solid fa-code-branch fa-xl"></i></a>
-              </div>
-            <hr>
+              <a href="actions.php?id=<?php echo $company_data['comp_id']; ?>" ><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
+
             <ul class="list-group list-group-horizontal d-flex justify-content-between">
               <li class="list-group-item" style="color:grey;  width: 30%;">Email</li>
               <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $company_data['email']; ?></li>
@@ -480,18 +475,18 @@ font-size: 0.8rem;
         // <th class='custom-header'>Action</th>";
         //   echo "</tr></thead><tbody>";
 
-          // while ($row = $result->fetch_assoc()) {
-          //   echo "<tr>";
-          //   echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
-          //   echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td>";
-          //   echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
-          //   echo "<td>" . htmlspecialchars($row["ContactPersonResignation"]) . "</td>";
-          //   echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
-          //   echo "<td>" . htmlspecialchars($row["City"]) . "</td>";
-          //   echo "<td>" . htmlspecialchars($row["State"]) . "</td>";
-          //   echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
+        // while ($row = $result->fetch_assoc()) {
+        //   echo "<tr>";
+        //   echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
+        //   echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td>";
+        //   echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
+        //   echo "<td>" . htmlspecialchars($row["ContactPersonResignation"]) . "</td>";
+        //   echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
+        //   echo "<td>" . htmlspecialchars($row["City"]) . "</td>";
+        //   echo "<td>" . htmlspecialchars($row["State"]) . "</td>";
+        //   echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
         ?>
-            <!-- <td>
+        <!-- <td>
               <a class="btn btn-danger" href="branchDelete.php?id=<?php echo $row['compID_FK']; ?>">Delete</a>
             </td> -->
         <?php
@@ -538,10 +533,10 @@ font-size: 0.8rem;
   <script src="assets/js/main.js"></script>
 
   <script>
-<script>
-    $(document).on('click', 'img', function() {
-      $(this).next('input[type="file"]').click();
-    });
+    < script >
+      $(document).on('click', 'img', function() {
+        $(this).next('input[type="file"]').click();
+      });
 
     function uploadImage(comp_id) {
       var fileInput = document.getElementById('file-' + comp_id);
@@ -573,8 +568,6 @@ font-size: 0.8rem;
     initMDB({
       Ripple
     });
-
-  
   </script>
 </body>
 

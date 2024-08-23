@@ -48,7 +48,7 @@ function test_input($data) {
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+  <title>Login</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -68,6 +68,13 @@ function test_input($data) {
   <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+
+  <style>
+  .w-100 {
+    margin-left: 122px;
+    width: 100% !important;
+}</style>
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
@@ -110,7 +117,7 @@ function test_input($data) {
 
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                    <p class="text-center small">Enter your email & password to login</p>
+                    <p class="text-center small">Enter your email & password</p>
                   </div>
 
                   <form class="row g-3 needs-validation"  method="post" action="<?php echo htmlspecialchars ($_SERVER["PHP_SELF"]);?>">
@@ -126,8 +133,8 @@ function test_input($data) {
                       <input type="password" name="password" class="form-control" id="yourPassword" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
-                    <div class="col-12">
-                  <button class="btn btn-primary w-100" type="submit" name="submit" value="submit">Login</button>
+                    <div class="col-6 d-flex">
+                  <button class="btn btn-outline-primary w-100" type="submit" name="submit" value="submit">Login</button>
                 </div>
                 <!-- <div class="col-12">
                   <p class="small mb-0">Don't have account? <a href="pages-register.php">Create an account</a></p>

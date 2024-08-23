@@ -119,10 +119,9 @@ $company_data = $result->fetch_assoc();
 
     .customImage {
       border: 1px solid white;
-      padding-left: 18px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-
+      position: relative;
+    top: 36%;
+    left: 25%;
 
     }
 
@@ -186,7 +185,7 @@ $company_data = $result->fetch_assoc();
     }
 
     .remix {
-      margin-left: 35px;
+      margin-left: 120px;
       width: 40px;
     }
 
@@ -430,7 +429,7 @@ $company_data = $result->fetch_assoc();
             <hr>
             <ul class="list-group list-group-horizontal d-flex justify-content-between">
               <li class="list-group-item" style="color:grey;  width: 30%;">Email</li>
-              <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $company_data['email']; ?></li>
+              <li class="list-group-item text-end" style="text-align: right; width: 75%;"><?php echo $company_data['email']; ?></li>
             </ul>
             <ul class="list-group list-group-horizontal-sm d-flex justify-content-between">
               <li class="list-group-item" style="color:grey; width: 30%;">Phone</li>

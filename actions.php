@@ -484,7 +484,7 @@ tbody, td, tr{
 
                         echo "</tbody></table>";
                     } else {
-                        echo "no entry found";
+                        echo "There's not an already existing branch";
                     }
                     ?>
 

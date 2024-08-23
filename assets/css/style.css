@@ -263,6 +263,7 @@ h6 {
 
 .card-title {
   padding: 20px 0 0px 0;
+  text-align: center;
   font-size: 23px;
   font-weight: 500;
   color: #012970;
@@ -497,6 +498,20 @@ h6 {
   border-radius: 3px;
   transition: 0.3s;
   width: 100%;
+}
+
+input[type=date].form-control {
+  appearance: none;
+  font-size: 0.8rem;
+  padding: 20px;
+}
+
+.form-control[type=file]:not(:disabled):not([readonly]) {
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding-top: 9px;
+  padding-bottom: 10px;
+  height: 39px;
 }
 
 .header .search-form input:focus,
@@ -906,7 +921,7 @@ h6 {
 
     max-width: 47%;
     margin-top: 20px;
-    margin-left: 1px;
+    margin-left: 16px;
 }
 .card-title {
   padding: 5px 0 0px 0;

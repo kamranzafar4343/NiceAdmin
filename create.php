@@ -107,24 +107,28 @@
 
         /*styles for form*/
         .card-body {
-    padding: 0 20px 20px 20px;
-    font-size: 0.8rem;
-}
-.form-control[type=file]:not(:disabled):not([readonly]) {
-    cursor: pointer;
-    font-size: 0.8rem;
+            padding: 0 20px 20px 20px;
+            font-size: 0.8rem;
+        }
 
-}
-input[type=date].form-control {
-    appearance: none;
-    font-size: 0.8rem;
-}
+        .form-control[type=file]:not(:disabled):not([readonly]) {
+            cursor: pointer;
+            font-size: 0.8rem;
 
-@media (min-width: 1200px) {
-    .h2, h2 {
-        font-size: 1.5rem;
-    }
-}
+        }
+
+        input[type=date].form-control {
+            appearance: none;
+            font-size: 0.8rem;
+        }
+
+        @media (min-width: 1200px) {
+
+            .h2,
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
 
         /* Define the pulse animation */
         @keyframes pulse {
@@ -206,19 +210,19 @@ input[type=date].form-control {
 
 </head>
 
-<body>  <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
+<body> <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
 
-    <div class="d-flex align-items-center justify-content-between">
-    <img class="navbar-image" src="assets/img/logo3.png" alt="">  
-    <a href="index.php" class="logo d-flex align-items-center">
-       
-        <span class="d-none d-lg-block">FingerLog</span>
-      </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
+        <div class="d-flex align-items-center justify-content-between">
+            <img class="navbar-image" src="assets/img/logo3.png" alt="">
+            <a href="index.php" class="logo d-flex align-items-center">
 
-    <!-- 
+                <span class="d-none d-lg-block">FingerLog</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+        <!-- 
     <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="POST" action="#">
         <input type="text" name="query" placeholder="Search" title="Enter search keyword">
@@ -227,76 +231,76 @@ input[type=date].form-control {
     </div>
     End Search Bar -->
 
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
 
-        <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
-        </li><!-- End Search Icon-->
+                <li class="nav-item d-block d-lg-none">
+                    <a class="nav-link nav-icon search-bar-toggle " href="#">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </li><!-- End Search Icon-->
 
-        
-        <li class="nav-item profileimage dropdown pe-3 mr-4">
 
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-          </a><!-- End Profile Image Icon -->
+                <li class="nav-item profileimage dropdown pe-3 mr-4">
 
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                    </a><!-- End Profile Image Icon -->
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-person"></i>
-                <span>My Profile</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li class="dropdown-header">
+                            <h6>Kevin Anderson</h6>
+                            <span>Web Designer</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-gear"></i>
-                <span>Account Settings</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-person"></i>
+                                <span>My Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                <i class="bi bi-question-circle"></i>
-                <span>Need Help?</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-gear"></i>
+                                <span>Account Settings</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
-            </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                                <i class="bi bi-question-circle"></i>
+                                <span>Need Help?</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </li>
 
-      </ul>
-    </nav><!-- End Icons Navigation -->
+                    </ul><!-- End Profile Dropdown Items -->
+                </li><!-- End Profile Nav -->
 
-  </header><!-- End Header -->
+            </ul>
+        </nav><!-- End Icons Navigation -->
+
+    </header><!-- End Header -->
 
 
     <!-- ======= Sidebar ======= -->
@@ -364,7 +368,7 @@ input[type=date].form-control {
     <!--form--------------------------------------form--------------------------------------->
     <!-- Start Header form -->
     <div class="headerimg text-center">
-    <img src="image/create.png" alt="network-logo" width="50" height="50">
+        <img src="image/create.png" alt="network-logo" width="50" height="50">
         <h2>Create Company</h2>
     </div>
     <!-- End Header form -->
@@ -374,14 +378,14 @@ input[type=date].form-control {
             <div class="card-body">
                 <br>
                 <!-- Multi Columns Form -->
-                <form class="row g-3" action="insert.php" method="POST" enctype="multipart/form-data">
+                <form class="row g-3 needs-validation" action="insert.php" method="POST" enctype="multipart/form-data">
                     <div class="col-md-6">
                         <label for="comp_name" class="form-label">Company Name</label>
                         <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="14" title="only letters allowed; at least 3">
                     </div>
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="phone" name="phone" required pattern="[0-9]{10,13}" title="Phone number should be between 10 to 15 digits">
+                        <input type="text" class="form-control" id="phone" name="phone" required pattern="[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
                     </div>
                     <div class="col-md-6">
                         <label for="email" class="form-label">Email</label>
@@ -393,7 +397,8 @@ input[type=date].form-control {
                     </div>
                     <div class="col-md-6">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required minlength="8" maxlength="12" title="Password should be at least 8 characters long">
+                        <input type="password" class="form-control" id="password" name="password" required minlength="8" maxlength="12" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                            title="It must be 8-16 characters, include at least one number, one uppercase and one lowercase letter">
                     </div>
                     <div class="col-md-6">
                         <label for="image" class="form-label" style="font-size: 0.8rem;">Image</label>
@@ -469,6 +474,36 @@ input[type=date].form-control {
                 });
             });
         });
+        window.onload = function() {
+            // Get the current date
+            const today = new Date();
+
+            // Format the date to YYYY-MM-DD
+            const formattedDate = today.toISOString().split('T')[0];
+
+            // Set the value of the date input to the formatted date
+            document.getElementById('registration').value = formattedDate;
+        };
+        window.onload = function() {
+            // Get the current date
+            const today = new Date();
+
+            // Format the current date to YYYY-MM-DD for the registration date
+            const formattedDate = today.toISOString().split('T')[0];
+
+            // Set the current date as the default value for the registration date input
+            document.getElementById('registration').value = formattedDate;
+
+            // Calculate the date one year from today
+            const nextYear = new Date(today);
+            nextYear.setFullYear(today.getFullYear() + 1);
+
+            // Format the date one year from today to YYYY-MM-DD for the expiry date
+            const formattedExpiryDate = nextYear.toISOString().split('T')[0];
+
+            // Set the default value for the expiry date input to one year from today
+            document.getElementById('expiry').value = formattedExpiryDate;
+        };
     </script>
 
     <script src="js/jquery-3.3.1.min.js"></script>

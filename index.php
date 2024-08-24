@@ -1,5 +1,14 @@
 <?php
+// session_start(); // Start the session
+
 include 'db.php';
+
+// // Check if the user is logged in
+// if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+//     // User is not logged in, redirect to login page
+//     header("Location: pages-login.php");
+//     exit;
+// }
 
 //get total no of companies for compani card
 $query = "SELECT COUNT(*) AS count FROM compani";
@@ -198,8 +207,15 @@ margin-right: 24px;
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-login.php">
-          <i class="bi bi-box-arrow-in-right"></i>
+          <i class="bi bi-box-arrow-right"></i>
           <span>Login</span>
+        </a>
+      </li><!-- End Login Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="logout.php">
+          <i class="bi bi-box-arrow-left"></i>
+          <span>Logout</span>
         </a>
       </li><!-- End Login Page Nav -->
 
@@ -252,7 +268,7 @@ margin-right: 24px;
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Companies </h5>
+                  <h5 class="card-title-indexphp">Companies </h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -286,7 +302,7 @@ margin-right: 24px;
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Branches </h5>
+                  <h5 class="card-title-indexphp">Branches </h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -322,7 +338,7 @@ margin-right: 24px;
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Employees</h5>
+                  <h5 class="card-title-indexphp">Employees</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">

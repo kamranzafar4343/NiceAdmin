@@ -177,6 +177,13 @@ End Search Bar -->
     </a>
   </li><!-- End Login Page Nav -->
 
+  <li class="nav-item">
+        <a class="nav-link collapsed" href="logout.php">
+          <i class="bi bi-box-arrow-left"></i>
+          <span>Logout</span>
+        </a>
+      </li><!-- End Login Page Nav -->
+
 
   <li class="nav-item">
     <a class="nav-link active" href="pages-contact.php">

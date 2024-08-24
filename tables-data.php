@@ -1,6 +1,14 @@
 <?php
+// session_start(); // Start the session
 
 include 'db.php'; // Include the database connection
+
+// // Check if the user is logged in
+// if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+//     // User is not logged in, redirect to login page
+//     header("Location: pages-login.php");
+//     exit;
+// }
 
 $sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
 $result = $conn->query($sql);
@@ -385,6 +393,12 @@ tbody, td, tr{
         </a>
       </li><!-- End Login Page Nav -->
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="logout.php">
+          <i class="bi bi-box-arrow-left"></i>
+          <span>Logout</span>
+        </a>
+      </li><!-- End Login Page Nav -->
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-contact.php">

@@ -261,15 +261,6 @@ h6 {
   padding: 15px;
 }
 
-.card-title {
-  padding: 20px 0 0px 0;
-  text-align: center;
-  font-size: 23px;
-  font-weight: 500;
-  color: #012970;
-  margin-top:14px;
-  font-family: "Poppins", sans-serif;
-}
 
 .card-title span {
   color: #899bbd;
@@ -923,11 +914,30 @@ input[type=date].form-control {
     margin-top: 20px;
     margin-left: 16px;
 }
+.card-title-indexphp {
+  padding: 5px 0 0px 0;
+  font-size: 20px;
+  font-weight: 500;
+  position: relative;
+  left: -85px;
+  top: 1px;
+  text-align: center;
+  color: #012970;
+  margin-top:14px;
+  font-family: "Poppins", sans-serif;
+  /* font-family: "Poppins", sans-serif; */
+}
+
 .card-title {
   padding: 5px 0 0px 0;
   font-size: 20px;
   font-weight: 500;
+  position: relative;
+  left: -15px;
+  text-align: center;
   color: #012970;
+  margin-top:14px;
+  font-family: "Poppins", sans-serif;
   /* font-family: "Poppins", sans-serif; */
 }
 .dashboard .revenue-card .card-icon {

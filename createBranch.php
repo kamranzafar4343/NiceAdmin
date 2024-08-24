@@ -1,9 +1,11 @@
 <?php
-include "db.php";
+
 
 // Retrieve company ID from URL
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
+
+include "db.php";
 // Validate company ID
 $companyQuery = "SELECT comp_id, comp_name FROM compani WHERE comp_id = $company_id";
 $companyResult = $conn->query($companyQuery);

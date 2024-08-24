@@ -1,72 +1,3 @@
-<?php
-// session_start(); // Start the session at the beginning of the script
-require 'db.php';
-
-// // Assume you have validated the user's credentials here
-// $validUser = true; // This should be replaced with actual authentication logic
-
-// if ($validUser) {
-//     // Set session variables
-//     $_SESSION['loggedin'] = true;
-
-//     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//       // Assume the form field for company name is named 'company_name'
-//       if (isset($_POST['comp_name']) && !empty($_POST['comp_name'])) {
-//           // Assign the form input to a session variable
-//           $_SESSION['comp_name'] = $_POST['comp_name'];
-//       } else {
-//           // Handle the case where the input is not set or is empty
-//           echo "Please provide a company name.";
-//       }
-//   }
-
-//     // Redirect to the index page after successful login
-//     header("Location: index.php");
-//     exit;
-// } else {
-//     echo "Invalid login credentials.";
-// }
-
-
-if(isset($_POST["submit"])){
-  $email= mysqli_real_escape_string($conn, $_POST["email"]);
-  $password=mysqli_real_escape_string($conn, $_POST["password"]);
-  
-  $result = mysqli_query($conn, "SELECT * FROM register WHERE email = '$email' ");
-
-  $row= mysqli_fetch_assoc($result);
-
-  if(mysqli_num_rows($result) > 0){
-    if($password == $row["password"]){
-      $_SESSION["login"]=true;
-      $_SESSION["id"]= $row["id"];
-      header("Location: index.php");
-    }
-    else{
-      echo "<script> alert('Wrong password'); </script>";
-    }
-}
-else{
-  echo "<script> alert('User not registered'); </script>";
-}
-}
-
-// define variables and set to empty values
-$email = $password= "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $email = test_input($_POST["email"]);
-  $password = test_input($_POST["password"]);
-}
-
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,7 +6,7 @@ function test_input($data) {
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Login</title>
+  <title>Sign out</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -143,30 +74,11 @@ function test_input($data) {
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                    <p class="text-center small">Enter your email & password</p>
+                    <h5 class="card-title text-center pb-0 fs-4">Singed out successfully!</h5>
+                    <p class="text-center small">Have a nice day.</p>
                   </div>
 
-                  <form class="row g-3 needs-validation"  method="post" action="<?php echo htmlspecialchars ($_SERVER["PHP_SELF"]);?>">
-
-                    <div class="col-12">
-                      <label for="yourEmail" class="form-label">Your Email</label>
-                      <input type="email" name="email" class="form-control" id="yourEmail" required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
-                      <div class="invalid-feedback">Please enter your password!</div>
-                    </div>
-                    <div class="col-6 d-flex">
-                  <button class="btn btn-outline-primary w-100" type="submit" name="submit" value="submit">Login</button>
-                </div>
-                <!-- <div class="col-12">
-                  <p class="small mb-0">Don't have account? <a href="pages-register.php">Create an account</a></p>
-                </div> -->
-                </form>
+                  
                 </div>
                 
 
@@ -208,4 +120,11 @@ function test_input($data) {
 </body>
 
 </html>
+<?php
+session_start(); // Start the session
+
+// Destroy all session data
+session_unset();
+session_destroy();
+?>
 

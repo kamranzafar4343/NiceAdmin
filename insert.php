@@ -6,6 +6,7 @@ if (isset($_POST['submit'])) {
     $phone = mysqli_real_escape_string($conn, $_POST['phone']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
     // Check if the email already exists in the database
     $emailCheckQuery = "SELECT * FROM `compani` WHERE `email` = '$email'";
@@ -67,15 +68,14 @@ if (isset($_POST['submit'])) {
 
 //redirect and show message
     if (mysqli_query($conn, $sql)) {
-        $_SESSION['data_inserted'] = true;
-    } else {
-        $_SESSION['data_inserted'] = false;
 
+        header("location:tables-data.php");
+        exit();
+    } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
-    header("location:insert.php");
-    exit();
+    
 
     $conn->close();
 }
@@ -90,18 +90,7 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-<!--script for showing succes or error message and redirect also-->
-    <script>
-        <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
-            alert('Company Registered successfully!');
-            window.location.href = 'tables-data.php'; // Redirect to the Branches page
-            <?php unset($_SESSION['data_inserted']); // Clear the session variable 
-            ?>
-        <?php elseif (isset($_SESSION['data_inserted']) && !$_SESSION['data_inserted']): ?>
-            alert('Failed to enter new data.');
-            <?php unset($_SESSION['data_inserted']); ?>
-        <?php endif; ?>
-    </script>
+
 </body>
 
 </html>

@@ -432,7 +432,7 @@ $company_data = $result->fetch_assoc();
           </div>
           <div class="card-body list-group">
             <h4 class="card-title ml-3"><?php echo $company_data['comp_name']; ?></h4>
-            <a href="actions.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
+            <a href="Branches.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
             <hr>
             <ul class="list-group list-group-horizontal d-flex justify-content-between">
               <li class="list-group-item" style="color:grey;  width: 30%;">Email</li>

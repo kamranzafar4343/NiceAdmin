@@ -5,3 +5,7 @@ NiceAdmin comes with lots of reusable and beautiful UI elements and components l
 NiceAdmin template has a fully responsive layout. It displays perfectly on all the modern displays and resolutions from regular desktop screens to tablets, iPads, iPhones and small mobile devices.
 
 Sass/SCSS source files included (pro and membership users only)
+
+Pages Hirearchy:
+
+-> Dashboad.php

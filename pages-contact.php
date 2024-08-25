@@ -146,7 +146,7 @@ End Search Bar -->
 
 
   <li class="nav-item">
-    <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
+    <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
       <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
     </a>
   </li><!-- End Tables Nav -->

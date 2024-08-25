@@ -460,7 +460,7 @@ tbody, td, tr{
           ?>
               <td>
 
-                <a class="text-primary fw-bold" href="table-data2.php?id=<?php echo $row['comp_id']; ?>">
+                <a class="text-primary fw-bold" href="CompanyInfo.php?id=<?php echo $row['comp_id']; ?>">
                   <?php echo $row['comp_name']; ?>
                 </a>
               </td>

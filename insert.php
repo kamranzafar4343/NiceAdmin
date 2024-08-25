@@ -64,12 +64,12 @@ if (isset($_POST['submit'])) {
 
     // Insert the record into the database
     $sql = "INSERT INTO `compani` (`comp_name`, `phone`, `email`, `password`, `image`, `city`, `state`, `country`, `registration`, `expiry`) 
-            VALUES ('$comp_name', '$phone', '$email', '$password', '$img_des', '$city', '$state', '$country', '$registration', '$expiry')";
+            VALUES ('$comp_name', '$phone', '$email', '$hashedPassword', '$img_des', '$city', '$state', '$country', '$registration', '$expiry')";
 
 //redirect and show message
     if (mysqli_query($conn, $sql)) {
 
-        header("location:tables-data.php");
+        header("location:Companies.php");
         exit();
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;

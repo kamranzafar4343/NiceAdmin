@@ -358,7 +358,7 @@ End Search Bar -->
 
 
   <li class="nav-item">
-    <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
+    <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
       <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
     </a>
   </li><!-- End Tables Nav -->
@@ -464,7 +464,7 @@ End Search Bar -->
     <script>
         <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
             alert('Company Registered successfully!');
-            window.location.href = 'tables-data.php';
+            window.location.href = 'Companies.php';
             <?php unset($_SESSION['data_inserted']); // Clear the session variable 
             ?>
         <?php elseif (isset($_SESSION['data_inserted']) && !$_SESSION['data_inserted']): ?>

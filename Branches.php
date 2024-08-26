@@ -208,6 +208,10 @@ tbody, td, tr{
     max-width: 200px;
 }
 
+.datatable-table > tbody > tr > td, .datatable-table > tbody > tr > th, .datatable-table > tfoot > tr > td, .datatable-table > tfoot > tr > th, .datatable-table > thead > tr > td, .datatable-table > thead > tr > th {
+    vertical-align: top;
+    padding: 8px 2px;
+}
     .image-circle{
       display: flex;
     justify-content: center; /* Horizontally center */
@@ -249,6 +253,9 @@ tbody, td, tr{
       width: 122%;
     }
 
+    /* .custom-header-col-name{
+        margin-right: 1000px;
+    } */
     </style>
 
     <!-- Template Main CSS File -->
@@ -371,7 +378,7 @@ tbody, td, tr{
 
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
@@ -453,13 +460,15 @@ tbody, td, tr{
                     if ($result->num_rows > 0) {
                         // Output data for each row
                         echo "<table class='datatable custom2'  style='background-color: #ffffff;'><thead><tr>";
-                        echo "<th class='custom-header' style='width: 13%;'>Company Id</th><th class='custom-header ' style='width: 13%;' scope='row'>Branch Id</th><th class='custom-header' style='width: 15%;'>Representative</th><th class='custom-header'>Phone</th><th class='custom-header' style='width: 15.5%;'>Resignation</th><th class='custom-header'>City</th><th class='custom-header'>State</th><th class='custom-header' style='width: 11%;'>Country</th><th class='custom-header'>Action</th>";
+                        echo "<th class='custom-header' style='width: 13%;'>Company Id</th><th class='custom-header ' style='width: 10%;' scope='row'>Branch Id</th><th class='custom-header-col-name' style='width: 6.488549618320611%; margin-left: 50px;' scope='row'>Branch Name</th><th class='custom-header' style='width: 15%;'>Representative</th><th class='custom-header'>Phone</th><th class='custom-header' style='width: 15.5%;'>Resignation</th><th class='custom-header'>City</th><th class='custom-header'>State</th><th class='custom-header' style='width: 11%;'>Country</th><th class='custom-header'>Action</th>";
                         echo "</tr></thead><tbody>";
 
                         while ($row = $result->fetch_assoc()) {
                             echo "<tr>";
                             echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
                             echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td> ";
+                            echo "<td>" . htmlspecialchars($row["branch_name"]) . "</td>";
+                            
                             echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
                             echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
 

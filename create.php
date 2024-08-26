@@ -407,15 +407,29 @@
 
                     <div class="col-md-6">
                         <label for="country" class="form-label">Country</label>
-                        <input type="text" class="form-control" id="country" name="country" required pattern="[A-Za-z\s]+" title="Country name should only contain letters and spaces">
+                        <select class="form-select" id="country" name="country" required>
+                            <option value="">Select Country</option>
+                            <option value="USA">USA</option>
+                            <option value="Canada">Canada</option>
+                            <option value="UK">UK</option>
+                            <!-- Add more countries as needed -->
+                        </select>
                     </div>
+
                     <div class="col-md-6">
                         <label for="state" class="form-label">State</label>
-                        <input type="text" class="form-control" id="state" name="state" required pattern="[A-Za-z\s]+" title="State name should only contain letters and spaces">
+                        <select class="form-select" id="state" name="state" required>
+                            <option value="">Select State</option>
+                            <!-- Options will be dynamically populated based on selected country -->
+                        </select>
                     </div>
+
                     <div class="col-md-6">
                         <label for="city" class="form-label">City</label>
-                        <input type="text" class="form-control" id="city" name="city" required pattern="[A-Za-z\s]+" title="City name should only contain letters and spaces">
+                        <select class="form-select" id="city" name="city" required>
+                            <option value="">Select City</option>
+                            <!-- Options will be dynamically populated based on selected state -->
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label for="registration" class="form-label">Registration Date</label>
@@ -455,16 +469,15 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
     <!-- Template Main JS File -->
+
+
+    <script>
+        const dataTable = new simpleDatatables.DataTable("#myTable2", {
+            searchable: false,
+            fixedHeight: true,
+        })
+    </script>
     <script src="assets/js/main.js"></script>
-
-<script>
-    
-    const dataTable = new simpleDatatables.DataTable("#myTable2", {
-  searchable: false,
-  fixedHeight: true,
-})
-</script>
-
 </body>
 
 </html>

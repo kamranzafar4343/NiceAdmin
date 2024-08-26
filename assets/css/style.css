@@ -25,9 +25,9 @@ body {
   padding-bottom: 14px;
   padding-right: 22px;
   padding-left: 22px;
-  table-layout: fixed; 
+  /* table-layout: fixed;  */
    width: 100%; 
-   overflow: hidden; 
+   /* overflow: hidden;  */
 
 }
 

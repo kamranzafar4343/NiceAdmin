@@ -70,14 +70,18 @@ if (isset($_POST['submit'])) {
     //redirect and show message
     if (mysqli_query($conn, $sql)) {
 
-        header("location:Companies.php");
-        exit();
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        // Step 2: Get the ID of the newly inserted company
+        $newCompanyId = mysqli_insert_id($conn);
+
+        $insertBranchSql = "INSERT INTO `branch` (`compID_FK`, `branch_name` ) VALUES ('$newCompanyId', '$comp_name')";
     }
 
-
+    if (mysqli_query($conn, $insertBranchSql)) {
+        header("Location: Branches.php?id=" . $newCompanyId);
+        exit; // Stop further script execution
+    } else {
+        echo "Error creating branch: " . mysqli_error($conn);
+    }
 
     $conn->close();
 }
-?>

@@ -449,4 +449,62 @@ function populateCities() {
 window.onload = function() {
   populateStatesAndCities();
 };*/
+
+document.addEventListener('DOMContentLoaded', function() {
+  const countryStateCityData = {
+    USA: {
+      California: ["Los Angeles", "San Francisco", "San Diego"],
+      Texas: ["Houston", "Austin", "Dallas"]
+      // Add more states and cities
+    },
+    Canada: {
+      Ontario: ["Toronto", "Ottawa", "Hamilton"],
+      Quebec: ["Montreal", "Quebec City"]
+      // Add more provinces and cities
+    },
+    UK: {
+      England: ["London", "Manchester", "Birmingham"],
+      Scotland: ["Edinburgh", "Glasgow"]
+      // Add more countries and cities
+    }
+  };
+
+  const countrySelect = document.getElementById('country');
+  const stateSelect = document.getElementById('state');
+  const citySelect = document.getElementById('city');
+
+  // Update states dropdown when a country is selected
+  countrySelect.addEventListener('change', function() {
+    const selectedCountry = countrySelect.value;
+    stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
+    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+    if (selectedCountry) {
+      const states = Object.keys(countryStateCityData[selectedCountry]);
+      states.forEach(function(state) {
+        const option = document.createElement('option');
+        option.value = state;
+        option.text = state;
+        stateSelect.add(option);
+      });
+    }
+  });
+
+  // Update cities dropdown when a state is selected
+  stateSelect.addEventListener('change', function() {
+    const selectedCountry = countrySelect.value;
+    const selectedState = stateSelect.value;
+    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+    if (selectedCountry && selectedState) {
+      const cities = countryStateCityData[selectedCountry][selectedState];
+      cities.forEach(function(city) {
+        const option = document.createElement('option');
+        option.value = city;
+        option.text = city;
+        citySelect.add(option);
+      });
+    }
+  });
+});
 ;

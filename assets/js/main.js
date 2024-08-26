@@ -316,4 +316,137 @@
     }, 200);
   }
 
-})();
+})()
+
+//new code
+
+$(document).ready(function() {
+  $('#email').blur(function() {
+      var email = $(this).val();
+
+      $.ajax({
+          url: 'check_email.php',
+          method: 'POST',
+          data: {
+              email: email
+          },
+          success: function(response) {
+              if (response === 'exists') {
+                  $('#email').addClass('is-invalid');
+                  $('#emailFeedback').text('Email already exists. Please use another email.');
+              } else {
+                  $('#email').removeClass('is-invalid');
+                  $('#emailFeedback').text('');
+              }
+          }
+      });
+  });
+});
+window.onload = function() {
+  // Get the current date
+  const today = new Date();
+
+  // Format the date to YYYY-MM-DD
+  const formattedDate = today.toISOString().split('T')[0];
+
+  // Set the value of the date input to the formatted date
+  document.getElementById('registration').value = formattedDate;
+};
+window.onload = function() {
+  // Get the current date
+  const today = new Date();
+
+  // Format the current date to YYYY-MM-DD for the registration date
+  const formattedDate = today.toISOString().split('T')[0];
+
+  // Set the current date as the default value for the registration date input
+  document.getElementById('registration').value = formattedDate;
+
+  // Calculate the date one year from today
+  const nextYear = new Date(today);
+  nextYear.setFullYear(today.getFullYear() + 1);
+
+  // Format the date one year from today to YYYY-MM-DD for the expiry date
+  const formattedExpiryDate = nextYear.toISOString().split('T')[0];
+
+  // Set the default value for the expiry date input to one year from today
+  document.getElementById('expiry').value = formattedExpiryDate;
+};
+
+
+// JavaScript data and functions remain unchanged
+/*const data = {
+  "Pakistan": {
+      "Punjab": ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
+      "Sindh": ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
+      "Khyber Pakhtunkhwa": ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
+      "Balochistan": ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
+      "Islamabad Capital Territory": ["Islamabad"],
+      "Azad Jammu and Kashmir": ["Muzaffarabad", "Mirpur", "Rawalakot"],
+      "Gilgit-Baltistan": ["Gilgit", "Skardu", "Hunza"]
+  },
+  "United States": {
+      "California": ["Los Angeles", "San Francisco", "San Diego"],
+      "New York": ["New York City", "Buffalo", "Rochester"],
+      "Texas": ["Houston", "Austin", "Dallas"]
+  },
+  "Canada": {
+      "Ontario": ["Toronto", "Ottawa", "Mississauga"],
+      "Quebec": ["Montreal", "Quebec City"],
+      "British Columbia": ["Vancouver", "Victoria"]
+  },
+  "United Kingdom": {
+      "England": ["London", "Manchester", "Liverpool"],
+      "Scotland": ["Edinburgh", "Glasgow"],
+      "Wales": ["Cardiff", "Swansea"],
+      "Northern Ireland": ["Belfast", "Derry"]
+  }
+  // Add more countries and their states and cities here
+};
+
+function populateStatesAndCities() {
+  const countrySelect = document.getElementById('country');
+  const stateSelect = document.getElementById('state');
+  const citySelect = document.getElementById('city');
+  const selectedCountry = countrySelect.value;
+
+  stateSelect.innerHTML = '';
+  citySelect.innerHTML = '';
+
+  if (data[selectedCountry]) {
+      const states = Object.keys(data[selectedCountry]);
+      states.forEach(state => {
+          const option = document.createElement('option');
+          option.value = state;
+          option.textContent = state;
+          stateSelect.appendChild(option);
+      });
+
+      populateCities();
+  }
+}
+
+function populateCities() {
+  const countrySelect = document.getElementById('country');
+  const stateSelect = document.getElementById('state');
+  const citySelect = document.getElementById('city');
+  const selectedCountry = countrySelect.value;
+  const selectedState = stateSelect.value;
+
+  citySelect.innerHTML = '';
+
+  if (data[selectedCountry] && data[selectedCountry][selectedState]) {
+      const cities = data[selectedCountry][selectedState];
+      cities.forEach(city => {
+          const option = document.createElement('option');
+          option.value = city;
+          option.textContent = city;
+          citySelect.appendChild(option);
+      });
+  }
+}
+
+window.onload = function() {
+  populateStatesAndCities();
+};*/
+;

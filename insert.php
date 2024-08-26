@@ -12,11 +12,12 @@ if (isset($_POST['submit'])) {
     $emailCheckQuery = "SELECT * FROM `compani` WHERE `email` = '$email'";
     $emailCheckResult = $conn->query($emailCheckQuery);
 
-
-    //---------------------------set image variable------------------------ and its validation
     if ($emailCheckResult->num_rows > 0) {
         die("Error: The email '$email' already exists.");
     }
+
+    //---------------------------set image variable------------------------ and its validation
+
 
     // Validate if the image is uploaded without errors
     if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
@@ -66,7 +67,7 @@ if (isset($_POST['submit'])) {
     $sql = "INSERT INTO `compani` (`comp_name`, `phone`, `email`, `password`, `image`, `city`, `state`, `country`, `registration`, `expiry`) 
             VALUES ('$comp_name', '$phone', '$email', '$hashedPassword', '$img_des', '$city', '$state', '$country', '$registration', '$expiry')";
 
-//redirect and show message
+    //redirect and show message
     if (mysqli_query($conn, $sql)) {
 
         header("location:Companies.php");
@@ -75,22 +76,8 @@ if (isset($_POST['submit'])) {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
-    
+
 
     $conn->close();
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insert Data</title>
-</head>
-
-<body>
-
-</body>
-
-</html>

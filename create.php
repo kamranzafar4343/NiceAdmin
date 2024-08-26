@@ -317,7 +317,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
@@ -381,11 +381,11 @@
                 <form class="row g-3 needs-validation" action="insert.php" method="POST" enctype="multipart/form-data">
                     <div class="col-md-6">
                         <label for="comp_name" class="form-label">Company Name</label>
-                        <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="14" title="only letters allowed; at least 3">
+                        <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
                     </div>
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="phone" name="phone" required pattern="[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
+                        <input type="text" class="form-control" id="phone" name="phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
                     </div>
                     <div class="col-md-6">
                         <label for="email" class="form-label">Email</label>
@@ -404,17 +404,18 @@
                         <label for="image" class="form-label" style="font-size: 0.8rem;">Image</label>
                         <input type="file" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
                     </div>
+
                     <div class="col-md-6">
-                        <label for="city" class="form-label">City</label>
-                        <input type="text" class="form-control" id="city" name="city" required pattern="[A-Za-z\s]+" title="City name should only contain letters and spaces">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" class="form-control" id="country" name="country" required pattern="[A-Za-z\s]+" title="Country name should only contain letters and spaces">
                     </div>
                     <div class="col-md-6">
                         <label for="state" class="form-label">State</label>
                         <input type="text" class="form-control" id="state" name="state" required pattern="[A-Za-z\s]+" title="State name should only contain letters and spaces">
                     </div>
                     <div class="col-md-6">
-                        <label for="country" class="form-label">Country</label>
-                        <input type="text" class="form-control" id="country" name="country" required pattern="[A-Za-z\s]+" title="Country name should only contain letters and spaces">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="city" name="city" required pattern="[A-Za-z\s]+" title="City name should only contain letters and spaces">
                     </div>
                     <div class="col-md-6">
                         <label for="registration" class="form-label">Registration Date</label>
@@ -428,7 +429,8 @@
                         <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>
                     </div>
-                </form><!-- End Multi Columns Form -->
+                </form>
+                <!------------------------  Form end ---------------------->
 
             </div>
         </div>
@@ -444,81 +446,25 @@
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script>
-        const dataTable = new simpleDatatables.DataTable("#myTable2", {
-            searchable: false,
-            fixedHeight: true,
-        })
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $('#email').blur(function() {
-                var email = $(this).val();
-
-                $.ajax({
-                    url: 'check_email.php',
-                    method: 'POST',
-                    data: {
-                        email: email
-                    },
-                    success: function(response) {
-                        if (response === 'exists') {
-                            $('#email').addClass('is-invalid');
-                            $('#emailFeedback').text('Email already exists. Please use another email.');
-                        } else {
-                            $('#email').removeClass('is-invalid');
-                            $('#emailFeedback').text('');
-                        }
-                    }
-                });
-            });
-        });
-        window.onload = function() {
-            // Get the current date
-            const today = new Date();
-
-            // Format the date to YYYY-MM-DD
-            const formattedDate = today.toISOString().split('T')[0];
-
-            // Set the value of the date input to the formatted date
-            document.getElementById('registration').value = formattedDate;
-        };
-        window.onload = function() {
-            // Get the current date
-            const today = new Date();
-
-            // Format the current date to YYYY-MM-DD for the registration date
-            const formattedDate = today.toISOString().split('T')[0];
-
-            // Set the current date as the default value for the registration date input
-            document.getElementById('registration').value = formattedDate;
-
-            // Calculate the date one year from today
-            const nextYear = new Date(today);
-            nextYear.setFullYear(today.getFullYear() + 1);
-
-            // Format the date one year from today to YYYY-MM-DD for the expiry date
-            const formattedExpiryDate = nextYear.toISOString().split('T')[0];
-
-            // Set the default value for the expiry date input to one year from today
-            document.getElementById('expiry').value = formattedExpiryDate;
-        };
-    </script>
-
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js">
     </script>
-
-    <!-- Template Main JS File -->
-    <script src="assets/js/main.js"></script>
-
-
     <!-- Bootstrap JS (Optional) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+
+<script>
+    
+    const dataTable = new simpleDatatables.DataTable("#myTable2", {
+  searchable: false,
+  fixedHeight: true,
+})
+</script>
+
 </body>
 
 </html>

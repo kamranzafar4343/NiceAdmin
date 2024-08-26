@@ -236,15 +236,17 @@ input[type=date].form-control {
         $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
         $phone =  mysqli_real_escape_string($conn, $_POST['phone']);
         $email =  mysqli_real_escape_string($conn, $_POST['email']);
-        $password = mysqli_real_escape_string($conn, $_POST['password']);
     
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
         $city = mysqli_real_escape_string($conn, $_POST['city']);
         $state = mysqli_real_escape_string($conn, $_POST['state']);
         $country = mysqli_real_escape_string($conn, $_POST['country']);
         $registration = mysqli_real_escape_string($conn, $_POST['registration']);
         $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
 
-        $sql = "UPDATE `compani` SET `comp_name`='$comp_name', `phone`='$phone', `email`='$email', `password`='$password', `city`='$city', `state`='$state', `country`='$country', `registration`='$registration', `expiry`='$expiry'  WHERE `comp_id`='$user_id'";
+        $sql = "UPDATE `compani` SET `comp_name`='$comp_name', `phone`='$phone', `email`='$email', `password`='$hashedPassword', `city`='$city', `state`='$state', `country`='$country', `registration`='$registration', `expiry`='$expiry'  WHERE `comp_id`='$user_id'";
 
         if (mysqli_query($conn, $sql)) {
           $_SESSION['data_inserted'] = true;
@@ -350,7 +352,7 @@ input[type=date].form-control {
         }
 
         .headerimg {
-            margin-top: 54px;
+            margin-top: 104px;
             margin-left: 260px;
         }
 
@@ -577,7 +579,7 @@ End Search Bar -->
 
 
   <li class="nav-item">
-    <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="tables-data.php">
+    <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
       <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
     </a>
   </li><!-- End Tables Nav -->
@@ -639,12 +641,12 @@ End Search Bar -->
             <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
                 <div class="col-md-6">
                     <label class="form-label">Company name</label>
-                    <input type="text" class="form-control" name="comp_name" value="<?php echo $comp_name; ?>" required>
+                    <input type="text" class="form-control" name="comp_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $comp_name; ?>" required>
                     <input type="hidden" name="comp_id" value="<?php echo $user_id; ?>">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Phone</label>
-                    <input type="text" class="form-control" name="phone" value="<?php echo $phone; ?>" required pattern="\d{10,15}">
+                    <input type="text" class="form-control" name="phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" value="<?php echo $phone; ?>" required pattern="\d{10,15}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Email</label>
@@ -652,7 +654,8 @@ End Search Bar -->
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password" value="<?php echo $password; ?>" required minlength="6">
+                    <input type="password" class="form-control" name="password" required minlength="8" maxlength="12" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    title="It must be 8-16 characters, include at least one number, one uppercase and one lowercase letter" value="<?php echo $password; ?>" required minlength="6">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">City</label>
@@ -708,14 +711,13 @@ End Search Bar -->
 <!-- Template Main JS File -->
 <script src="assets/js/main.js"></script>
 
-
   <!-- Bootstrap JS (Optional) -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
   <script>
         <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
-            alert('Company Registered successfully!');
-            window.location.href = 'tables-data.php';
+            alert('Company Updated successfully! Click OK to see the Companies List');
+            window.location.href = 'Companies.php';
             <?php unset($_SESSION['data_inserted']); // Clear the session variable 
             ?>
         <?php elseif (isset($_SESSION['data_inserted']) && !$_SESSION['data_inserted']): ?>

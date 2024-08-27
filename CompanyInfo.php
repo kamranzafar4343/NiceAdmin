@@ -127,8 +127,8 @@ $company_data = $result->fetch_assoc();
     .customImage {
       border: 1px solid white;
       position: relative;
-    top: 36%;
-    left: 25%;
+      top: 36%;
+      left: 25%;
 
     }
 
@@ -218,17 +218,30 @@ $company_data = $result->fetch_assoc();
       word-wrap: break-word;
       max-width: 200px;
     }
-    
-.card-title-info{
-  text-align: center;
-}
+
+    .card-title-info {
+      text-align: center;
+    }
 
     .datatable-top {
       margin-left: 10px !important;
       width: 0px;
     }
+
+    .customImage {
+      border: 1px solid white;
+      position: relative;
+      top: 36%;
+      left: 25%;
+      cursor: pointer;
+      /* Change cursor to indicate clickability */
+    }
+
+    .hiddenFileInput {
+      display: none;
+      /* Hide the file input */
+    }
   </style>
-  </styl>
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
@@ -363,9 +376,6 @@ $company_data = $result->fetch_assoc();
         </a>
       </li>
       <!-- End Profile Page Nav -->
-
-
-
       <!-- <li class="nav-item">
     <a class="nav-link collapsed" href="pages-register.php">
       <i class="bi bi-card-list"></i>
@@ -398,7 +408,7 @@ $company_data = $result->fetch_assoc();
 
   <main id="main" class="main">
     <div class="headerbox">
-      <div class="pagetitle">
+      <!-- <div class="pagetitle">
         <h1 class="mb-1 mt-4">Companies</h1>
         <div>
           <nav class="mt-0">
@@ -407,11 +417,11 @@ $company_data = $result->fetch_assoc();
               <li class="breadcrumb-item active">Details</li>
             </ol>
           </nav>
-        </div>
-      </div><!-- End Page Title -->
-      <div class="pagetitleinside mt-1">
-        <!-- <button type="button" onclick="window.location.href = 'createBranch.php';" class="btn btn-outline-primary mb-3">Add Branch</button> -->
-      </div>
+        </div> -->
+    </div><!-- End Page Title -->
+    <div class="pagetitleinside mt-1">
+      <!-- <button type="button" onclick="window.location.href = 'createBranch.php';" class="btn btn-outline-primary mb-3">Add Branch</button> -->
+    </div>
     </div>
 
     <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
@@ -432,7 +442,13 @@ $company_data = $result->fetch_assoc();
         <div class="card card-custom bg-white border-white border-0">
           <div class="card-custom-img"></div>
           <div class="card-custom-avatar">
-            <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" alt="Company Image" width="120" height="75" />
+          <form id="updateImageForm" action="update_image.php" method="POST" enctype="multipart/form-data"> 
+          <!-- Display the company image -->
+            <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" class="customImage" id="imagePreview" alt="Company Image" width="120">
+
+            <!-- Hidden file input for uploading new image -->
+            <input type="file" id="fileInput" class="hiddenFileInput" accept="image/*" onchange="previewImage(event)">
+          </form>
           </div>
           <div class="card-body list-group">
             <h4 class="card-title-info"><?php echo $company_data['comp_name']; ?></h4>
@@ -451,6 +467,10 @@ $company_data = $result->fetch_assoc();
               <li class="list-group-item" style="text-align: right;width: 55%;"><?php echo $company_data['registration']; ?></li>
             </ul>
             <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
+              <li class="list-group-item" style="color:grey; width: 30%;">Ex. Date</li>
+              <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $company_data['expiry']; ?></li>
+            </ul>
+            <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
               <li class="list-group-item" style="color:grey; width: 30%;">City</li>
               <li class="list-group-item " style="text-align: right; width: 55%;"><?php echo $company_data['city']; ?></li>
             </ul>
@@ -458,6 +478,7 @@ $company_data = $result->fetch_assoc();
               <li class="list-group-item" style="color:grey; width: 30%;">Country</li>
               <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $company_data['country']; ?></li>
             </ul>
+
             <!-- <ul class="list-group list-group-horizontal-lg">
               <li class="list-group-item">Branches</li>
               <li class="list-group-item">An item</li>
@@ -543,42 +564,21 @@ $company_data = $result->fetch_assoc();
   <script src="assets/js/main.js"></script>
 
   <script>
-    < script >
-      $(document).on('click', 'img', function() {
-        $(this).next('input[type="file"]').click();
-      });
-
-    function uploadImage(comp_id) {
-      var fileInput = document.getElementById('file-' + comp_id);
-      var file = fileInput.files[0];
-      var formData = new FormData();
-      formData.append('image', file);
-      formData.append('comp_id', comp_id);
-
-      $.ajax({
-        url: 'update_image.php',
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-          // Update the image source with the new image path
-          $('#image-' + comp_id).attr('src', response);
-        },
-        error: function() {
-          alert('Image upload failed. Please try again.');
-        }
-      });
-    }
-    import {
-      Ripple,
-      initMDB
-    } from "mdb-ui-kit";
-
-    initMDB({
-      Ripple
+    // JavaScript to handle the image click and file input
+    document.getElementById('imagePreview').addEventListener('click', function() {
+      document.getElementById('fileInput').click(); // Trigger file input click when image is clicked
     });
-    
+
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('imagePreview').src = e.target.result; // Update image preview
+        };
+        reader.readAsDataURL(file);
+      }
+    }
   </script>
 
 </body>

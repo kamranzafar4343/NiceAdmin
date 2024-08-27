@@ -91,169 +91,196 @@ $result = $conn->query($sql);
 
         /* Define the pulse animation */
         .pagetitle {
-      display: flex;
-      width: 989px;
-      flex-direction: column;
+            display: flex;
+            width: 989px;
+            flex-direction: column;
 
-    }
+        }
 
-    .row {
-    margin-left: 52px;
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: calc(var(--bs-gutter-y)* -1);
-    margin-right: calc(var(--bs-gutter-x)* 1.5);
-    margin-left: calc(var(--bs-gutter-x)* 0.2);
-    }
-   
-    .datatable-container {
-  border:none;
-  margin-left: 12px;
-  margin-top: 12px;
-  /* table-layout: fixed; */
+#fixedButtonBranch{
+    position: relative;
+    top: 110px;
+    left: 1187px;
 }
+        .row {
+            margin-left: 52px;
+            --bs-gutter-x: 1.5rem;
+            --bs-gutter-y: 0;
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: calc(var(--bs-gutter-y)* -1);
+            margin-right: calc(var(--bs-gutter-x)* 1.5);
+            margin-left: calc(var(--bs-gutter-x)* 0.2);
+        }
+
+        .datatable-container {
+            border: none;
+            margin-left: 12px;
+            margin-top: 12px;
+            /* table-layout: fixed; */
+        }
 
 
-    /* Define the pulse animation */
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-      }
+        /* Define the pulse animation */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
 
-      50% {
-        transform: scale(1.1);
-      }
+            50% {
+                transform: scale(1.1);
+            }
 
-      100% {
-        transform: scale(1);
-      }
-    }
+            100% {
+                transform: scale(1);
+            }
+        }
 
-    /* Define the click animation */
-    @keyframes clickEffect {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
+        /* Define the click animation */
+        @keyframes clickEffect {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
 
-      50% {
-        transform: scale(0.9);
-        opacity: 0.7;
-      }
+            50% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
 
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
 
-    .company-name {
-      color: #000;
-      text-decoration: none;
-      display: inline-block;
-      transition: color 0.3s ease;
-    }
-    .mt-4 {
-    margin-top: 1.5rem !important;
-    margin-right: 214px;
+        .company-name {
+            color: #000;
+            text-decoration: none;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .mt-4 {
+            margin-top: 1.5rem !important;
+            margin-right: 214px;
+        }
+
+        .datatable-dropdown label {
+            font-size: 0.9rem;
+        }
+
+        .datatable-info {
+            display: none;
+        }
+
+        .datatable-top {
+            width: 1048px;
+
+        }
+
+        
+/* Card */
+.cardBranch {
+  margin-bottom: 30px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+  background-color: white;
+  font-size: 0.8rem;
+  margin-top: 30px;
 }
+        .company-name:active {
+            animation: clickEffect 0.s ease;
+            /* Apply the click effect animation on click */
+            color: #0056b3;
+            /* Darken color on click */
+        }
 
-    .datatable-dropdown label {
-      font-size: 0.9rem;
-    }
+        * {
+            margin: 0;
 
-    .datatable-info {
-      display: none;
-    }
+            padding: 0;
 
-    .datatable-top{
-  width: 1048px;
+            box-sizing: border-box;
+        }
 
-}
-    .company-name:active {
-      animation: clickEffect 0.s ease;
-      /* Apply the click effect animation on click */
-      color: #0056b3;
-      /* Darken color on click */
-    }
+        .custom2 {
+            font-size: 0.8rem;
+            border-radius: 7px;
+            padding-top: 14px;
+            padding-bottom: 14px;
+            padding-right: 34px;
+            padding-left: 40px;
+            margin-left: 20px;
 
-    * {
-      margin: 0;
+            /* table-layout: fixed; */
 
-      padding: 0;
+            /* overflow: hidden; */
+            /* text-overflow: ellipsis; */
+            /* white-space: nowrap; */
+        }
 
-      box-sizing: border-box;
-    }
-   
-    .custom2 {
-    font-size: 0.8rem;
-    border-radius: 7px;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    padding-right: 34px;
-    padding-left: 40px;
-    margin-left: 20px;
-    
-    /* table-layout: fixed; */
+        tbody,
+        td,
+        tr {
+            word-wrap: break-word;
+            max-width: 200px;
+        }
 
-    /* overflow: hidden; */
-    /* text-overflow: ellipsis; */
-    /* white-space: nowrap; */
-}
+        .datatable-table>tbody>tr>td,
+        .datatable-table>tbody>tr>th,
+        .datatable-table>tfoot>tr>td,
+        .datatable-table>tfoot>tr>th,
+        .datatable-table>thead>tr>td,
+        .datatable-table>thead>tr>th {
+            vertical-align: top;
+            padding: 8px 2px;
+        }
 
-tbody, td, tr{
-  word-wrap: break-word;
-    max-width: 200px;
-}
+        .image-circle {
+            display: flex;
+            justify-content: center;
+            /* Horizontally center */
+            align-items: center;
+            text-align: center;
+        }
 
-.datatable-table > tbody > tr > td, .datatable-table > tbody > tr > th, .datatable-table > tfoot > tr > td, .datatable-table > tfoot > tr > th, .datatable-table > thead > tr > td, .datatable-table > thead > tr > th {
-    vertical-align: top;
-    padding: 8px 2px;
-}
-    .image-circle{
-      display: flex;
-    justify-content: center; /* Horizontally center */
-    align-items: center; 
-    text-align: center;   
-    }
 
-  
-    .navbar-image{
-  width: 50px;
-  height: 50px;
-  margin-right: 7px;
-}
+        .navbar-image {
+            width: 50px;
+            height: 50px;
+            margin-right: 7px;
+        }
 
-    .headerbox {
+        .headerbox {
 
-      display: flex;
-    }
+            display: flex;
+        }
 
-.datatable-table > thead > tr > th {
-    vertical-align: bottom;
-    text-align: left;
-    border-bottom: 0px solid #d9d9d9;
-}
+        .datatable-table>thead>tr>th {
+            vertical-align: bottom;
+            text-align: left;
+            border-bottom: 0px solid #d9d9d9;
+        }
 
-    .pagetitleinside button {
-      width: 150px;
-    }
+        .pagetitleinside button {
+            width: 150px;
+        }
 
-    .datatable-pagination {
-      margin-left: 50px;
-    }
+        .datatable-pagination {
+            margin-left: 50px;
+        }
 
-     .datatable-top {
-    width: 844px;
-}
- 
-    .datatable-bottom {
-      width: 122%;
-    }
+        .datatable-top {
+            width: 844px;
+        }
 
-    /* .custom-header-col-name{
+        .datatable-bottom {
+            width: 122%;
+        }
+
+        /* .custom-header-col-name{
         margin-right: 1000px;
     } */
     </style>
@@ -424,163 +451,157 @@ tbody, td, tr{
 
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
+    
+        <!--new table design-->
+        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
+        <!-- 
+  <h1>Companies List</h1> -->
+        <main id="main" class="main">
 
+            <div class="col-12">
 
-    <main id="main" class="main">
+                <div class="cardBranch recent-sales overflow-auto">
+                    <div class="card-body">
+                        <h5 class="card-title">Company branches</h5>
 
-
-        <div class="headerbox">
-            <div class="pagetitle mt-4">
-                <h1 class="mb-1 ">Branches</h1>
-                <div>
-                    <nav class="mt-0">
-                        <ol class="breadcrumb mt-0">
-                            <li class="breadcrumb-item">branch</li>
-                            <li class="breadcrumb-item active">Details</li>
-                        </ol>
-                    </nav>
-                </div>
-
-            </div><!-- End Page Title -->
-
-            <div class="pagetitleinside mt-4"><button type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-outline-primary mb-3">Add Branch</button>
-      </div>
-        </div>
-
-        <section class="section">
-
-            <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-
-
-            <?php endif; ?>
-            <div class="row">
-                <div class="col-lg-10">
-
-                    <?php
-                    if ($result->num_rows > 0) {
-                        // Output data for each row
-                        echo "<table class='datatable custom2'  style='background-color: #ffffff;'><thead><tr>";
-                        echo "<th class='custom-header' style='width: 13%;'>Company Id</th><th class='custom-header ' style='width: 10%;' scope='row'>Branch Id</th><th class='custom-header-col-name' style='width: 6.488549618320611%; margin-left: 50px;' scope='row'>Branch Name</th><th class='custom-header' style='width: 15%;'>Representative</th><th class='custom-header'>Phone</th><th class='custom-header' style='width: 15.5%;'>Resignation</th><th class='custom-header'>City</th><th class='custom-header'>State</th><th class='custom-header' style='width: 11%;'>Country</th><th class='custom-header'>Action</th>";
-                        echo "</tr></thead><tbody>";
-
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td> ";
-                            echo "<td>" . htmlspecialchars($row["branch_name"]) . "</td>";
-                            
-                            echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
-
-                            echo "<td>" . htmlspecialchars($row["ContactPersonResignation"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["City"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["State"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
-                            ?>
-                            <td>
-                              <div>
-                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                              </div>
-                            </td>
-              
                         <?php
-                            echo "</tr>";
+                        if ($result->num_rows > 0) {
+                        ?>
+                            <table class="table table-borderless datatable" style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+
+                                        <th scope="col">Comp. Id</th>
+                                        <th scope="col">Branch Id</th>
+                                        <th scope="col">Branch Name</th>
+                                        <th scope="col">Contact Person</th>
+                                        <th scope="col">Phone</th>
+                                        <th scope="col">Contact Person Resignation</th>
+
+                                        <th scope="col">City</th>
+                                        <th scope="col">State</th>
+                                        <th scope="col">Country</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="table-layout: fixed;">
+
+                                    <?php
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>";
+                                        echo "<tr>";
+                                        echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td> ";
+                                        echo "<td>" . htmlspecialchars($row["branch_name"]) . "</td>";
+
+                                        echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
+
+                                        echo "<td>" . htmlspecialchars($row["ContactPersonResignation"]) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row["City"]) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row["State"]) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
+                                        ?>
+                                        <td>
+                                            <div>
+                                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                            </div>
+                                        </td>
+
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
+
+                                </tbody>
+                            </table>
+                        <?php
                         }
+                        ?>
 
-
-                        
-
-
-                        echo "</tbody></table>";
-                    } else {
-                        echo "There's not an already existing branch";
-                    }
-                    ?>
+                    </div>
 
                 </div>
             </div>
 
-            </div>
-            </div>
-        </section>
 
-    </main><!-- End #main -->
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+        </main><!-- End #main -->
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
+        <!-- Vendor JS Files -->
+        <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+        <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/vendor/chart.js/chart.umd.js"></script>
+        <script src="assets/vendor/echarts/echarts.min.js"></script>
+        <script src="assets/vendor/quill/quill.js"></script>
+        <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+        <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+        <script src="assets/vendor/php-email-form/validate.js"></script>
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
 
-    <!-- Template Main JS File -->
-    <script src="assets/js/main.js"></script>
+        <!-- Template Main JS File -->
+        <script src="assets/js/main.js"></script>
 
-    <script>
-        //click on the picture to update with ajax
-        $(document).on('click', 'img', function() {
-            $(this).next('input[type="file"]').click();
-        });
-
-        function uploadImage(comp_id) {
-            var fileInput = document.getElementById('file-' + comp_id);
-            var file = fileInput.files[0];
-            var formData = new FormData();
-            formData.append('image', file);
-            formData.append('comp_id', comp_id);
-
-            $.ajax({
-                url: 'update_image.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    // Update the image source with the new image path
-                    $('#image-' + comp_id).attr('src', response);
-                },
-                error: function() {
-                    alert('Image upload failed. Please try again.');
-                }
+        <script>
+            //click on the picture to update with ajax
+            $(document).on('click', 'img', function() {
+                $(this).next('input[type="file"]').click();
             });
-        }
-        import {
-            Ripple,
-            initMDB
-        } from "mdb-ui-kit";
 
-        initMDB({
-            Ripple
-        });
+            function uploadImage(comp_id) {
+                var fileInput = document.getElementById('file-' + comp_id);
+                var file = fileInput.files[0];
+                var formData = new FormData();
+                formData.append('image', file);
+                formData.append('comp_id', comp_id);
 
-        // function confirmDelete() {
-        //     // Display a confirmation dialog
-        //     var confirmation = confirm("Are you sure you want to delete this record?");
+                $.ajax({
+                    url: 'update_image.php',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        // Update the image source with the new image path
+                        $('#image-' + comp_id).attr('src', response);
+                    },
+                    error: function() {
+                        alert('Image upload failed. Please try again.');
+                    }
+                });
+            }
+            import {
+                Ripple,
+                initMDB
+            } from "mdb-ui-kit";
 
-        //     if (confirmation) {
-        //         // User clicked OK, proceed with deletion
-        //         deleteRecord();
-        //     } else {
-        //         // User clicked Cancel, do nothing
-        //         console.log("Record deletion canceled.");
-        //     }
-        // }
+            initMDB({
+                Ripple
+            });
 
-        // function deleteRecord() {
-        //     // Your deletion logic here
-        //     console.log("Record deleted.");
-        //     // Example: You might want to make an AJAX request to delete the record from the server
-        //     // fetch('/delete-record', { method: 'POST' }).then(response => response.json()).then(data => console.log(data));
-        // }
-    </script>
+            // function confirmDelete() {
+            //     // Display a confirmation dialog
+            //     var confirmation = confirm("Are you sure you want to delete this record?");
+
+            //     if (confirmation) {
+            //         // User clicked OK, proceed with deletion
+            //         deleteRecord();
+            //     } else {
+            //         // User clicked Cancel, do nothing
+            //         console.log("Record deletion canceled.");
+            //     }
+            // }
+
+            // function deleteRecord() {
+            //     // Your deletion logic here
+            //     console.log("Record deleted.");
+            //     // Example: You might want to make an AJAX request to delete the record from the server
+            //     // fetch('/delete-record', { method: 'POST' }).then(response => response.json()).then(data => console.log(data));
+            // }
+        </script>
 
 
 </body>

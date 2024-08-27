@@ -244,6 +244,7 @@ h6 {
   border-color: #d3d3d4;
 }
 
+
 /* Card */
 .card {
   margin-bottom: 30px;
@@ -251,6 +252,7 @@ h6 {
   border-radius: 5px;
   box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
   background-color: white;
+  font-size: 0.8rem;
 }
 
 .card-header,
@@ -473,10 +475,11 @@ h6 {
   outline: none;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 14px;
 }
 
 .datatable-dropdown label {
-  visibility: collapse;
+
   font-size: 0.9rem;
 }
 
@@ -493,14 +496,14 @@ h6 {
 
 input[type=date].form-control {
   appearance: none;
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: 20px;
 }
 
 .form-control[type=file]:not(:disabled):not([readonly]) {
   cursor: pointer;
-  font-size: 0.8rem;
-  padding-top: 9px;
+  font-size: 1rem;
+  padding-top: 8px;
   padding-bottom: 10px;
   height: 39px;
 }
@@ -933,8 +936,8 @@ input[type=date].form-control {
   font-size: 20px;
   font-weight: 500;
   position: relative;
-  left: -15px;
-  text-align: center;
+  left: 11px;
+
   color: #012970;
   margin-top:14px;
   font-family: "Poppins", sans-serif;
@@ -1047,31 +1050,29 @@ input[type=date].form-control {
   padding: 0 0 10px 0;
 }
 
+.datatable-top, .datatable-bottom {
+  padding: 12px 10px;
+  margin-top: 4px;
+}
 
 .datatable-selector {
-	padding: 4px;
+	padding: 6px;
+  
 	font-size:0.8rem;
 }
 
 .datatable-selector label{
   font-size:0.8rem;
-  margin-right:50px;
+
 }
 
 .datatable-sorter::before, .datatable-sorter::after{
-  display: none;
+
 }
 
 
 
 
-.datatable-input {
-	padding: 4px 10px;
-	width:240px;
-	height:38px;
-	font-size: 0.9rem;
-  outline: none;
-}
 .datatable-search{
   margin-left:150px;
 }
@@ -1124,32 +1125,28 @@ input[type=date].form-control {
   margin-right: -223px;
   width: 100%;
 }
-.datatable-selector{
-  display: none;
-    color: transparent;
-    text-shadow: 0 0 0 #000; /* Optional: Makes the text readable when selected */
 
-}
 
 .header .toggle-sidebar-btn {
   font-size: 32px;
   padding-left: 10px;
   cursor: pointer;
-  color: white;
-  position: absolute;
-  left: -999px;
-  visibility:hidden;
-  color: transparent;
+  
 }
+
+#fixedButton {
+  position: relative;
+  top: 81px;
+  left: 290px;
+}
+
 
 .datatable-wrapper.no-footer .datatable-container {
   border: none;
   margin-left: -16px;
 }
 
-.datatable-selector {
-  display: none;
-}
+
 
 .iconslist .icon {
   background-color: #fff;

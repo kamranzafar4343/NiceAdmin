@@ -11,7 +11,7 @@ if (isset($_GET['id'])) {
     
     if ($conn->query($sql) === TRUE) {
         
-        header('Location: tables-data.php');
+        header('Location: Companies.php');
         exit(); // Make sure no further code is executed after redirect
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;

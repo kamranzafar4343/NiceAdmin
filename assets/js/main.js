@@ -6,6 +6,9 @@
 * License: https://bootstrapmade.com/license/
 */
 
+// JavaScript to trigger the file input when image is clicked
+
+
 (function() {
   "use strict";
 
@@ -450,61 +453,36 @@ window.onload = function() {
   populateStatesAndCities();
 };*/
 
-document.addEventListener('DOMContentLoaded', function() {
-  const countryStateCityData = {
-    USA: {
-      California: ["Los Angeles", "San Francisco", "San Diego"],
-      Texas: ["Houston", "Austin", "Dallas"]
-      // Add more states and cities
-    },
-    Canada: {
-      Ontario: ["Toronto", "Ottawa", "Hamilton"],
-      Quebec: ["Montreal", "Quebec City"]
-      // Add more provinces and cities
-    },
-    UK: {
-      England: ["London", "Manchester", "Birmingham"],
-      Scotland: ["Edinburgh", "Glasgow"]
-      // Add more countries and cities
-    }
-  };
 
-  const countrySelect = document.getElementById('country');
-  const stateSelect = document.getElementById('state');
-  const citySelect = document.getElementById('city');
 
-  // Update states dropdown when a country is selected
-  countrySelect.addEventListener('change', function() {
-    const selectedCountry = countrySelect.value;
-    stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
 
-    if (selectedCountry) {
-      const states = Object.keys(countryStateCityData[selectedCountry]);
-      states.forEach(function(state) {
-        const option = document.createElement('option');
-        option.value = state;
-        option.text = state;
-        stateSelect.add(option);
-      });
-    }
-  });
+//for updating image -----------------------------------------------------------
+document.getElementById('currentImage').addEventListener('click', function () {
+  document.getElementById('fileInput').click();
+});
 
-  // Update cities dropdown when a state is selected
-  stateSelect.addEventListener('change', function() {
-    const selectedCountry = countrySelect.value;
-    const selectedState = stateSelect.value;
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+// JavaScript to handle file input change and upload the image
+document.getElementById('fileInput').addEventListener('change', function (event) {
+  var file = event.target.files[0];
+  if (file) {
+      var formData = new FormData();
+      formData.append('image', file);
 
-    if (selectedCountry && selectedState) {
-      const cities = countryStateCityData[selectedCountry][selectedState];
-      cities.forEach(function(city) {
-        const option = document.createElement('option');
-        option.value = city;
-        option.text = city;
-        citySelect.add(option);
-      });
-    }
-  });
+      // AJAX request to upload the image
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'upload_image.php', true);
+      
+      xhr.onload = function () {
+          if (xhr.status === 200) {
+              // On successful upload, update the image src with the new image path
+              document.getElementById('currentImage').src = xhr.responseText;
+              alert('Image updated successfully!');
+          } else {
+              alert('Error updating image.');
+          }
+      };
+
+      xhr.send(formData);
+  }
 });
 ;

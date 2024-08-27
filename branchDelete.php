@@ -2,23 +2,32 @@
 include "db.php";
 
 if (isset($_GET['id'])) {
-    $user_id = intval($_GET['id']); // Ensure ID is an int
+    $branch_id = intval($_GET['id']); // Ensure branch ID is an integer
 
+    // Fetch the company ID associated with the branch from the compID_FK column
+    $sql = "SELECT `compID_FK` FROM `branch` WHERE `branch_id` = $branch_id";
+    $result = $conn->query($sql);
 
-    // Prepare and execute the delete query
-    $sql = "DELETE FROM `branch` WHERE `branch_id`='$user_id'";
-    
-    
-    if ($conn->query($sql) === TRUE) {
-        
-        echo "<script> alert('record deleted');</script>";
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $company_id = $row['compID_FK'];
 
-        // header("Location: table-data2.php");
- 
-        
+        // Now, perform the delete operation
+        $delete_sql = "DELETE FROM `branch` WHERE `branch_id` = $branch_id";
+        if ($conn->query($delete_sql) === TRUE) {
+            // Redirect to the company's branches page after successful deletion
+            header("Location: Branches.php?id=" . $company_id);
+            exit;
+        } else {
+            echo "Error deleting record: " . $conn->error;
+        }
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: No company found for this branch.";
     }
+
+    // Close the database connection
     $conn->close();
+} else {
+    echo "No branch ID provided.";
 }
 ?>

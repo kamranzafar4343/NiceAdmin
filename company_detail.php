@@ -59,7 +59,7 @@ if ($stmt->execute()) {
         .compImage{
             border: 1px solid white;
             padding: 2px;
-            
+            cursor: pointer;
         }
     </style>
 </head>
@@ -68,7 +68,8 @@ if ($stmt->execute()) {
     <div class="container">
         <div class="mb-3">
             <br>
-            <img class="compImage" src="<?php echo $company['image']; ?>" alt="Company Image" width="75" height="75">
+            <img class="compImage" src="<?php echo $company['image']; ?>" id="currentImage" alt="Company Image" width="75" height="75">
+            
         </div>
         <br>
         <h4>List of Branches</h4>

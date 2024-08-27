@@ -218,6 +218,10 @@ $company_data = $result->fetch_assoc();
       word-wrap: break-word;
       max-width: 200px;
     }
+    
+.card-title-info{
+  text-align: center;
+}
 
     .datatable-top {
       margin-left: 10px !important;
@@ -431,7 +435,7 @@ $company_data = $result->fetch_assoc();
             <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" alt="Company Image" width="120" height="75" />
           </div>
           <div class="card-body list-group">
-            <h4 class="card-title ml-3"><?php echo $company_data['comp_name']; ?></h4>
+            <h4 class="card-title-info"><?php echo $company_data['comp_name']; ?></h4>
             <a href="Branches.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
             <hr>
             <ul class="list-group list-group-horizontal d-flex justify-content-between">

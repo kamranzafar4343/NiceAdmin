@@ -409,6 +409,7 @@
                         <label for="country" class="form-label">Country</label>
                         <select class="form-select" id="country" name="country" required>
                             <option value="">Select Country</option>
+                            <option value="Pakistan">Pakistan</option>
                             <option value="USA">USA</option>
                             <option value="Canada">Canada</option>
                             <option value="UK">UK</option>

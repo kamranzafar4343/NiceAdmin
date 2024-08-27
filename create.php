@@ -340,6 +340,7 @@
       <span>Register</span>
     </a>
   </li> -->
+  
             <!-- End Register Page Nav -->
 
             <li class="nav-item">

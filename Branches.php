@@ -9,6 +9,8 @@ $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 // Fetch branches of the company
 $sql = "SELECT * FROM branch WHERE compID_FK = $company_id";
 $result = $conn->query($sql);
+
+
 ?>
 
 <!DOCTYPE html>

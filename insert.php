@@ -73,7 +73,7 @@ if (isset($_POST['submit'])) {
         // Step 2: Get the ID of the newly inserted company
         $newCompanyId = mysqli_insert_id($conn);
 
-        $insertBranchSql = "INSERT INTO `branch` (`compID_FK`, `branch_name` ) VALUES ('$newCompanyId', '$comp_name')";
+        $insertBranchSql = "INSERT INTO `branch` (`compID_FK`, `branch_name`, `ContactPersonName`, `ContactPersonPhone`, `ContactPersonResignation`, `City`, `State`, `Country`) VALUES ('$newCompanyId', '$comp_name', 'null', '$phone', 'null', '$city', '$state', '$country')";
     }
 
     if (mysqli_query($conn, $insertBranchSql)) {

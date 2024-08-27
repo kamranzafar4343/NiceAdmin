@@ -447,16 +447,17 @@ End Search Bar -->
           </div>
           <div class="col-md-6">
             <label class="form-label">Contact Person Phone</label>
-            <input type="text" class="form-control" name="ContactPersonPhone" required pattern="[0-9]{10,13}" title="Phone number should be between 10 to 15 digits" required>
+            <input type="text" class="form-control" name="ContactPersonPhone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" required>
           </div>
           <div class="col-md-6">
             <label class="form-label">Contact Person Resignation</label>
-            <input type="text" class="form-control" name="ContactPersonResignation" required pattern="[A-Za-z\s]+" required minlength="4" maxlength="14" title="only letters ; at least 4" required>
+            <input type="text" class="form-control" name="ContactPersonResignation" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="25" title="only letters ; at least 3" required>
           </div>
           <div class="col-md-6">
             <label for="country" class="form-label">Country</label>
             <select class="form-select" id="country" name="Country" required>
               <option value="">Select Country</option>
+              <option value="Pakistan">Pakistan</option>
               <option value="USA">USA</option>
               <option value="Canada">Canada</option>
               <option value="UK">UK</option>

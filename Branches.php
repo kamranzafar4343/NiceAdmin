@@ -10,6 +10,16 @@ $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $sql = "SELECT * FROM branch WHERE compID_FK = $company_id";
 $result = $conn->query($sql);
 
+//2nd query to fetch the comp_name
+$sql2 = "Select comp_name from compani where comp_id= $company_id";
+$result2= $conn->query($sql2);
+
+$comp_name= "";
+
+if($result2->num_rows>0){
+    $row2 = $result2->fetch_assoc();
+$comp_name=$row2['comp_name'];
+}
 
 ?>
 
@@ -464,7 +474,7 @@ $result = $conn->query($sql);
 
                 <div class="cardBranch recent-sales overflow-auto">
                     <div class="card-body">
-                        <h5 class="card-title">Company branches</h5>
+                        <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
 
                         <?php
                         if ($result->num_rows > 0) {
@@ -472,10 +482,7 @@ $result = $conn->query($sql);
                             <table class="table table-borderless datatable" style="table-layout: fixed;">
                                 <thead>
                                     <tr>
-
-                                        <th scope="col">Comp. Id</th>
-                                        <th scope="col">Branch Id</th>
-                                        <th scope="col">Branch Name</th>
+                               <th scope="col">Branch Name</th>
                                         <th scope="col">Contact Person</th>
                                         <th scope="col">Phone</th>
                                         <th scope="col">Contact Person Resignation</th>
@@ -492,8 +499,6 @@ $result = $conn->query($sql);
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<tr>";
-                                        echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td> ";
                                         echo "<td>" . htmlspecialchars($row["branch_name"]) . "</td>";
 
                                         echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
@@ -505,11 +510,13 @@ $result = $conn->query($sql);
                                         echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
                                         ?>
                                         <td>
-                                            <div>
-                                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                            </div>
+                                            <div style="display: flex; gap: 10px;">
+                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                            
+                                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init 
+                                            onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>    
+                                        </div>
                                         </td>
-
                                         </tr>
                                     <?php
                                     }

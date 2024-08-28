@@ -440,15 +440,14 @@ tbody, td, tr{
                 </colgroup>
                 <thead>
                   <tr>
-                    
                   <th scope="col" >Comp. Id</th>
                     <th scope="col" >Name</th>
                     <th scope="col" >Phone</th>
                     <th scope="col" >Email</th>
-                    <th scope="col">Password</th>
+                    <!-- <th scope="col">Password</th> -->
                     <th scope="col">City</th>
                     <th scope="col">Country</th>
-
+<th scope="col"> Registration date</th>
                     <th scope="col" >Expiry</th>
                     <th scope="col" >Actions</th>
                   </tr>
@@ -471,12 +470,12 @@ tbody, td, tr{
                     <?php
                     echo "<td >" . htmlspecialchars($row["phone"]) . "</td> ";
                     echo "<td >" . htmlspecialchars($row["email"]) . "</td>";
-                    echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
+                    // echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
                     // echo "<td><button type='button' class='btn btn-light view-password' data-id='" . htmlspecialchars($row['comp_id']) . "'><i class='fa fa-eye'></i></button></td>";
                     echo "<td >" . htmlspecialchars($row["city"]) . "</td>";
                     // echo "<td>" . htmlspecialchars($row["state"]) . "</td>";
                     echo "<td >" . htmlspecialchars($row["country"]) . "</td>";
-                    //   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
+                      echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
                     echo "<td >" . htmlspecialchars($row["expiry"]) . "</td>";
 
                     ?>

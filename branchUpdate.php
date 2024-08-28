@@ -1,3 +1,63 @@
+<?php
+
+
+  include "db.php";
+
+  // show branch previous data
+  if (isset($_GET['id'])) {
+    $branch_id = $_GET['id'];
+    $sql = "SELECT * FROM `branch` WHERE `branch_id`= '$branch_id'";
+    $result = $conn->query($sql);
+    $row = mysqli_fetch_array($result);
+    $branch_name = $row['branch_name'];
+    $contactPerson = $row['ContactPersonName'];
+    $resignation = $row['ContactPersonResignation'];
+    $phone = $row['ContactPersonPhone'];
+    $city = $row['City'];
+    $state = $row['State'];
+    $country = $row['Country'];
+    }
+
+    if (isset($_GET['id'])) {
+        $branch_id = intval($_GET['id']); 
+    $sql = "SELECT `compID_FK` FROM `branch` WHERE `branch_id` = $branch_id";
+    $result = $conn->query($sql);
+
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $company_id = $row['compID_FK'];
+    } else {
+        echo "Error: No company found for this branch.";
+    }
+    }
+
+  //update the record
+  if (isset($_POST['update'])) {
+    $branch_name = mysqli_real_escape_string($conn, $_POST['branch_name']);
+    $contactPerson =  mysqli_real_escape_string($conn, $_POST['ContactPersonName']);
+    $resignation = mysqli_real_escape_string($conn, $_POST['ContactPersonResignation']);
+    $phone = mysqli_real_escape_string($conn, $_POST['ContactPersonPhone']);
+    $city = mysqli_real_escape_string($conn, $_POST['City']);
+    $state = mysqli_real_escape_string($conn, $_POST['State']);
+    $country = mysqli_real_escape_string($conn, $_POST['Country']);
+    
+   $sql = "UPDATE `branch` SET `branch_name`='$branch_name', `ContactPersonName`='$contactPerson', `ContactPersonResignation`='$resignation', `ContactPersonPhone`='$phone', `City`='$city', `State`='$state', `Country`='$country' WHERE `branch_id`='$branch_id'";
+
+    if (mysqli_query($conn, $sql)) {
+        header("Location: Branches.php?id=". $company_id);
+        exit;
+    } else {
+      echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    
+
+    $conn->close();
+  }
+
+  ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -218,60 +278,7 @@
 </head>
 
 <body>
-  <?php
-  include "db.php";
-
-  //get company id for updating the specific company
-  if (isset($_GET['id'])) {
-    $user_id = $_GET['id'];
-    $sql = "SELECT * FROM `compani` WHERE `comp_id`='$user_id'";
-    $result = $conn->query($sql);
-    $row = mysqli_fetch_array($result);
-    $comp_name = $row['comp_name'];
-    $phone = $row['phone'];
-    $email = $row['email'];
-    $password = $row['password'];
-    $city = $row['city'];
-    $state = $row['state'];
-    $country = $row['country'];
-    $registration = $row['registration'];
-    $expiry = $row['expiry'];
-  }
-
-  //update the record
-  if (isset($_POST['update'])) {
-    $user_id = $_POST['comp_id'];
-    
-    $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
-    $phone =  mysqli_real_escape_string($conn, $_POST['phone']);
-    $email =  mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-    $city = mysqli_real_escape_string($conn, $_POST['city']);
-    $state = mysqli_real_escape_string($conn, $_POST['state']);
-    $country = mysqli_real_escape_string($conn, $_POST['country']);
-    $registration = mysqli_real_escape_string($conn, $_POST['registration']);
-    $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
-
-    $sql = "UPDATE `compani` SET `comp_name`='$comp_name', `phone`='$phone', `email`='$email', `password`='$hashedPassword', `city`='$city', `state`='$state', `country`='$country', `registration`='$registration', `expiry`='$expiry'  WHERE `comp_id`='$user_id'";
-
-    if (mysqli_query($conn, $sql)) {
-      $_SESSION['data_inserted'] = true;
-    } else {
-      $_SESSION['data_inserted'] = false;
-
-      echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-
-    // header("location:update.php");
-    // exit();
-
-    $conn->close();
-  }
-
-  ?>
-
+  
   <!doctype html>
   <html lang="en">
 
@@ -642,7 +649,7 @@ End Search Bar -->
   <!-- Start Header form -->
   <div class="headerimg text-center">
     <img src="image/update.png.png" alt="network-logo" width="50" height="50" />
-    <h2>Update Company Information</h2>
+    <h2>Update Branch Information</h2>
   </div>
   <!-- End Header form -->
 
@@ -652,38 +659,39 @@ End Search Bar -->
         <!-- <h5 class="card-title">Update Company Information</h5> -->
         <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
           <div class="col-md-6">
-            <label class="form-label">Company name</label>
-            <input type="text" class="form-control" name="comp_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $comp_name; ?>" required>
-            <input type="hidden" name="comp_id" value="<?php echo $user_id; ?>">
+            <label class="form-label">Branch name</label>
+            <input type="text" class="form-control" name="branch_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $branch_name; ?>" required>
+        
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Contact Person Name</label>
+            <input type="text" class="form-control" name="ContactPersonName" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $contactPerson; ?>" required>
+    
           </div>
           <div class="col-md-6">
             <label class="form-label">Phone</label>
-            <input type="text" class="form-control" name="phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" value="<?php echo $phone; ?>" required pattern="\d{10,15}">
+            <input type="text" class="form-control" name="ContactPersonPhone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" value="<?php echo $phone; ?>" required pattern="\d{10,15}">
           </div>
           <div class="col-md-6">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" value="<?php echo $email; ?>" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Password</label>
-            <input type="password" class="form-control" name="password" required minlength="8" maxlength="12" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-              title="It must be 8-16 characters, include at least one number, one uppercase and one lowercase letter" value="<?php echo $password; ?>" required minlength="6">
+            <label class="form-label">Contact Person Resignation</label>
+            <input type="text" class="form-control" name="ContactPersonResignation" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $resignation; ?>" required>
+      
           </div>
           <div class="col-md-6">
             <label for="country" class="form-label">Country</label>
-            <select class="form-select" id="country" name="country" value="<?php echo $country; ?>" required>
+            <select class="form-select" id="country" name="Country" value="<?php echo $country; ?>" required>
               <option value="">Select Country</option>
-              <option value="Pakistan">Pakistan</option>
-              <option value="USA">USA</option>
-              <option value="Canada">Canada</option>
-              <option value="UK">UK</option>
+              <option value="Pakistan" <?php if ($country == 'Pakistan') { ?> selected="selected" <?php } ?>>Pakistan</option>
+              <option value="USA" <?php if ($country == 'USA') { ?> selected="selected" <?php } ?> >USA</option>
+              <option value="Canada" <?php if ($country == 'Canada') { ?> selected="selected" <?php } ?> >Canada</option>
+              <option value="UK" <?php if ($country == 'UK') { ?> selected="selected" <?php } ?> >UK</option>
               <!-- Add more countries as needed -->
             </select>
           </div>
 
           <div class="col-md-6">
             <label for="state" class="form-label">State</label>
-            <select class="form-select" id="state" name="state" value="<?php echo $state; ?>" required>
+            <select class="form-select" id="state" name="State" value="<?php echo $state; ?>" required>
               <option value="">Select State</option>
               <!-- Options will be dynamically populated based on selected country -->
             </select>
@@ -691,18 +699,10 @@ End Search Bar -->
 
           <div class="col-md-6">
             <label for="city" class="form-label">City</label>
-            <select class="form-select" id="city" name="city" value="<?php echo $city; ?>" required>
+            <select class="form-select" id="city" name="City" value="<?php echo $city; ?>" required>
               <option value="">Select City</option>
               <!-- Options will be dynamically populated based on selected state -->
             </select>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Registration date</label>
-            <input type="date" class="form-control" name="registration" value="<?php echo $registration; ?>" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Expiry date</label>
-            <input type="date" class="form-control" name="expiry" value="<?php echo $expiry; ?>" required>
           </div>
           <div class="col-12 text-center">
             <button type="submit" class="btn btn-outline-primary mt-3" name="update" value="update">Update</button>

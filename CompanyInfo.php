@@ -139,6 +139,7 @@ $company_data = $result->fetch_assoc();
       box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
       background-color: white;
       font-size: 0.8rem;
+      margin-top: 38px;
     }
 
     .container-card {

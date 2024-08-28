@@ -77,7 +77,6 @@ if ($stmt->execute()) {
 
        </div>
        <br>
-
     <table class="table table-bordered container">
             <thead class="">
                 <tr>

@@ -56,7 +56,6 @@ if (isset($_POST['submit'])) {
     //------------------end---------------------------------- of image variable and its validation
 
 
-
     $city = mysqli_real_escape_string($conn, $_POST['city']);
     $state = mysqli_real_escape_string($conn, $_POST['state']);
     $country = mysqli_real_escape_string($conn, $_POST['country']);
@@ -67,7 +66,8 @@ if (isset($_POST['submit'])) {
     $sql = "INSERT INTO `compani` (`comp_name`, `phone`, `email`, `password`, `image`, `city`, `state`, `country`, `registration`, `expiry`) 
             VALUES ('$comp_name', '$phone', '$email', '$hashedPassword', '$img_des', '$city', '$state', '$country', '$registration', '$expiry')";
 
-    //redirect and show message
+
+//added code to insert data into branch table and redirect to branches table of specific company
     if (mysqli_query($conn, $sql)) {
 
         // Step 2: Get the ID of the newly inserted company
@@ -85,3 +85,4 @@ if (isset($_POST['submit'])) {
 
     $conn->close();
 }
+?>

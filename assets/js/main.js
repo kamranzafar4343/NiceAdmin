@@ -345,6 +345,7 @@ $(document).ready(function() {
       });
   });
 });
+
 window.onload = function() {
   // Get the current date
   const today = new Date();

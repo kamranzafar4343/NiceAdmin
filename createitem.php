@@ -1,27 +1,67 @@
 <?php
+// Retrieve company ID from URL
+$company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
 include "db.php";
 
+// Validate company ID
+$Query = "SELECT * FROM item WHERE comp_FK_item = $company_id";
+$Result = $conn->query($Query);
+
+$comp_FK_item="";
+  $box_FK_item="";
+  $branch_FK_item="";
+  $item_id="";
+  
+  if ($Result->num_rows > 0){
+      $row2 = $Result->fetch_assoc();
+      $comp_FK_item = $row2['comp_FK_item'];
+      $box_FK_item = $row2['box_FK_item'];
+      $branch_FK_item = $row2['branch_FK_item'];
+    //   $item_id=$row2['item_id'];
+  }
+
 if (isset($_POST['submit'])) {
-    $box_name = mysqli_real_escape_string($conn, $_POST['box_name']);
+  $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
+  $item_price = mysqli_real_escape_string($conn, $_POST['item_price']);
+  $item_quantity = mysqli_real_escape_string($conn, $_POST['item_quantity']);
 
-    // Check if the box name already exists in the database
-    $emailCheckQuery = "SELECT * FROM `box` WHERE `box_name` = '$box_name'";
-    $emailCheckResult = $conn->query($emailCheckQuery);
+  $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
+  $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
+  $item_id = mysqli_real_escape_string($conn, $_POST['item_id']);
+  $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
+//   $timestamp = mysqli_real_escape_string($conn, $_POST['timestamp']);
+  $status = mysqli_real_escape_string($conn, $_POST['status']);
+  
+  $sql = "INSERT INTO  item (comp_FK_item, box_FK_item, branch_FK_item, item_name, item_price, item_quantity, status) 
+            VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' ,'$item_name', '$item_price', '$item_quantity' ,'$status')";
 
-    // Insert the record into the database
-    $sql = "INSERT INTO `box` (`box_name`) 
-            VALUES ('$box_name')";
+  if ($conn->query($sql) === TRUE) {
+    header("Location: showItems.php?id=" .$company_id);
+    // exit; // Ensure script ends after redirect
 
-    // if (mysqli_query($conn, $sql)) {
-    //     header("Location: Box.php?id=" . $newCompanyId);
-    //     exit; // Stop further script execution
-    // } else {
-    //     echo "Error creating branch: " . mysqli_error($conn);
-    // }
+  } else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
 
-    $conn->close();
+//   $sql2 = "SELECT comp_FK_item, box_FK_item, branch_FK_item FROM item WHERE comp_FK_item= $company_id";
+//   $result2 = $conn->query($sql2);
+  
+//   $comp_FK_item="";
+//   $box_FK_item="";
+//   $branch_FK_item="";
+  
+//   if ($result2->num_rows > 0){
+//       $row2 = $result2->fetch_assoc();
+//       $comp_FK_item = $row2['comp_FK_item'];
+//       $box_FK_item = $row2['box_FK_item'];
+//       $branch_FK_item = $row2['branch_FK_item'];
+//   }
 }
+  $conn->close();
 ?>
+
+
 
 <!doctype html>
 <html lang="en">
@@ -230,7 +270,7 @@ if (isset($_POST['submit'])) {
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>add box</title>
+    <title>create item</title>
 
 
 </head>
@@ -342,14 +382,8 @@ if (isset($_POST['submit'])) {
 
 
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li><!-- End Tables Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="createBox.php">
-                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
 
@@ -371,7 +405,7 @@ if (isset($_POST['submit'])) {
       <span>Register</span>
     </a>
   </li> -->
-  
+
             <!-- End Register Page Nav -->
 
             <li class="nav-item">
@@ -401,7 +435,7 @@ if (isset($_POST['submit'])) {
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Create Box</h2>
+        <h2>Add an item</h2>
     </div>
     <!-- End Header form -->
     <div class="container d-flex justify-content-center">
@@ -411,10 +445,56 @@ if (isset($_POST['submit'])) {
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
-                    <div class="col-md-6">
-                        <label for="box_name" class="form-label">Box Name</label>
-                        <input type="text" class="form-control" id="box_name" name="box_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="15" title="only letters allowed; at least 3">
+                <div class="col-md-6">
+                        <label for="comp_name" class="form-label">Item Name</label>
+                        <input type="text" class="form-control" name="item_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
+                    </div>    
+                
+                    <div class="col-md-6">  
+                        <label class="form-label">Item price</label>
+                        <input type="text" class="form-control" name="item_price" required>
                     </div>
+                    
+                    <div class="col-md-6">  
+                        <label class="form-label">Item quantity</label>
+                        <input type="text" class="form-control" name="item_quantity" required>
+                    </div>
+                
+                    <div class="col-md-6" style="display: none;">  
+                        <label class="form-label">Company ID</label>
+                        <input type="text" class="form-control" name="comp_FK_item" value="<?php echo ($company_id); ?>" readonly>
+                    </div>
+
+                    <div class="col-md-6" style="display: none;">
+                        <label class="form-label">Branch Id</label>
+                        <input type="text" class="form-control" name="branch_FK_item" value="<?php echo ($branch_FK_item); ?>" readonly>
+                    </div>
+
+                    <div class="col-md-6" style="display: none;">
+                        <label class="form-label">Box Id</label>
+                        <input type="text" class="form-control" name="box_FK_item" value="<?php echo ($box_FK_item); ?>" readonly>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <label class="form-label">Item Id</label>
+                        <input type="text" class="form-control" name="item_id" value="<?php echo ($item_id); ?>" readonly>
+                    </div>
+                    <div class="col-md-6">
+                    <?php date_default_timezone_set('Asia/Karachi'); ?>
+                        <label for="" class="form-label">Created at</label>
+                        <input type="datetime-local" class="form-control" id="timestamp" name="timestamp" value="<?php echo date('Y-m-d\TH:i'); ?>" readonly>
+                    </div> -->
+
+                    <div class="col-md-6">
+                        <label for="status" class="form-label">Item Condition</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="Select status"></option>
+                            <option selected value="New">New</option>
+                           <option value="Second Hand">Second Hand</option>
+                            <option value="Damaged">Damaged</option>
+                            <option value="Defective">Defective</option> 
+                            <option value="Used - Good">Used - Good</option> 
+                             <option value="Used - Acceptable">Used - Acceptable</option>
+                            </select> 
                     </div>
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
@@ -445,14 +525,76 @@ if (isset($_POST['submit'])) {
     <!-- Bootstrap JS (Optional) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
+    <!-- Template Main JS File -->
 
-   
-     <script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const countryStateCityData = {
+                Pakistan: {
+                    Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
+                    KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
+                    Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
+                    Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
+
+                },
+                USA: {
+                    California: ["Los Angeles", "San Francisco", "San Diego"],
+                    Texas: ["Houston", "Austin", "Dallas"]
+                    // Add more states and cities
+                },
+                Canada: {
+                    Ontario: ["Toronto", "Ottawa", "Hamilton"],
+                    Quebec: ["Montreal", "Quebec City"]
+                    // Add more provinces and cities
+                },
+            };
+
+            const countrySelect = document.getElementById('country');
+            const stateSelect = document.getElementById('state');
+            const citySelect = document.getElementById('city');
+
+            // Update states dropdown when a country is selected
+            countrySelect.addEventListener('change', function() {
+                const selectedCountry = countrySelect.value;
+                stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
+                citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+                if (selectedCountry) {
+                    const states = Object.keys(countryStateCityData[selectedCountry]);
+                    states.forEach(function(state) {
+                        const option = document.createElement('option');
+                        option.value = state;
+                        option.text = state;
+                        stateSelect.add(option);
+                    });
+                }
+            });
+
+            // Update cities dropdown when a state is selected
+            stateSelect.addEventListener('change', function() {
+                const selectedCountry = countrySelect.value;
+                const selectedState = stateSelect.value;
+                citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+                if (selectedCountry && selectedState) {
+                    const cities = countryStateCityData[selectedCountry][selectedState];
+                    cities.forEach(function(city) {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.text = city;
+                        citySelect.add(option);
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {
             searchable: false,
             fixedHeight: true,
         })
-        
     </script>
     <script src="assets/js/main.js"></script>
 </body>

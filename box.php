@@ -6,19 +6,18 @@ include 'db.php'; // Include the database connection
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Fetch branches of the company
-$sql = "SELECT * FROM branch WHERE compID_FK = $company_id";
+$sql = "SELECT * FROM box WHERE companiID_FK = $company_id";
 $result = $conn->query($sql);
 
-//2nd query to fetch the comp_name
-$sql2 = "Select comp_name from compani where comp_id= $company_id";
-$result2 = $conn->query($sql2);
+// //2nd query to fetch the comp_name
+// $sql2 = "Select comp_name from compani where comp_id= $company_id";
+// $result2 = $conn->query($sql2);
 
-$comp_name = "";
-
-if ($result2->num_rows > 0) {
-    $row2 = $result2->fetch_assoc();
-    $comp_name = $row2['comp_name'];
-}
+// $comp_name = "";
+// if ($result2->num_rows > 0) {
+//     $row2 = $result2->fetch_assoc();
+//     $comp_name = $row2['comp_name'];
+// }
 
 ?>
 
@@ -466,32 +465,25 @@ if ($result2->num_rows > 0) {
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
-    <!-- 
-  <h1>Companies List</h1> -->
+    <button id="fixedButtonBranch" type="button"  class="btn btn-primary mb-3">Add Branch</button>  
+  <h1>Box List</h1>
     <main id="main" class="main">
 
         <div class="col-12">
 
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
-
                     <?php
                     if ($result->num_rows > 0) {
                     ?>
                         <table class="table table-borderless datatable" style="table-layout: fixed;">
                             <thead>
                                 <tr>
-                                    <th scope="col">Branch Name</th>
-                                    <th scope="col">Contact Person</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Contact Person Resignation</th>
-
-                                    <th scope="col">City</th>
-                                    <th scope="col">State</th>
-                                    <th scope="col">Country</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">Box name</th>
+                                    <th scope="col">Created at</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Barcode</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody style="table-layout: fixed;">
@@ -500,24 +492,14 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                    echo "<td>" . ($row["branch_name"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonName"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonPhone"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonResignation"]) . "</td>";
-                                    echo "<td>" . ($row["City"]) . "</td>";
-                                    echo "<td>" . ($row["State"]) . "</td>";
-                                    echo "<td>" . ($row["Country"]) . "</td>";
+                                    echo "<td>" . ($row["box_name"]) . "</td>";
+                                    echo "<td>" . ($row["created_at"]) . "</td>";
+                                    echo "<td>" . ($row["Status"]) . "</td>";
+                                    echo "<td>" . ($row["barcode"]) . "</td>";
+                                    
                                 ?>
                                     <td>
-                                        <div style="display: flex; gap: 10px;">
                                         
-                                        <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a>
-                                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-
-                                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                                onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                         
-                                            </div>
                                     </td>
                                     </tr>
                                 <?php
@@ -556,63 +538,7 @@ if ($result2->num_rows > 0) {
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
-    <script>
-        //click on the picture to update with ajax
-        $(document).on('click', 'img', function() {
-            $(this).next('input[type="file"]').click();
-        });
-
-        function uploadImage(comp_id) {
-            var fileInput = document.getElementById('file-' + comp_id);
-            var file = fileInput.files[0];
-            var formData = new FormData();
-            formData.append('image', file);
-            formData.append('comp_id', comp_id);
-
-            $.ajax({
-                url: 'update_image.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    // Update the image source with the new image path
-                    $('#image-' + comp_id).attr('src', response);
-                },
-                error: function() {
-                    alert('Image upload failed. Please try again.');
-                }
-            });
-        }
-        import {
-            Ripple,
-            initMDB
-        } from "mdb-ui-kit";
-
-        initMDB({
-            Ripple
-        });
-
-        // function confirmDelete() {
-        //     // Display a confirmation dialog
-        //     var confirmation = confirm("Are you sure you want to delete this record?");
-
-        //     if (confirmation) {
-        //         // User clicked OK, proceed with deletion
-        //         deleteRecord();
-        //     } else {
-        //         // User clicked Cancel, do nothing
-        //         console.log("Record deletion canceled.");
-        //     }
-        // }
-
-        // function deleteRecord() {
-        //     // Your deletion logic here
-        //     console.log("Record deleted.");
-        //     // Example: You might want to make an AJAX request to delete the record from the server
-        //     // fetch('/delete-record', { method: 'POST' }).then(response => response.json()).then(data => console.log(data));
-        // }
-    </script>
+  
 
 
 </body>

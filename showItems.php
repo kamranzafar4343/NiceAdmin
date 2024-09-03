@@ -5,19 +5,18 @@ include 'db.php'; // Include the database connection
 // Get company ID from query string
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Fetch branches of the company
-$sql = "SELECT * FROM branch WHERE compID_FK = $company_id";
+$sql = "SELECT * FROM item WHERE comp_FK_item = $company_id";
 $result = $conn->query($sql);
 
-//2nd query to fetch the comp_name
-$sql2 = "Select comp_name from compani where comp_id= $company_id";
+//2nd query to fetch the box name
+$sql2 = "SELECT box_name from box WHERE companiID_FK= $company_id";
 $result2 = $conn->query($sql2);
 
-$comp_name = "";
+$box_name = "";
 
 if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
-    $comp_name = $row2['comp_name'];
+    $box_name = $row2['box_name'];
 }
 
 ?>
@@ -29,9 +28,7 @@ if ($result2->num_rows > 0) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Branches</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+    <title>List of Box items</title>
 
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -78,7 +75,6 @@ if ($result2->num_rows > 0) {
             display: flex;
             width: 989px;
             flex-direction: column;
-
         }
 
         .row {
@@ -466,7 +462,7 @@ if ($result2->num_rows > 0) {
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Item</button>
     <!-- 
   <h1>Companies List</h1> -->
     <main id="main" class="main">
@@ -475,22 +471,23 @@ if ($result2->num_rows > 0) {
 
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
+                    <!-- <h2 class="card-title fw-bold text-uppercase"><?php echo $box_name; ?></h2> -->
 
                     <?php
                     if ($result->num_rows > 0) {
                     ?>
-                        <table class="table table-borderless datatable" style="table-layout: fixed;">
+                        <table class="table table-borderless datatable mt-4" style="table-layout: fixed;">
                             <thead>
                                 <tr>
-                                    <th scope="col">Branch Name</th>
-                                    <th scope="col">Contact Person</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Contact Person Resignation</th>
-
-                                    <th scope="col">City</th>
-                                    <th scope="col">State</th>
-                                    <th scope="col">Country</th>
+                                    <th scope="col">Item Name</th>
+                                    <th scope="col">Item Price</th>
+                                    <th scope="col">Item Quantity</th>
+                                    <!-- <th scope="col">Company id </th>
+                                    <th scope="col">Branch id</th>
+                                    <th scope="col">Box id</th>
+                                    <th scope="col">Item id</th> -->
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Created at</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -500,24 +497,24 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                    echo "<td>" . ($row["branch_name"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonName"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonPhone"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonResignation"]) . "</td>";
-                                    echo "<td>" . ($row["City"]) . "</td>";
-                                    echo "<td>" . ($row["State"]) . "</td>";
-                                    echo "<td>" . ($row["Country"]) . "</td>";
+                                    echo "<td>" . ($row["item_name"]) . "</td>";
+                                    echo "<td>" . ($row["item_price"]) . "</td>";
+                                    echo "<td>" . ($row["item_quantity"]) . "</td>";
+                                    // echo "<td>" . ($row["comp_FK_item"]) . "</td>";
+                                    // echo "<td>" . ($row["branch_FK_item"]) . "</td>";
+                                    // echo "<td>" . ($row["box_FK_item"]) . "</td>";
+                                    // echo "<td>" . ($row["item_id"]) . "</td>";
+                                    echo "<td>" . ($row["status"]) . "</td>";
+                                    echo "<td>" . ($row["timestamp"]) . "</td>";
+
                                 ?>
                                     <td>
                                         <div style="display: flex; gap: 10px;">
-                                        
-                                        <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a>
-                                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="itemUpdate.php?id=<?php echo $row['item_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                                             <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                                onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                         
-                                            </div>
+                                                onclick="return confirm('Are you sure you want to delete this record?');" href="itemDelete.php?id=<?php echo $row['item_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                        </div>
                                     </td>
                                     </tr>
                                 <?php

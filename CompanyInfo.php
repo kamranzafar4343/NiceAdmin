@@ -193,8 +193,7 @@ $company_data = $result->fetch_assoc();
     }
 
     .remix {
-      margin-left: 120px;
-      width: 40px;
+      margin-right: 5px;
     }
 
     /* styles for card */
@@ -443,17 +442,20 @@ $company_data = $result->fetch_assoc();
         <div class="card card-custom bg-white border-white border-0">
           <div class="card-custom-img"></div>
           <div class="card-custom-avatar">
-          <form id="updateImageForm" action="update_image.php" method="POST" enctype="multipart/form-data"> 
-          <!-- Display the company image -->
-            <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" class="customImage" id="imagePreview" alt="Company Image" width="120">
+            <form id="updateImageForm" action="update_image.php" method="POST" enctype="multipart/form-data">
+              <!-- Display the company image -->
+              <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" class="customImage" id="imagePreview" alt="Company Image" width="120">
 
-            <!-- Hidden file input for uploading new image -->
-            <input type="file" id="fileInput" class="hiddenFileInput" accept="image/*" onchange="previewImage(event)">
-          </form>
+              <!-- Hidden file input for uploading new image -->
+              <input type="file" id="fileInput" class="hiddenFileInput" accept="image/*" onchange="previewImage(event)">
+            </form>
           </div>
           <div class="card-body list-group">
             <h4 class="card-title-info"><?php echo $company_data['comp_name']; ?></h4>
-            <a href="Branches.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
+            <div class="d-flex justify-content-center">
+              <a href="Branches.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
+              <a href="showItems.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-shopping-cart-2-line remix" style="font-size: 30px;"></i></a>
+            </div>
             <hr>
             <ul class="list-group list-group-horizontal d-flex justify-content-between">
               <li class="list-group-item" style="color:grey;  width: 30%;">Email</li>

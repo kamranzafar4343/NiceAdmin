@@ -67,13 +67,14 @@ $result = $conn->query($sql);
   <style>
     /* Custom CSS to decrease font size of the table */
 
-    .add{
+    .add {
       cursor: pointer;
-    width: 143px;
-    margin-left: 844px;
-    margin-top: 26px;
+      width: 143px;
+      margin-left: 844px;
+      margin-top: 26px;
     }
-   /*
+
+    /*
     .pagetitle {
       display: flex;
       width: 989px;
@@ -233,8 +234,7 @@ tbody, td, tr{
     .datatable-bottom {
       width: 122%;
     } */
-    
-</style>
+  </style>
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
@@ -255,10 +255,10 @@ tbody, td, tr{
 
     <div class="d-flex align-items-center justify-content-between">
 
-    <img class="navbar-image" src="assets/img/logo3.png" alt="">
-          
-    <a href="index.php" class="logo d-flex align-items-center">
-      
+      <img class="navbar-image" src="assets/img/logo3.png" alt="">
+
+      <a href="index.php" class="logo d-flex align-items-center">
+
         <span class="d-none d-lg-block">FingerLog</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -275,8 +275,8 @@ tbody, td, tr{
       <ul class="d-flex align-items-center">
 
         <li class="nav-item d-block d-lg-none">
-          
-            <i class="bi bi-search"></i>
+
+          <i class="bi bi-search"></i>
           </a>
         </li><!-- End Search Icon-->
 
@@ -410,120 +410,98 @@ tbody, td, tr{
 
 
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
-      
+
   <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Company</button>
-<!-- 
+  <!-- 
   <h1>Companies List</h1> -->
   <main id="main" class="main">
 
-  <div class="col-12">
+    <div class="col-12">
 
-        <div class="card recent-sales overflow-auto">
-                  <div class="card-body">
-                  <h5 class="card-title">List of Companies</h5>
+      <div class="card recent-sales overflow-auto">
+        <div class="card-body">
+          <h5 class="card-title">List of Companies</h5>
 
-            <?php
-            if ($result->num_rows > 0) {
-            ?>
-              <table class="table table-borderless datatable" style="table-layout: fixed;">
+          <?php
+          if ($result->num_rows > 0) {
+          ?>
+            <table class="table table-borderless datatable" style="table-layout: fixed;">
 
               <colgroup>
-              <col style="width:12%;">
-              <col style="width: 15%;">
-                  <col style="width: 12%;">
-                  <col style="width: 13%;">
-                  <col style="width: 14%;">
-                  <col style="width: 8%;">
-                  <col style="width: 8%;">
-                  <col style="width: 10%;">
-                  <col style="width: 10%;">
-                </colgroup>
-                <thead>
-                  <tr>
-                  <th scope="col" >Comp. Id</th>
-                    <th scope="col" >Name</th>
-                    <th scope="col" >Phone</th>
-                    <th scope="col" >Email</th>
-                    <!-- <th scope="col">Password</th> -->
-                    <th scope="col">City</th>
-                    <th scope="col">Country</th>
-<th scope="col"> Registration date</th>
-                    <th scope="col" >Expiry</th>
-                    <th scope="col" >Actions</th>
+                <col style="width:12%;">
+                <col style="width: 15%;">
+                <col style="width: 12%;">
+                <col style="width: 13%;">
+                <col style="width: 14%;">
+                <col style="width: 8%;">
+                <col style="width: 8%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">Comp. Id</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Email</th>
+                  <!-- <th scope="col">Password</th> -->
+                  <th scope="col">City</th>
+                  <th scope="col">Country</th>
+                  <th scope="col"> Registration date</th>
+                  <th scope="col">Expiry</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody style="table-layout: fixed;">
+
+                <?php
+                while ($row = $result->fetch_assoc()) {
+                  echo "<tr>";
+                  echo "<td>" . htmlspecialchars($row["comp_id"]) . "</td>";
+                ?>
+                  <td>
+
+                    <a class="text-primary fw-bold" href="CompanyInfo.php?id=<?php echo $row['comp_id']; ?>">
+                      <?php echo $row['comp_name']; ?>
+                    </a>
+                  </td>
+
+                  <?php
+                  echo "<td >" . htmlspecialchars($row["phone"]) . "</td> ";
+                  echo "<td >" . htmlspecialchars($row["email"]) . "</td>";
+                  // echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
+                  // echo "<td><button type='button' class='btn btn-light view-password' data-id='" . htmlspecialchars($row['comp_id']) . "'><i class='fa fa-eye'></i></button></td>";
+                  echo "<td >" . htmlspecialchars($row["city"]) . "</td>";
+                  // echo "<td>" . htmlspecialchars($row["state"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["country"]) . "</td>";
+                  echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["expiry"]) . "</td>";
+                  ?>
+                  <td>
+                    <div style="display: flex; gap: 10px;">
+                      <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+
+                      <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+
+                    </div>
+                  </td>
                   </tr>
-                </thead>
-                <tbody style="table-layout: fixed;">
+                <?php
+                }
+                ?>
 
-                  <?php
-                  while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row["comp_id"]) . "</td>";
-                  ?>
-                    <td >
-
-                      <a class="text-primary fw-bold" href="CompanyInfo.php?id=<?php echo $row['comp_id']; ?>">
-                        <?php echo $row['comp_name']; ?>
-                      </a>
-                    </td>
-
-                    <?php
-                    echo "<td >" . htmlspecialchars($row["phone"]) . "</td> ";
-                    echo "<td >" . htmlspecialchars($row["email"]) . "</td>";
-                    // echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
-                    // echo "<td><button type='button' class='btn btn-light view-password' data-id='" . htmlspecialchars($row['comp_id']) . "'><i class='fa fa-eye'></i></button></td>";
-                    echo "<td >" . htmlspecialchars($row["city"]) . "</td>";
-                    // echo "<td>" . htmlspecialchars($row["state"]) . "</td>";
-                    echo "<td >" . htmlspecialchars($row["country"]) . "</td>";
-                      echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
-                    echo "<td >" . htmlspecialchars($row["expiry"]) . "</td>";
-
-                    ?>
-                    <td >
-                      <div style="display: flex; gap: 10px;">
-                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-
-                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                      
-                      </div>
-                    </td>
-                    </tr>
-                  <?php
-                  }
-                  ?>
-
-                </tbody>
-              </table>
-            <?php
-            }
-            ?>
-
-          </div>
+              </tbody>
+            </table>
+          <?php
+          }
+          ?>
 
         </div>
-      </div>
 
-      <!-- Password Verification Modal -->
-<!-- <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="passwordModalLabel">Admin Password Required</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="passwordVerificationForm">
-          <div class="mb-3">
-            <label for="adminPassword" class="form-label">Enter Admin Password</label>
-            <input type="password" class="form-control" id="adminPassword" required>
-          </div>
-          <input type="hidden" id="companyId" name="companyId">
-          <button type="submit" class="btn btn-primary">Verify</button>
-        </form>
-        <div id="passwordError" class="text-danger mt-2" style="display: none;">Incorrect password. Please try again.</div>
       </div>
     </div>
-  </div>
-</div> -->
+
+
 
   </main><!-- End #main -->
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -545,55 +523,35 @@ tbody, td, tr{
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 
-
-  <!-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-  const passwordModal = new bootstrap.Modal(document.getElementById('passwordModal'));
-  const passwordVerificationForm = document.getElementById('passwordVerificationForm');
-  const passwordError = document.getElementById('passwordError');
-
-  // Show modal on button click
-  document.querySelectorAll('.view-password').forEach(button => {
-    button.addEventListener('click', function() {
-      const companyId = this.getAttribute('data-id');
-      document.getElementById('companyId').value = companyId;
-      passwordError.style.display = 'none'; // Reset error message
-      passwordModal.show();
+  <script>
+    //click on the picture to update with ajax
+    $(document).on('click', 'img', function() {
+      $(this).next('input[type="file"]').click();
     });
-  });
 
-  // Handle form submission
-  passwordVerificationForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+    function uploadImage(comp_id) {
+      var fileInput = document.getElementById('file-' + comp_id);
+      var file = fileInput.files[0];
+      var formData = new FormData();
+      formData.append('image', file);
+      formData.append('comp_id', comp_id);
 
-    const companyId = document.getElementById('companyId').value;
-    const adminPassword = document.getElementById('adminPassword').value;
-
-    // Perform AJAX request to verify password
-    fetch('verify_password.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ companyId, adminPassword })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        // Password correct, display hashed password
-        const passwordCell = document.querySelector(`button[data-id='${companyId}']`).closest('td');
-        passwordCell.innerHTML = data.hashedPassword;
-        passwordModal.hide();
-      } else {
-        // Incorrect password
-        passwordError.style.display = 'block';
-      }
-    })
-    .catch(error => console.error('Error:', error));
-  });
-});
-
-  </script> -->
-
-
+      $.ajax({
+        url: 'update_image.php',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          // Update the image source with the new image path
+          $('#image-' + comp_id).attr('src', response);
+        },
+        error: function() {
+          alert('Image upload failed. Please try again.');
+        }
+      });
+    }
+  </script>
 </body>
 
 </html>

@@ -186,11 +186,11 @@ margin-right: 24px;
         </a>
       </li><!-- End Tables Nav -->
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
           <i class="ri-building-4-line"></i><span>Box</span><i class="bi bi-chevron ms-auto"></i>
         </a>
-      </li><!-- End Tables Nav -->
+      </li> -->
 
 
       <li class="nav-heading">Pages</li>

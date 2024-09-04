@@ -72,6 +72,18 @@
   <style>
     /* Custom CSS to decrease font size of the table */
 
+    .image-circle {
+      margin-left: 335px;
+      margin-top: 36px;
+      margin-bottom: 18px;
+      border: 2px solid white;
+      width: 85px;
+      padding: 5px;
+    }
+
+    .image-circle img {
+      width: 100px;
+    }
     .img {
       border-radius: 30%;
     }
@@ -241,7 +253,7 @@
   //update the record
   if (isset($_POST['update'])) {
     $user_id = $_POST['comp_id'];
-    
+
     $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
     $phone =  mysqli_real_escape_string($conn, $_POST['phone']);
     $email =  mysqli_real_escape_string($conn, $_POST['email']);
@@ -649,6 +661,13 @@ End Search Bar -->
   <section class="container d-flex justify-content-center my-4">
     <div class="card custom-card2  shadow-lg" style="border: none; box-shadow:none; border:none;">
       <div class="card-body">
+        <form id="updateImageForm" action="update_image.php" method="POST" enctype="multipart/form-data">
+          <!-- Display the company image -->
+          <div class="image-circle">
+            <img src="<?php echo $row['image']; ?>" width="70px" alt="image" id="image-<?php echo $row['comp_id']; ?>" style="cursor:pointer;">
+            <input type="file" id="file-<?php echo $row['comp_id']; ?>" style="display:none;" onchange="uploadImage(<?php echo $row['comp_id']; ?>)" />
+          </div>
+        </form>
         <!-- <h5 class="card-title">Update Company Information</h5> -->
         <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
           <div class="col-md-6">
@@ -754,64 +773,92 @@ End Search Bar -->
 
     //for the country, state, city dropdown
     document.addEventListener('DOMContentLoaded', function() {
-  const countryStateCityData = {
-    Pakistan: {
-      Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-      KPK:["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-      Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-      Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
-      
-    },
-    USA: {
-      California: ["Los Angeles", "San Francisco", "San Diego"],
-      Texas: ["Houston", "Austin", "Dallas"]
-      // Add more states and cities
-    },
-    Canada: {
-      Ontario: ["Toronto", "Ottawa", "Hamilton"],
-      Quebec: ["Montreal", "Quebec City"]
-      // Add more provinces and cities
-    },
-  };
+      const countryStateCityData = {
+        Pakistan: {
+          Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
+          KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
+          Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
+          Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
 
-  const countrySelect = document.getElementById('country');
-  const stateSelect = document.getElementById('state');
-  const citySelect = document.getElementById('city');
+        },
+        USA: {
+          California: ["Los Angeles", "San Francisco", "San Diego"],
+          Texas: ["Houston", "Austin", "Dallas"]
+          // Add more states and cities
+        },
+        Canada: {
+          Ontario: ["Toronto", "Ottawa", "Hamilton"],
+          Quebec: ["Montreal", "Quebec City"]
+          // Add more provinces and cities
+        },
+      };
 
-  // Update states dropdown when a country is selected
-  countrySelect.addEventListener('change', function() {
-    const selectedCountry = countrySelect.value;
-    stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+      const countrySelect = document.getElementById('country');
+      const stateSelect = document.getElementById('state');
+      const citySelect = document.getElementById('city');
 
-    if (selectedCountry) {
-      const states = Object.keys(countryStateCityData[selectedCountry]);
-      states.forEach(function(state) {
-        const option = document.createElement('option');
-        option.value = state;
-        option.text = state;
-        stateSelect.add(option);
+      // Update states dropdown when a country is selected
+      countrySelect.addEventListener('change', function() {
+        const selectedCountry = countrySelect.value;
+        stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
+        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+        if (selectedCountry) {
+          const states = Object.keys(countryStateCityData[selectedCountry]);
+          states.forEach(function(state) {
+            const option = document.createElement('option');
+            option.value = state;
+            option.text = state;
+            stateSelect.add(option);
+          });
+        }
+      });
+
+      // Update cities dropdown when a state is selected
+      stateSelect.addEventListener('change', function() {
+        const selectedCountry = countrySelect.value;
+        const selectedState = stateSelect.value;
+        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+        if (selectedCountry && selectedState) {
+          const cities = countryStateCityData[selectedCountry][selectedState];
+          cities.forEach(function(city) {
+            const option = document.createElement('option');
+            option.value = city;
+            option.text = city;
+            citySelect.add(option);
+          });
+        }
+      });
+    });
+
+    //click on the picture to update with ajax
+    $(document).on('click', 'img', function() {
+      $(this).next('input[type="file"]').click();
+    });
+
+    function uploadImage(comp_id) {
+      var fileInput = document.getElementById('file-' + comp_id);
+      var file = fileInput.files[0];
+      var formData = new FormData();
+      formData.append('image', file);
+      formData.append('comp_id', comp_id);
+
+      $.ajax({
+        url: 'update_image.php',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          // Update the image source with the new image path
+          $('#image-' + comp_id).attr('src', response);
+        },
+        error: function() {
+          alert('Image upload failed. Please try again.');
+        }
       });
     }
-  });
-
-  // Update cities dropdown when a state is selected
-  stateSelect.addEventListener('change', function() {
-    const selectedCountry = countrySelect.value;
-    const selectedState = stateSelect.value;
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-    if (selectedCountry && selectedState) {
-      const cities = countryStateCityData[selectedCountry][selectedState];
-      cities.forEach(function(city) {
-        const option = document.createElement('option');
-        option.value = city;
-        option.text = city;
-        citySelect.add(option);
-      });
-    }
-  });
-});  
   </script>
 
 </body>

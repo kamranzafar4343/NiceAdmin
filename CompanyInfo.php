@@ -165,6 +165,11 @@ $company_data = $result->fetch_assoc();
       display: inline-block;
       transition: color 0.3s ease;
     }
+    .img-fluid{
+      margin-top: 20px;
+    margin-left: 37px !important;
+    margin-bottom: 15px;
+    }
 
     .company-name:hover {
       color: #007bff;
@@ -233,7 +238,7 @@ $company_data = $result->fetch_assoc();
       position: relative;
       top: 36%;
       left: 25%;
-      cursor: pointer;
+     
       /* Change cursor to indicate clickability */
     }
 
@@ -440,21 +445,22 @@ $company_data = $result->fetch_assoc();
       <!-- Card container -->
       <div class="col-md-6 col-lg-4 pb-3">
         <div class="card card-custom bg-white border-white border-0">
+
           <div class="card-custom-img"></div>
           <div class="card-custom-avatar">
             <form id="updateImageForm" action="update_image.php" method="POST" enctype="multipart/form-data">
               <!-- Display the company image -->
-              <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" class="customImage" id="imagePreview" alt="Company Image" width="120">
-
-              <!-- Hidden file input for uploading new image -->
-              <input type="file" id="fileInput" class="hiddenFileInput" accept="image/*" onchange="previewImage(event)">
+            
+                <img class="img-fluid customImage"  src="<?php echo $company_data['image']; ?>" width="70px" alt="image" id="image-<?php echo $company_data['comp_id']; ?>">
+                
+             
             </form>
           </div>
           <div class="card-body list-group">
             <h4 class="card-title-info"><?php echo $company_data['comp_name']; ?></h4>
             <div class="d-flex justify-content-center">
               <a href="Branches.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
-              <a href="showItems.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-shopping-cart-2-line remix" style="font-size: 30px;"></i></a>
+              <!-- <a href="showItems.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-shopping-cart-2-line remix" style="font-size: 30px;"></i></a> -->
             </div>
             <hr>
             <ul class="list-group list-group-horizontal d-flex justify-content-between">
@@ -565,24 +571,6 @@ $company_data = $result->fetch_assoc();
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-
-  <script>
-    // JavaScript to handle the image click and file input
-    document.getElementById('imagePreview').addEventListener('click', function() {
-      document.getElementById('fileInput').click(); // Trigger file input click when image is clicked
-    });
-
-    function previewImage(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('imagePreview').src = e.target.result; // Update image preview
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-  </script>
 
 </body>
 

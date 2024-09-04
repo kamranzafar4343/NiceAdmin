@@ -5,7 +5,7 @@ $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 include "db.php";
 
 // Validate company ID
-$Query = "SELECT * FROM item WHERE comp_FK_item = $company_id";
+$Query = "SELECT * FROM item WHERE branch_FK_item = $company_id";
 $Result = $conn->query($Query);
 
 $comp_FK_item="";

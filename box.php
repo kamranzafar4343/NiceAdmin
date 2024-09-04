@@ -5,7 +5,7 @@ include 'db.php'; // Include the database connection
 // Get company ID from query string
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Fetch branches of the company
+// Fetch box of the company
 $sql = "SELECT * FROM box WHERE branchID_FK = $company_id";
 $result = $conn->query($sql);
 
@@ -28,7 +28,7 @@ $result = $conn->query($sql);
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Branches</title>
+    <title>boxes</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -79,6 +79,18 @@ $result = $conn->query($sql);
             flex-direction: column;
 
         }
+        .barcode {
+            height: 35px;
+            width: 180px;
+            position: relative;
+            left: -38px;
+        }
+/* 
+        #main {
+            margin-top: 20px !important;
+            padding: 20px 30px;
+            transition: all 0.3s;
+        } */
 
         .row {
             margin-left: 52px;
@@ -130,6 +142,9 @@ $result = $conn->query($sql);
             margin-top: 12px;
             /* table-layout: fixed; */
         }
+        .card-body {
+    padding: 0 20px 20px 60px !important;
+}
 
 
         /* Define the pulse animation */
@@ -329,7 +344,7 @@ $result = $conn->query($sql);
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
         </div><!-- End Search Bar -->
-<h3>List of boxes</h3>
+        <h3>List of boxes</h3>
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
 
@@ -465,8 +480,8 @@ $result = $conn->query($sql);
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button"  class="btn btn-primary mb-3">Add Branch</button>  
-  <h1>Box List</h1>
+    <button id="fixedButtonBranch" type="button" class="btn btn-primary mb-3">Add box</button>
+    
     <main id="main" class="main">
 
         <div class="col-12">
@@ -476,7 +491,7 @@ $result = $conn->query($sql);
                     <?php
                     if ($result->num_rows > 0) {
                     ?>
-                        <table class="table table-borderless datatable" style="table-layout: fixed;">
+                        <table class="table table-borderless datatable mt-4" style="table-layout: fixed;">
                             <thead>
                                 <tr>
                                     <th scope="col">Box name</th>
@@ -492,7 +507,7 @@ $result = $conn->query($sql);
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                    ?>
+                                ?>
                                     <td>
 
                                         <a class="text-primary fw-bold" href="showItems.php?id=<?php echo $row['branchID_FK']; ?>">
@@ -502,20 +517,20 @@ $result = $conn->query($sql);
                                     <?php
                                     echo "<td>" . ($row["created_at"]) . "</td>";
                                     echo "<td>" . ($row["Status"]) . "</td>";
-                                    echo "<td>" . ($row["barcode"]) . "</td>";
-                                ?>
+                                    echo "<td>" . '<img class="barcode" alt="' . ($row["box_id"]) . '" src="barcode.php?text=' . urlencode($row["box_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
+                                    ?>
                                     <td>
-                                    
+
                                         <div style="display: flex; gap: 10px;">
 
-                                            <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
-                                            <!-- <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                            <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['box_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
+                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['box_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                                             <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                                onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a> -->
+                                                onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['box_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
 
                                         </div>
-                                    
+
                                     </td>
                                     </tr>
                                 <?php
@@ -554,7 +569,7 @@ $result = $conn->query($sql);
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
-  
+
 
 
 </body>

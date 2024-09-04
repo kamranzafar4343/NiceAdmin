@@ -36,7 +36,7 @@ if ($result2->num_rows > 0) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>List of Box items</title>
+    <title>items</title>
 
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -78,6 +78,11 @@ if ($result2->num_rows > 0) {
     <link rel="stylesheet" href="css/style.css">
     <style>
         /* Custom CSS to decrease font size of the table */
+
+
+        .card-body{
+            margin-left: 37px !important;
+        }
 
         .pagetitle {
             display: flex;
@@ -298,8 +303,10 @@ if ($result2->num_rows > 0) {
         }
 
         .barcode {
-            height: 27px;
-            width: 80px;
+            height: 37px;
+            width: 167px;
+            position: relative;
+            left: -18px;
         }
 
         /* .custom-header-col-name{
@@ -492,17 +499,17 @@ if ($result2->num_rows > 0) {
                         <table class="table table-borderless datatable mt-4" style="table-layout: fixed;">
                             <thead>
                                 <tr>
-                                    <th scope="col">Item Name</th>
-                                    <th scope="col">Item Price</th>
-                                    <th scope="col">Quantity</th>
+                                    <th scope="col" style="width: 10%;">Quantity</th>
+                                    <th scope="col" style="width: 15%;">Item Name</th>
+                                    <th scope="col" style="width: 14%;">Item Price</th>
                                     <!-- <th scope="col">Company id </th>
                                     <th scope="col">Branch id</th>
                                     <th scope="col">Box id</th>
                                     <th scope="col">Item id</th> -->
-                                    <th scope="col">Condition</th>
-                                    <th scope="col">Created at</th>
-                                    <th scope="col"> Barcode </th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col" style="width: 13%;">Condition</th>
+                                    <th scope="col" style="width: 20%;">Created at</th>
+                                    <th scope="col" style="width: 25%;"> Barcode </th>
+                                    <th scope="col" style="width: 15%;">Actions</th>
 
                                 </tr>
                             </thead>
@@ -512,16 +519,17 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
+                                    echo "<td>" . ($row["item_quantity"]) . "</td>";
                                     echo "<td>" . ($row["item_name"]) . "</td>";
                                     echo "<td>" . ($row["item_price"]) . "</td>";
-                                    echo "<td>" . ($row["item_quantity"]) . "</td>";
+
                                     // echo "<td>" . ($row["comp_FK_item"]) . "</td>";
                                     // echo "<td>" . ($row["branch_FK_item"]) . "</td>";
                                     // echo "<td>" . ($row["box_FK_item"]) . "</td>";
                                     // echo "<td>" . ($row["item_id"]) . "</td>";
                                     echo "<td><span>" . $row["status"] . "</span></td>";
                                     echo "<td>" . ($row["timestamp"]) . "</td>";
-                                    echo "<td>" . '<img class="barcode" alt="' . ($row["timestamp"]) . '" src="barcode.php?text=' . urlencode($row["timestamp"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
+                                    echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
 
                                 ?>
                                     <td>

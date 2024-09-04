@@ -4,7 +4,6 @@
 // Retrieve company ID from URL
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-
 include "db.php";
 
 // Validate company ID

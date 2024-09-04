@@ -5,8 +5,15 @@ include 'db.php'; // Include the database connection
 // Get company ID from query string
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-$sql = "SELECT * FROM item WHERE comp_FK_item = $company_id";
+$sql = "SELECT * FROM item WHERE branch_FK_item = $company_id";
 $result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+
+    $barcodeText = $row['item_id'];
+    $status = $row['status'];
+}
 
 //2nd query to fetch the box name
 $sql2 = "SELECT box_name from box WHERE companiID_FK= $company_id";
@@ -18,6 +25,7 @@ if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
     $box_name = $row2['box_name'];
 }
+
 
 ?>
 
@@ -289,6 +297,11 @@ if ($result2->num_rows > 0) {
             width: 122%;
         }
 
+        .barcode {
+            height: 27px;
+            width: 80px;
+        }
+
         /* .custom-header-col-name{
         margin-right: 1000px;
     } */
@@ -326,7 +339,7 @@ if ($result2->num_rows > 0) {
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
         </div><!-- End Search Bar -->
-
+        <h3>List of Items</h3>
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
 
@@ -481,14 +494,16 @@ if ($result2->num_rows > 0) {
                                 <tr>
                                     <th scope="col">Item Name</th>
                                     <th scope="col">Item Price</th>
-                                    <th scope="col">Item Quantity</th>
+                                    <th scope="col">Quantity</th>
                                     <!-- <th scope="col">Company id </th>
                                     <th scope="col">Branch id</th>
                                     <th scope="col">Box id</th>
                                     <th scope="col">Item id</th> -->
-                                    <th scope="col">Status</th>
+                                    <th scope="col">Condition</th>
                                     <th scope="col">Created at</th>
+                                    <th scope="col"> Barcode </th>
                                     <th scope="col">Actions</th>
+
                                 </tr>
                             </thead>
                             <tbody style="table-layout: fixed;">
@@ -504,8 +519,9 @@ if ($result2->num_rows > 0) {
                                     // echo "<td>" . ($row["branch_FK_item"]) . "</td>";
                                     // echo "<td>" . ($row["box_FK_item"]) . "</td>";
                                     // echo "<td>" . ($row["item_id"]) . "</td>";
-                                    echo "<td>" . ($row["status"]) . "</td>";
+                                    echo "<td><span>" . $row["status"] . "</span></td>";
                                     echo "<td>" . ($row["timestamp"]) . "</td>";
+                                    echo "<td>" . '<img class="barcode" alt="' . ($row["timestamp"]) . '" src="barcode.php?text=' . urlencode($row["timestamp"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
 
                                 ?>
                                     <td>

@@ -18,6 +18,7 @@ $comp_FK_item="";
       $comp_FK_item = $row2['comp_FK_item'];
       $box_FK_item = $row2['box_FK_item'];
       $branch_FK_item = $row2['branch_FK_item'];
+      $item_id = $row2['item_id'];
     //   $item_id=$row2['item_id'];
   }
 
@@ -28,7 +29,7 @@ if (isset($_POST['submit'])) {
 
   $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
   $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
-  $item_id = mysqli_real_escape_string($conn, $_POST['item_id']);
+
   $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
 //   $timestamp = mysqli_real_escape_string($conn, $_POST['timestamp']);
   $status = mysqli_real_escape_string($conn, $_POST['status']);
@@ -37,7 +38,7 @@ if (isset($_POST['submit'])) {
             VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' ,'$item_name', '$item_price', '$item_quantity' ,'$status')";
 
   if ($conn->query($sql) === TRUE) {
-    header("Location: showItems.php?id=" .$company_id);
+    // header("Location: showItems.php?id=" .$company_id);
     // exit; // Ensure script ends after redirect
 
   } else {
@@ -487,8 +488,7 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-6">
                         <label for="status" class="form-label">Item Condition</label>
                         <select class="form-select" id="status" name="status">
-                            <option value="Select status"></option>
-                            <option selected value="New">New</option>
+                            <option value="New">New</option>
                            <option value="Second Hand">Second Hand</option>
                             <option value="Damaged">Damaged</option>
                             <option value="Defective">Defective</option> 

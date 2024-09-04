@@ -331,6 +331,8 @@ if ($result2->num_rows > 0) {
             </form>
         </div><!-- End Search Bar -->
 
+        <h3>List of Branches</h3>
+
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
 
@@ -500,24 +502,30 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                    echo "<td>" . ($row["branch_name"]) . "</td>";
+                                ?>
+                                    <td>
+                                        <a class="text-primary fw-bold" href="box.php?id=<?php echo $row['branch_id']; ?>">
+                                            <?php echo $row['branch_name']; ?>
+                                        </a>
+                                    </td>
+                                    <?php
                                     echo "<td>" . ($row["ContactPersonName"]) . "</td>";
                                     echo "<td>" . ($row["ContactPersonPhone"]) . "</td>";
                                     echo "<td>" . ($row["ContactPersonResignation"]) . "</td>";
                                     echo "<td>" . ($row["City"]) . "</td>";
                                     echo "<td>" . ($row["State"]) . "</td>";
                                     echo "<td>" . ($row["Country"]) . "</td>";
-                                ?>
+                                    ?>
                                     <td>
                                         <div style="display: flex; gap: 10px;">
-                                        
-                                        <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a>
-                                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+
+                                            <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
+                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                                             <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
                                                 onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                         
-                                            </div>
+
+                                        </div>
                                     </td>
                                     </tr>
                                 <?php

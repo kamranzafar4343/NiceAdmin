@@ -6,7 +6,7 @@ include 'db.php'; // Include the database connection
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Fetch branches of the company
-$sql = "SELECT * FROM box WHERE companiID_FK = $company_id";
+$sql = "SELECT * FROM box WHERE branchID_FK = $company_id";
 $result = $conn->query($sql);
 
 // //2nd query to fetch the comp_name
@@ -329,7 +329,7 @@ $result = $conn->query($sql);
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
         </div><!-- End Search Bar -->
-
+<h3>List of boxes</h3>
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
 
@@ -492,14 +492,30 @@ $result = $conn->query($sql);
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                    echo "<td>" . ($row["box_name"]) . "</td>";
+                                    ?>
+                                    <td>
+
+                                        <a class="text-primary fw-bold" href="showItems.php?id=<?php echo $row['branchID_FK']; ?>">
+                                            <?php echo $row['box_name']; ?>
+                                        </a>
+                                    </td>
+                                    <?php
                                     echo "<td>" . ($row["created_at"]) . "</td>";
                                     echo "<td>" . ($row["Status"]) . "</td>";
                                     echo "<td>" . ($row["barcode"]) . "</td>";
-                                    
                                 ?>
                                     <td>
-                                        
+                                    
+                                        <div style="display: flex; gap: 10px;">
+
+                                            <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
+                                            <!-- <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+
+                                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                                                onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a> -->
+
+                                        </div>
+                                    
                                     </td>
                                     </tr>
                                 <?php

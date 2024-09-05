@@ -4,7 +4,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $box_name = $_POST['box_name'];
     $company_id = $_POST['company'];
     $branch_id = $_POST['branch'];
-    $status = $_POST['status'];
+    
+    $barcode=$_POST['barcode'];
 
     // Simple SQL query to insert the box into the database
     $conn = new mysqli("localhost", "root", "", "catmarketing");
@@ -13,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK, status) VALUES ('$box_name', '$company_id', '$branch_id', '$status')";
+    $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK, barcode) VALUES ('$box_name', '$company_id', '$branch_id', '$barcode')";
 
     if ($conn->query($sql) === TRUE) {
         echo "Box created successfully!";
@@ -438,17 +439,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <option value="">Select a Branch</option>
                                 </select>
                             </div>
-
+                            
                             <div class="form-group">
-                                <label for="status">Select status:</label>
-                                <select id="status" class="form-control" name="status">
-                                    <option selected value="">Select status</option>
-                                    <option  value="active">active</option>
-                                    <option  value="inactive">inactive</option>
-                                
-                                </select>
+                            <label for="barcode">Barcode:</label>
+                            <input type="text" class="form-control" id="barcode" name="barcode" required>
                             </div>
-
                             <button type="submit" class="btn btn-primary btn-block">Create Box</button>
                         </form>
                     </div>
@@ -488,7 +483,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             });
         });
     </script>
-
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -1,65 +1,66 @@
 <?php
 // Retrieve company ID from URL
-$company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$branch = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 include "db.php";
 
 // Validate company ID
-$Query = "SELECT * FROM item WHERE branch_FK_item = $company_id";
+$Query = "SELECT * FROM item WHERE branch_FK_item = $branch";
 $Result = $conn->query($Query);
 
-$comp_FK_item="";
-  $box_FK_item="";
-  $branch_FK_item="";
-  $item_id="";
-  
-  if ($Result->num_rows > 0){
-      $row2 = $Result->fetch_assoc();
-      $comp_FK_item = $row2['comp_FK_item'];
-      $box_FK_item = $row2['box_FK_item'];
-      $branch_FK_item = $row2['branch_FK_item'];
-      $item_id = $row2['item_id'];
+$comp_FK_item = "";
+$box_FK_item = "";
+$branch_FK_item = "";
+$item_id = "";
+
+if ($Result->num_rows > 0) {
+    $row2 = $Result->fetch_assoc();
+    $comp_FK_item = $row2['comp_FK_item'];
+    $box_FK_item = $row2['box_FK_item'];
+    $branch_FK_item = $row2['branch_FK_item'];
+    $item_id = $row2['item_id'];
     //   $item_id=$row2['item_id'];
-  }
+}
 
 if (isset($_POST['submit'])) {
-  $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
-  $item_price = mysqli_real_escape_string($conn, $_POST['item_price']);
-  $item_quantity = mysqli_real_escape_string($conn, $_POST['item_quantity']);
+    $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
+    $item_price = mysqli_real_escape_string($conn, $_POST['item_price']);
+    $item_quantity = mysqli_real_escape_string($conn, $_POST['item_quantity']);
 
-  $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
-  $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
+    $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
+    $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
+    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
-  $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
-//   $timestamp = mysqli_real_escape_string($conn, $_POST['timestamp']);
-  $status = mysqli_real_escape_string($conn, $_POST['status']);
-  
-  $sql = "INSERT INTO  item (comp_FK_item, box_FK_item, branch_FK_item, item_name, item_price, item_quantity, status) 
-            VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' ,'$item_name', '$item_price', '$item_quantity' ,'$status')";
+    $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
+    //   $timestamp = mysqli_real_escape_string($conn, $_POST['timestamp']);
+    $status = mysqli_real_escape_string($conn, $_POST['status']);
 
-  if ($conn->query($sql) === TRUE) {
-    // header("Location: showItems.php?id=" .$company_id);
-    // exit; // Ensure script ends after redirect
+    $sql = "INSERT INTO  item (comp_FK_item, box_FK_item, branch_FK_item, item_name, item_price, item_quantity, status, barcode) 
+            VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' ,'$item_name', '$item_price', '$item_quantity' ,'$status', '$barcode')";
 
-  } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-  }
+    if ($conn->query($sql) === TRUE) {
+        // header("Location: showItems.php?id=" .$company_id);
+        // exit; // Ensure script ends after redirect
 
-//   $sql2 = "SELECT comp_FK_item, box_FK_item, branch_FK_item FROM item WHERE comp_FK_item= $company_id";
-//   $result2 = $conn->query($sql2);
-  
-//   $comp_FK_item="";
-//   $box_FK_item="";
-//   $branch_FK_item="";
-  
-//   if ($result2->num_rows > 0){
-//       $row2 = $result2->fetch_assoc();
-//       $comp_FK_item = $row2['comp_FK_item'];
-//       $box_FK_item = $row2['box_FK_item'];
-//       $branch_FK_item = $row2['branch_FK_item'];
-//   }
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    //   $sql2 = "SELECT comp_FK_item, box_FK_item, branch_FK_item FROM item WHERE comp_FK_item= $company_id";
+    //   $result2 = $conn->query($sql2);
+
+    //   $comp_FK_item="";
+    //   $box_FK_item="";
+    //   $branch_FK_item="";
+
+    //   if ($result2->num_rows > 0){
+    //       $row2 = $result2->fetch_assoc();
+    //       $comp_FK_item = $row2['comp_FK_item'];
+    //       $box_FK_item = $row2['box_FK_item'];
+    //       $branch_FK_item = $row2['branch_FK_item'];
+    //   }
 }
-  $conn->close();
+$conn->close();
 ?>
 
 
@@ -446,22 +447,22 @@ if (isset($_POST['submit'])) {
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
-                <div class="col-md-6">
+                    <div class="col-md-6">
                         <label for="comp_name" class="form-label">Item Name</label>
                         <input type="text" class="form-control" name="item_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
-                    </div>    
-                
-                    <div class="col-md-6">  
+                    </div>
+
+                    <div class="col-md-6">
                         <label class="form-label">Item price</label>
                         <input type="text" class="form-control" name="item_price" required>
                     </div>
-                    
-                    <div class="col-md-6">  
+
+                    <div class="col-md-6">
                         <label class="form-label">Item quantity</label>
                         <input type="text" class="form-control" name="item_quantity" required>
                     </div>
-                
-                    <div class="col-md-6" style="display: none;">  
+
+                    <div class="col-md-6" style="display: none;">
                         <label class="form-label">Company ID</label>
                         <input type="text" class="form-control" name="comp_FK_item" value="<?php echo ($company_id); ?>" readonly>
                     </div>
@@ -489,13 +490,20 @@ if (isset($_POST['submit'])) {
                         <label for="status" class="form-label">Item Condition</label>
                         <select class="form-select" id="status" name="status">
                             <option value="New">New</option>
-                           <option value="Second Hand">Second Hand</option>
+                            <option value="Second Hand">Second Hand</option>
                             <option value="Damaged">Damaged</option>
-                            <option value="Defective">Defective</option> 
-                            <option value="Used - Good">Used - Good</option> 
-                             <option value="Used - Acceptable">Used - Acceptable</option>
-                            </select> 
+                            <option value="Defective">Defective</option>
+                            <option value="Used - Good">Used - Good</option>
+                            <option value="Used - Acceptable">Used - Acceptable</option>
+                        </select>
                     </div>
+       
+                    <div class="col-md-6" >
+                        <label class="form-label">Barcode</label>
+                        <input type="text" class="form-control" name="barcode" >
+                    </div>
+
+
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>

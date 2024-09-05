@@ -363,6 +363,12 @@ tbody, td, tr{
         </a>
       </li><!-- End Tables Nav -->
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+          <i class="ri-building-4-line"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">

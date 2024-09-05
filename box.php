@@ -2,11 +2,8 @@
 
 include 'db.php'; // Include the database connection
 
-// Get company ID from query string
-$company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
 // Fetch box of the company
-$sql = "SELECT * FROM box WHERE branchID_FK = $company_id";
+$sql = "SELECT * FROM box";
 $result = $conn->query($sql);
 
 // //2nd query to fetch the comp_name
@@ -79,13 +76,15 @@ $result = $conn->query($sql);
             flex-direction: column;
 
         }
+
         .barcode {
             height: 35px;
             width: 180px;
             position: relative;
             left: -38px;
         }
-/* 
+
+        /* 
         #main {
             margin-top: 20px !important;
             padding: 20px 30px;
@@ -142,9 +141,10 @@ $result = $conn->query($sql);
             margin-top: 12px;
             /* table-layout: fixed; */
         }
+
         .card-body {
-    padding: 0 20px 20px 60px !important;
-}
+            padding: 0 20px 20px 60px !important;
+        }
 
 
         /* Define the pulse animation */
@@ -432,10 +432,17 @@ $result = $conn->query($sql);
 
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+                    <i class="ri-building-4-line"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+
 
             <li class="nav-heading">Pages</li>
 
@@ -480,8 +487,8 @@ $result = $conn->query($sql);
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" class="btn btn-primary mb-3">Add box</button>
-    
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add box</button>
+
     <main id="main" class="main">
 
         <div class="col-12">

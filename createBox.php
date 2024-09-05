@@ -1,26 +1,28 @@
 <?php
-include "db.php";
 
-if (isset($_POST['submit'])) {
-    $box_name = mysqli_real_escape_string($conn, $_POST['box_name']);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $box_name = $_POST['box_name'];
+    $company_id = $_POST['company'];
+    $branch_id = $_POST['branch'];
 
-    // Check if the box name already exists in the database
-    $emailCheckQuery = "SELECT * FROM `box` WHERE `box_name` = '$box_name'";
-    $emailCheckResult = $conn->query($emailCheckQuery);
+    // Simple SQL query to insert the box into the database
+    $conn = new mysqli("localhost", "root", "", "catmarketing");
 
-    // Insert the record into the database
-    $sql = "INSERT INTO `box` (`box_name`) 
-            VALUES ('$box_name')";
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
-    // if (mysqli_query($conn, $sql)) {
-    //     header("Location: Box.php?id=" . $newCompanyId);
-    //     exit; // Stop further script execution
-    // } else {
-    //     echo "Error creating branch: " . mysqli_error($conn);
-    // }
+    $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK) VALUES ('$box_name', '$company_id', '$branch_id')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Box created successfully!";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 
     $conn->close();
 }
+
 ?>
 
 <!doctype html>
@@ -371,7 +373,7 @@ if (isset($_POST['submit'])) {
       <span>Register</span>
     </a>
   </li> -->
-  
+
             <!-- End Register Page Nav -->
 
             <li class="nav-item">
@@ -398,63 +400,107 @@ if (isset($_POST['submit'])) {
 
 
     <!--form--------------------------------------form--------------------------------------->
-    <!-- Start Header form -->
-    <div class="headerimg text-center">
-        <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Create Box</h2>
-    </div>
-    <!-- End Header form -->
-    <div class="container d-flex justify-content-center">
-        <div class="card custom-card shadow-lg mt-3">
-            <!-- <h5 class="card-title ml-4">Create Company </h5> -->
-            <div class="card-body">
-                <br>
-                <!-- Multi Columns Form -->
-                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
-                    <div class="col-md-6">
-                        <label for="box_name" class="form-label">Box Name</label>
-                        <input type="text" class="form-control" id="box_name" name="box_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="15" title="only letters allowed; at least 3">
-                    </div>
-                    </div>
-                    <div class="text-center mt-4 mb-2">
-                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary ">Reset</button>
-                    </div>
-                </form>
-                <!------------------------  Form end ---------------------->
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-body mt-4">
+                            <form action="" method="POST">
+                                <div class="form-group">
+                                    <label for="box_name">Box Name:</label>
+                                    <input type="text" class="form-control" id="box_name" name="box_name" required>
+                                </div>
 
+                                <div class="form-group">
+                                    <label for="company">Select Company:</label>
+                                    <select id="company" class="form-control" name="company" required>
+                                        <option value="">Select a Company</option>
+                                        <?php
+                                        // Fetch companies from database
+                                        $conn = new mysqli("localhost", "root", "", "catmarketing");
+                                        $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="branch">Select Branch:</label>
+                                    <select id="branch" class="form-control" name="branch" >
+                                        <option value="">Select a Branch</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block">Create Box</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js">
-    </script>
-    <!-- Bootstrap JS (Optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
 
-   
-     <script>
-        const dataTable = new simpleDatatables.DataTable("#myTable2", {
-            searchable: false,
-            fixedHeight: true,
-        })
-        
-    </script>
-    <script src="assets/js/main.js"></script>
-</body>
 
-</html>
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+        <script>
+            $(document).ready(function() {
+                // When company is changed, fetch the branches
+                $('#company').change(function() {
+                    var company_id = $(this).val();
+
+                    console.log(company_id);
+                    // AJAX request to get branches for the selected company
+                    $.ajax({
+                        url: 'get_branches.php',
+                        type: 'POST',
+                        data: {
+                            company_id: company_id
+                        },
+                        success: function(response) {
+                            // Clear existing branches
+                            $('#branch').empty();
+                            // $('#branch').append('<option value="">Select a Branch</option>');
+
+                            // Add the new options from the response
+                            var branches = JSON.parse(response);
+                            $.each(branches, function(index, branch) {
+                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+        <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+        <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/vendor/chart.js/chart.umd.js"></script>
+        <script src="assets/vendor/echarts/echarts.min.js"></script>
+        <script src="assets/vendor/quill/quill.js"></script>
+        <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+        <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+        <script src="assets/vendor/php-email-form/validate.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js">
+        </script>
+        <!-- Bootstrap JS (Optional) -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
+
+
+        <!-- <script>
+            const dataTable = new simpleDatatables.DataTable("#myTable2", {
+                searchable: false,
+                fixedHeight: true,
+            })
+        </script> -->
+        <script src="assets/js/main.js"></script>
+    </body>
+
+    </html>

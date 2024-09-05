@@ -502,13 +502,7 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                ?>
-                                    <td>
-                                        <a class="text-primary fw-bold" href="box.php?id=<?php echo $row['branch_id']; ?>">
-                                            <?php echo $row['branch_name']; ?>
-                                        </a>
-                                    </td>
-                                    <?php
+                                    echo "<td>" . ($row["branch_name"]) . "</td>";
                                     echo "<td>" . ($row["ContactPersonName"]) . "</td>";
                                     echo "<td>" . ($row["ContactPersonPhone"]) . "</td>";
                                     echo "<td>" . ($row["ContactPersonResignation"]) . "</td>";

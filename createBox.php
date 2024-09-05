@@ -4,6 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $box_name = $_POST['box_name'];
     $company_id = $_POST['company'];
     $branch_id = $_POST['branch'];
+    $status = $_POST['status'];
 
     // Simple SQL query to insert the box into the database
     $conn = new mysqli("localhost", "root", "", "catmarketing");
@@ -12,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK) VALUES ('$box_name', '$company_id', '$branch_id')";
+    $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK, status) VALUES ('$box_name', '$company_id', '$branch_id', '$status')";
 
     if ($conn->query($sql) === TRUE) {
         echo "Box created successfully!";
@@ -97,6 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-size: 0.9rem;
             /* Adjust as needed */
             font-family: monospace;
+        }
+
+        .mt-5 {
+            margin-top: 7rem !important;
+            margin-left: -1rem;
         }
 
         .company-name {
@@ -350,7 +356,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </li><!-- End Tables Nav -->
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="createBox.php">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Box.php">
                     <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
@@ -400,107 +406,118 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     <!--form--------------------------------------form--------------------------------------->
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    <div class="card">
-                        <div class="card-body mt-4">
-                            <form action="" method="POST">
-                                <div class="form-group">
-                                    <label for="box_name">Box Name:</label>
-                                    <input type="text" class="form-control" id="box_name" name="box_name" required>
-                                </div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body mt-4">
+                        <form action="" method="POST">
+                            <div class="form-group">
+                                <label for="box_name">Box Name:</label>
+                                <input type="text" class="form-control" id="box_name" name="box_name" required>
+                            </div>
 
-                                <div class="form-group">
-                                    <label for="company">Select Company:</label>
-                                    <select id="company" class="form-control" name="company" required>
-                                        <option value="">Select a Company</option>
-                                        <?php
-                                        // Fetch companies from database
-                                        $conn = new mysqli("localhost", "root", "", "catmarketing");
-                                        $result = $conn->query("SELECT comp_id, comp_name FROM compani");
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
+                            <div class="form-group">
+                                <label for="company">Select Company:</label>
+                                <select id="company" class="form-control" name="company" required>
+                                    <option value="">Select a Company</option>
+                                    <?php
+                                    // Fetch companies from database
+                                    $conn = new mysqli("localhost", "root", "", "catmarketing");
+                                    $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
 
-                                <div class="form-group">
-                                    <label for="branch">Select Branch:</label>
-                                    <select id="branch" class="form-control" name="branch" >
-                                        <option value="">Select a Branch</option>
-                                    </select>
-                                </div>
+                            <div class="form-group">
+                                <label for="branch">Select Branch:</label>
+                                <select id="branch" class="form-control" name="branch">
+                                    <option value="">Select a Branch</option>
+                                </select>
+                            </div>
 
-                                <button type="submit" class="btn btn-primary btn-block">Create Box</button>
-                            </form>
-                        </div>
+                            <div class="form-group">
+                                <label for="status">Select status:</label>
+                                <select id="status" class="form-control" name="status">
+                                    <option selected value="">Select status</option>
+                                    <option  value="active">active</option>
+                                    <option  value="inactive">inactive</option>
+                                
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">Create Box</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+    <script>
+        $(document).ready(function() {
+            // When company is changed, fetch the branches
+            $('#company').change(function() {
+                var company_id = $(this).val();
 
-        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+                console.log(company_id);
+                // AJAX request to get branches for the selected company
+                $.ajax({
+                    url: 'get_branches.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        // Clear existing branches
+                        $('#branch').empty();
+                        // $('#branch').append('<option value="">Select a Branch</option>');
 
-        <script>
-            $(document).ready(function() {
-                // When company is changed, fetch the branches
-                $('#company').change(function() {
-                    var company_id = $(this).val();
-
-                    console.log(company_id);
-                    // AJAX request to get branches for the selected company
-                    $.ajax({
-                        url: 'get_branches.php',
-                        type: 'POST',
-                        data: {
-                            company_id: company_id
-                        },
-                        success: function(response) {
-                            // Clear existing branches
-                            $('#branch').empty();
-                            // $('#branch').append('<option value="">Select a Branch</option>');
-
-                            // Add the new options from the response
-                            var branches = JSON.parse(response);
-                            $.each(branches, function(index, branch) {
-                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
-                            });
-                        }
-                    });
+                        // Add the new options from the response
+                        var branches = JSON.parse(response);
+                        $.each(branches, function(index, branch) {
+                            $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                        });
+                    }
                 });
             });
-        </script>
+        });
+    </script>
+
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
-        <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-        <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/vendor/chart.js/chart.umd.js"></script>
-        <script src="assets/vendor/echarts/echarts.min.js"></script>
-        <script src="assets/vendor/quill/quill.js"></script>
-        <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-        <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-        <script src="assets/vendor/php-email-form/validate.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/main.js">
-        </script>
-        <!-- Bootstrap JS (Optional) -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js">
+    </script>
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
 
 
-        <!-- <script>
+    <!-- <script>
             const dataTable = new simpleDatatables.DataTable("#myTable2", {
                 searchable: false,
                 fixedHeight: true,
             })
         </script> -->
-        <script src="assets/js/main.js"></script>
-    </body>
+    <script src="assets/js/main.js"></script>
+</body>
 
-    </html>
+</html>

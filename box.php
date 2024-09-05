@@ -5,16 +5,20 @@ include 'db.php'; // Include the database connection
 // Fetch box of the company
 $sql = "SELECT * FROM box";
 $result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $companiID_FK = $row['companiID_FK'];
+}
 
 // //2nd query to fetch the comp_name
-// $sql2 = "Select comp_name from compani where comp_id= $company_id";
-// $result2 = $conn->query($sql2);
-
-// $comp_name = "";
-// if ($result2->num_rows > 0) {
-//     $row2 = $result2->fetch_assoc();
-//     $comp_name = $row2['comp_name'];
-// }
+$sql2 = "Select * from compani where comp_id= $companiID_FK";
+$result2 = $conn->query($sql2);
+$comp_name = "";
+if ($result2->num_rows > 0) {
+    $row2 = $result2->fetch_assoc();
+    $comp_name = $row2['comp_name'];
+   
+}
 
 ?>
 
@@ -443,7 +447,6 @@ $result = $conn->query($sql);
                 </a>
             </li>
 
-
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
@@ -501,9 +504,10 @@ $result = $conn->query($sql);
                         <table class="table table-borderless datatable mt-4" style="table-layout: fixed;">
                             <thead>
                                 <tr>
+
+                                    <th scope="col">Comp name</th>
                                     <th scope="col">Box name</th>
                                     <th scope="col">Created at</th>
-                                    <th scope="col">Status</th>
                                     <th scope="col">Barcode</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -514,6 +518,7 @@ $result = $conn->query($sql);
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
+                                    echo "<td>" . $comp_name . . "</td>";
                                 ?>
                                     <td>
 
@@ -523,18 +528,17 @@ $result = $conn->query($sql);
                                     </td>
                                     <?php
                                     echo "<td>" . ($row["created_at"]) . "</td>";
-                                    echo "<td>" . ($row["Status"]) . "</td>";
-                                    echo "<td>" . '<img class="barcode" alt="' . ($row["box_id"]) . '" src="barcode.php?text=' . urlencode($row["box_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
+                                    echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
                                     ?>
                                     <td>
 
                                         <div style="display: flex; gap: 10px;">
 
                                             <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['box_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
-                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['box_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="boxUpdate.php?id=<?php echo $row['box_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                                             <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                                onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['box_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                                onclick="return confirm('Are you sure you want to delete this record?');" href="boxDelete.php?id=<?php echo $row['box_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
 
                                         </div>
 

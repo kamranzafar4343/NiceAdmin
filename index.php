@@ -1,12 +1,6 @@
 <?php
 // session_start(); // Start the session
 session_start();
-
-session_regenerate_id(true); // This will regenerate the session ID and delete the old one
-ini_set('session.cookie_secure', '1'); // Only send cookies over HTTPS
-ini_set('session.cookie_httponly', '1'); // Prevent access to cookies via JavaScript (mitigates XSS)
-ini_set('session.cookie_samesite', 'Strict'); // Prevent CSRF attacks by restricting cross-site cookie sharing
-
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
     // If not logged in, redirect to login page
@@ -14,13 +8,6 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 include 'db.php';
-
-// // Check if the user is logged in
-// if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-//     // User is not logged in, redirect to login page
-//     header("Location: pages-login.php");
-//     exit;
-// }
 
 //get total no of companies for compani card
 $query = "SELECT COUNT(*) AS count FROM compani";

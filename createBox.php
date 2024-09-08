@@ -1,23 +1,18 @@
 <?php
 
+include "db.php";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $box_name = $_POST['box_name'];
     $company_id = $_POST['company'];
     $branch_id = $_POST['branch'];
-    
-    $barcode=$_POST['barcode'];
+    $barcode = $_POST['barcode'];
 
-    // Simple SQL query to insert the box into the database
-    $conn = new mysqli("localhost", "root", "", "catmarketing");
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
+    //insert data into box
     $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK, barcode) VALUES ('$box_name', '$company_id', '$branch_id', '$barcode')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Box created successfully!";
+        header("location: box.php");
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -54,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -413,6 +407,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="card">
                     <div class="card-body mt-4">
                         <form action="" method="POST">
+
                             <div class="form-group">
                                 <label for="box_name">Box Name:</label>
                                 <input type="text" class="form-control" id="box_name" name="box_name" required>
@@ -420,31 +415,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <div class="form-group">
                                 <label for="company">Select Company:</label>
-                                <select id="company" class="form-control" name="company" required>
-                                    <option value="">Select a Company</option>
-                                    <?php
-                                    // Fetch companies from database
-                                    $conn = new mysqli("localhost", "root", "", "catmarketing");
-                                    $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                                <select id="company" class="form-select" name="company" required>
+                                    <option value=""> Select a Company </option>
+                                   
+                                   <?php
+
+                                    //fetch companies
+                                        $result = $conn->query("SELECT comp_id, comp_name FROM compani");
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
                                     }
                                     ?>
+
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="branch">Select Branch:</label>
-                                <select id="branch" class="form-control" name="branch">
+                                <select id="branch" class="form-select" name="branch" required>
                                     <option value="">Select a Branch</option>
                                 </select>
                             </div>
-                            
+
                             <div class="form-group">
-                            <label for="barcode">Barcode:</label>
-                            <input type="text" class="form-control" id="barcode" name="barcode" required>
+                                <label for="barcode">Barcode:</label>
+                                <input type="text" class="form-control" id="barcode" name="barcode" required>
                             </div>
+
                             <button type="submit" class="btn btn-primary btn-block">Create Box</button>
+
                         </form>
                     </div>
                 </div>
@@ -460,7 +459,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $('#company').change(function() {
                 var company_id = $(this).val();
 
-                console.log(company_id);
                 // AJAX request to get branches for the selected company
                 $.ajax({
                     url: 'get_branches.php',
@@ -469,22 +467,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         company_id: company_id
                     },
                     success: function(response) {
-                        // Clear existing branches
-                        $('#branch').empty();
-                        // $('#branch').append('<option value="">Select a Branch</option>');
-
-                        // Add the new options from the response
-                        var branches = JSON.parse(response);
-                        $.each(branches, function(index, branch) {
-                            $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
-                        });
+                        try {
+                            var branches = JSON.parse(response);
+                            // Clear existing branches
+                            $('#branch').empty();
+                            $('#branch').append('<option value="">Select a Branch</option>');
+                            // Add the new options from the response
+                            $.each(branches, function(index, branch) {
+                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                            });
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
                     }
                 });
             });
         });
     </script>
 
-
+    <!--corrected jquery version-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
@@ -500,10 +501,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js">
     </script>
-    <!-- Bootstrap JS (Optional) -->
+    <!-- Bootstrap JS (Optional)
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
-
+ -->
 
     <!-- <script>
             const dataTable = new simpleDatatables.DataTable("#myTable2", {

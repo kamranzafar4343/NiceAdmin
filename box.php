@@ -82,11 +82,11 @@ if ($result2->num_rows > 0) {
         }
 
         .barcode {
-            height: 35px;
-            width: 180px;
+            height: 55px;
+            width: 250px;
             position: relative;
             left: -38px;
-        }
+          }
 
         /* 
         #main {
@@ -505,7 +505,7 @@ if ($result2->num_rows > 0) {
                             <thead>
                                 <tr>
 
-                                    <th scope="col">Comp name</th>
+                                    <!-- <th scope="col">Comp name</th> -->
                                     <th scope="col">Box name</th>
                                     <th scope="col">Created at</th>
                                     <th scope="col">Barcode</th>
@@ -518,7 +518,7 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                    echo "<td>" . $comp_name . . "</td>";
+                                    // echo "<td>" . $comp_name . "</td>";
                                 ?>
                                     <td>
 

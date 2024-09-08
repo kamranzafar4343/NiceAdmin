@@ -26,7 +26,6 @@ $result = $conn->query($sql);
   <meta content="" name="description">
   <meta content="" name="keywords">
 
-
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Favicons -->

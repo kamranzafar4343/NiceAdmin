@@ -1,72 +1,73 @@
 <?php
-// session_start(); // Start the session at the beginning of the script
-require 'db.php';
+session_start();
+include "db.php";
 
-// // Assume you have validated the user's credentials here
-// $validUser = true; // This should be replaced with actual authentication logic
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-// if ($validUser) {
-//     // Set session variables
-//     $_SESSION['loggedin'] = true;
+    // Get the user input
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-//     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//       // Assume the form field for company name is named 'company_name'
-//       if (isset($_POST['comp_name']) && !empty($_POST['comp_name'])) {
-//           // Assign the form input to a session variable
-//           $_SESSION['comp_name'] = $_POST['comp_name'];
-//       } else {
-//           // Handle the case where the input is not set or is empty
-//           echo "Please provide a company name.";
-//       }
-//   }
+    // Query to check if the username and password are correct
+    $result = $conn->query("SELECT * FROM register WHERE email='$email' AND password='$password'");
 
-//     // Redirect to the index page after successful login
-//     header("Location: index.php");
-//     exit;
-// } else {
-//     echo "Invalid login credentials.";
+    // If a match is found, set the session
+    if ($result->num_rows > 0) {
+        $_SESSION['email'] = $email; // Set session variable
+        header("Location: index.php"); // Redirect to the dashboard or home page
+    } else {
+        echo "Invalid login!";
+    }
+}
+
+// require 'db.php';
+
+
+// if(isset($_POST["submit"])){
+//   $email= mysqli_real_escape_string($conn, $_POST["email"]);
+//   $password=mysqli_real_escape_string($conn, $_POST["password"]);
+  
+//   $result = mysqli_query($conn, "SELECT * FROM register WHERE email = '$email' AND password='$password'");
+
+//   $row= mysqli_fetch_assoc($result);
+
+//   if(mysqli_num_rows($result) > 0){
+//     if($password == $row["password"]){
+//       $_SESSION["login"]=true;
+//       $_SESSION["id"]= $row["id"];
+//       header("Location: index.php");
+//     }
+//     else{
+//       echo "<script> alert('Wrong password'); </script>";
+//     }
+// }
+// else{
+//   echo "<script> alert('User not registered'); </script>";
+// }
 // }
 
+// // define variables and set to empty values
+// $email = $password= "";
 
-if(isset($_POST["submit"])){
-  $email= mysqli_real_escape_string($conn, $_POST["email"]);
-  $password=mysqli_real_escape_string($conn, $_POST["password"]);
-  
-  $result = mysqli_query($conn, "SELECT * FROM register WHERE email = '$email' ");
+// if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//   $email = test_input($_POST["email"]);
+//   $password = test_input($_POST["password"]);
+// }
 
-  $row= mysqli_fetch_assoc($result);
-
-  if(mysqli_num_rows($result) > 0){
-    if($password == $row["password"]){
-      $_SESSION["login"]=true;
-      $_SESSION["id"]= $row["id"];
-      header("Location: index.php");
-    }
-    else{
-      echo "<script> alert('Wrong password'); </script>";
-    }
-}
-else{
-  echo "<script> alert('User not registered'); </script>";
-}
-}
-
-// define variables and set to empty values
-$email = $password= "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $email = test_input($_POST["email"]);
-  $password = test_input($_POST["password"]);
-}
-
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
+// function test_input($data) {
+//   $data = trim($data);
+//   $data = stripslashes($data);
+//   $data = htmlspecialchars($data);
+//   return $data;
+// }
+// //new code
+// <?php
+// Start the session
 
 ?>
+
+<!-- 
+?> -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -147,7 +148,7 @@ function test_input($data) {
                     <p class="text-center small">Enter your email & password</p>
                   </div>
 
-                  <form class="row g-3 needs-validation"  method="post" action="<?php echo htmlspecialchars ($_SERVER["PHP_SELF"]);?>">
+                  <form class="row g-3 needs-validation"  method="POST" action="">
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>

@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
             VALUES ('$comp_name', '$phone', '$email', '$hashedPassword', '$img_des', '$city', '$state', '$country', '$registration', '$expiry')";
 
 
-//added code to insert data into branch table and redirect to branches table of specific company
+    //added code to insert data into branch table and redirect to branches table of specific company
     if (mysqli_query($conn, $sql)) {
 
         // Step 2: Get the ID of the newly inserted company
@@ -357,46 +357,16 @@ if (isset($_POST['submit'])) {
                         <li>
                             <hr class="dropdown-divider">
                         </li>
+                </li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center" href="logout.php">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Sign Out</span>
+                    </a>
+                </li>
 
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                                <i class="bi bi-person"></i>
-                                <span>My Profile</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                                <i class="bi bi-gear"></i>
-                                <span>Account Settings</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                                <i class="bi bi-question-circle"></i>
-                                <span>Need Help?</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
-                            </a>
-                        </li>
-
-                    </ul><!-- End Profile Dropdown Items -->
-                </li><!-- End Profile Nav -->
+            </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
 
             </ul>
         </nav><!-- End Icons Navigation -->
@@ -416,12 +386,23 @@ if (isset($_POST['submit'])) {
                 </a>
             </li><!-- End Dashboard Nav -->
 
-
             <li class="nav-item">
                 <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
 
             <li class="nav-heading">Pages</li>
 
@@ -441,7 +422,7 @@ if (isset($_POST['submit'])) {
       <span>Register</span>
     </a>
   </li> -->
-  
+
             <!-- End Register Page Nav -->
 
             <li class="nav-item">
@@ -574,74 +555,73 @@ if (isset($_POST['submit'])) {
     <!-- Template Main JS File -->
 
 
-   
+
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-  const countryStateCityData = {
-    Pakistan: {
-      Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-      KPK:["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-      Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-      Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
-      
-    },
-    USA: {
-      California: ["Los Angeles", "San Francisco", "San Diego"],
-      Texas: ["Houston", "Austin", "Dallas"]
-      // Add more states and cities
-    },
-    Canada: {
-      Ontario: ["Toronto", "Ottawa", "Hamilton"],
-      Quebec: ["Montreal", "Quebec City"]
-      // Add more provinces and cities
-    },
-  };
+        document.addEventListener('DOMContentLoaded', function() {
+            const countryStateCityData = {
+                Pakistan: {
+                    Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
+                    KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
+                    Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
+                    Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
 
-  const countrySelect = document.getElementById('country');
-  const stateSelect = document.getElementById('state');
-  const citySelect = document.getElementById('city');
+                },
+                USA: {
+                    California: ["Los Angeles", "San Francisco", "San Diego"],
+                    Texas: ["Houston", "Austin", "Dallas"]
+                    // Add more states and cities
+                },
+                Canada: {
+                    Ontario: ["Toronto", "Ottawa", "Hamilton"],
+                    Quebec: ["Montreal", "Quebec City"]
+                    // Add more provinces and cities
+                },
+            };
 
-  // Update states dropdown when a country is selected
-  countrySelect.addEventListener('change', function() {
-    const selectedCountry = countrySelect.value;
-    stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+            const countrySelect = document.getElementById('country');
+            const stateSelect = document.getElementById('state');
+            const citySelect = document.getElementById('city');
 
-    if (selectedCountry) {
-      const states = Object.keys(countryStateCityData[selectedCountry]);
-      states.forEach(function(state) {
-        const option = document.createElement('option');
-        option.value = state;
-        option.text = state;
-        stateSelect.add(option);
-      });
-    }
-  });
+            // Update states dropdown when a country is selected
+            countrySelect.addEventListener('change', function() {
+                const selectedCountry = countrySelect.value;
+                stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
+                citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
 
-  // Update cities dropdown when a state is selected
-  stateSelect.addEventListener('change', function() {
-    const selectedCountry = countrySelect.value;
-    const selectedState = stateSelect.value;
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+                if (selectedCountry) {
+                    const states = Object.keys(countryStateCityData[selectedCountry]);
+                    states.forEach(function(state) {
+                        const option = document.createElement('option');
+                        option.value = state;
+                        option.text = state;
+                        stateSelect.add(option);
+                    });
+                }
+            });
 
-    if (selectedCountry && selectedState) {
-      const cities = countryStateCityData[selectedCountry][selectedState];
-      cities.forEach(function(city) {
-        const option = document.createElement('option');
-        option.value = city;
-        option.text = city;
-        citySelect.add(option);
-      });
-    }
-  });
-});  
+            // Update cities dropdown when a state is selected
+            stateSelect.addEventListener('change', function() {
+                const selectedCountry = countrySelect.value;
+                const selectedState = stateSelect.value;
+                citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+                if (selectedCountry && selectedState) {
+                    const cities = countryStateCityData[selectedCountry][selectedState];
+                    cities.forEach(function(city) {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.text = city;
+                        citySelect.add(option);
+                    });
+                }
+            });
+        });
     </script>
-     <script>
+    <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {
             searchable: false,
             fixedHeight: true,
         })
-        
     </script>
     <script src="assets/js/main.js"></script>
 </body>

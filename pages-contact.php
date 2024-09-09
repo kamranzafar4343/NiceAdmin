@@ -40,19 +40,19 @@
 
 <body>
 
-<!-- ======= Header ======= -->
-<header id="header" class="header fixed-top d-flex align-items-center">
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
 
-<div class="d-flex align-items-center justify-content-between">
-<img class="navbar-image" src="assets/img/logo3.png" alt="">  
-<a href="index.php" class="logo d-flex align-items-center">
-   
-    <span class="d-none d-lg-block">FingerLog</span>
-  </a>
-  <i class="bi bi-list toggle-sidebar-btn"></i>
-</div><!-- End Logo -->
+    <div class="d-flex align-items-center justify-content-between">
+      <img class="navbar-image" src="assets/img/logo3.png" alt="">
+      <a href="index.php" class="logo d-flex align-items-center">
 
-<!-- 
+        <span class="d-none d-lg-block">FingerLog</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <!-- 
 <div class="search-bar">
   <form class="search-form d-flex align-items-center" method="POST" action="#">
     <input type="text" name="query" placeholder="Search" title="Enter search keyword">
@@ -61,123 +61,105 @@
 </div>
 End Search Bar -->
 
-<nav class="header-nav ms-auto">
-  <ul class="d-flex align-items-center">
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
 
-    <li class="nav-item d-block d-lg-none">
-      <a class="nav-link nav-icon search-bar-toggle " href="#">
-        <i class="bi bi-search"></i>
-      </a>
-    </li><!-- End Search Icon-->
-
-    
-    <li class="nav-item profileimage dropdown pe-3 mr-4">
-
-      <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-        <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-      </a><!-- End Profile Image Icon -->
-
-      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-        <li class="dropdown-header">
-          <h6>Kevin Anderson</h6>
-          <span>Web Designer</span>
-        </li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-            <i class="bi bi-person"></i>
-            <span>My Profile</span>
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
           </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
+        </li><!-- End Search Icon-->
 
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-            <i class="bi bi-gear"></i>
-            <span>Account Settings</span>
-          </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
 
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-            <i class="bi bi-question-circle"></i>
-            <span>Need Help?</span>
-          </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
+        <li class="nav-item profileimage dropdown pe-3 mr-4">
 
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+          </a><!-- End Profile Image Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Kevin Anderson</h6>
+              <span>Web Designer</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+        </li>
         <li>
-          <a class="dropdown-item d-flex align-items-center" href="#">
+          <a class="dropdown-item d-flex align-items-center" href="logout.php">
             <i class="bi bi-box-arrow-right"></i>
             <span>Sign Out</span>
           </a>
         </li>
 
       </ul><!-- End Profile Dropdown Items -->
-    </li><!-- End Profile Nav -->
+      </li><!-- End Profile Nav -->
 
-  </ul>
-</nav><!-- End Icons Navigation -->
+      </ul>
+    </nav><!-- End Icons Navigation -->
 
-</header><!-- End Header -->
+  </header><!-- End Header -->
 
-<!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar">
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
 
-<ul class="sidebar-nav" id="sidebar-nav">
+    <ul class="sidebar-nav" id="sidebar-nav">
 
-  <li class="nav-item" >
-    <a class="nav-link collapsed" href="index.php" >
-      <i class="ri-home-8-line"></i>
-      <span>Dashboard</span>
-    </a>
-  </li><!-- End Dashboard Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="index.php">
+          <i class="ri-home-8-line"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
 
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-      <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-    </a>
-  </li><!-- End Tables Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+          <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li><!-- End Tables Nav -->
 
-  <li class="nav-heading">Pages</li>
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+          <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="users-profile.html">
-      <i class="bi bi-person"></i>
-      <span>Profile</span>
-    </a>
-  </li><!-- End Profile Page Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+          <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
 
-  
-<!-- 
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+
+      <!-- 
   <li class="nav-item">
     <a class="nav-link collapsed" href="pages-register.php">
       <i class="bi bi-card-list"></i>
       <span>Register</span>
     </a>
   </li> -->
-  <!-- End Register Page Nav -->
+      <!-- End Register Page Nav -->
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-login.php">
-      <i class="bi bi-box-arrow-in-right"></i>
-      <span>Login</span>
-    </a>
-  </li><!-- End Login Page Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-login.php">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Login</span>
+        </a>
+      </li><!-- End Login Page Nav -->
 
-  <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link collapsed" href="logout.php">
           <i class="bi bi-box-arrow-left"></i>
           <span>Logout</span>
@@ -185,16 +167,16 @@ End Search Bar -->
       </li><!-- End Login Page Nav -->
 
 
-  <li class="nav-item">
-    <a class="nav-link active" href="pages-contact.php">
-      <i class="bi bi-envelope"></i>
-      <span>Contact</span>
-    </a>
-  </li><!-- End Contact Page Nav -->
+      <li class="nav-item">
+        <a class="nav-link active" href="pages-contact.php">
+          <i class="bi bi-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </li><!-- End Contact Page Nav -->
 
-</ul>
+    </ul>
 
-</aside><!--------------- End sidebar ------------------>
+  </aside><!--------------- End sidebar ------------------>
 
   <main id="main" class="main">
 
@@ -289,7 +271,7 @@ End Search Bar -->
 
   </main><!-- End #main -->
 
- 
+
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

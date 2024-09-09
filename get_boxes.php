@@ -1,22 +1,23 @@
 <?php
 
-if (isset($_POST['company_id'])) {
-    $company_id = $_POST['company_id'];
+if (isset($_POST['branch_id'])) {
+    $branch_id = $_POST['branch_id'];
+    
     
     // Database connection
     $conn = new mysqli("localhost", "root", "", "catmarketing");
     
     // Simple SQL query to get branches for the selected company
-    $result = $conn->query("SELECT branch_id, branch_name FROM branch WHERE compID_FK = '$company_id'");
+    $result = $conn->query("SELECT box_id, box_name FROM box WHERE branchID_FK = '$branch_id'");
     
-    $branches = array();
+    $boxes = array();
     while ($row = $result->fetch_assoc()) {
-        $branches[] = $row;
+        $boxes[] = $row;
     }
     
 
     // Return branches as JSON
-    echo json_encode($branches);
+    echo json_encode($boxes);
 
     $conn->close();
 }

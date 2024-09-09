@@ -3,9 +3,9 @@
 session_start();
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-    // If not logged in, redirect to login page
-    header("Location: pages-login.php");
-    exit();
+  // If not logged in, redirect to login page
+  header("Location: pages-login.php");
+  exit();
 }
 include 'db.php';
 
@@ -61,10 +61,11 @@ $branchCount = $rowBranches['branch_count'];
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
   <style>
-    .profileimage{
-margin-right: 24px;
+    .profileimage {
+      margin-right: 24px;
     }
-    .navbar-image{
+
+    .navbar-image {
       width: 50px;
       height: 50px;
       margin-right: 7px;
@@ -78,9 +79,9 @@ margin-right: 24px;
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-    <img class="navbar-image" src="assets/img/logo3.png" alt="">  
-    <a href="index.php" class="logo d-flex align-items-center">
-       
+      <img class="navbar-image" src="assets/img/logo3.png" alt="">
+      <a href="index.php" class="logo d-flex align-items-center">
+
         <span class="d-none d-lg-block">FingerLog</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -104,7 +105,7 @@ margin-right: 24px;
           </a>
         </li><!-- End Search Icon-->
 
-        
+
         <li class="nav-item profileimage dropdown pe-3 mr-4">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
@@ -120,46 +121,16 @@ margin-right: 24px;
             <li>
               <hr class="dropdown-divider">
             </li>
+        </li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="logout.php">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Sign Out</span>
+          </a>
+        </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-person"></i>
-                <span>My Profile</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-gear"></i>
-                <span>Account Settings</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                <i class="bi bi-question-circle"></i>
-                <span>Need Help?</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
-            </li>
-
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
+      </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
 
       </ul>
     </nav><!-- End Icons Navigation -->
@@ -171,8 +142,8 @@ margin-right: 24px;
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
-      <li class="nav-item" >
-        <a class="nav-link active" href="index.php" >
+      <li class="nav-item">
+        <a class="nav-link active" href="index.php">
           <i class="ri-home-8-line"></i>
           <span>Dashboard</span>
         </a>
@@ -186,17 +157,16 @@ margin-right: 24px;
       </li><!-- End Tables Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-          <i class="ri-building-4-line"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+          <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showitems.php">
-          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+          <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
-
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
@@ -206,8 +176,8 @@ margin-right: 24px;
         </a>
       </li><!-- End Profile Page Nav -->
 
-      
-<!-- 
+
+      <!-- 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-register.php">
           <i class="bi bi-card-list"></i>
@@ -287,7 +257,7 @@ margin-right: 24px;
                     </div>
                     <div class="ps-3">
                       <h6><?php echo $companyCount; ?></h6>
-                   
+
                     </div>
                   </div>
                 </div>
@@ -321,7 +291,7 @@ margin-right: 24px;
                     </div>
                     <div class="ps-3">
                       <h6><?php echo $branchCount; ?></h6>
-                     
+
 
                     </div>
                   </div>
@@ -357,7 +327,7 @@ margin-right: 24px;
                     </div>
                     <div class="ps-3">
                       <h6>0</h6>
-                   
+
 
                     </div>
                   </div>

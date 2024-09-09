@@ -10,30 +10,14 @@ if (!isset($_SESSION['email'])) {
 }
 include 'db.php'; // Include the database connection
 
-// Get company ID from query string
-$box_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-$sql = "SELECT * FROM item WHERE box_FK_item = $box_id";
+// Fetch box of the company
+$sql = "SELECT * FROM item";
 $result = $conn->query($sql);
-
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-
-    $barcodeText = $row['item_id'];
-    $status = $row['status'];
+    $box_FK_item = $row['box_FK_item'];
 }
-
-//2nd query to fetch the box name
-// $sql2 = "SELECT box_name from box WHERE companiID_FK= $company_id";
-// $result2 = $conn->query($sql2);
-
-// $box_name = "";
-
-// if ($result2->num_rows > 0) {
-//     $row2 = $result2->fetch_assoc();
-//     $box_name = $row2['box_name'];
-// }
-
 
 ?>
 
@@ -382,46 +366,16 @@ if ($result->num_rows > 0) {
                         <li>
                             <hr class="dropdown-divider">
                         </li>
+                </li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center" href="logout.php">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Sign Out</span>
+                    </a>
+                </li>
 
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                                <i class="bi bi-person"></i>
-                                <span>My Profile</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                                <i class="bi bi-gear"></i>
-                                <span>Account Settings</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                                <i class="bi bi-question-circle"></i>
-                                <span>Need Help?</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
-                            </a>
-                        </li>
-
-                    </ul><!-- End Profile Dropdown Items -->
-                </li><!-- End Profile Nav -->
+            </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
 
             </ul>
         </nav><!-- End Icons Navigation -->
@@ -448,15 +402,16 @@ if ($result->num_rows > 0) {
             </li><!-- End Tables Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-                    <i class="ri-building-4-line"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
+
             <li class="nav-item">
-        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
 
             <li class="nav-heading">Pages</li>
             <li class="nav-item">
@@ -507,7 +462,7 @@ if ($result->num_rows > 0) {
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php?id=<?php echo $box_id; ?>'" class="btn btn-primary mb-3">Add Item</button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php?id=<?php echo $box_FK_item; ?>'" class="btn btn-primary mb-3">Add Item</button>
     <!-- 
   <h1>Companies List</h1> -->
     <main id="main" class="main">

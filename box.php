@@ -383,39 +383,9 @@ if ($result2->num_rows > 0) {
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                                <i class="bi bi-person"></i>
-                                <span>My Profile</span>
-                            </a>
                         </li>
                         <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                                <i class="bi bi-gear"></i>
-                                <span>Account Settings</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                                <i class="bi bi-question-circle"></i>
-                                <span>Need Help?</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                            <a class="dropdown-item d-flex align-items-center" href="logout.php">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Sign Out</span>
                             </a>
@@ -450,12 +420,12 @@ if ($result2->num_rows > 0) {
 
             <li class="nav-item">
                 <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-                    <i class="ri-building-4-line"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
             <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+          <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
 
@@ -540,11 +510,8 @@ if ($result2->num_rows > 0) {
                                     // echo "<td>" . $comp_name . "</td>";
                                 ?>
                                     <td>
-
-                                        <a class="text-primary fw-bold" href="showItems.php?id=<?php echo $row['box_id']; ?>">
                                             <?php echo $row['box_name']; ?>
-                                        </a>
-                                    </td>
+                                        </td>
                                     <?php
                                     echo "<td>" . ($row["created_at"]) . "</td>";
                                     echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";

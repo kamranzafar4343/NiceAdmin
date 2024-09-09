@@ -11,68 +11,30 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-// Retrieve box ID from URL
-$box_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
 include "db.php";
 
-// Validate company ID
-$Query = "SELECT * FROM item WHERE box_FK_item = $box_id";
-$Result = $conn->query($Query);
-
-$comp_FK_item = "";
-$box_FK_item = "";
-$branch_FK_item = "";
-$item_id = "";
-
-if ($Result->num_rows > 0) {
-    $row2 = $Result->fetch_assoc();
-    $comp_FK_item = $row2['comp_FK_item'];
-    $box_FK_item = $row2['box_FK_item'];
-    $branch_FK_item = $row2['branch_FK_item'];
-    $item_id = $row2['item_id'];
-    //   $item_id=$row2['item_id'];
-}
-
-if (isset($_POST['submit'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
     $item_price = mysqli_real_escape_string($conn, $_POST['item_price']);
     $item_quantity = mysqli_real_escape_string($conn, $_POST['item_quantity']);
-
     $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
     $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
-    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
-
     $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
-    //   $timestamp = mysqli_real_escape_string($conn, $_POST['timestamp']);
     $status = mysqli_real_escape_string($conn, $_POST['status']);
+    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
     $sql = "INSERT INTO  item (comp_FK_item, box_FK_item, branch_FK_item, item_name, item_price, item_quantity, status, barcode) 
             VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' ,'$item_name', '$item_price', '$item_quantity' ,'$status', '$barcode')";
 
     if ($conn->query($sql) === TRUE) {
-        // header("Location: showItems.php?id=" .$company_id);
-        // exit; // Ensure script ends after redirect
-
+        header("location: showItems.php");
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
-    //   $sql2 = "SELECT comp_FK_item, box_FK_item, branch_FK_item FROM item WHERE comp_FK_item= $company_id";
-    //   $result2 = $conn->query($sql2);
-
-    //   $comp_FK_item="";
-    //   $box_FK_item="";
-    //   $branch_FK_item="";
-
-    //   if ($result2->num_rows > 0){
-    //       $row2 = $result2->fetch_assoc();
-    //       $comp_FK_item = $row2['comp_FK_item'];
-    //       $box_FK_item = $row2['box_FK_item'];
-    //       $branch_FK_item = $row2['branch_FK_item'];
-    //   }
+    $conn->close();
 }
-$conn->close();
+
 ?>
 
 
@@ -335,46 +297,16 @@ $conn->close();
                         <li>
                             <hr class="dropdown-divider">
                         </li>
+                </li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center" href="logout.php">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Sign Out</span>
+                    </a>
+                </li>
 
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                                <i class="bi bi-person"></i>
-                                <span>My Profile</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                                <i class="bi bi-gear"></i>
-                                <span>Account Settings</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                                <i class="bi bi-question-circle"></i>
-                                <span>Need Help?</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
-                            </a>
-                        </li>
-
-                    </ul><!-- End Profile Dropdown Items -->
-                </li><!-- End Profile Nav -->
+            </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
 
             </ul>
         </nav><!-- End Icons Navigation -->
@@ -400,6 +332,18 @@ $conn->close();
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
 
             <li class="nav-heading">Pages</li>
 
@@ -459,6 +403,38 @@ $conn->close();
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
+
+                    <div class="col-md-6">
+                        <label for="company">Select Company:</label>
+                        <select id="company" class="form-select" name="comp_FK_item" required>
+                            <option value=""> Select a Company </option>
+
+                            <?php
+
+                            //fetch companies
+                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                            }
+                            ?>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="branch">Select a Branch:</label>
+                        <select id="branch" class="form-select" name="branch_FK_item" required>
+                            <option value="">Select a Branch</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="box">Select Box:</label>
+                        <select id="box" class="form-select" name="box_FK_item" required>
+                            <option value="">Select a Box</option>
+                        </select>
+                    </div>
+
                     <div class="col-md-6">
                         <label for="comp_name" class="form-label">Item Name</label>
                         <input type="text" class="form-control" name="item_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
@@ -474,25 +450,6 @@ $conn->close();
                         <input type="text" class="form-control" name="item_quantity" required>
                     </div>
 
-                    <div class="col-md-6" >
-                        <label class="form-label">Company ID</label>
-                        <input type="text" class="form-control" name="comp_FK_item" value="<?php echo ($comp_FK_item); ?>" readonly>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label">Branch Id</label>
-                        <input type="text" class="form-control" name="branch_FK_item" value="<?php echo ($branch_FK_item); ?>" readonly>
-                    </div>
-
-                    <div class="col-md-6" >
-                        <label class="form-label">Box Id</label>
-                        <input type="text" class="form-control" name="box_FK_item" value="<?php echo ($box_FK_item); ?>" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Item Id</label>
-                        <input type="text" class="form-control" name="item_id" value="<?php echo ($item_id); ?>" readonly>
-                    </div>
-                    
                     <div class="col-md-6">
                         <label for="status" class="form-label">Item Condition</label>
                         <select class="form-select" id="status" name="status">
@@ -509,13 +466,12 @@ $conn->close();
                         <input type="text" class="form-control" name="barcode">
                     </div>
 
-
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>
                     </div>
                 </form>
-               
+
 
             </div>
         </div>
@@ -542,8 +498,67 @@ $conn->close();
     <!-- Template Main JS File -->
 
 
+    <script>
+        $(document).ready(function() {
 
-    
+            // When company is changed, fetch the branches
+            $('#company').change(function() {
+                var company_id = $(this).val();
+
+                // AJAX request to get branches for the selected company
+                $.ajax({
+                    url: 'get_branches.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            var branches = JSON.parse(response);
+                            // Clear existing branches
+                            $('#branch').empty();
+                            $('#branch').append('<option value="">Select a Branch</option>');
+                            // Add the new options from the response
+                            $.each(branches, function(index, branch) {
+                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                            });
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+
+            // When company is changed, fetch the box
+            $('#branch').change(function() {
+                var branch_id = $(this).val();
+
+                // AJAX request to get box for the selected company
+                $.ajax({
+                    url: 'get_boxes.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var boxes = JSON.parse(response);
+                            // Clear existing branches
+                            $('#box').empty();
+                            $('#box').append('<option value="">Select a Box</option>');
+                            // Add the new options from the response
+                            $.each(boxes, function(index, box) {
+                                $('#box').append('<option value="' + box.box_id + '">' + box.box_name + '</option>');
+                            });
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {
             searchable: false,

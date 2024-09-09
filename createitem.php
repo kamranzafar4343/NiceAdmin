@@ -328,19 +328,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
                     <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
                     <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
@@ -471,8 +471,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>
                     </div>
                 </form>
-
-
             </div>
         </div>
     </div>

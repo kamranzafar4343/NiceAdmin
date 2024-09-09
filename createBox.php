@@ -144,12 +144,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
 
-        /*styles for form*/
-        .card-body {
-            padding: 0 20px 20px 20px;
-            font-size: 0.8rem;
-        }
-
         .form-control[type=file]:not(:disabled):not([readonly]) {
             cursor: pointer;
             font-size: 0.8rem;
@@ -238,6 +232,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             box-shadow: none;
 
             border: none;
+        }
+        
+        /*styles for form*/
+        .card-body {
+            padding: 0 20px 20px 20px;
+            font-size: 0.8rem;
         }
     </style>
 
@@ -395,56 +395,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     <!--form--------------------------------------form--------------------------------------->
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <div class="card">
-                    <div class="card-body mt-4">
-                        <form action="" method="POST">
+    <div class="headerimg text-center">
+        <img src="image/create.png" alt="network-logo" width="50" height="50">
+        <h2>Add a box</h2>
+    </div>
+    <!-- End Header form -->
+    <div class="container d-flex justify-content-center">
+        <div class="card custom-card shadow-lg mt-3">
+            <!-- <h5 class="card-title ml-4">Create Company </h5> -->
+            <div class="card-body">
+                <br>
+                <!-- Multi Columns Form -->
+                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
 
-                            <div class="form-group">
-                                <label for="box_name">Box Name:</label>
-                                <input type="text" class="form-control" id="box_name" name="box_name" required>
-                            </div>
+                    <div class="col-md-6">
+                        <label for="company">Select Company:</label>
+                        <select id="company" class="form-select" name="company" required>
+                            <option value=""> Select a Company </option>
 
-                            <div class="form-group">
-                                <label for="company">Select Company:</label>
-                                <select id="company" class="form-select" name="company" required>
-                                    <option value=""> Select a Company </option>
+                            <?php
 
-                                    <?php
+                            //fetch companies
+                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                            }
+                            ?>
 
-                                    //fetch companies
-                                    $result = $conn->query("SELECT comp_id, comp_name FROM compani");
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
-                                    }
-                                    ?>
-
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="branch">Select Branch:</label>
-                                <select id="branch" class="form-select" name="branch" required>
-                                    <option value="">Select a Branch</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="barcode">Barcode:</label>
-                                <input type="text" class="form-control" id="barcode" name="barcode" required>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary btn-block">Create Box</button>
-
-                        </form>
+                        </select>
                     </div>
-                </div>
+
+                    <div class="col-md-6">
+                        <label for="branch">Select a Branch:</label>
+                        <select id="branch" class="form-select" name="branch" required>
+                            <option value="">Select a Branch</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="box_name" class="form-label">Box Name</label>
+                        <input type="text" class="form-control" name="box_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Barcode</label>
+                        <input type="text" class="form-control" name="barcode">
+                    </div>
+
+                    <div class="text-center mt-4 mb-2">
+                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
+                        <button type="reset" class="btn btn-outline-secondary ">Reset</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <script>

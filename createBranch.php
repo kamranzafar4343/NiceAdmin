@@ -347,10 +347,15 @@ End Search Bar -->
         <span>Dashboard</span>
       </a>
     </li><!-- End Dashboard Nav -->
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+          <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
 
 
     <li class="nav-item">
-        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
           <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
@@ -385,6 +390,13 @@ End Search Bar -->
       <a class="nav-link collapsed" href="pages-login.php">
         <i class="bi bi-box-arrow-in-right"></i>
         <span>Login</span>
+      </a>
+    </li><!-- End Login Page Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="logout.php">
+        <i class="bi bi-box-arrow-in-right"></i>
+        <span>Logout</span>
       </a>
     </li><!-- End Login Page Nav -->
 

@@ -122,7 +122,7 @@ End Search Bar -->
       </li><!-- End Tables Nav -->
 
       <li class="nav-item">
-        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
           <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>

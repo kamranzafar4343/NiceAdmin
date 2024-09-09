@@ -495,10 +495,10 @@ if ($result2->num_rows > 0) {
                                 <tr>
 
                                     <!-- <th scope="col">Comp name</th> -->
-                                    <th scope="col">Box name</th>
-                                    <th scope="col">Created at</th>
-                                    <th scope="col">Barcode</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col" style="width: 25%;">Box name</th>
+                                    <th scope="col" style="width: 30%;">Created at</th>
+                                    <th scope="col" style="width: 35%;">Barcode</th>
+                                    <th scope="col" style="width: 10%;">Action</th>
                                 </tr>
                             </thead>
                             <tbody style="table-layout: fixed;">

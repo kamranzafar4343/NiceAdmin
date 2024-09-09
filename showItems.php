@@ -1,13 +1,6 @@
 <?php
-ini_set('session.cookie_secure', '1'); // Only send cookies over HTTPS
-ini_set('session.cookie_httponly', '1'); // Prevent access to cookies via JavaScript (mitigates XSS)
-ini_set('session.cookie_samesite', 'Strict'); // Prevent CSRF attacks by restricting cross-site cookie sharing
-
 // session_start(); // Start the session
 session_start();
-
-session_regenerate_id(true); // This will regenerate the session ID and delete the old one
-
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
@@ -18,9 +11,9 @@ if (!isset($_SESSION['email'])) {
 include 'db.php'; // Include the database connection
 
 // Get company ID from query string
-$company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$box_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-$sql = "SELECT * FROM item WHERE branch_FK_item = $company_id";
+$sql = "SELECT * FROM item WHERE box_FK_item = $box_id";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -31,15 +24,15 @@ if ($result->num_rows > 0) {
 }
 
 //2nd query to fetch the box name
-$sql2 = "SELECT box_name from box WHERE companiID_FK= $company_id";
-$result2 = $conn->query($sql2);
+// $sql2 = "SELECT box_name from box WHERE companiID_FK= $company_id";
+// $result2 = $conn->query($sql2);
 
-$box_name = "";
+// $box_name = "";
 
-if ($result2->num_rows > 0) {
-    $row2 = $result2->fetch_assoc();
-    $box_name = $row2['box_name'];
-}
+// if ($result2->num_rows > 0) {
+//     $row2 = $result2->fetch_assoc();
+//     $box_name = $row2['box_name'];
+// }
 
 
 ?>
@@ -95,7 +88,7 @@ if ($result2->num_rows > 0) {
         /* Custom CSS to decrease font size of the table */
 
 
-        .card-body{
+        .card-body {
             margin-left: 37px !important;
         }
 
@@ -449,13 +442,23 @@ if ($result2->num_rows > 0) {
 
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
 
-            <li class="nav-heading">Pages</li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+                    <i class="ri-building-4-line"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
 
+            <li class="nav-heading">Pages</li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="users-profile.html">
                     <i class="bi bi-person"></i>
@@ -481,6 +484,13 @@ if ($result2->num_rows > 0) {
                 </a>
             </li><!-- End Login Page Nav -->
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="logout.php">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>Logout</span>
+                </a>
+            </li><!-- End Login Page Nav -->
+
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-contact.php">
@@ -497,7 +507,7 @@ if ($result2->num_rows > 0) {
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Item</button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php?id=<?php echo $box_id; ?>'" class="btn btn-primary mb-3">Add Item</button>
     <!-- 
   <h1>Companies List</h1> -->
     <main id="main" class="main">

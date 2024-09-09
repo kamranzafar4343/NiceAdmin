@@ -376,6 +376,19 @@ $company_data = $result->fetch_assoc();
         </a>
       </li><!-- End Tables Nav -->
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+          <i class="ri-building-4-line"></i><span>Box</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+
+
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
@@ -400,6 +413,12 @@ $company_data = $result->fetch_assoc();
         </a>
       </li><!-- End Login Page Nav -->
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="logout.php">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Logout</span>
+        </a>
+      </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-contact.php">
@@ -434,12 +453,6 @@ $company_data = $result->fetch_assoc();
     </div>
 
     <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-      <!-- <div class="alert alert-success alert-dismissible fade show" role="alert">
-        Company added successfully!
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div> -->
       <br>
     <?php endif; ?>
 

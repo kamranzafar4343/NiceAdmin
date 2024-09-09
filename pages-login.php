@@ -4,70 +4,26 @@ include "db.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    // Get the user input
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+  // Get the user input
+  $email = $_POST['email'];
+  $password = $_POST['password'];
 
-    // Query to check if the username and password are correct
-    $result = $conn->query("SELECT * FROM register WHERE email='$email' AND password='$password'");
+  // Query to check if the username and password are correct
+  $result = $conn->query("SELECT * FROM register WHERE email='$email' AND password='$password'");
 
-    // If a match is found, set the session
-    if ($result->num_rows > 0) {
-        $_SESSION['email'] = $email; // Set session variable
-        header("Location: index.php"); // Redirect to the dashboard or home page
-    } else {
-        echo "Invalid login!";
-    }
+  // If a match is found, set the session
+  if ($result->num_rows > 0) {
+    $_SESSION['email'] = $email; // Set session variable
+
+    header("Location: index.php"); // Redirect to the dashboard or home page
+    
+  } else {
+    
+  }
 }
-
-// require 'db.php';
-
-
-// if(isset($_POST["submit"])){
-//   $email= mysqli_real_escape_string($conn, $_POST["email"]);
-//   $password=mysqli_real_escape_string($conn, $_POST["password"]);
-  
-//   $result = mysqli_query($conn, "SELECT * FROM register WHERE email = '$email' AND password='$password'");
-
-//   $row= mysqli_fetch_assoc($result);
-
-//   if(mysqli_num_rows($result) > 0){
-//     if($password == $row["password"]){
-//       $_SESSION["login"]=true;
-//       $_SESSION["id"]= $row["id"];
-//       header("Location: index.php");
-//     }
-//     else{
-//       echo "<script> alert('Wrong password'); </script>";
-//     }
-// }
-// else{
-//   echo "<script> alert('User not registered'); </script>";
-// }
-// }
-
-// // define variables and set to empty values
-// $email = $password= "";
-
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//   $email = test_input($_POST["email"]);
-//   $password = test_input($_POST["password"]);
-// }
-
-// function test_input($data) {
-//   $data = trim($data);
-//   $data = stripslashes($data);
-//   $data = htmlspecialchars($data);
-//   return $data;
-// }
-// //new code
-// <?php
-// Start the session
 
 ?>
 
-<!-- 
-?> -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -98,19 +54,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
 
+  <!--ALERTIFY CSS-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
+  <!-- Bootstrap theme -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css" />
+
   <style>
-  .w-100 {
-    margin-left: 122px;
-    width: 100% !important;
-}</style>
+    .w-100 {
+      margin-left: 122px;
+      width: 100% !important;
+    }
+  </style>
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
   <style>
     .logo img {
-    max-height: 50px;
-    margin-right: 11px;
-}
+      max-height: 50px;
+      margin-right: 11px;
+    }
   </style>
 
   <!-- =======================================================
@@ -148,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <p class="text-center small">Enter your email & password</p>
                   </div>
 
-                  <form class="row g-3 needs-validation"  method="POST" action="">
+                  <form class="row g-3 needs-validation" method="POST" action="">
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>
@@ -162,14 +124,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
                     <div class="col-6 d-flex">
-                  <button class="btn btn-outline-primary w-100" type="submit" name="submit" value="submit">Login</button>
-                </div>
-                <!-- <div class="col-12">
+                      <button class="btn btn-outline-primary w-100" type="submit" name="submit" value="submit">Login</button>
+                    </div>
+                    <!-- <div class="col-12">
                   <p class="small mb-0">Don't have account? <a href="pages-register.php">Create an account</a></p>
                 </div> -->
-                </form>
+                  </form>
                 </div>
-                
+
 
               </div>
             </div>
@@ -202,11 +164,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
-
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <!-- ALERTIFY JavaScript -->
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+
+  <!-- <script>
+  <?php
+  if(isset($_SESSION['message']))
+  {
+  ?>
+    alertify.set('notifier', 'position', 'top-right');
+    alertify.success('<?= $_SESSION['message']; ?>');
+  <?php
+  unset($_SESSION['message']);
+  }
+  ?>
+  </script> -->
 
 </body>
 
 </html>
-

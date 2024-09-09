@@ -6,66 +6,66 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-    // If not logged in, redirect to login page
-    header("Location: pages-login.php");
-    exit();
+  // If not logged in, redirect to login page
+  header("Location: pages-login.php");
+  exit();
 }
 
-  include "db.php";
+include "db.php";
 
-  // show branch previous data
-  if (isset($_GET['id'])) {
-    $branch_id = $_GET['id'];
-    $sql = "SELECT * FROM `branch` WHERE `branch_id`= '$branch_id'";
-    $result = $conn->query($sql);
-    $row = mysqli_fetch_array($result);
-    $branch_name = $row['branch_name'];
-    $contactPerson = $row['ContactPersonName'];
-    $resignation = $row['ContactPersonResignation'];
-    $phone = $row['ContactPersonPhone'];
-    $city = $row['City'];
-    $state = $row['State'];
-    $country = $row['Country'];
-    }
+// show branch previous data
+if (isset($_GET['id'])) {
+  $branch_id = $_GET['id'];
+  $sql = "SELECT * FROM `branch` WHERE `branch_id`= '$branch_id'";
+  $result = $conn->query($sql);
+  $row = mysqli_fetch_array($result);
+  $branch_name = $row['branch_name'];
+  $contactPerson = $row['ContactPersonName'];
+  $resignation = $row['ContactPersonResignation'];
+  $phone = $row['ContactPersonPhone'];
+  $city = $row['City'];
+  $state = $row['State'];
+  $country = $row['Country'];
+}
 
-    if (isset($_GET['id'])) {
-        $branch_id = intval($_GET['id']); 
-    $sql = "SELECT `compID_FK` FROM `branch` WHERE `branch_id` = $branch_id";
-    $result = $conn->query($sql);
+if (isset($_GET['id'])) {
+  $branch_id = intval($_GET['id']);
+  $sql = "SELECT `compID_FK` FROM `branch` WHERE `branch_id` = $branch_id";
+  $result = $conn->query($sql);
 
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $company_id = $row['compID_FK'];
-    } else {
-        echo "Error: No company found for this branch.";
-    }
-    }
+  if ($result && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $company_id = $row['compID_FK'];
+  } else {
+    echo "Error: No company found for this branch.";
+  }
+}
 
-  //update the record
-  if (isset($_POST['update'])) {
-    $branch_name = mysqli_real_escape_string($conn, $_POST['branch_name']);
-    $contactPerson =  mysqli_real_escape_string($conn, $_POST['ContactPersonName']);
-    $resignation = mysqli_real_escape_string($conn, $_POST['ContactPersonResignation']);
-    $phone = mysqli_real_escape_string($conn, $_POST['ContactPersonPhone']);
-    $city = mysqli_real_escape_string($conn, $_POST['City']);
-    $state = mysqli_real_escape_string($conn, $_POST['State']);
-    $country = mysqli_real_escape_string($conn, $_POST['Country']);
-    
-   $sql = "UPDATE `branch` SET `branch_name`='$branch_name', `ContactPersonName`='$contactPerson', `ContactPersonResignation`='$resignation', `ContactPersonPhone`='$phone', `City`='$city', `State`='$state', `Country`='$country' WHERE `branch_id`='$branch_id'";
+//update the record
+if (isset($_POST['update'])) {
+  $branch_name = mysqli_real_escape_string($conn, $_POST['branch_name']);
+  $contactPerson =  mysqli_real_escape_string($conn, $_POST['ContactPersonName']);
+  $resignation = mysqli_real_escape_string($conn, $_POST['ContactPersonResignation']);
+  $phone = mysqli_real_escape_string($conn, $_POST['ContactPersonPhone']);
+  $city = mysqli_real_escape_string($conn, $_POST['City']);
+  $state = mysqli_real_escape_string($conn, $_POST['State']);
+  $country = mysqli_real_escape_string($conn, $_POST['Country']);
 
-    if (mysqli_query($conn, $sql)) {
-        header("Location: Branches.php?id=". $company_id);
-        exit;
-    } else {
-      echo "Error: " . $sql . "<br>" . $conn->error;
-    }
+  $sql = "UPDATE `branch` SET `branch_name`='$branch_name', `ContactPersonName`='$contactPerson', `ContactPersonResignation`='$resignation', `ContactPersonPhone`='$phone', `City`='$city', `State`='$state', `Country`='$country' WHERE `branch_id`='$branch_id'";
 
-    
-
-    $conn->close();
+  if (mysqli_query($conn, $sql)) {
+    header("Location: Branches.php?id=" . $company_id);
+    exit;
+  } else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
   }
 
-  ?>
+
+
+  $conn->close();
+}
+
+?>
 
 
 <!DOCTYPE html>
@@ -288,7 +288,7 @@ if (!isset($_SESSION['email'])) {
 </head>
 
 <body>
-  
+
   <!doctype html>
   <html lang="en">
 
@@ -671,12 +671,12 @@ End Search Bar -->
           <div class="col-md-6">
             <label class="form-label">Branch name</label>
             <input type="text" class="form-control" name="branch_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $branch_name; ?>" required>
-        
+
           </div>
           <div class="col-md-6">
             <label class="form-label">Contact Person Name</label>
             <input type="text" class="form-control" name="ContactPersonName" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $contactPerson; ?>" required>
-    
+
           </div>
           <div class="col-md-6">
             <label class="form-label">Phone</label>
@@ -685,16 +685,16 @@ End Search Bar -->
           <div class="col-md-6">
             <label class="form-label">Contact Person Resignation</label>
             <input type="text" class="form-control" name="ContactPersonResignation" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $resignation; ?>" required>
-      
+
           </div>
           <div class="col-md-6">
             <label for="country" class="form-label">Country</label>
             <select class="form-select" id="country" name="Country" value="<?php echo $country; ?>" required>
               <option value="">Select Country</option>
               <option value="Pakistan" <?php if ($country == 'Pakistan') { ?> selected="selected" <?php } ?>>Pakistan</option>
-              <option value="USA" <?php if ($country == 'USA') { ?> selected="selected" <?php } ?> >USA</option>
-              <option value="Canada" <?php if ($country == 'Canada') { ?> selected="selected" <?php } ?> >Canada</option>
-              <option value="UK" <?php if ($country == 'UK') { ?> selected="selected" <?php } ?> >UK</option>
+              <option value="USA" <?php if ($country == 'USA') { ?> selected="selected" <?php } ?>>USA</option>
+              <option value="Canada" <?php if ($country == 'Canada') { ?> selected="selected" <?php } ?>>Canada</option>
+              <option value="UK" <?php if ($country == 'UK') { ?> selected="selected" <?php } ?>>UK</option>
               <!-- Add more countries as needed -->
             </select>
           </div>
@@ -764,64 +764,64 @@ End Search Bar -->
 
     //for the country, state, city dropdown
     document.addEventListener('DOMContentLoaded', function() {
-  const countryStateCityData = {
-    Pakistan: {
-      Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-      KPK:["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-      Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-      Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
-      
-    },
-    USA: {
-      California: ["Los Angeles", "San Francisco", "San Diego"],
-      Texas: ["Houston", "Austin", "Dallas"]
-      // Add more states and cities
-    },
-    Canada: {
-      Ontario: ["Toronto", "Ottawa", "Hamilton"],
-      Quebec: ["Montreal", "Quebec City"]
-      // Add more provinces and cities
-    },
-  };
+      const countryStateCityData = {
+        Pakistan: {
+          Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
+          KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
+          Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
+          Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
 
-  const countrySelect = document.getElementById('country');
-  const stateSelect = document.getElementById('state');
-  const citySelect = document.getElementById('city');
+        },
+        USA: {
+          California: ["Los Angeles", "San Francisco", "San Diego"],
+          Texas: ["Houston", "Austin", "Dallas"]
+          // Add more states and cities
+        },
+        Canada: {
+          Ontario: ["Toronto", "Ottawa", "Hamilton"],
+          Quebec: ["Montreal", "Quebec City"]
+          // Add more provinces and cities
+        },
+      };
 
-  // Update states dropdown when a country is selected
-  countrySelect.addEventListener('change', function() {
-    const selectedCountry = countrySelect.value;
-    stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+      const countrySelect = document.getElementById('country');
+      const stateSelect = document.getElementById('state');
+      const citySelect = document.getElementById('city');
 
-    if (selectedCountry) {
-      const states = Object.keys(countryStateCityData[selectedCountry]);
-      states.forEach(function(state) {
-        const option = document.createElement('option');
-        option.value = state;
-        option.text = state;
-        stateSelect.add(option);
+      // Update states dropdown when a country is selected
+      countrySelect.addEventListener('change', function() {
+        const selectedCountry = countrySelect.value;
+        stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
+        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+        if (selectedCountry) {
+          const states = Object.keys(countryStateCityData[selectedCountry]);
+          states.forEach(function(state) {
+            const option = document.createElement('option');
+            option.value = state;
+            option.text = state;
+            stateSelect.add(option);
+          });
+        }
       });
-    }
-  });
 
-  // Update cities dropdown when a state is selected
-  stateSelect.addEventListener('change', function() {
-    const selectedCountry = countrySelect.value;
-    const selectedState = stateSelect.value;
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+      // Update cities dropdown when a state is selected
+      stateSelect.addEventListener('change', function() {
+        const selectedCountry = countrySelect.value;
+        const selectedState = stateSelect.value;
+        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
 
-    if (selectedCountry && selectedState) {
-      const cities = countryStateCityData[selectedCountry][selectedState];
-      cities.forEach(function(city) {
-        const option = document.createElement('option');
-        option.value = city;
-        option.text = city;
-        citySelect.add(option);
+        if (selectedCountry && selectedState) {
+          const cities = countryStateCityData[selectedCountry][selectedState];
+          cities.forEach(function(city) {
+            const option = document.createElement('option');
+            option.value = city;
+            option.text = city;
+            citySelect.add(option);
+          });
+        }
       });
-    }
-  });
-});  
+    });
   </script>
 
 </body>

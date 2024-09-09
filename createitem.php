@@ -11,13 +11,13 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-// Retrieve company ID from URL
-$branch = isset($_GET['id']) ? intval($_GET['id']) : 0;
+// Retrieve box ID from URL
+$box_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 include "db.php";
 
 // Validate company ID
-$Query = "SELECT * FROM item WHERE branch_FK_item = $branch";
+$Query = "SELECT * FROM item WHERE box_FK_item = $box_id";
 $Result = $conn->query($Query);
 
 $comp_FK_item = "";
@@ -474,30 +474,25 @@ $conn->close();
                         <input type="text" class="form-control" name="item_quantity" required>
                     </div>
 
-                    <div class="col-md-6" style="display: none;">
+                    <div class="col-md-6" >
                         <label class="form-label">Company ID</label>
-                        <input type="text" class="form-control" name="comp_FK_item" value="<?php echo ($company_id); ?>" readonly>
+                        <input type="text" class="form-control" name="comp_FK_item" value="<?php echo ($comp_FK_item); ?>" readonly>
                     </div>
 
-                    <div class="col-md-6" style="display: none;">
+                    <div class="col-md-6">
                         <label class="form-label">Branch Id</label>
                         <input type="text" class="form-control" name="branch_FK_item" value="<?php echo ($branch_FK_item); ?>" readonly>
                     </div>
 
-                    <div class="col-md-6" style="display: none;">
+                    <div class="col-md-6" >
                         <label class="form-label">Box Id</label>
                         <input type="text" class="form-control" name="box_FK_item" value="<?php echo ($box_FK_item); ?>" readonly>
                     </div>
-                    <!-- <div class="col-md-6">
+                    <div class="col-md-6">
                         <label class="form-label">Item Id</label>
                         <input type="text" class="form-control" name="item_id" value="<?php echo ($item_id); ?>" readonly>
                     </div>
-                    <div class="col-md-6">
-                    <?php date_default_timezone_set('Asia/Karachi'); ?>
-                        <label for="" class="form-label">Created at</label>
-                        <input type="datetime-local" class="form-control" id="timestamp" name="timestamp" value="<?php echo date('Y-m-d\TH:i'); ?>" readonly>
-                    </div> -->
-
+                    
                     <div class="col-md-6">
                         <label for="status" class="form-label">Item Condition</label>
                         <select class="form-select" id="status" name="status">
@@ -509,10 +504,9 @@ $conn->close();
                             <option value="Used - Acceptable">Used - Acceptable</option>
                         </select>
                     </div>
-       
-                    <div class="col-md-6" >
+                    <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" >
+                        <input type="text" class="form-control" name="barcode">
                     </div>
 
 
@@ -521,7 +515,7 @@ $conn->close();
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>
                     </div>
                 </form>
-                <!------------------------  Form end ---------------------->
+               
 
             </div>
         </div>
@@ -549,67 +543,7 @@ $conn->close();
 
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const countryStateCityData = {
-                Pakistan: {
-                    Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-                    KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-                    Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-                    Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
-
-                },
-                USA: {
-                    California: ["Los Angeles", "San Francisco", "San Diego"],
-                    Texas: ["Houston", "Austin", "Dallas"]
-                    // Add more states and cities
-                },
-                Canada: {
-                    Ontario: ["Toronto", "Ottawa", "Hamilton"],
-                    Quebec: ["Montreal", "Quebec City"]
-                    // Add more provinces and cities
-                },
-            };
-
-            const countrySelect = document.getElementById('country');
-            const stateSelect = document.getElementById('state');
-            const citySelect = document.getElementById('city');
-
-            // Update states dropdown when a country is selected
-            countrySelect.addEventListener('change', function() {
-                const selectedCountry = countrySelect.value;
-                stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-                citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-                if (selectedCountry) {
-                    const states = Object.keys(countryStateCityData[selectedCountry]);
-                    states.forEach(function(state) {
-                        const option = document.createElement('option');
-                        option.value = state;
-                        option.text = state;
-                        stateSelect.add(option);
-                    });
-                }
-            });
-
-            // Update cities dropdown when a state is selected
-            stateSelect.addEventListener('change', function() {
-                const selectedCountry = countrySelect.value;
-                const selectedState = stateSelect.value;
-                citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-                if (selectedCountry && selectedState) {
-                    const cities = countryStateCityData[selectedCountry][selectedState];
-                    cities.forEach(function(city) {
-                        const option = document.createElement('option');
-                        option.value = city;
-                        option.text = city;
-                        citySelect.add(option);
-                    });
-                }
-            });
-        });
-    </script>
+    
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {
             searchable: false,

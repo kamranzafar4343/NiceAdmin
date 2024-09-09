@@ -395,6 +395,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </a>
             </li><!-- End Login Page Nav -->
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="logout.php">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>Logout</span>
+                </a>
+            </li><!-- End Login Page Nav -->
+
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-contact.php">
@@ -428,11 +435,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label for="company">Select Company:</label>
                                 <select id="company" class="form-select" name="company" required>
                                     <option value=""> Select a Company </option>
-                                   
-                                   <?php
+
+                                    <?php
 
                                     //fetch companies
-                                        $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                                    $result = $conn->query("SELECT comp_id, comp_name FROM compani");
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
                                     }

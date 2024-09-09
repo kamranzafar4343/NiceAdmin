@@ -19,14 +19,12 @@ if ($result->num_rows > 0) {
     $companiID_FK = $row['companiID_FK'];
 }
 
-// //2nd query to fetch the comp_name
 $sql2 = "Select * from compani where comp_id= $companiID_FK";
 $result2 = $conn->query($sql2);
 $comp_name = "";
 if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
     $comp_name = $row2['comp_name'];
-   
 }
 
 ?>
@@ -95,7 +93,7 @@ if ($result2->num_rows > 0) {
             width: 250px;
             position: relative;
             left: -38px;
-          }
+        }
 
         /* 
         #main {
@@ -455,6 +453,11 @@ if ($result2->num_rows > 0) {
                     <i class="ri-building-4-line"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
+            <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
 
             <li class="nav-heading">Pages</li>
 
@@ -480,6 +483,13 @@ if ($result2->num_rows > 0) {
                 <a class="nav-link collapsed" href="pages-login.php">
                     <i class="bi bi-box-arrow-in-right"></i>
                     <span>Login</span>
+                </a>
+            </li><!-- End Login Page Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="logout.php">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>Logout</span>
                 </a>
             </li><!-- End Login Page Nav -->
 
@@ -531,7 +541,7 @@ if ($result2->num_rows > 0) {
                                 ?>
                                     <td>
 
-                                        <a class="text-primary fw-bold" href="showItems.php?id=<?php echo $row['branchID_FK']; ?>">
+                                        <a class="text-primary fw-bold" href="showItems.php?id=<?php echo $row['box_id']; ?>">
                                             <?php echo $row['box_name']; ?>
                                         </a>
                                     </td>

@@ -13,21 +13,21 @@ if (!isset($_SESSION['email'])) {
 include "db.php";
 
 if (isset($_GET['id'])) {
-    $branch_id = intval($_GET['id']); // Ensure branch ID is an integer
+    $box_id = intval($_GET['id']); // Ensure box ID is an integer
 
     // Fetch the company ID associated with the branch from the compID_FK column
-    $sql = "SELECT `compID_FK` FROM `branch` WHERE `branch_id` = $branch_id";
+    $sql = "SELECT `branchID_FK` FROM `box` WHERE `box_id` = $box_id";
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $company_id = $row['compID_FK'];
+        $branch_id = $row['branchID_FK'];
 
         // Now, perform the delete operation
-        $delete_sql = "DELETE FROM `branch` WHERE `branch_id` = $branch_id";
+        $delete_sql = "DELETE FROM `box` WHERE `box_id` = $box_id";
         if ($conn->query($delete_sql) === TRUE) {
-            // Redirect to the company's branches page after successful deletion
-            header("Location: Branches.php?id=" . $company_id);
+            // Redirect to the branch box page after successful deletion
+            header("Location: box.php?id=" . $branch_id);
             exit;
         } else {
             echo "Error deleting record: " . $conn->error;
@@ -41,4 +41,3 @@ if (isset($_GET['id'])) {
 } else {
     echo "No branch ID provided.";
 }
-?>

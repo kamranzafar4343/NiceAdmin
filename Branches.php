@@ -436,6 +436,20 @@ if ($result2->num_rows > 0) {
                 </a>
             </li><!-- End Tables Nav -->
 
+            
+            <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+          <i class="ri-building-4-line"></i><span>Box</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
@@ -520,7 +534,7 @@ if ($result2->num_rows > 0) {
                                     echo "<td>" . ($row["City"]) . "</td>";
                                     echo "<td>" . ($row["State"]) . "</td>";
                                     echo "<td>" . ($row["Country"]) . "</td>";
-                                    ?>
+                                ?>
                                     <td>
                                         <div style="display: flex; gap: 10px;">
 

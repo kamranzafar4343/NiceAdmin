@@ -191,6 +191,11 @@ margin-right: 24px;
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showitems.php">
+          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
 
       <li class="nav-heading">Pages</li>
 

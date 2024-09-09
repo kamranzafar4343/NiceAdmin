@@ -8,14 +8,8 @@ if (!isset($_SESSION['email'])) {
     header("Location: pages-login.php");
     exit();
 }
-include 'db.php'; // Include the database connection
 
-// // Check if the user is logged in
-// if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-//     // User is not logged in, redirect to login page
-//     header("Location: pages-login.php");
-//     exit;
-// }
+include 'db.php'; // Include the database connection
 
 $sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
 $result = $conn->query($sql);
@@ -375,6 +369,12 @@ tbody, td, tr{
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+      
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">

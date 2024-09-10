@@ -12,13 +12,13 @@ include 'db.php'; // Include the database connection
 
 $email = $_SESSION['email'];
 //get user name and email from register table
- $getAdminData = "SELECT * FROM register WHERE email = '$email'";
- $resultData = mysqli_query($conn, $getAdminData);
- if($resultData ->num_rows > 0){
-  $row2= $resultData->fetch_assoc();
-  $adminName= $row2['name'];
-  $adminEmail=$row2['email'];
- }
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+$resultData = mysqli_query($conn, $getAdminData);
+if ($resultData->num_rows > 0) {
+  $row2 = $resultData->fetch_assoc();
+  $adminName = $row2['name'];
+  $adminEmail = $row2['email'];
+}
 
 
 
@@ -423,6 +423,7 @@ tbody, td, tr{
               <colgroup>
                 <col style="width:10%;">
                 <col style="width: 15%;">
+                <col style="width: 10%;">
                 <col style="width: 12%;">
                 <col style="width: 13%;">
                 <col style="width: 14%;">
@@ -434,7 +435,9 @@ tbody, td, tr{
               <thead>
                 <tr>
                   <th scope="col">Comp. Id</th>
+
                   <th scope="col">Name</th>
+                  <th scope="col">Image</th>
                   <th scope="col">Phone</th>
                   <th scope="col">Email</th>
                   <!-- <th scope="col">Password</th> -->
@@ -460,6 +463,7 @@ tbody, td, tr{
                   </td>
 
                   <?php
+                  echo "<td >" . "<img src='" . $row['image'] . "' alt='Profile Image' width='70' height=''>" . "</td> ";
                   echo "<td >" . htmlspecialchars($row["phone"]) . "</td> ";
                   echo "<td >" . htmlspecialchars($row["email"]) . "</td>";
                   // echo "<td>" . htmlspecialchars($row["password"]) . "</td>";

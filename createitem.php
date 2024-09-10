@@ -22,7 +22,7 @@ $email = $_SESSION['email'];
   $adminName= $row2['name'];
   $adminEmail=$row2['email'];
  }
- 
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
     $item_price = mysqli_real_escape_string($conn, $_POST['item_price']);
@@ -358,7 +358,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.html">
+                <a class="nav-link collapsed" href="users-profile.php">
                     <i class="bi bi-person"></i>
                     <span>Profile</span>
                 </a>

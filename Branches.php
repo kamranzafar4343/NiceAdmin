@@ -22,7 +22,7 @@ $email = $_SESSION['email'];
   $adminName= $row2['name'];
   $adminEmail=$row2['email'];
  }
- 
+
 // Get company ID from query string
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
@@ -432,7 +432,7 @@ if ($result2->num_rows > 0) {
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.html">
+                <a class="nav-link collapsed" href="users-profile.php">
                     <i class="bi bi-person"></i>
                     <span>Profile</span>
                 </a>

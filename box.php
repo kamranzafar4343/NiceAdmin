@@ -20,7 +20,7 @@ $email = $_SESSION['email'];
   $adminName= $row2['name'];
   $adminEmail=$row2['email'];
  }
- 
+
 // Fetch box of the company
 $sql = "SELECT * FROM box";
 $result = $conn->query($sql);
@@ -442,7 +442,7 @@ if ($result2->num_rows > 0) {
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.html">
+                <a class="nav-link collapsed" href="users-profile.php">
                     <i class="bi bi-person"></i>
                     <span>Profile</span>
                 </a>

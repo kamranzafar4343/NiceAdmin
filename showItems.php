@@ -20,13 +20,19 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-// Fetch box of the company
-$sql = "SELECT * FROM item";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $box_FK_item = $row['box_FK_item'];
+// Initialize query condition
+$searchQuery = "";
+if (isset($_GET['query']) && !empty($_GET['query'])) {
+    $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
+
+    // Search query: match barcode exactly or item name partially
+    $sql = "SELECT * FROM item WHERE barcode = '$searchQuery' OR item_name LIKE '%$searchQuery%'";
+} else {
+    // Default query if no search is performed
+    $sql = "SELECT * FROM item";
 }
+
+$result = $conn->query($sql);
 
 ?>
 
@@ -80,6 +86,39 @@ if ($result->num_rows > 0) {
     <style>
         /* Custom CSS to decrease font size of the table */
 
+        /* Basic styling for search bar */
+        input.btn.btn-success {
+            margin-left: 7px;
+            height: 41px;
+            padding: 2%;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            text-align: center;
+            justify-items: center;
+
+        }
+
+        .search-container {
+            margin: 50px;
+            margin-left: 320px;
+            margin-bottom: 3px !important;
+        }
+
+        #main {
+
+            margin-top: 0 !important;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 0.9rem;
+            width: 363px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
 
         .card-body {
             margin-left: 37px !important;
@@ -196,12 +235,6 @@ if ($result->num_rows > 0) {
             display: none;
         }
 
-        .datatable-top {
-            width: 1048px;
-
-        }
-
-
         /* Card */
         .cardBranch {
             margin-bottom: 30px;
@@ -210,7 +243,6 @@ if ($result->num_rows > 0) {
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
-            margin-top: 30px;
         }
 
         .company-name:active {
@@ -296,7 +328,7 @@ if ($result->num_rows > 0) {
         }
 
         .datatable-top {
-            width: 844px;
+            width: 942px;
         }
 
         .datatable-bottom {
@@ -308,6 +340,54 @@ if ($result->num_rows > 0) {
             width: 167px;
             position: relative;
             left: -18px;
+        }
+
+        /* styles for card */
+        .card-body {
+            padding: 18px !important;
+            padding-left: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        /*datatable top css*/
+        .datatable-top,
+        .datatable-bottom {
+            padding: 12px 10px;
+            margin-top: 4px;
+            display: flex !important;
+        }
+
+        .card-title {
+            padding: 5px 0 0px 0;
+            font-size: 23px;
+            font-weight: 500;
+            position: relative;
+            left: 11px;
+            color: #012970;
+            margin-top: 14px;
+            font-family: "Poppins", sans-serif;
+            /* font-family: "Poppins", sans-serif; */
+            width: 424px !important;
+        }
+
+        .datatable-input {
+            padding: 4px 10px !important;
+            width: 255px !important;
+            height: 33px;
+            font-size: 0.8rem;
+            margin-left: 6px;
+            outline: none;
+            width: 148% !important;
+            max-width: 414px;
+            padding: 21px 23px !important;
+            font-size: 17px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 14px;
+            margin-top: 8px !important;
         }
 
         /* .custom-header-col-name{
@@ -347,7 +427,7 @@ if ($result->num_rows > 0) {
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
         </div><!-- End Search Bar -->
-        <h3>List of Items</h3>
+
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
 
@@ -472,76 +552,93 @@ if ($result->num_rows > 0) {
 
     <!--new table design-->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php?id=<?php echo $box_FK_item; ?>'" class="btn btn-primary mb-3">Add Item</button>
-    <!-- 
-  <h1>Companies List</h1> -->
+
+    <div class="search-container">
+        <form id="searchForm" action="" method="GET">
+            <input type="text" id="searchInput" name="query" placeholder="Enter product name or scan barcode" autofocus>
+            <input type="submit" value="Search" class="btn btn-success btn-success">
+        </form>
+    </div>
     <main id="main" class="main">
 
         <div class="col-12">
-
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <!-- <h2 class="card-title fw-bold text-uppercase"><?php echo $box_name; ?></h2> -->
+                    <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns search-results">
+                        <h5 class="card-title">List of Items</h5>
+                        <!-- <div class="datatable-top">
+                       
+                       
+                        <div class="datatable-search">
+                            <input class="datatable-input" placeholder="Enter item name or scan barcode ..." type="search" name="search" title="Search within table">
+                        </div>
+                    </div> -->
 
-                    <?php
-                    if ($result->num_rows > 0) {
-                    ?>
-                        <table class="table table-borderless datatable mt-4" style="table-layout: fixed;">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="width: 10%;">Quantity</th>
-                                    <th scope="col" style="width: 15%;">Item Name</th>
-                                    <th scope="col" style="width: 14%;">Item Price</th>
-                                    <!-- <th scope="col">Company id </th>
+
+                        <?php
+                        if ($result->num_rows > 0) {
+                        ?>
+                            <table class="table table-borderless datatable mt-4" style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="width: 10%;">Quantity</th>
+                                        <th scope="col" style="width: 15%;">Item Name</th>
+                                        <th scope="col" style="width: 14%;">Item Price</th>
+                                        <!-- <th scope="col">Company id </th>
                                     <th scope="col">Branch id</th>
                                     <th scope="col">Box id</th>
                                     <th scope="col">Item id</th> -->
-                                    <th scope="col" style="width: 13%;">Condition</th>
-                                    <th scope="col" style="width: 20%;">Created at</th>
-                                    <th scope="col" style="width: 25%;"> Barcode </th>
-                                    <th scope="col" style="width: 15%;">Actions</th>
+                                        <th scope="col" style="width: 13%;">Condition</th>
+                                        <th scope="col" style="width: 20%;">Created at</th>
+                                        <th scope="col" style="width: 25%;"> Barcode </th>
+                                        <th scope="col" style="width: 15%;">Actions</th>
 
-                                </tr>
-                            </thead>
-                            <tbody style="table-layout: fixed;">
-
-                                <?php
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<tr>";
-                                    echo "<td>" . ($row["item_quantity"]) . "</td>";
-                                    echo "<td>" . ($row["item_name"]) . "</td>";
-                                    echo "<td>" . ($row["item_price"]) . "</td>";
-
-                                    // echo "<td>" . ($row["comp_FK_item"]) . "</td>";
-                                    // echo "<td>" . ($row["branch_FK_item"]) . "</td>";
-                                    // echo "<td>" . ($row["box_FK_item"]) . "</td>";
-                                    // echo "<td>" . ($row["item_id"]) . "</td>";
-                                    echo "<td><span>" . $row["status"] . "</span></td>";
-                                    echo "<td>" . ($row["timestamp"]) . "</td>";
-                                    echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
-
-                                ?>
-                                    <td>
-                                        <div style="display: flex; gap: 10px;">
-                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="itemUpdate.php?id=<?php echo $row['item_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-
-                                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                                onclick="return confirm('Are you sure you want to delete this record?');" href="itemDelete.php?id=<?php echo $row['item_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                        </div>
-                                    </td>
                                     </tr>
-                                <?php
-                                }
-                                ?>
+                                </thead>
+                                <tbody style="table-layout: fixed;">
 
-                            </tbody>
-                        </table>
-                    <?php
-                    }
-                    ?>
+
+
+                                    <?php
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>";
+                                        echo "<tr>";
+                                        echo "<td>" . ($row["item_quantity"]) . "</td>";
+                                        echo "<td>" . ($row["item_name"]) . "</td>";
+                                        echo "<td>" . ($row["item_price"]) . "</td>";
+
+                                        // echo "<td>" . ($row["comp_FK_item"]) . "</td>";
+                                        // echo "<td>" . ($row["branch_FK_item"]) . "</td>";
+                                        // echo "<td>" . ($row["box_FK_item"]) . "</td>";
+                                        // echo "<td>" . ($row["item_id"]) . "</td>";
+                                        echo "<td><span>" . $row["status"] . "</span></td>";
+                                        echo "<td>" . ($row["timestamp"]) . "</td>";
+                                        echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
+
+                                    ?>
+                                        <td>
+                                            <div style="display: flex; gap: 10px;">
+                                                <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="itemUpdate.php?id=<?php echo $row['item_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+
+                                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                                                    onclick="return confirm('Are you sure you want to delete this record?');" href="itemDelete.php?id=<?php echo $row['item_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
+
+                                </tbody>
+                            </table>
+                        <?php
+                        }
+
+                        ?>
+
+                    </div>
 
                 </div>
-
             </div>
         </div>
 
@@ -567,6 +664,14 @@ if ($result->num_rows > 0) {
     <script src="assets/js/main.js"></script>
 
     <script>
+        // Listen for the Enter key press
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default form submission
+                document.getElementById("searchForm").submit(); // Manually submit the form
+            }
+        });
+
         //click on the picture to update with ajax
         $(document).on('click', 'img', function() {
             $(this).next('input[type="file"]').click();

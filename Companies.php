@@ -421,7 +421,7 @@ tbody, td, tr{
             <table class="table table-borderless datatable" style="table-layout: fixed;">
 
               <colgroup>
-                <col style="width:10%;">
+                <col style="width:6%;">
                 <col style="width: 15%;">
                 <col style="width: 10%;">
                 <col style="width: 12%;">
@@ -434,18 +434,18 @@ tbody, td, tr{
               </colgroup>
               <thead>
                 <tr>
-                  <th scope="col">Comp. Id</th>
+                  <th scope="col" style="width:6%;">#</th>
 
-                  <th scope="col">Name</th>
-                  <th scope="col">Image</th>
-                  <th scope="col">Phone</th>
-                  <th scope="col">Email</th>
+                  <th scope="col" style="width:10%;">Name</th>
+                  <th scope="col" style="width:12%;">Image</th>
+                  <th scope="col" style="width:14%;">Phone</th>
+                  <th scope="col" style="width:15%;">Email</th>
                   <!-- <th scope="col">Password</th> -->
-                  <th scope="col">City</th>
-                  <th scope="col">Country</th>
-                  <th scope="col"> Reg. Date</th>
-                  <th scope="col">Expiry</th>
-                  <th scope="col">Actions</th>
+                  <th scope="col" style="width:8%;">City</th>
+                  <th scope="col" style="width:9%;">Country</th>
+                  <th scope="col" style="width:10%;"> Reg. Date</th>
+                  <th scope="col" style="width:10%;">Expiry</th>
+                  <th scope="col" style="width:9%;">Actions</th>
                 </tr>
               </thead>
               <tbody style="table-layout: fixed;">

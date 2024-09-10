@@ -13,13 +13,13 @@ include 'db.php'; // Include the database connection
 
 $email = $_SESSION['email'];
 //get user name and email from register table
- $getAdminData = "SELECT * FROM register WHERE email = '$email'";
- $resultData = mysqli_query($conn, $getAdminData);
- if($resultData ->num_rows > 0){
-  $row2= $resultData->fetch_assoc();
-  $adminName= $row2['name'];
-  $adminEmail=$row2['email'];
- }
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+$resultData = mysqli_query($conn, $getAdminData);
+if ($resultData->num_rows > 0) {
+    $row2 = $resultData->fetch_assoc();
+    $adminName = $row2['name'];
+    $adminEmail = $row2['email'];
+}
 
 // Fetch box of the company
 $sql = "SELECT * FROM box";
@@ -222,7 +222,7 @@ if ($result2->num_rows > 0) {
         }
 
         .datatable-top {
-            width: 1048px;
+            width: 942px;
 
         }
 
@@ -320,9 +320,6 @@ if ($result2->num_rows > 0) {
             margin-left: 50px;
         }
 
-        .datatable-top {
-            width: 844px;
-        }
 
         .datatable-bottom {
             width: 122%;
@@ -365,7 +362,7 @@ if ($result2->num_rows > 0) {
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
         </div><!-- End Search Bar -->
-        <h3>List of boxes</h3>
+
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
 
@@ -497,6 +494,22 @@ if ($result2->num_rows > 0) {
 
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
+                    <h5 class="card-title">List of Boxes</h5>
+                    <!-- <div class="datatable-top">
+                        <div class="datatable-dropdown">
+                            <label>
+                                <select class="datatable-selector" name="per-page">
+                                    <option value="5">5</option>
+                                    <option value="10" selected="">10</option>
+                                    <option value="15">15</option>
+                                    <option value="-1">All</option>
+                                </select> entries per page
+                            </label>
+                        </div>
+                        <div class="datatable-search">
+                            <input class="datatable-input" placeholder="Search..." type="search" name="search" title="Search within table">
+                        </div>
+                    </div> -->
                     <?php
                     if ($result->num_rows > 0) {
                     ?>

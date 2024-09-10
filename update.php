@@ -11,6 +11,8 @@ if (!isset($_SESSION['email'])) {
   exit();
 }
 
+include "db.php";
+
 $email = $_SESSION['email'];
 //get user name and email from register table
  $getAdminData = "SELECT * FROM register WHERE email = '$email'";

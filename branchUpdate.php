@@ -13,6 +13,16 @@ if (!isset($_SESSION['email'])) {
 
 include "db.php";
 
+$email = $_SESSION['email'];
+//get user name and email from register table
+ $getAdminData = "SELECT * FROM register WHERE email = '$email'";
+ $resultData = mysqli_query($conn, $getAdminData);
+ if($resultData ->num_rows > 0){
+  $row2= $resultData->fetch_assoc();
+  $adminName= $row2['name'];
+  $adminEmail=$row2['email'];
+ }
+ 
 // show branch previous data
 if (isset($_GET['id'])) {
   $branch_id = $_GET['id'];
@@ -73,7 +83,7 @@ if (isset($_POST['update'])) {
 
 <head>
   <meta charset="UTF-8">
-  <title>Update Company</title>
+  <title>Update branch</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 
@@ -534,15 +544,15 @@ End Search Bar -->
 
         <li class="nav-item profileimage dropdown pe-3 mr-4">
 
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
           </a><!-- End Profile Image Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
+              <h6><?php echo $adminName ?></h6>
+              <span><?php echo $adminEmail ?></span>
             </li>
             <li>
               <hr class="dropdown-divider">

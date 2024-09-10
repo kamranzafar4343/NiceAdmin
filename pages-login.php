@@ -2,6 +2,8 @@
 session_start();
 include "db.php";
 
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   // Get the user input

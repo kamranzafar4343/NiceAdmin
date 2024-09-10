@@ -6,11 +6,21 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-    // If not logged in, redirect to login page
-    header("Location: pages-login.php");
-    exit();
+  // If not logged in, redirect to login page
+  header("Location: pages-login.php");
+  exit();
 }
 
+$email = $_SESSION['email'];
+//get user name and email from register table
+ $getAdminData = "SELECT * FROM register WHERE email = '$email'";
+ $resultData = mysqli_query($conn, $getAdminData);
+ if($resultData ->num_rows > 0){
+  $row2= $resultData->fetch_assoc();
+  $adminName= $row2['name'];
+  $adminEmail=$row2['email'];
+ }
+ 
 // Retrieve company ID from URL
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
@@ -39,7 +49,7 @@ if (isset($_POST['submit'])) {
   if ($conn->query($sql) === TRUE) {
     header("Location: Branches.php?id=" . $company_id);
     exit; // Ensure script ends after redirect
-    echo"success";
+    echo "success";
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
@@ -307,28 +317,28 @@ End Search Bar -->
       <li class="nav-item profileimage dropdown pe-3 mr-4">
 
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-          <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+          <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
+          <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
         </a><!-- End Profile Image Icon -->
 
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                        <li class="dropdown-header">
-                            <h6>Kevin Anderson</h6>
-                            <span>Web Designer</span>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
-                            </a>
-                        </li>
+          <li class="dropdown-header">
+            <h6><?php echo $adminName ?></h6>
+            <span><?php echo $adminEmail ?></span>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+      </li>
+      <li>
+        <a class="dropdown-item d-flex align-items-center" href="logout.php">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Sign Out</span>
+        </a>
+      </li>
 
-                    </ul><!-- End Profile Dropdown Items -->
-      </li><!-- End Profile Nav -->
+    </ul><!-- End Profile Dropdown Items -->
+    </li><!-- End Profile Nav -->
 
     </ul>
   </nav><!-- End Icons Navigation -->
@@ -348,23 +358,23 @@ End Search Bar -->
       </a>
     </li><!-- End Dashboard Nav -->
     <li class="nav-item">
-        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-          <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
+      <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+      </a>
+    </li>
 
 
     <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-          <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
+      <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+      </a>
+    </li>
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-          <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+      </a>
+    </li>
 
     <li class="nav-heading">Pages</li>
 
@@ -487,75 +497,75 @@ End Search Bar -->
   </div>
 
   <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
-      alert('Company Registered successfully!');
-      window.location.href = 'Companies.php';
-      <?php unset($_SESSION['data_inserted']); // Clear the session variable 
-      ?>
-    <?php elseif (isset($_SESSION['data_inserted']) && !$_SESSION['data_inserted']): ?>
-      alert('Failed to enter new data.');
-      <?php unset($_SESSION['data_inserted']); ?>
-    <?php endif; ?>
+    alert('Company Registered successfully!');
+    window.location.href = 'Companies.php';
+    <?php unset($_SESSION['data_inserted']); // Clear the session variable 
+    ?>
+  <?php elseif (isset($_SESSION['data_inserted']) && !$_SESSION['data_inserted']): ?>
+    alert('Failed to enter new data.');
+    <?php unset($_SESSION['data_inserted']); ?>
+  <?php endif; ?>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-  const countryStateCityData = {
-    Pakistan: {
-      Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-      KPK:["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-      Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-      Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
-      
-    },
-    USA: {
-      California: ["Los Angeles", "San Francisco", "San Diego"],
-      Texas: ["Houston", "Austin", "Dallas"]
-      // Add more states and cities
-    },
-    Canada: {
-      Ontario: ["Toronto", "Ottawa", "Hamilton"],
-      Quebec: ["Montreal", "Quebec City"]
-      // Add more provinces and cities
-    },
-  };
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const countryStateCityData = {
+        Pakistan: {
+          Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
+          KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
+          Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
+          Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
 
-  const countrySelect = document.getElementById('country');
-  const stateSelect = document.getElementById('state');
-  const citySelect = document.getElementById('city');
+        },
+        USA: {
+          California: ["Los Angeles", "San Francisco", "San Diego"],
+          Texas: ["Houston", "Austin", "Dallas"]
+          // Add more states and cities
+        },
+        Canada: {
+          Ontario: ["Toronto", "Ottawa", "Hamilton"],
+          Quebec: ["Montreal", "Quebec City"]
+          // Add more provinces and cities
+        },
+      };
 
-  // Update states dropdown when a country is selected
-  countrySelect.addEventListener('change', function() {
-    const selectedCountry = countrySelect.value;
-    stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+      const countrySelect = document.getElementById('country');
+      const stateSelect = document.getElementById('state');
+      const citySelect = document.getElementById('city');
 
-    if (selectedCountry) {
-      const states = Object.keys(countryStateCityData[selectedCountry]);
-      states.forEach(function(state) {
-        const option = document.createElement('option');
-        option.value = state;
-        option.text = state;
-        stateSelect.add(option);
+      // Update states dropdown when a country is selected
+      countrySelect.addEventListener('change', function() {
+        const selectedCountry = countrySelect.value;
+        stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
+        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+        if (selectedCountry) {
+          const states = Object.keys(countryStateCityData[selectedCountry]);
+          states.forEach(function(state) {
+            const option = document.createElement('option');
+            option.value = state;
+            option.text = state;
+            stateSelect.add(option);
+          });
+        }
       });
-    }
-  });
 
-  // Update cities dropdown when a state is selected
-  stateSelect.addEventListener('change', function() {
-    const selectedCountry = countrySelect.value;
-    const selectedState = stateSelect.value;
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+      // Update cities dropdown when a state is selected
+      stateSelect.addEventListener('change', function() {
+        const selectedCountry = countrySelect.value;
+        const selectedState = stateSelect.value;
+        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
 
-    if (selectedCountry && selectedState) {
-      const cities = countryStateCityData[selectedCountry][selectedState];
-      cities.forEach(function(city) {
-        const option = document.createElement('option');
-        option.value = city;
-        option.text = city;
-        citySelect.add(option);
+        if (selectedCountry && selectedState) {
+          const cities = countryStateCityData[selectedCountry][selectedState];
+          cities.forEach(function(city) {
+            const option = document.createElement('option');
+            option.value = city;
+            option.text = city;
+            citySelect.add(option);
+          });
+        }
       });
-    }
-  });
-});   
+    });
   </script>
 
 </body>

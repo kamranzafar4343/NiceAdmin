@@ -6,10 +6,20 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-    // If not logged in, redirect to login page
-    header("Location: pages-login.php");
-    exit();
+  // If not logged in, redirect to login page
+  header("Location: pages-login.php");
+  exit();
 }
+
+$email = $_SESSION['email'];
+//get user name and email from register table
+ $getAdminData = "SELECT * FROM register WHERE email = '$email'";
+ $resultData = mysqli_query($conn, $getAdminData);
+ if($resultData ->num_rows > 0){
+  $row2= $resultData->fetch_assoc();
+  $adminName= $row2['name'];
+  $adminEmail=$row2['email'];
+ }
 ?>
 
 <!DOCTYPE html>
@@ -84,8 +94,6 @@ if (!isset($_SESSION['email'])) {
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
   <style>
-    /* Custom CSS to decrease font size of the table */
-
     .image-circle {
       margin-left: 335px;
       margin-top: 36px;
@@ -95,9 +103,14 @@ if (!isset($_SESSION['email'])) {
       padding: 5px;
     }
 
-    .image-circle img {
-      width: 100px;
+    .image-circle:hover {
+      opacity: 0.60;
     }
+
+    .image-circle img {
+      width: 120px;
+    }
+
     .img {
       border-radius: 30%;
     }
@@ -544,28 +557,28 @@ End Search Bar -->
         <li class="nav-item profileimage dropdown pe-3 mr-4">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+            <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
           </a><!-- End Profile Image Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                        <li class="dropdown-header">
-                            <h6>Kevin Anderson</h6>
-                            <span>Web Designer</span>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
-                            </a>
-                        </li>
+            <li class="dropdown-header">
+              <h6><?php echo $adminName ?></h6>
+              <span><?php echo $adminEmail ?></span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+        </li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="logout.php">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Sign Out</span>
+          </a>
+        </li>
 
-                    </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
+      </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
 
       </ul>
     </nav><!-- End Icons Navigation -->

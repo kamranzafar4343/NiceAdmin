@@ -1,6 +1,7 @@
 <?php
 // session_start(); // Start the session
 session_start();
+
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
   // If not logged in, redirect to login page
@@ -8,6 +9,16 @@ if (!isset($_SESSION['email'])) {
   exit();
 }
 include 'db.php';
+
+$email = $_SESSION['email'];
+//get user name and email from register table
+ $getAdminData = "SELECT * FROM register WHERE email = '$email'";
+ $resultData = mysqli_query($conn, $getAdminData);
+ if($resultData ->num_rows > 0){
+  $row2= $resultData->fetch_assoc();
+  $adminName= $row2['name'];
+  $adminEmail=$row2['email'];
+ }
 
 //get total no of companies for compani card
 $query = "SELECT COUNT(*) AS count FROM compani";
@@ -20,6 +31,12 @@ $queryBranches = "SELECT COUNT(*) AS branch_count FROM branch";
 $resultBranches = mysqli_query($conn, $queryBranches);
 $rowBranches = mysqli_fetch_assoc($resultBranches);
 $branchCount = $rowBranches['branch_count'];
+
+//get no of items for item card
+$queryItem = "SELECT COUNT(*) AS item_count FROM item";
+$resultItem = mysqli_query($conn, $queryItem);
+$rowItem = mysqli_fetch_assoc($resultItem);
+$itemCount = $rowItem['item_count'];
 ?>
 
 <!DOCTYPE html>
@@ -109,14 +126,14 @@ $branchCount = $rowBranches['branch_count'];
         <li class="nav-item profileimage dropdown pe-3 mr-4">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+            <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
           </a><!-- End Profile Image Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
+              <h6><?php echo $adminName ?></h6>
+              <span><?php echo $adminEmail ?></span>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -250,14 +267,12 @@ $branchCount = $rowBranches['branch_count'];
 
                 <div class="card-body">
                   <h5 class="card-title-indexphp">Companies </h5>
-
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="ri-building-4-line"></i>
                     </div>
                     <div class="ps-3">
                       <h6><?php echo $companyCount; ?></h6>
-
                     </div>
                   </div>
                 </div>
@@ -319,14 +334,14 @@ $branchCount = $rowBranches['branch_count'];
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title-indexphp">Employees</h5>
+                  <h5 class="card-title-indexphp">Items</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
+                      <i class="ri-shopping-cart-line"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>0</h6>
+                      <h6><?php echo $itemCount; ?></h6>
 
 
                     </div>

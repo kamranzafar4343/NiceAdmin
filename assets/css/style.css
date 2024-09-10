@@ -922,9 +922,8 @@ input[type=date].form-control {
   font-size: 20px;
   font-weight: 500;
   position: relative;
-  left: -85px;
+  left: 5px;
   top: 1px;
-  text-align: center;
   color: #012970;
   margin-top:14px;
   font-family: "Poppins", sans-serif;

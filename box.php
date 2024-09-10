@@ -11,6 +11,16 @@ if (!isset($_SESSION['email'])) {
 }
 include 'db.php'; // Include the database connection
 
+$email = $_SESSION['email'];
+//get user name and email from register table
+ $getAdminData = "SELECT * FROM register WHERE email = '$email'";
+ $resultData = mysqli_query($conn, $getAdminData);
+ if($resultData ->num_rows > 0){
+  $row2= $resultData->fetch_assoc();
+  $adminName= $row2['name'];
+  $adminEmail=$row2['email'];
+ }
+ 
 // Fetch box of the company
 $sql = "SELECT * FROM box";
 $result = $conn->query($sql);
@@ -371,28 +381,28 @@ if ($result2->num_rows > 0) {
                 <li class="nav-item dropdown pe-3 mr-4">
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-                    </a><!-- End Profile Iamge Icon -->
+                        <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
+                    </a><!-- End Profile Image Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
-                            <h6>Kevin Anderson</h6>
-                            <span>Web Designer</span>
+                            <h6><?php echo $adminName ?></h6>
+                            <span><?php echo $adminEmail ?></span>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
-                            </a>
-                        </li>
+                </li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center" href="logout.php">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Sign Out</span>
+                    </a>
+                </li>
 
-                    </ul><!-- End Profile Dropdown Items -->
-                </li><!-- End Profile Nav -->
+            </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
 
             </ul>
         </nav><!-- End Icons Navigation -->
@@ -424,10 +434,10 @@ if ($result2->num_rows > 0) {
                 </a>
             </li>
             <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-          <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
 
             <li class="nav-heading">Pages</li>
 
@@ -510,8 +520,8 @@ if ($result2->num_rows > 0) {
                                     // echo "<td>" . $comp_name . "</td>";
                                 ?>
                                     <td>
-                                            <?php echo $row['box_name']; ?>
-                                        </td>
+                                        <?php echo $row['box_name']; ?>
+                                    </td>
                                     <?php
                                     echo "<td>" . ($row["created_at"]) . "</td>";
                                     echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";

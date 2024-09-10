@@ -13,6 +13,16 @@ if (!isset($_SESSION['email'])) {
 
 include "db.php";
 
+$email = $_SESSION['email'];
+//get user name and email from register table
+ $getAdminData = "SELECT * FROM register WHERE email = '$email'";
+ $resultData = mysqli_query($conn, $getAdminData);
+ if($resultData ->num_rows > 0){
+  $row2= $resultData->fetch_assoc();
+  $adminName= $row2['name'];
+  $adminEmail=$row2['email'];
+ }
+ 
 // show item previous data
 if (isset($_GET['id'])) {
 
@@ -26,6 +36,7 @@ if (isset($_GET['id'])) {
     $item_price = $row['item_price'];
     $item_quantity = $row['item_quantity'];
     $status = $row['status'];
+    $barcode = $row['barcode'];
 }
 
 if (isset($_GET['id'])) {
@@ -67,7 +78,7 @@ if (isset($_POST['update'])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Update Company</title>
+    <title>Update item</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 
@@ -529,14 +540,14 @@ End Search Bar -->
                 <li class="nav-item profileimage dropdown pe-3 mr-4">
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                        <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
                     </a><!-- End Profile Image Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
-                            <h6>Kevin Anderson</h6>
-                            <span>Web Designer</span>
+                            <h6><?php echo $adminName ?></h6>
+                            <span><?php echo $adminEmail ?></span>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
@@ -572,7 +583,7 @@ End Search Bar -->
 
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
@@ -584,7 +595,7 @@ End Search Bar -->
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
                     <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
@@ -664,6 +675,12 @@ End Search Bar -->
                     <div class="col-md-6">
                         <label class="form-label">Item Condition</label>
                         <input type="text" class="form-control" name="status" value="<?php echo $status; ?>" required>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Barcode</label>
+                        <input type="text" class="form-control" name="barcode" value="<?php echo $barcode; ?>" required>
 
                     </div>
 

@@ -13,6 +13,16 @@ if (!isset($_SESSION['email'])) {
 
 include 'db.php'; // Include the database connection
 
+$email = $_SESSION['email'];
+//get user name and email from register table
+ $getAdminData = "SELECT * FROM register WHERE email = '$email'";
+ $resultData = mysqli_query($conn, $getAdminData);
+ if($resultData ->num_rows > 0){
+  $row2= $resultData->fetch_assoc();
+  $adminName= $row2['name'];
+  $adminEmail=$row2['email'];
+ }
+ 
 // Get company ID from query string
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
@@ -359,14 +369,14 @@ if ($result2->num_rows > 0) {
                 <li class="nav-item dropdown pe-3 mr-4">
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-                    </a><!-- End Profile Iamge Icon -->
+                        <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
+                    </a><!-- End Profile Image Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
-                            <h6>Kevin Anderson</h6>
-                            <span>Web Designer</span>
+                            <h6><?php echo $adminName ?></h6>
+                            <span><?php echo $adminEmail ?></span>
                         </li>
                         <li>
                             <hr class="dropdown-divider">

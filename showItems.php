@@ -243,6 +243,7 @@ $result = $conn->query($sql);
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
+            
         }
 
         .company-name:active {
@@ -555,10 +556,11 @@ $result = $conn->query($sql);
 
     <div class="search-container">
         <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Enter product name or scan barcode" autofocus>
+            <input type="text" id="searchInput" name="query" placeholder="Enter item name or scan barcode..." autofocus>
             <input type="submit" value="Search" class="btn btn-success btn-success">
         </form>
     </div>
+
     <main id="main" class="main">
 
         <div class="col-12">
@@ -707,26 +709,6 @@ $result = $conn->query($sql);
         initMDB({
             Ripple
         });
-
-        // function confirmDelete() {
-        //     // Display a confirmation dialog
-        //     var confirmation = confirm("Are you sure you want to delete this record?");
-
-        //     if (confirmation) {
-        //         // User clicked OK, proceed with deletion
-        //         deleteRecord();
-        //     } else {
-        //         // User clicked Cancel, do nothing
-        //         console.log("Record deletion canceled.");
-        //     }
-        // }
-
-        // function deleteRecord() {
-        //     // Your deletion logic here
-        //     console.log("Record deleted.");
-        //     // Example: You might want to make an AJAX request to delete the record from the server
-        //     // fetch('/delete-record', { method: 'POST' }).then(response => response.json()).then(data => console.log(data));
-        // }
     </script>
 
 

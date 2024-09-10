@@ -11,6 +11,8 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
+include "db.php";
+
 $email = $_SESSION['email'];
 //get user name and email from register table
  $getAdminData = "SELECT * FROM register WHERE email = '$email'";
@@ -21,7 +23,6 @@ $email = $_SESSION['email'];
   $adminEmail=$row2['email'];
  }
 
-include "db.php";
 
 if (isset($_POST['submit'])) {
     $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);

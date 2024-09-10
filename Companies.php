@@ -8,22 +8,21 @@ if (!isset($_SESSION['email'])) {
   header("Location: pages-login.php");
   exit();
 }
-include 'db.php'; // Include the database connection
+include "db.php"; // Include the database connection
+
+$sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
+$result = $conn->query($sql);
+
 
 $email = $_SESSION['email'];
 //get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
-if ($resultData->num_rows > 0) {
+if ($resultData -> num_rows > 0) {
   $row2 = $resultData->fetch_assoc();
   $adminName = $row2['name'];
   $adminEmail = $row2['email'];
 }
-
-
-
-$sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
-$result = $conn->query($sql);
 
 ?>
 
@@ -451,9 +450,10 @@ tbody, td, tr{
               <tbody style="table-layout: fixed;">
 
                 <?php
+                 $counter = 1; // Initialize counter
                 while ($row = $result->fetch_assoc()) {
                   echo "<tr>";
-                  echo "<td>" . htmlspecialchars($row["comp_id"]) . "</td>";
+                  echo "<td>" . $counter++ . "</td>";
                 ?>
                   <td>
 

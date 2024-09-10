@@ -21,21 +21,28 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-// Fetch box of the company
-$sql = "SELECT * FROM box";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $companiID_FK = $row['companiID_FK'];
+
+// Initialize query condition
+$searchQuery = "";
+if (isset($_GET['query']) && !empty($_GET['query'])) {
+    $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
+
+    // Search query: match barcode exactly or item name partially
+    $sql = "SELECT * FROM box WHERE barcode = '$searchQuery' OR box_name LIKE '%$searchQuery%'";
+} else {
+    // Default query if no search is performed
+    $sql = "SELECT * FROM box";
 }
 
-$sql2 = "Select * from compani where comp_id= $companiID_FK";
-$result2 = $conn->query($sql2);
-$comp_name = "";
-if ($result2->num_rows > 0) {
-    $row2 = $result2->fetch_assoc();
-    $comp_name = $row2['comp_name'];
-}
+$result = $conn->query($sql);
+
+// $sql2 = "Select * from compani where comp_id= $companiID_FK";
+// $result2 = $conn->query($sql2);
+// $comp_name = "";
+// if ($result2->num_rows > 0) {
+//     $row2 = $result2->fetch_assoc();
+//     $comp_name = $row2['comp_name'];
+// }
 
 ?>
 
@@ -90,6 +97,40 @@ if ($result2->num_rows > 0) {
     <link rel="stylesheet" href="css/style.css">
     <style>
         /* Custom CSS to decrease font size of the table */
+
+        /* Basic styling for search bar */
+        input.btn.btn-success {
+            margin-left: 7px;
+            height: 41px;
+            padding: 2%;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            text-align: center;
+            justify-items: center;
+
+        }
+
+        .search-container {
+            margin: 50px;
+            margin-left: 320px;
+            margin-bottom: 3px !important;
+        }
+
+        #main {
+
+            margin-top: 0 !important;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 0.9rem;
+            width: 363px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
 
         .pagetitle {
             display: flex;
@@ -235,7 +276,7 @@ if ($result2->num_rows > 0) {
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
-            margin-top: 30px;
+          
         }
 
         .company-name:active {
@@ -488,6 +529,12 @@ if ($result2->num_rows > 0) {
     <!--new table design-->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add box</button>
 
+    <div class="search-container">
+        <form id="searchForm" action="" method="GET">
+            <input type="text" id="searchInput" name="query" placeholder="Enter box name or scan barcode..." autofocus>
+            <input type="submit" value="Search" class="btn btn-success btn-success">
+        </form>
+    </div>
     <main id="main" class="main">
 
         <div class="col-12">
@@ -588,10 +635,15 @@ if ($result2->num_rows > 0) {
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
-
-
-
-
+    <script>
+        // Listen for the Enter key press
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default form submission
+                document.getElementById("searchForm").submit(); // Manually submit the form
+            }
+        });
+    </script>
 </body>
 
 </html>

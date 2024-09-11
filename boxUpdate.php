@@ -15,13 +15,13 @@ include "db.php";
 
 $email = $_SESSION['email'];
 //get user name and email from register table
- $getAdminData = "SELECT * FROM register WHERE email = '$email'";
- $resultData = mysqli_query($conn, $getAdminData);
- if($resultData ->num_rows > 0){
-  $row2= $resultData->fetch_assoc();
-  $adminName= $row2['name'];
-  $adminEmail=$row2['email'];
- }
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+$resultData = mysqli_query($conn, $getAdminData);
+if ($resultData->num_rows > 0) {
+    $row2 = $resultData->fetch_assoc();
+    $adminName = $row2['name'];
+    $adminEmail = $row2['email'];
+}
 
 // show box previous data
 if (isset($_GET['id'])) {
@@ -603,17 +603,6 @@ End Search Bar -->
                     <span>Profile</span>
                 </a>
             </li>
-            <!-- End Profile Page Nav -->
-
-
-
-            <!-- <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-register.php">
-      <i class="bi bi-card-list"></i>
-      <span>Register</span>
-    </a>
-  </li> -->
-            <!-- End Register Page Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">

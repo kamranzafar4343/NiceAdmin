@@ -416,19 +416,8 @@ $company_data = $result->fetch_assoc();
 
   <main id="main" class="main">
     <div class="headerbox">
-      <!-- <div class="pagetitle">
-        <h1 class="mb-1 mt-4">Companies</h1>
-        <div>
-          <nav class="mt-0">
-            <ol class="breadcrumb mt-0">
-              <li class="breadcrumb-item">Company</li>
-              <li class="breadcrumb-item active">Details</li>
-            </ol>
-          </nav>
-        </div> -->
     </div><!-- End Page Title -->
     <div class="pagetitleinside mt-1">
-      <!-- <button type="button" onclick="window.location.href = 'createBranch.php';" class="btn btn-outline-primary mb-3">Add Branch</button> -->
     </div>
     </div>
 
@@ -485,13 +474,6 @@ $company_data = $result->fetch_assoc();
               <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $company_data['country']; ?></li>
             </ul>
 
-            <!-- <ul class="list-group list-group-horizontal-lg">
-              <li class="list-group-item">Branches</li>
-              <li class="list-group-item">An item</li>
-            </ul> -->
-            <!-- <div class="card-footer" style="background: inherit; border-color: inherit;">
-              <a href="#" class="btn btn-outline-primary">Branches</a>
-            </div> -->
           </div>
         </div>
       </div>

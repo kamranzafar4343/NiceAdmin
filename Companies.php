@@ -466,10 +466,7 @@ tbody, td, tr{
                   echo "<td >" . "<img src='" . $row['image'] . "' alt='Profile Image' width='70' height=''>" . "</td> ";
                   echo "<td >" . htmlspecialchars($row["phone"]) . "</td> ";
                   echo "<td >" . htmlspecialchars($row["email"]) . "</td>";
-                  // echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
-                  // echo "<td><button type='button' class='btn btn-light view-password' data-id='" . htmlspecialchars($row['comp_id']) . "'><i class='fa fa-eye'></i></button></td>";
-                  echo "<td >" . htmlspecialchars($row["city"]) . "</td>";
-                  // echo "<td>" . htmlspecialchars($row["state"]) . "</td>";
+                   echo "<td >" . htmlspecialchars($row["city"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["country"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["expiry"]) . "</td>";

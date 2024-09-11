@@ -548,7 +548,6 @@ $result = $conn->query($sql);
 
     </aside>
 
-
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
@@ -568,14 +567,6 @@ $result = $conn->query($sql);
                 <div class="card-body">
                     <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns search-results">
                         <h5 class="card-title">List of Items</h5>
-                        <!-- <div class="datatable-top">
-                       
-                       
-                        <div class="datatable-search">
-                            <input class="datatable-input" placeholder="Enter item name or scan barcode ..." type="search" name="search" title="Search within table">
-                        </div>
-                    </div> -->
-
 
                         <?php
                         if ($result->num_rows > 0) {
@@ -586,10 +577,6 @@ $result = $conn->query($sql);
                                         <th scope="col" style="width: 10%;">Quantity</th>
                                         <th scope="col" style="width: 15%;">Item Name</th>
                                         <th scope="col" style="width: 14%;">Item Price</th>
-                                        <!-- <th scope="col">Company id </th>
-                                    <th scope="col">Branch id</th>
-                                    <th scope="col">Box id</th>
-                                    <th scope="col">Item id</th> -->
                                         <th scope="col" style="width: 13%;">Condition</th>
                                         <th scope="col" style="width: 20%;">Created at</th>
                                         <th scope="col" style="width: 25%;"> Barcode </th>
@@ -608,11 +595,6 @@ $result = $conn->query($sql);
                                         echo "<td>" . ($row["item_quantity"]) . "</td>";
                                         echo "<td>" . ($row["item_name"]) . "</td>";
                                         echo "<td>" . ($row["item_price"]) . "</td>";
-
-                                        // echo "<td>" . ($row["comp_FK_item"]) . "</td>";
-                                        // echo "<td>" . ($row["branch_FK_item"]) . "</td>";
-                                        // echo "<td>" . ($row["box_FK_item"]) . "</td>";
-                                        // echo "<td>" . ($row["item_id"]) . "</td>";
                                         echo "<td><span>" . $row["status"] . "</span></td>";
                                         echo "<td>" . ($row["timestamp"]) . "</td>";
                                         echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";

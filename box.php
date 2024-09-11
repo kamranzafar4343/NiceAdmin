@@ -35,15 +35,6 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
 }
 
 $result = $conn->query($sql);
-
-// $sql2 = "Select * from compani where comp_id= $companiID_FK";
-// $result2 = $conn->query($sql2);
-// $comp_name = "";
-// if ($result2->num_rows > 0) {
-//     $row2 = $result2->fetch_assoc();
-//     $comp_name = $row2['comp_name'];
-// }
-
 ?>
 
 <!DOCTYPE html>
@@ -276,7 +267,7 @@ $result = $conn->query($sql);
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
-          
+
         }
 
         .company-name:active {
@@ -302,12 +293,6 @@ $result = $conn->query($sql);
             padding-right: 34px;
             padding-left: 40px;
             margin-left: 20px;
-
-            /* table-layout: fixed; */
-
-            /* overflow: hidden; */
-            /* text-overflow: ellipsis; */
-            /* white-space: nowrap; */
         }
 
         tbody,
@@ -365,10 +350,6 @@ $result = $conn->query($sql);
         .datatable-bottom {
             width: 122%;
         }
-
-        /* .custom-header-col-name{
-        margin-right: 1000px;
-    } */
     </style>
 
     <!-- Template Main CSS File -->
@@ -542,21 +523,7 @@ $result = $conn->query($sql);
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
                     <h5 class="card-title">List of Boxes</h5>
-                    <!-- <div class="datatable-top">
-                        <div class="datatable-dropdown">
-                            <label>
-                                <select class="datatable-selector" name="per-page">
-                                    <option value="5">5</option>
-                                    <option value="10" selected="">10</option>
-                                    <option value="15">15</option>
-                                    <option value="-1">All</option>
-                                </select> entries per page
-                            </label>
-                        </div>
-                        <div class="datatable-search">
-                            <input class="datatable-input" placeholder="Search..." type="search" name="search" title="Search within table">
-                        </div>
-                    </div> -->
+
                     <?php
                     if ($result->num_rows > 0) {
                     ?>
@@ -564,20 +531,24 @@ $result = $conn->query($sql);
                             <thead>
                                 <tr>
 
-                                    <!-- <th scope="col">Comp name</th> -->
-                                    <th scope="col" style="width: 25%;">Box name</th>
-                                    <th scope="col" style="width: 30%;">Created at</th>
-                                    <th scope="col" style="width: 35%;">Barcode</th>
+                                    <th scope="col" style="width:8%;">#</th>
+                                    <th scope="col" style="width: 20%;">Box name</th>
+                                    <th scope="col" style="width: 20%;">Created at</th>
+                                    <th scope="col" style="width: 30%;">Barcode</th>
                                     <th scope="col" style="width: 10%;">Action</th>
                                 </tr>
                             </thead>
                             <tbody style="table-layout: fixed;">
 
                                 <?php
+
+                                //counter variable
+                                $counter = 1;
+
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                    // echo "<td>" . $comp_name . "</td>";
+                                    echo "<td>" . $counter++ . "</td>";
                                 ?>
                                     <td>
                                         <?php echo $row['box_name']; ?>
@@ -589,29 +560,22 @@ $result = $conn->query($sql);
                                     <td>
 
                                         <div style="display: flex; gap: 10px;">
-
-                                            <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['box_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
                                             <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="boxUpdate.php?id=<?php echo $row['box_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                                             <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
                                                 onclick="return confirm('Are you sure you want to delete this record?');" href="boxDelete.php?id=<?php echo $row['box_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-
                                         </div>
-
                                     </td>
                                     </tr>
                                 <?php
                                 }
                                 ?>
-
                             </tbody>
                         </table>
                     <?php
                     }
                     ?>
-
                 </div>
-
             </div>
         </div>
 
@@ -635,8 +599,9 @@ $result = $conn->query($sql);
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
-    <script>
-        // Listen for the Enter key press
+   
+   <script>
+        // event listener for search bar 
         document.getElementById("searchInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault(); // Prevent default form submission

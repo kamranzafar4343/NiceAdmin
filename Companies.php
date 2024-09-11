@@ -65,7 +65,13 @@ if ($resultData->num_rows > 0) {
 
   <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- Datatable css for export buttons -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css">
+
   <link rel="stylesheet" href="fonts/icomoon/style.css">
+
 
   <link rel="stylesheet" href="css/owl.carousel.min.css">
 
@@ -83,167 +89,6 @@ if ($resultData->num_rows > 0) {
       margin-left: 844px;
       margin-top: 26px;
     }
-
-    /*
-    .pagetitle {
-      display: flex;
-      width: 989px;
-      flex-direction: column;
-
-    }
-
-    .row {
-    margin-left: 52px;
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: calc(var(--bs-gutter-y)* -1);
-    margin-right: calc(var(--bs-gutter-x)* 1.5);
-    margin-left: calc(var(--bs-gutter-x)* 0.2);
-    }
-   
-    .datatable-container {
-  border:none;
-  margin-left: 12px;
-  margin-top: 12px;
-  /* table-layout: fixed; */
-
-
-
-    /* Define the pulse animation 
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.1);
-      }
-
-      100% {
-        transform: scale(1);
-      }
-    }
-
-    @keyframes clickEffect {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-
-      50% {
-        transform: scale(0.9);
-        opacity: 0.7;
-      }
-
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    .company-name {
-      color: #000;
-      text-decoration: none;
-      display: inline-block;
-      transition: color 0.3s ease;
-    }
-
-    .pagetitleinside {
-      padding-left: 600px;
-    }
-
-    .datatable-dropdown label {
-      font-size: 0.9rem;
-    }
-
-    .datatable-info {
-      display: none;
-    }
-
-    .mt-1 {
-    margin-top: .25rem !important;
-    margin-right: 45px;
-}
-    .company-name:active {
-      animation: clickEffect 0.s ease;
-      
-      color: #0056b3;
-      
-    }
-
-    * {
-      margin: 0;
-
-      padding: 0;
-
-      box-sizing: border-box;
-    }
-   
-    .custom {
-    font-size: 0.8rem;
-    border-radius: 7px;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    padding-right: 32px;
-    padding-left: 32px;
-    
-}
-tbody, td, tr{
-  word-wrap: break-word;
-    max-width: 200px;
-}
-
-    .image-circle{
-      display: flex;
-    justify-content: center; 
-    align-items: center; 
-    text-align: center;   
-    }
-
-    
-    .custom-header-expiry{
-      white-space: nowrap;
-  
-      color: #343a40;
-      font-weight: bold;
-    }
-    .navbar-image{
-  width: 50px;
-  height: 50px;
-  margin-right: 7px;
-}
-
-    .headerbox {
-
-      display: flex;
-    }
-
-.datatable-table > thead > tr > th {
-    vertical-align: bottom;
-    text-align: left;
-    border-bottom: 0px solid #d9d9d9;
-}
-
-    .pagetitleinside button {
-      width: 150px;
-    }
-
-    .datatable-pagination {
-      margin-left: 50px;
-    }
-
-    .datatable-top{
-      margin: 0;
- 
-      width: 1002px;
-
-}
-
-    .datatable-bottom {
-      width: 122%;
-    } */
   </style>
 
   <!-- Template Main CSS File -->
@@ -404,6 +249,9 @@ tbody, td, tr{
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
   <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Company</button>
+  <div class="container">
+
+  </div>
   <!-- 
   <h1>Companies List</h1> -->
   <main id="main" class="main">
@@ -411,29 +259,16 @@ tbody, td, tr{
     <div class="col-14">
 
       <div class="card recent-sales overflow-auto">
-        <div class="card-body">
-          <h5 class="card-title">List of Companies</h5>
+        <div class="card-body mt-4">
+          <!-- <h5 class="card-title">List of Companies</h5> -->
 
           <?php
           if ($result->num_rows > 0) {
           ?>
-            <table class="table table-borderless datatable" style="table-layout: fixed;">
-
-              <colgroup>
-                <col style="width:6%;">
-                <col style="width: 15%;">
-                <col style="width: 10%;">
-                <col style="width: 12%;">
-                <col style="width: 13%;">
-                <col style="width: 14%;">
-                <col style="width: 8%;">
-                <col style="width: 8%;">
-                <col style="width: 10%;">
-                <col style="width: 10%;">
-              </colgroup>
+            <table id="companies" class="" >
               <thead>
                 <tr>
-                  <th scope="col" style="width:6%;">#</th>
+                  <th scope="col" style="width:0%;">#</th>
 
                   <th scope="col" style="width:10%;">Name</th>
                   <th scope="col" style="width:12%;">Image</th>
@@ -545,6 +380,26 @@ tbody, td, tr{
         }
       });
     }
+  </script>
+
+  <!--datatable export buttons-->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.dataTables.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+  <script>
+    new DataTable('#companies', {
+      layout: {
+        topStart: {
+          buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+        }
+      }
+    });
   </script>
 </body>
 

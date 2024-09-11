@@ -321,8 +321,7 @@
 
 })()
 
-//new code
-
+//email ajax
 $(document).ready(function() {
   $('#email').blur(function() {
       var email = $(this).val();
@@ -345,6 +344,31 @@ $(document).ready(function() {
       });
   });
 });
+
+//box name ajax
+$(document).ready(function() {
+  $('#box_name').blur(function() {
+      var box_name = $(this).val();
+
+      $.ajax({
+          url: 'box_validation.php',
+          method: 'POST',
+          data: {
+              box_name: box_name
+          },
+          success: function(response) {
+              if (response === 'exists') {
+                  $('#box_name').addClass('is-invalid');
+                  $('#boxNameFeedback').text('Box Name already exists');
+              } else {
+                  $('#box_name').removeClass('is-invalid');
+                  $('#boxNameFeedback').text('');
+              }
+          }
+      });
+  });
+});
+
 
 window.onload = function() {
   // Get the current date

@@ -532,8 +532,8 @@ $result = $conn->query($sql);
                                 <tr>
 
                                     <th scope="col" style="width:8%;">#</th>
-                                    <th scope="col" style="width: 20%;">Box name</th>
-                                    <th scope="col" style="width: 20%;">Created at</th>
+                                    <th scope="col" style="width: 24%;">Box name</th>
+                                    <th scope="col" style="width: 24%;">Created at</th>
                                     <th scope="col" style="width: 30%;">Barcode</th>
                                     <th scope="col" style="width: 10%;">Action</th>
                                 </tr>

@@ -243,7 +243,7 @@ $result = $conn->query($sql);
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
-            
+
         }
 
         .company-name:active {
@@ -551,7 +551,7 @@ $result = $conn->query($sql);
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php?id=<?php echo $box_FK_item; ?>'" class="btn btn-primary mb-3">Add Item</button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary mb-3">Add Item</button>
 
     <div class="search-container">
         <form id="searchForm" action="" method="GET">
@@ -574,9 +574,12 @@ $result = $conn->query($sql);
                             <table class="table table-borderless datatable mt-4" style="table-layout: fixed;">
                                 <thead>
                                     <tr>
-                                        <th scope="col" style="width: 10%;">Quantity</th>
+                                        <th scope="col" style="width: 10%;">#</th>
+
                                         <th scope="col" style="width: 15%;">Item Name</th>
                                         <th scope="col" style="width: 14%;">Item Price</th>
+                                        <th scope="col" style="width: 10%;">Quantity</th>
+
                                         <th scope="col" style="width: 13%;">Condition</th>
                                         <th scope="col" style="width: 20%;">Created at</th>
                                         <th scope="col" style="width: 25%;"> Barcode </th>
@@ -589,12 +592,18 @@ $result = $conn->query($sql);
 
 
                                     <?php
+
+                                    //counter variable
+                                    $counter = 1;
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<tr>";
-                                        echo "<td>" . ($row["item_quantity"]) . "</td>";
+                                        echo "<td>" . $counter++ . "</td>";
+
                                         echo "<td>" . ($row["item_name"]) . "</td>";
                                         echo "<td>" . ($row["item_price"]) . "</td>";
+                                        echo "<td>" . ($row["item_quantity"]) . "</td>";
+
                                         echo "<td><span>" . $row["status"] . "</span></td>";
                                         echo "<td>" . ($row["timestamp"]) . "</td>";
                                         echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";

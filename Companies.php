@@ -18,7 +18,7 @@ $email = $_SESSION['email'];
 //get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
-if ($resultData -> num_rows > 0) {
+if ($resultData->num_rows > 0) {
   $row2 = $resultData->fetch_assoc();
   $adminName = $row2['name'];
   $adminEmail = $row2['email'];
@@ -450,7 +450,7 @@ tbody, td, tr{
               <tbody style="table-layout: fixed;">
 
                 <?php
-                 $counter = 1; // Initialize counter
+                $counter = 1; // Initialize counter
                 while ($row = $result->fetch_assoc()) {
                   echo "<tr>";
                   echo "<td>" . $counter++ . "</td>";
@@ -466,7 +466,7 @@ tbody, td, tr{
                   echo "<td >" . "<img src='" . $row['image'] . "' alt='Profile Image' width='70' height=''>" . "</td> ";
                   echo "<td >" . htmlspecialchars($row["phone"]) . "</td> ";
                   echo "<td >" . htmlspecialchars($row["email"]) . "</td>";
-                   echo "<td >" . htmlspecialchars($row["city"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["city"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["country"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["expiry"]) . "</td>";

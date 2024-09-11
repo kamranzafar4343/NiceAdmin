@@ -76,3 +76,7 @@ For any questions or issues, please contact kamranzafar4343@gmail.com
 ---
 
 Feel free to adjust the details based on your specific project needs and structure!
+https://dev.controloye.com/masiQul/index.php?route
+
+http://10.10.10.1/masiQul/index.php?route=/sql&server=1&db=catmarketing&table=compani&pos=0
+http://10.10.10.1/misc/kamran/NiceAdmin/

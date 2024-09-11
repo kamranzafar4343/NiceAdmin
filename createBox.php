@@ -15,19 +15,27 @@ include "db.php";
 
 $email = $_SESSION['email'];
 //get user name and email from register table
- $getAdminData = "SELECT * FROM register WHERE email = '$email'";
- $resultData = mysqli_query($conn, $getAdminData);
- if($resultData ->num_rows > 0){
-  $row2= $resultData->fetch_assoc();
-  $adminName= $row2['name'];
-  $adminEmail=$row2['email'];
- }
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+$resultData = mysqli_query($conn, $getAdminData);
+if ($resultData->num_rows > 0) {
+    $row2 = $resultData->fetch_assoc();
+    $adminName = $row2['name'];
+    $adminEmail = $row2['email'];
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $box_name = $_POST['box_name'];
     $company_id = $_POST['company'];
     $branch_id = $_POST['branch'];
     $barcode = $_POST['barcode'];
+
+    // Check if the box name and barcode already exists in the database
+    $nameCheck = "SELECT * FROM `box` WHERE `box_name` = '$box_name' AND `barcode`='$barcode'";
+    $nameCheckResult = $conn->query($nameCheck);
+
+    if ($nameCheckResult->num_rows > 0) {
+        die("Error: The box name '$box_name' and barcode '$barcode' already exists.");
+    }
 
     //insert data into box
     $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK, barcode) VALUES ('$box_name', '$company_id', '$branch_id', '$barcode')";
@@ -444,12 +452,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="col-md-6">
                         <label for="box_name" class="form-label">Box Name</label>
-                        <input type="text" class="form-control" name="box_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
+                        <input type="text" class="form-control" name="box_name" id="box_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
+                        <div id="boxNameFeedback" class="invalid-feedback">
+                            <!-- Error message will be displayed here -->
+                        </div>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode">
+                        <input type="text" class="form-control" name="barcode" id="box_barcode">
+                        <div id="barcodeFeedback" class="invalid-feedback">
+                            <!-- Error message will be displayed here -->
+                        </div>
                     </div>
 
                     <div class="text-center mt-4 mb-2">

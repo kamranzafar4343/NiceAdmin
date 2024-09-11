@@ -33,6 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $status = mysqli_real_escape_string($conn, $_POST['status']);
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
+    // Check if the box name and barcode already exists in the database
+    $nameCheck = "SELECT * FROM `item` WHERE `item_name` = '$item_name' AND `barcode`='$barcode'";
+    $nameCheckResult = $conn->query($nameCheck);
+
+    if ($nameCheckResult->num_rows > 0) {
+        die("Error: The item name '$item_name' and barcode '$barcode' already exists.");
+    }
+
     $sql = "INSERT INTO  item (comp_FK_item, box_FK_item, branch_FK_item, item_name, item_price, item_quantity, status, barcode) 
             VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' ,'$item_name', '$item_price', '$item_quantity' ,'$status', '$barcode')";
 
@@ -447,7 +455,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="col-md-6">
                         <label for="comp_name" class="form-label">Item Name</label>
-                        <input type="text" class="form-control" name="item_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
+                        <input type="text" class="form-control" name="item_name" id="item_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
                     </div>
 
                     <div class="col-md-6">
@@ -473,7 +481,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode">
+                        <input type="text" class="form-control" name="barcode" id="item_barcode">
                     </div>
 
                     <div class="text-center mt-4 mb-2">

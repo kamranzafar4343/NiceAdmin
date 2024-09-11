@@ -1,11 +1,9 @@
 <?php
 
+include "db.php";
+
 if (isset($_POST['branch_id'])) {
     $branch_id = $_POST['branch_id'];
-    
-    
-    // Database connection
-    $conn = new mysqli("localhost", "root", "", "catmarketing");
     
     // Simple SQL query to get branches for the selected company
     $result = $conn->query("SELECT box_id, box_name FROM box WHERE branchID_FK = '$branch_id'");

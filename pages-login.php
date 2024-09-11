@@ -18,9 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['email'] = $email; // Set session variable
 
     header("Location: index.php"); // Redirect to the dashboard or home page
-    
+
   } else {
-    
+    die("Error: The email '$email' doesn'nt exist");
   }
 }
 
@@ -76,14 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       margin-right: 11px;
     }
   </style>
-
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -128,24 +120,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-6 d-flex">
                       <button class="btn btn-outline-primary w-100" type="submit" name="submit" value="submit">Login</button>
                     </div>
-                    <!-- <div class="col-12">
-                  <p class="small mb-0">Don't have account? <a href="pages-register.php">Create an account</a></p>
-                </div> -->
                   </form>
                 </div>
 
 
               </div>
             </div>
-
-            <!-- <div class="credits"> -->
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-            <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
-            <!-- </div> -->
-
           </div>
         </div>
     </div>
@@ -171,19 +151,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   <!-- ALERTIFY JavaScript -->
   <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
-
-  <!-- <script>
-  <?php
-  if(isset($_SESSION['message']))
-  {
-  ?>
-    alertify.set('notifier', 'position', 'top-right');
-    alertify.success('<?= $_SESSION['message']; ?>');
-  <?php
-  unset($_SESSION['message']);
-  }
-  ?>
-  </script> -->
 
 </body>
 

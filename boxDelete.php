@@ -23,6 +23,19 @@ if (isset($_GET['id'])) {
         $row = $result->fetch_assoc();
         $branch_id = $row['branchID_FK'];
 
+        //get no of items for a specific box
+        $getItems="SELECT * FROM item";
+        $queryItem = "SELECT COUNT(*) AS item_count FROM item WHERE box_FK_item = '$box_id'";
+        $resultItem = mysqli_query($conn, $queryItem);
+        $rowItem = mysqli_fetch_assoc($resultItem);
+        $itemCount = $rowItem['item_count'];
+
+        //don't delete the box if it has items
+        if($itemCount>0){
+            echo 'Cannot delete the box which has items stored in it';
+        }
+        else{
+
         // Now, perform the delete operation
         $delete_sql = "DELETE FROM `box` WHERE `box_id` = $box_id";
         if ($conn->query($delete_sql) === TRUE) {
@@ -32,10 +45,11 @@ if (isset($_GET['id'])) {
         } else {
             echo "Error deleting record: " . $conn->error;
         }
+    }
     } else {
         echo "Error: No company found for this branch.";
     }
-
+    
     // Close the database connection
     $conn->close();
 } else {

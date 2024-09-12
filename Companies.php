@@ -265,7 +265,7 @@ if ($resultData->num_rows > 0) {
           <?php
           if ($result->num_rows > 0) {
           ?>
-            <table id="companies" class="" >
+            <table id="companies" class="">
               <thead>
                 <tr>
                   <th scope="col" style="width:0%;">#</th>
@@ -396,7 +396,43 @@ if ($resultData->num_rows > 0) {
     new DataTable('#companies', {
       layout: {
         topStart: {
-          buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+          buttons: [{
+              extend: 'copy',
+              exportOptions: {
+                columns: ':visible:not(:nth-child(3), :nth-child(10))' // Exclude the 2nd column (index starts from 0)
+              },
+
+            },
+
+            {
+              extend: 'pdf',
+              exportOptions: {
+                columns: ':visible:not(:nth-child(3), :nth-child(10))' // Exclude the 2nd column (index starts from 0)
+              },
+
+            },
+            {
+              extend: 'csv',
+              exportOptions: {
+                columns: ':visible:not(:nth-child(3), :nth-child(10))' // Exclude the 2nd column (index starts from 0)
+              },
+
+            },
+            {
+              extend: 'excel',
+              exportOptions: {
+                columns: ':visible:not(:nth-child(3), :nth-child(10))' // Exclude the 2nd column (index starts from 0)
+              },
+
+            },
+            {
+              extend: 'print',
+              exportOptions: {
+                columns: ':visible:not(:nth-child(3), :nth-child(10))' // Exclude the 2nd column (index starts from 0)
+              },
+
+            },
+          ]
         }
       }
     });

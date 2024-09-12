@@ -533,8 +533,9 @@ $result = $conn->query($sql);
 
                                     <th scope="col" style="width:8%;">#</th>
                                     <th scope="col" style="width: 24%;">Box name</th>
+                                    <th scope="col" style="width: 24%;">Box ID</th>
                                     <th scope="col" style="width: 24%;">Created at</th>
-                                    <th scope="col" style="width: 30%;">Barcode</th>
+                                    <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
                                     <th scope="col" style="width: 10%;">Action</th>
                                 </tr>
                             </thead>
@@ -554,8 +555,10 @@ $result = $conn->query($sql);
                                         <?php echo $row['box_name']; ?>
                                     </td>
                                     <?php
+                                    
+                                    echo "<td>" . ($row["box_id"]) . "</td>";
                                     echo "<td>" . ($row["created_at"]) . "</td>";
-                                    echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
+                                    // echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
                                     ?>
                                     <td>
 

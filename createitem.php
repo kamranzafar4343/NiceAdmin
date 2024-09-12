@@ -458,7 +458,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="text" class="form-control" name="item_name" id="item_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
                     </div>
 
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <label class="form-label">Item price</label>
                         <input type="text" class="form-control" name="item_price" required>
                     </div>
@@ -466,7 +466,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-6">
                         <label class="form-label">Item quantity</label>
                         <input type="text" class="form-control" name="item_quantity" required>
-                    </div>
+                    </div> -->
 
                     <div class="col-md-6">
                         <label for="status" class="form-label">Item Condition</label>

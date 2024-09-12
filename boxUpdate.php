@@ -534,7 +534,7 @@ End Search Bar -->
 
                 <li class="nav-item profileimage dropdown pe-3 mr-4">
 
-                    <<a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                         <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
                         <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
                         </a><!-- End Profile Image Icon -->
@@ -646,7 +646,7 @@ End Search Bar -->
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" value="<?php echo $barcode; ?>" required>
+                        <input type="text" class="form-control" name="barcode" value="<?php echo $barcode; ?>" readonly>
 
                     </div>
 

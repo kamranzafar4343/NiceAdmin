@@ -577,9 +577,6 @@ $result = $conn->query($sql);
                                         <th scope="col" style="width: 10%;">#</th>
 
                                         <th scope="col" style="width: 15%;">Item Name</th>
-                                        <th scope="col" style="width: 14%;">Item Price</th>
-                                        <th scope="col" style="width: 10%;">Quantity</th>
-
                                         <th scope="col" style="width: 13%;">Condition</th>
                                         <th scope="col" style="width: 20%;">Created at</th>
                                         <th scope="col" style="width: 25%;"> Barcode </th>
@@ -599,11 +596,7 @@ $result = $conn->query($sql);
                                         echo "<tr>";
                                         echo "<tr>";
                                         echo "<td>" . $counter++ . "</td>";
-
                                         echo "<td>" . ($row["item_name"]) . "</td>";
-                                        echo "<td>" . ($row["item_price"]) . "</td>";
-                                        echo "<td>" . ($row["item_quantity"]) . "</td>";
-
                                         echo "<td><span>" . $row["status"] . "</span></td>";
                                         echo "<td>" . ($row["timestamp"]) . "</td>";
                                         echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";

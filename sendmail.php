@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = $subject;
-        $mail->Body    = $message;
+        $mail->Body    = nl2br($message);  //used nlbr which is used for new lines or formatting
 
         $mail->send();
         echo 'Message has been sent';

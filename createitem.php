@@ -15,18 +15,16 @@ include "db.php";
 
 $email = $_SESSION['email'];
 //get user name and email from register table
- $getAdminData = "SELECT * FROM register WHERE email = '$email'";
- $resultData = mysqli_query($conn, $getAdminData);
- if($resultData ->num_rows > 0){
-  $row2= $resultData->fetch_assoc();
-  $adminName= $row2['name'];
-  $adminEmail=$row2['email'];
- }
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+$resultData = mysqli_query($conn, $getAdminData);
+if ($resultData->num_rows > 0) {
+    $row2 = $resultData->fetch_assoc();
+    $adminName = $row2['name'];
+    $adminEmail = $row2['email'];
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
-    $item_price = mysqli_real_escape_string($conn, $_POST['item_price']);
-    $item_quantity = mysqli_real_escape_string($conn, $_POST['item_quantity']);
     $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
     $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
     $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
@@ -41,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die("Error: The item name '$item_name' and barcode '$barcode' already exists.");
     }
 
-    $sql = "INSERT INTO  item (comp_FK_item, box_FK_item, branch_FK_item, item_name, item_price, item_quantity, status, barcode) 
-            VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' ,'$item_name', '$item_price', '$item_quantity' ,'$status', '$barcode')";
+    $sql = "INSERT INTO  item (comp_FK_item, box_FK_item, branch_FK_item, item_name, status, barcode) 
+            VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' ,'$item_name','$status', '$barcode')";
 
     if ($conn->query($sql) === TRUE) {
         header("location: showItems.php");
@@ -420,7 +418,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="card-body">
                 <br>
                 <!-- Multi Columns Form -->
-                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
+                <form class="row g-3 needs-validation" id="addItemForm" action="" method="POST" enctype="multipart/form-data">
+
+                    <!-- Checkbox to cancel auto-selection -->
+                    <input type="checkbox" id="cancelAutoSelection" name="cancelAutoSelection">
+                    <label for="cancelAutoSelection">Cancel Auto-Selection</label>
 
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>

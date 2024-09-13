@@ -27,9 +27,11 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
 
     // Search query: match barcode exactly or item name partially
     $sql = "SELECT * FROM item WHERE barcode = '$searchQuery' OR item_name LIKE '%$searchQuery%'";
+    $result = $conn->query($sql);
 } else {
     // Default query if no search is performed
     $sql = "SELECT * FROM item";
+    $result = $conn->query($sql);
 }
 
 $result = $conn->query($sql);
@@ -577,6 +579,7 @@ $result = $conn->query($sql);
                                         <th scope="col" style="width: 10%;">#</th>
 
                                         <th scope="col" style="width: 15%;">Item Name</th>
+                                        <th scope="col" style="width: 17%;">Box</th>
                                         <th scope="col" style="width: 13%;">Condition</th>
                                         <th scope="col" style="width: 20%;">Created at</th>
                                         <th scope="col" style="width: 25%;"> Barcode </th>
@@ -597,8 +600,24 @@ $result = $conn->query($sql);
                                         echo "<tr>";
                                         echo "<td>" . $counter++ . "</td>";
                                         echo "<td>" . ($row["item_name"]) . "</td>";
+
+                                        //get specific box id   
+                                        $box_id = $row['box_FK_item'];
+
+                                        //show company name of box
+                                        $sql5 = "SELECT * FROM box WHERE box_id= '$box_id'";
+                                        $result5 = $conn->query($sql5);
+                                        if ($result5->num_rows > 0) {
+                                            $row5 = $result5->fetch_assoc();
+                                            $box_name = $row5['box_name'];
+                                        }
+
+                                        echo "<td>" . $box_name . "</td>";
+
                                         echo "<td><span>" . $row["status"] . "</span></td>";
+
                                         echo "<td>" . ($row["timestamp"]) . "</td>";
+
                                         echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
 
                                     ?>
@@ -612,6 +631,8 @@ $result = $conn->query($sql);
                                         </td>
                                         </tr>
                                     <?php
+
+
                                     }
                                     ?>
 

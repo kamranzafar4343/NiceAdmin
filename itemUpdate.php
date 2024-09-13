@@ -52,8 +52,6 @@ if (isset($_GET['id'])) {
 //update the record
 if (isset($_POST['update'])) {
     $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
-    $item_price =  mysqli_real_escape_string($conn, $_POST['item_price']);
-    $item_quantity = mysqli_real_escape_string($conn, $_POST['item_quantity']);
     $status = mysqli_real_escape_string($conn, $_POST['status']);
 
     $sql = "UPDATE `item` SET `item_name`='$item_name', `item_price`='$item_price' , `item_quantity`='$item_quantity', `status`='$status' WHERE `item_id`='$item_id'";
@@ -650,17 +648,7 @@ End Search Bar -->
                         <input type="text" class="form-control" name="item_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $item_name; ?>" required>
 
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Item price</label>
-                        <input type="text" class="form-control" name="item_price" value="<?php echo $item_price; ?>" required>
-
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label">Item quantity</label>
-                        <input type="text" class="form-control" name="item_quantity" value="<?php echo $item_quantity; ?>" required>
-
-                    </div>
+                    
 
                     <div class="col-md-6">
                         <label class="form-label">Item Condition</label>
@@ -670,7 +658,7 @@ End Search Bar -->
 
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" value="<?php echo $barcode; ?>" required>
+                        <input type="text" class="form-control" name="barcode" value="<?php echo $barcode; ?>" readonly>
 
                     </div>
 

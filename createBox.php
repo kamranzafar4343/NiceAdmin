@@ -28,6 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $company_id = $_POST['company'];
     $branch_id = $_POST['branch'];
     $barcode = $_POST['barcode'];
+    $rec_date= $_POST['rec_date'];
+    $sender=$_POST['sender'];
+    $rec_via=$_POST['rec_via'];
 
     // Check if the box name and barcode already exists in the database
     $nameCheck = "SELECT * FROM `box` WHERE `box_name` = '$box_name' AND `barcode`='$barcode'";
@@ -38,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     //insert data into box
-    $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK, barcode) VALUES ('$box_name', '$company_id', '$branch_id', '$barcode')";
+    $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via) VALUES ('$box_name', '$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via')";
 
     if ($conn->query($sql) === TRUE) {
         header("location: box.php");
@@ -458,6 +461,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
 
+                    <div class="col-md-6">
+                        <label for="rec_date">Receive date</label>
+                        <input type="datetime-local" class="form-control" name="rec_date">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="sender">Sender</label>
+                        <input type="text" class="form-control" name="sender">
+                        </div>
+                    
+                    <div class="col-md-6">
+                        <label for="rec_via">Receive via</label>
+                        <input type="text" class="form-control" name="rec_via">
+                    </div>
+                    
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
                         <input type="text" class="form-control" name="barcode" id="box_barcode">

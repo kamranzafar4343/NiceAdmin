@@ -89,6 +89,8 @@ if ($resultData->num_rows > 0) {
       margin-left: 844px;
       margin-top: 26px;
     }
+
+    .mail {}
   </style>
 
   <!-- Template Main CSS File -->
@@ -249,6 +251,9 @@ if ($resultData->num_rows > 0) {
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
   <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Company</button>
+  <button id="fixedButton" type="button" onclick="window.location.href = 'emailTable.php';" class="btn btn-outline-info mail">
+  <b><i class="ri-mail-line"></i></b>
+  </button>
   <div class="container">
 
   </div>

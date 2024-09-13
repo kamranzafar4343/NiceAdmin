@@ -532,24 +532,28 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
                             <thead>
                                 <tr>
 
-                                    <th scope="col" style="width:8%;">#</th>
-                                    <th scope="col" style="width: 24%;">Box name</th>
-                                    <th scope="col" style="width: 24%;">Box ID</th>
-                       
+                                    <th scope="col" style="width:10%;">#</th>
+                                    <th scope="col" style="width: 20%;">Box name</th>
+                                    <th scope="col" style="width: 20%;">Box ID</th>
+                                    <th scope="col" style="width: 20%;">Comp. Name</th>
                                     <!-- <th scope="col" style="width: 24%;">Company Name</th> -->
-                                    <th scope="col" style="width: 24%;">Created at</th>
+                                    <th scope="col" style="width: 20%;">Created at</th>
                                     <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
                                     <th scope="col" style="width: 10%;">Action</th>
                                 </tr>
                             </thead>
                             <tbody style="table-layout: fixed;">
-
                                 <?php
 
                                 //counter variable
                                 $counter = 1;
 
+                                
                                 while ($row = $result->fetch_assoc()) {
+
+
+                                    //dexlare variable for box_id
+
                                     echo "<tr>";
                                     echo "<tr>";
                                     echo "<td>" . $counter++ . "</td>";
@@ -561,6 +565,19 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
 
                                     echo "<td>" . ($row["box_id"]) . "</td>";
 
+                                 //get specific company id   
+                                $comp_item=$row['companiID_FK'];
+
+                                //show company name of box
+                                $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_item'";
+                                $result3 = $conn->query($sql3);
+                                if($result->num_rows>0){
+                                    $row3= $result3->fetch_assoc();
+                                    $comp_name=$row3['comp_name'];
+                                }
+
+
+                                    echo "<td>" . $comp_name. "</td>";
                                     
 
                                     echo "<td>" . ($row["created_at"]) . "</td>";

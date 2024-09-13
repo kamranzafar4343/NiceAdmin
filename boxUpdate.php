@@ -630,7 +630,7 @@ End Search Bar -->
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/update.png.png" alt="network-logo" width="50" height="50" />
-        <h2>Update item</h2>
+        <h2>Update box</h2>
     </div>
     <!-- End Header form -->
 

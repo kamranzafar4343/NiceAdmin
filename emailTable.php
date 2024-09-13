@@ -20,7 +20,6 @@ if (isset($_POST['send_email'])) {
         $tableHTML = "<table border='1' cellpadding='10' cellspacing='0'>
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Company Name</th>
                             <th>Phone</th>
                             <th>Email</th>
@@ -34,9 +33,8 @@ if (isset($_POST['send_email'])) {
                     <tbody>";
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $counter = 1;
+
             $tableHTML .= "<tr>
-                          <td>{$counter}</td>
                           <td>{$row['comp_name']}</td>
                           <td>{$row['phone']}</td>
                           <td>{$row['email']}</td>
@@ -46,7 +44,7 @@ if (isset($_POST['send_email'])) {
                           <td>{$row['registration']}</td>
                           <td>{$row['expiry']}</td>
                           </tr>";
-                          $counter++; // Increment the counter for each row
+                        
         }
 
         $tableHTML .= "</tbody></table>";

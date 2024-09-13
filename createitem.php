@@ -3,7 +3,6 @@
 // session_start(); // Start the session
 session_start();
 
-
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
     // If not logged in, redirect to login page
@@ -24,6 +23,7 @@ if ($resultData->num_rows > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
     $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
     $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
     $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
@@ -35,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nameCheck = "SELECT * FROM `item` WHERE `item_name` = '$item_name' AND `barcode`='$barcode'";
     $nameCheckResult = $conn->query($nameCheck);
 
+
+    //2 in 1 approach 
     if ($nameCheckResult->num_rows > 0) {
         die("Error: The item name '$item_name' and barcode '$barcode' already exists.");
     }
@@ -47,6 +49,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+
+
+    //for auto selection of companies, branch, box dropdown
+
+
+    if (isset($_POST['cancelAutoSelection'])) {
+        // Unset session data to cancel auto-selection
+        unset($_SESSION['last_company'], $_SESSION['last_branch'], $_SESSION['last_box']);
+    } else {
+        // Store the selected values in session variables
+        $_SESSION['last_company'] = $_POST['comp_FK_item'];
+        $_SESSION['last_branch'] = $_POST['branch_FK_item'];
+        $_SESSION['last_box'] = $_POST['box_FK_item'];
+    }
+
+    // Set default values for the company, branch, and box dropdowns
+    $selected_company = isset($_SESSION['last_company']) ? $_SESSION['last_company'] : '';
+    $selected_branch = isset($_SESSION['last_branch']) ? $_SESSION['last_branch'] : '';
+    $selected_box = isset($_SESSION['last_box']) ? $_SESSION['last_box'] : '';
+
+
 
     $conn->close();
 }
@@ -424,34 +447,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="checkbox" id="cancelAutoSelection" name="cancelAutoSelection">
                     <label for="cancelAutoSelection">Cancel Auto-Selection</label>
 
+                    <!-- Select Company -->
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>
                         <select id="company" class="form-select" name="comp_FK_item" required>
-                            <option value=""> Select a Company </option>
-
+                            <option value="">Select a Company</option>
                             <?php
-
-                            //fetch companies
                             $result = $conn->query("SELECT comp_id, comp_name FROM compani");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                                $selected = ($row['comp_id'] == $selected_company) ? 'selected' : '';
+                                echo "<option value='{$row['comp_id']}' $selected>{$row['comp_name']}</option>";
                             }
                             ?>
-
                         </select>
                     </div>
 
+                    <!-- Select Branch -->
                     <div class="col-md-6">
                         <label for="branch">Select a Branch:</label>
                         <select id="branch" class="form-select" name="branch_FK_item" required>
                             <option value="">Select a Branch</option>
+                            <!-- The options will be populated via AJAX based on the selected company -->
                         </select>
                     </div>
 
+                    <!-- Select Box -->
                     <div class="col-md-6">
                         <label for="box">Select Box:</label>
                         <select id="box" class="form-select" name="box_FK_item" required>
                             <option value="">Select a Box</option>
+                            <!-- The options will be populated via AJAX based on the selected branch -->
                         </select>
                     </div>
 

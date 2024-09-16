@@ -9,6 +9,7 @@ if (!isset($_SESSION['email'])) {
     header("Location: pages-login.php");
     exit();
 }
+
 include 'db.php'; // Include the database connection
 
 $email = $_SESSION['email'];
@@ -526,19 +527,19 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
                     <?php
                     if ($result->num_rows > 0) {
                     ?>
-                        <table class="table table-borderless datatable mt-4" style="table-layout: fixed;">
+                        <table class="table datatable mt-4" style="table-layout: fixed;">
                             <thead>
-                                <tr>    
+                                <tr>
                                     <th scope="col" style="width: 8%;">Box ID</th>
                                     <th scope="col" style="width: 14%;">Box name</th>
                                     <th scope="col" style="width: 14%;">Company</th>
                                     <th scope="col" style="width: 14%;">Branch</th>
                                     <!-- <th scope="col" style="width: 24%;">Company Name</th> -->
                                     <th scope="col" style="width: 14%;">Created at</th>
-                                    <th scope="col" style="width: 14%;">Receive Date</th>
-                                    <th scope="col" style="width: 10%;">Sender</th>
-                                    <th scope="col" style="width: 14%;">Received via</th>
-                                    
+                                    <!-- <th scope="col" style="width: 14%;">Receive Date</th> -->
+                                    <!-- <th scope="col" style="width: 10%;">Sender</th>
+                                    <th scope="col" style="width: 14%;">Received via</th> -->
+
                                     <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
                                     <th scope="col" style="width: 10%;">Action</th>
                                 </tr>
@@ -549,7 +550,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
                                 //counter variable
                                 $counter = 1;
 
-                                
+
                                 while ($row = $result->fetch_assoc()) {
 
 
@@ -560,45 +561,45 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
                                     echo "<td>" . ($row["box_id"]) . "</td>";
                                 ?>
                                     <td>
-                                        <?php echo $row['box_name']; ?>
+                                        <a class="text-primary fw-bold" href="boxInfo.php?id=<?php echo $row['box_id']; ?>">
+                                            <?php echo $row['box_name']; ?>
+                                        </a>
                                     </td>
                                     <?php
 
-                                    
+                                    //get specific company id   
+                                    $comp_id = $row['companiID_FK'];
 
-                                 //get specific company id   
-                                $comp_id=$row['companiID_FK'];
-
-                                //show company name of box
-                                $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
-                                $result3 = $conn->query($sql3);
-                                if($result3->num_rows>0){
-                                    $row3= $result3->fetch_assoc();
-                                    $comp_name=$row3['comp_name'];
-                                }
+                                    //show company name of box
+                                    $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
+                                    $result3 = $conn->query($sql3);
+                                    if ($result3->num_rows > 0) {
+                                        $row3 = $result3->fetch_assoc();
+                                        $comp_name = $row3['comp_name'];
+                                    }
 
 
-                                    echo "<td>" . $comp_name. "</td>";
+                                    echo "<td>" . $comp_name . "</td>";
 
 
-                                     //get specific branch id   
-                                $branch_id=$row['branchID_FK'];
+                                    //get specific branch id   
+                                    $branch_id = $row['branchID_FK'];
 
-                                //show branch name of box
-                                $sql7 = "SELECT * FROM branch WHERE branch_id= '$branch_id'";
-                                $result7 = $conn->query($sql7);
-                                if($result7->num_rows>0){
-                                    $row7= $result7->fetch_assoc();
-                                    $branch_name=$row7['branch_name'];
-                                }
+                                    //show branch name of box
+                                    $sql7 = "SELECT * FROM branch WHERE branch_id= '$branch_id'";
+                                    $result7 = $conn->query($sql7);
+                                    if ($result7->num_rows > 0) {
+                                        $row7 = $result7->fetch_assoc();
+                                        $branch_name = $row7['branch_name'];
+                                    }
 
-                                    echo "<td>" . $branch_name. "</td>";
-                                    
+                                    echo "<td>" . $branch_name . "</td>";
+
 
                                     echo "<td>" . ($row["created_at"]) . "</td>";
-                                    echo "<td>" . ($row["rec_date"]) . "</td>";
-                                    echo "<td>" . ($row["sender"]) . "</td>";
-                                    echo "<td>" . ($row["rec_via"]) . "</td>";
+                                    // echo "<td>" . ($row["rec_date"]) . "</td>";
+                                    // echo "<td>" . ($row["sender"]) . "</td>";
+                                    // echo "<td>" . ($row["rec_via"]) . "</td>";
                                     // echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
                                     ?>
                                     <td>

@@ -47,7 +47,6 @@ $result = $conn->query($sql);
 
     <title>items</title>
 
-
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
@@ -573,7 +572,7 @@ $result = $conn->query($sql);
                         <?php
                         if ($result->num_rows > 0) {
                         ?>
-                            <table class="table table-borderless datatable mt-4" style="table-layout: fixed;">
+                            <table class="table datatable mt-4" style="table-layout: fixed;">
                                 <thead>
                                     <tr>
                                         <th scope="col" style="width: 10%;">#</th>

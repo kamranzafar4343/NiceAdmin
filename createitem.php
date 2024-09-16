@@ -50,27 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
-
-    //for auto selection of companies, branch, box dropdown
-
-
-    if (isset($_POST['cancelAutoSelection'])) {
-        // Unset session data to cancel auto-selection
-        unset($_SESSION['last_company'], $_SESSION['last_branch'], $_SESSION['last_box']);
-    } else {
-        // Store the selected values in session variables
-        $_SESSION['last_company'] = $_POST['comp_FK_item'];
-        $_SESSION['last_branch'] = $_POST['branch_FK_item'];
-        $_SESSION['last_box'] = $_POST['box_FK_item'];
-    }
-
-    // Set default values for the company, branch, and box dropdowns
-    $selected_company = isset($_SESSION['last_company']) ? $_SESSION['last_company'] : '';
-    $selected_branch = isset($_SESSION['last_branch']) ? $_SESSION['last_branch'] : '';
-    $selected_box = isset($_SESSION['last_box']) ? $_SESSION['last_box'] : '';
-
-
-
     $conn->close();
 }
 
@@ -441,12 +420,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="card-body">
                 <br>
                 <!-- Multi Columns Form -->
-                <form class="row g-3 needs-validation" id="addItemForm" action="" method="POST" enctype="multipart/form-data">
-
-                    <!-- Checkbox to cancel auto-selection -->
-                    <input type="checkbox" id="cancelAutoSelection" name="cancelAutoSelection">
-                    <label for="cancelAutoSelection">Cancel Auto-Selection</label>
-
+                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
                     <!-- Select Company -->
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>

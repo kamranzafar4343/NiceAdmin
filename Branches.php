@@ -460,7 +460,6 @@ if ($result2->num_rows > 0) {
 
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
-
     <!--new table design-->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
     <!-- 

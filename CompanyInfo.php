@@ -14,13 +14,13 @@ include 'db.php';
 
 $email = $_SESSION['email'];
 //get user name and email from register table
- $getAdminData = "SELECT * FROM register WHERE email = '$email'";
- $resultData = mysqli_query($conn, $getAdminData);
- if($resultData ->num_rows > 0){
-  $row2= $resultData->fetch_assoc();
-  $adminName= $row2['name'];
-  $adminEmail=$row2['email'];
- }
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+$resultData = mysqli_query($conn, $getAdminData);
+if ($resultData->num_rows > 0) {
+  $row2 = $resultData->fetch_assoc();
+  $adminName = $row2['name'];
+  $adminEmail = $row2['email'];
+}
 
 $result = [];
 $company_data = null;
@@ -31,6 +31,14 @@ $company_id = $_GET['id'];
 $sql = "SELECT * FROM compani WHERE comp_id = $company_id";
 $result = $conn->query($sql);
 $company_data = $result->fetch_assoc();
+
+
+//fetch employee table
+$emp_sql = "Select * from employee where comp_FK_emp = $company_id";
+$result_emp = $conn->query($emp_sql);
+$emp_data = $result_emp->fetch_assoc();
+
+
 ?>
 
 
@@ -261,6 +269,13 @@ $company_data = $result->fetch_assoc();
       display: none;
       /* Hide the file input */
     }
+
+    /*Employee header*/
+    .headerSetting{
+      display: flex;
+      gap: 250px;
+    }
+
   </style>
 
   <!-- Template Main CSS File -->
@@ -421,10 +436,6 @@ $company_data = $result->fetch_assoc();
     </div>
     </div>
 
-    <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-      <br>
-    <?php endif; ?>
-
     <!-- Main content container -->
     <div class="d-flex flex-wrap">
 
@@ -479,45 +490,109 @@ $company_data = $result->fetch_assoc();
       </div>
 
       <!-- Table container -->
-      <div class="col-md-6 col-lg-8">
-        <?php
-        // if ($result->num_rows > 0) {
-        //   echo "<table class='datatable custom' style='background-color: #ffffff;'><thead><tr>";
-        //   echo "<th class='custom-header'>Company#</th>
-        // <th class='custom-header'>Branch#</th>
-        // <th class='custom-header'>Representative</th>
-        // <th class='custom-header'>Resignation</th>
-        // <th class='custom-header'>Phone</th>
-        // <th class='custom-header'>City</th>
-        // <th class='custom-header'>State</th>
-        // <th class='custom-header'>Country</th>
-        // <th class='custom-header'>Action</th>";
-        //   echo "</tr></thead><tbody>";
+       
+      <div class="col-md-7 col-lg-8 mt-4">
+        <div class="cardBranch recent-sales overflow-auto">
+          <div class="card-body" style="font-size: 0.8rem; ">
+          <div class="headerSetting">
+            <h5 class="card-title">List of employees</h5>
+          <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createEmployee.php?id=<?php echo $company_id;?>'" class="btn btn-primary mb-3">Add Employee</button>
+          </div>
+            <?php
+            if ($result_emp->num_rows > 0) {
+            ?>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">name</th>
+                    <th scope="col">email</th>
+                    <th scope="col">phone</th>
+                    <!-- <th scope="col" >Branch</th> -->
+                    <!-- <th scope="col" style="width: 24%;">Company Name</th> -->
+                    <th scope="col">Gender</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Authority</th>
+                    <!-- <th scope="col" >Received</th> -->
+                    <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody style="table-layout: fixed;">
+                  <?php
 
-        // while ($row = $result->fetch_assoc()) {
-        //   echo "<tr>";
-        //   echo "<td>" . htmlspecialchars($row["compID_FK"]) . "</td>";
-        //   echo "<td>" . htmlspecialchars($row["branch_id"]) . "</td>";
-        //   echo "<td>" . htmlspecialchars($row["ContactPersonName"]) . "</td>";
-        //   echo "<td>" . htmlspecialchars($row["ContactPersonResignation"]) . "</td>";
-        //   echo "<td>" . htmlspecialchars($row["ContactPersonPhone"]) . "</td>";
-        //   echo "<td>" . htmlspecialchars($row["City"]) . "</td>";
-        //   echo "<td>" . htmlspecialchars($row["State"]) . "</td>";
-        //   echo "<td>" . htmlspecialchars($row["Country"]) . "</td>";
-        ?>
-        <!-- <td>
-              <a class="btn btn-danger" href="branchDelete.php?id=<?php echo $row['compID_FK']; ?>">Delete</a>
-            </td> -->
-        <?php
-        //     echo "</tr>";
-        //   }
+                  //counter variable
+                  $counter = 1;
 
-        //   echo "</tbody></table>";
-        // } else {
-        //   echo "";
-        // }
-        ?>
+                  while ($emp_data = $result_emp->fetch_assoc()) {
+
+                    //dexlare variable for box_id
+
+                    echo "<tr>";
+                    echo "<tr>";
+                    echo "<td>" . ($emp_data["name"]) . "</td>";
+
+                    // //get specific company id   
+                    // $comp_id = $row['companiID_FK'];
+
+                    // //show company name of box
+                    // $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
+                    // $result3 = $conn->query($sql3);
+                    // if ($result3->num_rows > 0) {
+                    //   $row3 = $result3->fetch_assoc();
+                    //   $comp_name = $row3['comp_name'];
+                    // }
+
+
+                    // echo "<td>" . $comp_name . "</td>";
+
+
+                    // //get specific branch id   
+                    // $branch_id = $row['branchID_FK'];
+
+                    // //show branch name of box
+                    // $sql7 = "SELECT * FROM branch WHERE branch_id= '$branch_id'";
+                    // $result7 = $conn->query($sql7);
+                    // if ($result7->num_rows > 0) {
+                    //   $row7 = $result7->fetch_assoc();
+                    //   $branch_name = $row7['branch_name'];
+                    // }
+
+                    // echo "<td>" . $branch_name . "</td>";
+                    echo "<td>" . ($emp_data["email"]) . "</td>";
+                    echo "<td>" . ($emp_data["phone"]) . "</td>";
+                    echo "<td>" . ($emp_data["gender"]) . "</td>";
+                    echo "<td>" . ($emp_data["Address"]) . "</td>";
+                    echo "<td>" . ($emp_data["Authority"]) . "</td>";
+                    // echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
+                  ?>
+                    <td>
+
+                      <div style="display: flex; gap: 10px;">
+                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="boxUpdate.php?id=<?php echo $row['box_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+
+                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                          onclick="return confirm('Are you sure you want to delete this record?');" href="boxDelete.php?id=<?php echo $row['box_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                      </div>
+                    </td>
+                    </tr>
+                  <?php
+                  }
+                  ?>
+                </tbody>
+              </table>
+            <?php
+            }
+            else{
+
+              echo '<br>';
+              echo'No Employees found for Company '. '<b>'. $company_data['comp_name'] .'<b>';
+            }
+            ?>
+          </div>
+        </div>
       </div>
+
+    </div>
 
     </div>
     <!-- End d-flex container -->

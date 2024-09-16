@@ -1,8 +1,6 @@
 <?php
-
 // session_start(); // Start the session
 session_start();
-
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
   // If not logged in, redirect to login page
@@ -10,45 +8,39 @@ if (!isset($_SESSION['email'])) {
   exit();
 }
 
-$email = $_SESSION['email'];
-//get user name and email from register table
- $getAdminData = "SELECT * FROM register WHERE email = '$email'";
- $resultData = mysqli_query($conn, $getAdminData);
- if($resultData ->num_rows > 0){
-  $row2= $resultData->fetch_assoc();
-  $adminName= $row2['name'];
-  $adminEmail=$row2['email'];
- }
+// $email = $_SESSION['email'];
+// //get user name and email from register table
+// $getAdminData = "SELECT * FROM register WHERE email = '$email'";
+// $resultData = mysqli_query($conn, $getAdminData);
+// if ($resultData->num_rows > 0) {
+//   $row2 = $resultData->fetch_assoc();
+//   $adminName = $row2['name'];
+//   $adminEmail = $row2['email'];
+// }
+
+
+include "db.php";
+
 
 // Retrieve company ID from URL
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-include "db.php";
 
-// Validate company ID
-$companyQuery = "SELECT comp_id, comp_name FROM compani WHERE comp_id = $company_id";
-$companyResult = $conn->query($companyQuery);
-
-if ($companyResult->num_rows === 0) {
-  die("Error: Company ID does not exist.");
-}
 
 if (isset($_POST['submit'])) {
-  $branch_name = mysqli_real_escape_string($conn, $_POST['branch_name']);
-  $contactPersonName = mysqli_real_escape_string($conn, $_POST['ContactPersonName']);
-  $contactPersonPhone = mysqli_real_escape_string($conn, $_POST['ContactPersonPhone']);
-  $contactPersonResignation = mysqli_real_escape_string($conn, $_POST['ContactPersonResignation']);
-  $city = mysqli_real_escape_string($conn, $_POST['City']);
-  $state = mysqli_real_escape_string($conn, $_POST['State']);
-  $country = mysqli_real_escape_string($conn, $_POST['Country']);
+  $emp_name = mysqli_real_escape_string($conn, $_POST['employee_name']);
+  $emp_phone = mysqli_real_escape_string($conn, $_POST['phone']);
+  $emp_email = mysqli_real_escape_string($conn, $_POST['email']);
+  $emp_gender = mysqli_real_escape_string($conn, $_POST['gender']);
+  $emp_address = mysqli_real_escape_string($conn, $_POST['address']);
+  $emp_role = mysqli_real_escape_string($conn, $_POST['role']);
 
-  $sql = "INSERT INTO branch (compID_FK, branch_name, ContactPersonName, ContactPersonPhone, ContactPersonResignation, Country, State, City) 
-            VALUES ('$company_id', '$branch_name', '$contactPersonName', '$contactPersonPhone', '$contactPersonResignation', '$country', '$state', '$city')";
+  $sql = "INSERT INTO employee (name, phone, email, gender, Address, Authority) 
+            VALUES ('$emp_name', '$emp_phone', '$emp_email', '$emp_gender', '$emp_address', '$emp_role')";
 
   if ($conn->query($sql) === TRUE) {
-    header("Location: Branches.php?id=" . $company_id);
+    header("Location: companyInfo?id=". $company_id);
     exit; // Ensure script ends after redirect
-    echo "success";
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
@@ -427,8 +419,8 @@ End Search Bar -->
 <body>
 
   <div class="headerimg text-center">
-    <img src="image/create.png" alt="network-logo" width="50" height="50">
-    <h2>Create Branch</h2>
+    <img src="image/add-employee-icon.png" alt="network-logo" width="50" height="50">
+    <h2>Create Employee</h2>
   </div>
   <!-- End Header form -->
   <div class="container d-flex justify-content-center">
@@ -439,54 +431,53 @@ End Search Bar -->
         <!-- Multi Columns Form -->
         <form class="row g-3 p-3" action="#" method="POST">
           <!-- Company ID input (readonly) -->
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <label class="form-label">Company ID</label>
-            <input type="text" class="form-control" name="compID_FK" value="<?php echo htmlspecialchars($company_id); ?>" readonly>
-          </div>
+            <input type="text" class="form-control" name="compID_FK" value="" readonly>
+          </div> -->
 
           <div class="col-md-6">
-            <label class="form-label">Branch Name</label>
-            <input type="text" class="form-control" name="branch_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>
+            <label class="form-label">Employee Name</label>
+            <input type="text" class="form-control" name="employee_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>
           </div>
           <div class="col-md-6">
-            <label class="form-label">Contact Person Name</label>
-            <input type="text" class="form-control" name="ContactPersonName" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" id="email" required>
           </div>
           <div class="col-md-6">
-            <label class="form-label">Contact Person Phone</label>
-            <input type="text" class="form-control" name="ContactPersonPhone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" required>
+            <label class="form-label">Phone</label>
+            <input type="text" class="form-control" name="phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" required>
           </div>
           <div class="col-md-6">
-            <label class="form-label">Contact Person Resignation</label>
-            <input type="text" class="form-control" name="ContactPersonResignation" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="25" title="only letters ; at least 3" required>
-          </div>
-          <div class="col-md-6">
-            <label for="country" class="form-label">Country</label>
-            <select class="form-select" id="country" name="Country" required>
-              <option value="">Select Country</option>
-              <option value="Pakistan">Pakistan</option>
-              <option value="USA">USA</option>
-              <option value="Canada">Canada</option>
-              <option value="UK">UK</option>
+            <label for="country" class="form-label">Role</label>
+            <select class="form-select" id="role" name="role" required>
+              <option value="">Select Role</option>
+              <option value="ceo">CEO</option>
+              <option value="cfo">CFO</option>
+              <option value="cto">CTO</option>
+              <option value="hr">HR</option>
+              <option value="product-manager">product manager</option>
+              <option value="sales-manager">sales manager</option>
+              <option value="IT-manager">IT manager</option>
               <!-- Add more countries as needed -->
             </select>
           </div>
 
           <div class="col-md-6">
-            <label for="state" class="form-label">State</label>
-            <select class="form-select" id="state" name="State" required>
-              <option value="">Select State</option>
-              <!-- Options will be dynamically populated based on selected country -->
-            </select>
+            <label for="">Select Gender:</label>
+            <input type="radio" id="male" name="gender" value="male">
+            <label for="male">Male</label><br>
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Female</label><br>
+            <input type="radio" id="other" name="gender" value="other">
+            <label for="other">Other</label>
           </div>
 
           <div class="col-md-6">
-            <label for="city" class="form-label">City</label>
-            <select class="form-select" id="city" name="City" required>
-              <option value="">Select City</option>
-              <!-- Options will be dynamically populated based on selected state -->
-            </select>
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control" name="address" required>
           </div>
+          
           <div class="col-12 d-flex justify-content-center">
             <button type="submit" class="btn btn-outline-primary" name="submit" value="submit">Submit</button>
           </div>

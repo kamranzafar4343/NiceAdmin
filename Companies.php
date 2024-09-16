@@ -13,7 +13,6 @@ include "db.php"; // Include the database connection
 $sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
 $result = $conn->query($sql);
 
-
 $email = $_SESSION['email'];
 //get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
@@ -296,7 +295,6 @@ if ($resultData->num_rows > 0) {
                   echo "<td>" . $counter++ . "</td>";
                 ?>
                   <td>
-
                     <a class="text-primary fw-bold" href="CompanyInfo.php?id=<?php echo $row['comp_id']; ?>">
                       <?php echo $row['comp_name']; ?>
                     </a>

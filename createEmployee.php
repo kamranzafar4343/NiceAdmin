@@ -30,13 +30,15 @@ $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if (isset($_POST['submit'])) {
   $emp_name = mysqli_real_escape_string($conn, $_POST['employee_name']);
   $emp_phone = mysqli_real_escape_string($conn, $_POST['phone']);
+  $company_id = $_POST['company'];
+    $branch_id = $_POST['branch'];
   $emp_email = mysqli_real_escape_string($conn, $_POST['email']);
   $emp_gender = mysqli_real_escape_string($conn, $_POST['gender']);
   $emp_address = mysqli_real_escape_string($conn, $_POST['address']);
   $emp_role = mysqli_real_escape_string($conn, $_POST['role']);
 
-  $sql = "INSERT INTO employee (name, phone, email, gender, Address, Authority) 
-            VALUES ('$emp_name', '$emp_phone', '$emp_email', '$emp_gender', '$emp_address', '$emp_role')";
+  $sql = "INSERT INTO employee (name, phone, comp_FK_emp, branch_FK_emp, email, gender, Address, Authority) 
+            VALUES ('$emp_name', '$emp_phone', '$company_id', '$branch_id', '$emp_email', '$emp_gender', '$emp_address', '$emp_role')";
 
   if ($conn->query($sql) === TRUE) {
     header("Location: companyInfo?id=". $company_id);
@@ -55,7 +57,7 @@ if (isset($_POST['submit'])) {
 
 <head>
   <meta charset="UTF-8">
-  <title>Update Company</title>
+  <title>create employee</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 
@@ -305,34 +307,8 @@ End Search Bar -->
       </li><!-- End Search Icon-->
 
 
-      <li class="nav-item profileimage dropdown pe-3 mr-4">
-
-        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
-          <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
-        </a><!-- End Profile Image Icon -->
-
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-          <li class="dropdown-header">
-            <h6><?php echo $adminName ?></h6>
-            <span><?php echo $adminEmail ?></span>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-      </li>
-      <li>
-        <a class="dropdown-item d-flex align-items-center" href="logout.php">
-          <i class="bi bi-box-arrow-right"></i>
-          <span>Sign Out</span>
-        </a>
-      </li>
-
-    </ul><!-- End Profile Dropdown Items -->
-    </li><!-- End Profile Nav -->
-
     </ul>
-  </nav><!-- End Icons Navigation -->
+  </nav>
 
 </header><!-- End Header -->
 
@@ -437,6 +413,30 @@ End Search Bar -->
           </div> -->
 
           <div class="col-md-6">
+                        <label for="company">Select Company:</label>
+                        <select id="company" class="form-select" name="company" required>
+                            <option value=""> Select a Company </option>
+
+                            <?php
+
+                            //fetch companies
+                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                            }
+                            ?>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="branch">Select a Branch:</label>
+                        <select id="branch" class="form-select" name="branch" required>
+                            <option value="">Select a Branch</option>
+                        </select>
+                    </div>
+
+          <div class="col-md-6">
             <label class="form-label">Employee Name</label>
             <input type="text" class="form-control" name="employee_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>
           </div>
@@ -486,17 +486,107 @@ End Search Bar -->
     </div>
   </div>
 
-  <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
-    alert('Company Registered successfully!');
-    window.location.href = 'Companies.php';
-    <?php unset($_SESSION['data_inserted']); // Clear the session variable 
-    ?>
-  <?php elseif (isset($_SESSION['data_inserted']) && !$_SESSION['data_inserted']): ?>
-    alert('Failed to enter new data.');
-    <?php unset($_SESSION['data_inserted']); ?>
-  <?php endif; ?>
-
   <script>
+$(document).ready(function() {
+            // When company is changed, fetch the branches
+            $('#company').change(function() {
+                var company_id = $(this).val();
+
+                // AJAX request to get branches for the selected company
+                $.ajax({
+                    url: 'get_branches.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            var branches = JSON.parse(response);
+                            // Clear existing branches
+                            $('#branch').empty();
+                            $('#branch').append('<option value="">Select a Branch</option>');
+                            // Add the new options from the response
+                            $.each(branches, function(index, branch) {
+                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                            });
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const companySelect = document.getElementById('company');
+            const branchSelect = document.getElementById('branch');
+            const boxSelect = document.getElementById('box');
+
+            // Retrieve the previously selected company from localStorage
+            const selectedCompany = localStorage.getItem('selectedCompany');
+            if (selectedCompany) {
+                companySelect.value = selectedCompany;
+                loadBranches(selectedCompany); // Load branches based on the selected company
+            }
+
+            // Store the selected company in localStorage on change
+            companySelect.addEventListener('change', function() {
+                localStorage.setItem('selectedCompany', this.value);
+                loadBranches(this.value); // Load branches based on the new selection
+            });
+
+            // Retrieve the previously selected branch from localStorage
+            const selectedBranch = localStorage.getItem('selectedBranch');
+            if (selectedBranch) {
+                branchSelect.value = selectedBranch;
+            }
+
+            // Store the selected branch in localStorage on change
+            branchSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedBranch', this.value);
+                loadBoxes(this.value); // Load boxes based on the selected branch
+            });
+
+            // Retrieve the previously selected box from localStorage
+            const selectedBox = localStorage.getItem('selectedBox');
+            if (selectedBox) {
+                boxSelect.value = selectedBox;
+            }
+
+            // Store the selected box in localStorage on change
+            boxSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedBox', this.value);
+            });
+
+            // Function to load branches via AJAX
+            function loadBranches(company_id) {
+                $.ajax({
+                    url: 'get_branches.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            const branches = JSON.parse(response);
+                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
+                            branches.forEach(function(branch) {
+                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
+                            });
+
+                            // Set previously selected branch again, if available
+                            const selectedBranch = localStorage.getItem('selectedBranch');
+                            if (selectedBranch) {
+                                branchSelect.value = selectedBranch;
+                            }
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            }
+        });
+
     document.addEventListener('DOMContentLoaded', function() {
       const countryStateCityData = {
         Pakistan: {

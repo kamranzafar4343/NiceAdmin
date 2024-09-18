@@ -427,7 +427,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="card-body">
                 <br>
                 <!-- Multi Columns Form -->
-                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
+                <form class="row g-3 needs-validation" action="" method="POST">
 
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>
@@ -522,6 +522,75 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                 });
             });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const companySelect = document.getElementById('company');
+            const branchSelect = document.getElementById('branch');
+            const boxSelect = document.getElementById('box');
+
+            // Retrieve the previously selected company from localStorage
+            const selectedCompany = localStorage.getItem('selectedCompany');
+            if (selectedCompany) {
+                companySelect.value = selectedCompany;
+                loadBranches(selectedCompany); // Load branches based on the selected company
+            }
+
+            // Store the selected company in localStorage on change
+            companySelect.addEventListener('change', function() {
+                localStorage.setItem('selectedCompany', this.value);
+                loadBranches(this.value); // Load branches based on the new selection
+            });
+
+            // Retrieve the previously selected branch from localStorage
+            const selectedBranch = localStorage.getItem('selectedBranch');
+            if (selectedBranch) {
+                branchSelect.value = selectedBranch;
+            }
+
+            // Store the selected branch in localStorage on change
+            branchSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedBranch', this.value);
+                loadBoxes(this.value); // Load boxes based on the selected branch
+            });
+
+            // Retrieve the previously selected box from localStorage
+            const selectedBox = localStorage.getItem('selectedBox');
+            if (selectedBox) {
+                boxSelect.value = selectedBox;
+            }
+
+            // Store the selected box in localStorage on change
+            boxSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedBox', this.value);
+            });
+
+            // Function to load branches via AJAX
+            function loadBranches(company_id) {
+                $.ajax({
+                    url: 'get_branches.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            const branches = JSON.parse(response);
+                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
+                            branches.forEach(function(branch) {
+                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
+                            });
+
+                            // Set previously selected branch again, if available
+                            const selectedBranch = localStorage.getItem('selectedBranch');
+                            if (selectedBranch) {
+                                branchSelect.value = selectedBranch;
+                            }
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            }
         });
     </script>
 

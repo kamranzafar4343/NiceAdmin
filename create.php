@@ -15,13 +15,13 @@ include "db.php";
 
 $email = $_SESSION['email'];
 //get user name and email from register table
- $getAdminData = "SELECT * FROM register WHERE email = '$email'";
- $resultData = mysqli_query($conn, $getAdminData);
- if($resultData ->num_rows > 0){
-  $row2= $resultData->fetch_assoc();
-  $adminName= $row2['name'];
-  $adminEmail=$row2['email'];
- }
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+$resultData = mysqli_query($conn, $getAdminData);
+if ($resultData->num_rows > 0) {
+    $row2 = $resultData->fetch_assoc();
+    $adminName = $row2['name'];
+    $adminEmail = $row2['email'];
+}
 
 
 if (isset($_POST['submit'])) {
@@ -497,6 +497,10 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-6">
                         <label for="image" class="form-label" style="font-size: 0.8rem;">Image</label>
                         <input type="file" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
+                        <!-- Error messages -->
+                        <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
+                        <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
+                        <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
                     </div>
 
                     <div class="col-md-6">
@@ -628,6 +632,71 @@ if (isset($_POST['submit'])) {
             });
         });
     </script>
+    <script>
+    document.getElementById('image').addEventListener('change', function() {
+        const file = this.files[0];
+        const imageError = document.getElementById('image-error');
+        const sizeError = document.getElementById('size-error');
+        const dimensionError = document.getElementById('dimension-error');
+
+        // Reset error messages
+        imageError.style.display = 'none';
+        sizeError.style.display = 'none';
+        dimensionError.style.display = 'none';
+
+        if (file) {
+            const reader = new FileReader();
+
+            // Validate file size (2 MB limit)
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            if (file.size > maxSize) {
+                sizeError.style.display = 'block';
+                this.value = ''; // Clear the file input
+                return;
+            }
+
+            // Validate file header (magic number)
+            reader.onload = function(e) {
+                const header = new Uint8Array(e.target.result).subarray(0, 4);
+                let valid = false;
+
+                const jpg = header[0] === 0xFF && header[1] === 0xD8 && header[2] === 0xFF;
+                const png = header[0] === 0x89 && header[1] === 0x50 && header[2] === 0x4E && header[3] === 0x47;
+
+                if (jpg || png) {
+                    valid = true;
+                }
+
+                if (!valid) {
+                    imageError.style.display = 'block';
+                    document.getElementById('image').value = ''; // Clear the file input
+                    return;
+                } else {
+                    imageError.style.display = 'none';
+
+                    // Validate image dimensions
+                    const img = new Image();
+                    img.src = URL.createObjectURL(file);
+
+                    img.onload = function() {
+                        const maxWidth = 1024; // Example standard width
+                        const maxHeight = 768; // Example standard height
+
+                        if (img.width > maxWidth || img.height > maxHeight) {
+                            dimensionError.style.display = 'block';
+                            document.getElementById('image').value = ''; // Clear the file input
+                        } else {
+                            dimensionError.style.display = 'none';
+                        }
+                    };
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+    });
+</script>
+<!-- Validation Script of the header and the size of the image -->
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {
             searchable: false,

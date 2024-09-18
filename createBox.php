@@ -24,7 +24,6 @@ if ($resultData->num_rows > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $box_name = $_POST['box_name'];
     $company_id = $_POST['company'];
     $branch_id = $_POST['branch'];
     $barcode = $_POST['barcode'];
@@ -41,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     //insert data into box
-    $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via) VALUES ('$box_name', '$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via')";
+    $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via) VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via')";
 
     if ($conn->query($sql) === TRUE) {
         header("location: box.php");
@@ -427,7 +426,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="card-body">
                 <br>
                 <!-- Multi Columns Form -->
-                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
+                <form class="row g-3 needs-validation" action="" method="POST">
 
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>
@@ -454,16 +453,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
 
                     <div class="col-md-6">
-                        <label for="box_name" class="form-label">Box Name</label>
-                        <input type="text" class="form-control" name="box_name" id="box_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
-                        <div id="boxNameFeedback" class="invalid-feedback">
-                            <!-- Error message will be displayed here -->
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
                         <label for="rec_date">Receive date</label>
-                        <input type="datetime-local" class="form-control" name="rec_date">
+                        <input type="datetime-local" class="form-control" name="rec_date" required>
                     </div>
                     <div class="col-md-6">
                         <label for="sender">Sender</label>
@@ -472,7 +463,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     
                     <div class="col-md-6">
                         <label for="rec_via">Receive via</label>
-                        <input type="text" class="form-control" name="rec_via">
+                        <input type="text" class="form-control" name="rec_via" required>
                     </div>
                     
                     <div class="col-md-6">
@@ -522,6 +513,75 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                 });
             });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const companySelect = document.getElementById('company');
+            const branchSelect = document.getElementById('branch');
+            const boxSelect = document.getElementById('box');
+
+            // Retrieve the previously selected company from localStorage
+            const selectedCompany = localStorage.getItem('selectedCompany');
+            if (selectedCompany) {
+                companySelect.value = selectedCompany;
+                loadBranches(selectedCompany); // Load branches based on the selected company
+            }
+
+            // Store the selected company in localStorage on change
+            companySelect.addEventListener('change', function() {
+                localStorage.setItem('selectedCompany', this.value);
+                loadBranches(this.value); // Load branches based on the new selection
+            });
+
+            // Retrieve the previously selected branch from localStorage
+            const selectedBranch = localStorage.getItem('selectedBranch');
+            if (selectedBranch) {
+                branchSelect.value = selectedBranch;
+            }
+
+            // Store the selected branch in localStorage on change
+            branchSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedBranch', this.value);
+                loadBoxes(this.value); // Load boxes based on the selected branch
+            });
+
+            // Retrieve the previously selected box from localStorage
+            const selectedBox = localStorage.getItem('selectedBox');
+            if (selectedBox) {
+                boxSelect.value = selectedBox;
+            }
+
+            // Store the selected box in localStorage on change
+            boxSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedBox', this.value);
+            });
+
+            // Function to load branches via AJAX
+            function loadBranches(company_id) {
+                $.ajax({
+                    url: 'get_branches.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            const branches = JSON.parse(response);
+                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
+                            branches.forEach(function(branch) {
+                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
+                            });
+
+                            // Set previously selected branch again, if available
+                            const selectedBranch = localStorage.getItem('selectedBranch');
+                            if (selectedBranch) {
+                                branchSelect.value = selectedBranch;
+                            }
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            }
         });
     </script>
 

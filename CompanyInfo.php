@@ -496,12 +496,12 @@ $emp_data = $result_emp->fetch_assoc();
           <div class="card-body" style="font-size: 0.8rem;">
           <div class="headerSetting">
             <h5 class="card-title">List of employees</h5>
-          <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createEmployee.php?id=<?php echo $company_id;?>'" class="btn btn-primary mb-3">Add Employee</button>
+          <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createEmployee.php'" class="btn btn-primary mb-3">Add Employee</button>
           </div>
             <?php
             if ($result_emp->num_rows > 0) {
             ?>
-              <table class="table">
+              <table class="table datatable">
                 <thead>
                   <tr>
                     <th scope="col">name</th>
@@ -610,13 +610,6 @@ $emp_data = $result_emp->fetch_assoc();
   <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script>
-    const dataTable = new simpleDatatables.DataTable("#myTable2", {
-      searchable: false,
-      fixedHeight: true,
-    })
-  </script>
-
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>

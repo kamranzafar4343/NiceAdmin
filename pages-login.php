@@ -2,29 +2,29 @@
 session_start();
 include "db.php";
 
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-  // Get the user input
-  $email = $_POST['email'];
-  $password = $_POST['password'];
+  // Get the user input and escape it for security
+  $email = $conn->real_escape_string($_POST['email']);
+  $password = $conn->real_escape_string($_POST['password']);
 
-  // Query to check if the username and password are correct
+  // Query to check if the email and password are correct
   $result = $conn->query("SELECT * FROM register WHERE email='$email' AND password='$password'");
 
   // If a match is found, set the session
   if ($result->num_rows > 0) {
     $_SESSION['email'] = $email; // Set session variable
-
     header("Location: index.php"); // Redirect to the dashboard or home page
-
+    exit();
   } else {
-    die("Error: The email '$email' doesn'nt exist");
+    // Store the error message in a variable to use in the HTML
+    $error_message = "Invalid email or password!";
   }
 }
-
 ?>
+
+
+
 
 
 <!DOCTYPE html>
@@ -35,31 +35,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
   <title>Login</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Nunito|Poppins" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
-
-  <!--ALERTIFY CSS-->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
-  <!-- Bootstrap theme -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css" />
+  <!-- ALERTIFY CSS -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"/>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css"/>
 
   <style>
     .w-100 {
@@ -70,19 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
-  <style>
-    .logo img {
-      max-height: 50px;
-      margin-right: 11px;
-    }
-  </style>
 </head>
 
 <body>
 
   <main>
     <div class="container">
-
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
           <div class="row justify-content-center">
@@ -93,23 +71,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   <img src="assets/img/logo3.png" alt="">
                   <span class="d-none d-lg-block">FingerLog</span>
                 </a>
-              </div><!-- End Logo -->
+              </div>
 
               <div class="card mb-3">
-
                 <div class="card-body">
-
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
                     <p class="text-center small">Enter your email & password</p>
                   </div>
 
                   <form class="row g-3 needs-validation" method="POST" action="">
-
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>
                       <input type="email" name="email" class="form-control" id="yourEmail" required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                      <div class="invalid-feedback">Please enter a valid Email address!</div>
                     </div>
 
                     <div class="col-12">
@@ -117,40 +92,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                       <input type="password" name="password" class="form-control" id="yourPassword" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
+
                     <div class="col-6 d-flex">
                       <button class="btn btn-outline-primary w-100" type="submit" name="submit" value="submit">Login</button>
-                    </div>    
+                    </div>
                   </form>
                 </div>
-
-
               </div>
+
             </div>
           </div>
         </div>
     </div>
-
     </section>
-
-    </div>
-  </main><!-- End #main -->
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  </main>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="assets/vendor/echarts/echarts.min.js"></script>
-  <script src="assets/vendor/quill/quill.js"></script>
-  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
 
   <!-- ALERTIFY JavaScript -->
   <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+
+  <!-- Display Alertify Pop-up at the Top of the Page -->
+  <?php if (!empty($error_message)): ?>
+    <script>
+      // Set Alertify to display notifications at the top of the page
+      alertify.set('notifier','position', 'top-center');
+      alertify.error("<?= $error_message ?>");
+    </script>
+  <?php endif; ?>
 
 </body>
 

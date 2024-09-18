@@ -24,7 +24,6 @@ if ($resultData->num_rows > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $box_name = $_POST['box_name'];
     $company_id = $_POST['company'];
     $branch_id = $_POST['branch'];
     $barcode = $_POST['barcode'];
@@ -41,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     //insert data into box
-    $sql = "INSERT INTO box (box_name, companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via) VALUES ('$box_name', '$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via')";
+    $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via) VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via')";
 
     if ($conn->query($sql) === TRUE) {
         header("location: box.php");
@@ -454,16 +453,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
 
                     <div class="col-md-6">
-                        <label for="box_name" class="form-label">Box Name</label>
-                        <input type="text" class="form-control" name="box_name" id="box_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
-                        <div id="boxNameFeedback" class="invalid-feedback">
-                            <!-- Error message will be displayed here -->
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
                         <label for="rec_date">Receive date</label>
-                        <input type="datetime-local" class="form-control" name="rec_date">
+                        <input type="datetime-local" class="form-control" name="rec_date" required>
                     </div>
                     <div class="col-md-6">
                         <label for="sender">Sender</label>
@@ -472,7 +463,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     
                     <div class="col-md-6">
                         <label for="rec_via">Receive via</label>
-                        <input type="text" class="form-control" name="rec_via">
+                        <input type="text" class="form-control" name="rec_via" required>
                     </div>
                     
                     <div class="col-md-6">

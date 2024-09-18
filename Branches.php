@@ -479,10 +479,9 @@ if ($result2->num_rows > 0) {
                             <thead>
                                 <tr>
                                     <th scope="col">Branch Name</th>
-                                    <th scope="col">Contact Person</th>
+                                    <th scope="col">FOC</th>
                                     <th scope="col">Phone</th>
-                                    <th scope="col">Contact Person Resignation</th>
-
+                                    <th scope="col">FOC Role</th>
                                     <th scope="col">City</th>
                                     <th scope="col">State</th>
                                     <th scope="col">Country</th>

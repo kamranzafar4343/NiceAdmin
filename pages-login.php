@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="col-6 d-flex">
                       <button class="btn btn-outline-primary w-100" type="submit" name="submit" value="submit">Login</button>
-                    </div>
+                    </div>    
                   </form>
                 </div>
 

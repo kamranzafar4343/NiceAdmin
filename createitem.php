@@ -22,8 +22,9 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
     $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
     $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
     $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
@@ -31,10 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $status = mysqli_real_escape_string($conn, $_POST['status']);
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
+
     // Check if the box name and barcode already exists in the database
     $nameCheck = "SELECT * FROM `item` WHERE `item_name` = '$item_name' AND `barcode`='$barcode'";
     $nameCheckResult = $conn->query($nameCheck);
-
 
     //2 in 1 approach 
     if ($nameCheckResult->num_rows > 0) {
@@ -45,13 +46,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' ,'$item_name','$status', '$barcode')";
 
     if ($conn->query($sql) === TRUE) {
-        header("location: showItems.php");
+        header("location: createitem.php");
+        
+     $selected_company = isset($_POST['comp_FK_item']) ? $_POST['comp_FK_item'] : '';  // For company selection
+  
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
     $conn->close();
 }
+
+$selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
+
 
 ?>
 
@@ -419,17 +426,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <!-- <h5 class="card-title ml-4">Create Company </h5> -->
             <div class="card-body">
                 <br>
+                
                 <!-- Multi Columns Form -->
-                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
+                <form class="row g-3 needs-validation" action="" method="POST">
                     <!-- Select Company -->
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>
                         <select id="company" class="form-select" name="comp_FK_item" required>
                             <option value="">Select a Company</option>
                             <?php
+                            // Fetch the companies from the database
                             $result = $conn->query("SELECT comp_id, comp_name FROM compani");
                             while ($row = $result->fetch_assoc()) {
-                                $selected = ($row['comp_id'] == $selected_company) ? 'selected' : '';
                                 echo "<option value='{$row['comp_id']}' $selected>{$row['comp_name']}</option>";
                             }
                             ?>
@@ -470,16 +478,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div> -->
 
                     <div class="col-md-6">
-                        <label for="status" class="form-label">Item Condition</label>
-                        <select class="form-select" id="status" name="status">
-                            <option value="New">New</option>
-                            <option value="Second Hand">Second Hand</option>
-                            <option value="Damaged">Damaged</option>
-                            <option value="Defective">Defective</option>
-                            <option value="Used - Good">Used - Good</option>
-                            <option value="Used - Acceptable">Used - Acceptable</option>
-                        </select>
-                    </div>
+    <label for="status" class="form-label">Item Condition</label>
+    <select class="form-select" id="status" name="status">
+        <option value="New" <?php echo ($selected_status == 'New') ? 'selected' : ''; ?>>New</option>
+        <option value="Second Hand" <?php echo ($selected_status == 'Second Hand') ? 'selected' : ''; ?>>Second Hand</option>
+        <option value="Damaged" <?php echo ($selected_status == 'Damaged') ? 'selected' : ''; ?>>Damaged</option>
+        <option value="Defective" <?php echo ($selected_status == 'Defective') ? 'selected' : ''; ?>>Defective</option>
+        <option value="Used - Good" <?php echo ($selected_status == 'Used - Good') ? 'selected' : ''; ?>>Used - Good</option>
+        <option value="Used - Acceptable" <?php echo ($selected_status == 'Used - Acceptable') ? 'selected' : ''; ?>>Used - Acceptable</option>
+    </select>
+</div>
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
                         <input type="text" class="form-control" name="barcode" id="item_barcode">
@@ -517,7 +525,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script>
         $(document).ready(function() {
-
+       
             // When company is changed, fetch the branches
             $('#company').change(function() {
                 var company_id = $(this).val();
@@ -574,8 +582,194 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             });
         });
+    //     document.addEventListener('DOMContentLoaded', function () {
+    //     const companySelect = document.getElementById('company');
+    //     const branchSelect = document.getElementById('branch');
+
+    //     // Retrieve the previously selected company from localStorage
+    //     const selectedCompany = localStorage.getItem('selectedCompany');
+    //     if (selectedCompany) {
+    //         companySelect.value = selectedCompany;
+    //     }
+
+    //     // Store the selected company in localStorage on change
+    //     companySelect.addEventListener('change', function () {
+    //         localStorage.setItem('selectedCompany', this.value);
+    
+    //  // Retrieve the previously selected branch from localStorage
+    //  const selectedBranch = localStorage.getItem('selectedBranch');
+    //     if (selectedBranch) {
+    //         branchSelect.value = selectedBranch;
+    //     }
+
+    //     // Store the selected branch in localStorage on change
+    //     branchSelect.addEventListener('change', function () {
+    //         localStorage.setItem('selectedBranch', this.value);
+    //     });
+    //     });
+    // });
+
+    
+        // // Restore selected company and branch on page load
+        // window.onload = function() {
+        //     const selectedCompany = localStorage.getItem('selectedCompany');
+        //     const selectedBranch = localStorage.getItem('selectedBranch');
+
+        //     if (selectedCompany) {
+        //         document.getElementById('company').value = selectedCompany;
+        //         loadBranches(selectedCompany); // Load branches based on the company
+        //     }
+
+        //     if (selectedBranch) {
+        //         document.getElementById('branch').value = selectedBranch;
+        //         loadBoxes(selectedBranch); // Load boxes based on the branch
+        //     }
+        // };
+
+        // // Save selections to localStorage
+        // document.getElementById('company').addEventListener('change', function() {
+        //     const company = this.value;
+        //     localStorage.setItem('selectedCompany', company);
+        //     loadBranches(company);
+        // });
+
+        // document.getElementById('branch').addEventListener('change', function() {
+        //     const branch = this.value;
+        //     localStorage.setItem('selectedBranch', branch);
+        //     loadBoxes(branch);
+        // });
+
+        // // Function to load branches based on the selected company
+        // function loadBranches(companyId) {
+        //     if (companyId) {
+        //         const xhr = new XMLHttpRequest();
+        //         xhr.open('GET', 'getBranches.php?companyId=' + companyId, true);
+        //         xhr.onload = function() {
+        //             if (xhr.status === 200) {
+        //                 document.getElementById('branch').innerHTML = xhr.responseText;
+        //             }
+        //         };
+        //         xhr.send();
+        //     }
+        // }
+
+        // // Function to load boxes based on the selected branch
+        // function loadBoxes(branchId) {
+        //     if (branchId) {
+        //         const xhr = new XMLHttpRequest();
+        //         xhr.open('GET', 'getBoxes.php?branchId=' + branchId, true);
+        //         xhr.onload = function() {
+        //             if (xhr.status === 200) {
+        //                 document.getElementById('box').innerHTML = xhr.responseText;
+        //             }
+        //         };
+        //         xhr.send();
+        //     }
+        // }
     </script>
 
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        const companySelect = document.getElementById('company');
+        const branchSelect = document.getElementById('branch');
+const boxSelect=document.getElementById('box');
+        // Retrieve the previously selected company from localStorage
+        const selectedCompany = localStorage.getItem('selectedCompany');
+        if (selectedCompany) {
+            companySelect.value = selectedCompany;
+            loadBranches(selectedCompany);  // Load branches based on the selected company
+        }
+
+        // Store the selected company in localStorage on change
+        companySelect.addEventListener('change', function () {
+            localStorage.setItem('selectedCompany', this.value);
+            loadBranches(this.value);  // Load branches based on the new selection
+        });
+
+        // Retrieve the previously selected branch from localStorage
+        const selectedBranch = localStorage.getItem('selectedBranch');
+        if (selectedBranch) {
+            branchSelect.value = selectedBranch;
+        }
+
+        // Store the selected branch in localStorage on change
+        branchSelect.addEventListener('change', function () {
+            localStorage.setItem('selectedBranch', this.value);
+        });
+
+        // Retrieve the previously selected branch from localStorage
+        const selectedBox = localStorage.getItem('selectedBox');
+        if (selectedBox) {
+            boxSelect.value = selectedBox;
+        }
+
+        // Store the selected branch in localStorage on change
+        boxSelect.addEventListener('change', function () {
+            localStorage.setItem('selectedBox', this.value);
+        });
+
+        // Function to load branches via AJAX
+        function loadBranches(company_id) {
+            $.ajax({
+                url: 'get_branches.php',
+                type: 'POST',
+                data: {
+                    company_id: company_id
+                },
+                success: function (response) {
+                    try {
+                        var branches = JSON.parse(response);
+                        // Clear existing branches
+                        branchSelect.innerHTML = '<option value="">Select a Branch</option>';
+                        // Add the new options from the response
+                        branches.forEach(function (branch) {
+                            branchSelect.innerHTML += '<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>';
+                        });
+                        
+                        // If a branch was previously selected, set it again
+                        const selectedBranch = localStorage.getItem('selectedBranch');
+                        if (selectedBranch) {
+                            branchSelect.value = selectedBranch;
+                        }
+                    } catch (e) {
+                        console.error("Invalid JSON response", response);
+                    }
+                }
+            });
+        }
+        
+        // Function to load boxes via AJAX
+        function loadBoxes(company_id) {
+            $.ajax({
+                url: 'get_boxes.php',
+                type: 'POST',
+                data: {
+                    company_id: company_id
+                },
+                success: function (response) {
+                    try {
+                        var box = JSON.parse(response);
+                        // Clear existing boxs
+                        boxSelect.innerHTML = '<option value="">Select a box</option>';
+                        // Add the new options from the response
+                        br.forEach(function (branch) {
+                            branchSelect.innerHTML += '<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>';
+                        });
+                        
+                        // If a branch was previously selected, set it again
+                        const selectedBranch = localStorage.getItem('selectedBranch');
+                        if (selectedBranch) {
+                            branchSelect.value = selectedBranch;
+                        }
+                    } catch (e) {
+                        console.error("Invalid JSON response", response);
+                    }
+                }
+            });
+        }
+    });
+</script>
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {
             searchable: false,

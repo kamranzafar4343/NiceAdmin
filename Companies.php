@@ -273,7 +273,6 @@ if ($resultData->num_rows > 0) {
               <thead>
                 <tr>
                   <th scope="col" style="width:0%;">#</th>
-
                   <th scope="col" style="width:10%;">Name</th>
                   <th scope="col" style="width:12%;">Image</th>
                   <th scope="col" style="width:14%;">Phone</th>

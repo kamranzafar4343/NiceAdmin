@@ -444,12 +444,7 @@ $box_data = $result->fetch_assoc();
 
                     <div class="card-body list-group mt-3">
 
-                        <h4 class="card-title-info"><b><?php echo $box_data['box_name']; ?></b></h4>
-
-                        <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
-                            <li class="list-group-item" style="color:grey; width: 40%;">Box Name</li>
-                            <li class="list-group-item " style="text-align: right; width: 55%;"><?php echo $box_data['box_name']; ?></li>
-                        </ul>
+                        <h4 class="card-title-info"><b>Box Info</b></h4>
 
                         <ul class="list-group list-group-horizontal d-flex justify-content-between">
                             <li class="list-group-item" style="color:grey;  width: 35%;">Created_at</li>
@@ -460,7 +455,8 @@ $box_data = $result->fetch_assoc();
                             <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $box_data['rec_date']; ?></li>
                         </ul>
                         <ul class="list-group list-group-horizontal-md d-flex justify-content-between">
-                            <li class="list-group-item" style="color:grey; width:50%">Sender name</li>
+                            <!--change name to contact person or focal person-->
+                            <li class="list-group-item" style="color:grey; width:50%">Sender</li>
                             <li class="list-group-item" style="text-align: right;width: 55%;"><?php echo $box_data['sender']; ?></li>
                         </ul>
                         <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
@@ -483,7 +479,6 @@ $box_data = $result->fetch_assoc();
             </div>
 
         </div>
-
         </div>
         <!-- End d-flex container -->
     </main><!-- End #main -->

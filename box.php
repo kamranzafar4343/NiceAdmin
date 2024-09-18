@@ -531,7 +531,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
                             <thead>
                                 <tr>
                                     <th scope="col" style="width: 8%;">Box ID</th>
-                                    <th scope="col" style="width: 14%;">Box name</th>
+                                    <th scope="col" style="width: 14%;">Barcode</th>
                                     <th scope="col" style="width: 14%;">Company</th>
                                     <th scope="col" style="width: 14%;">Branch</th>
                                     <!-- <th scope="col" style="width: 24%;">Company Name</th> -->
@@ -562,7 +562,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
                                 ?>
                                     <td>
                                         <a class="text-primary fw-bold" href="boxInfo.php?id=<?php echo $row['box_id']; ?>">
-                                            <?php echo $row['box_name']; ?>
+                                            <?php echo $row['barcode']; ?>
                                         </a>
                                     </td>
                                     <?php

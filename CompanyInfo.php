@@ -493,7 +493,7 @@ $emp_data = $result_emp->fetch_assoc();
        
       <div class="col-md-7 col-lg-8 mt-4">
         <div class="cardBranch recent-sales overflow-auto">
-          <div class="card-body" style="font-size: 0.8rem; ">
+          <div class="card-body" style="font-size: 0.8rem;">
           <div class="headerSetting">
             <h5 class="card-title">List of employees</h5>
           <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createEmployee.php?id=<?php echo $company_id;?>'" class="btn btn-primary mb-3">Add Employee</button>

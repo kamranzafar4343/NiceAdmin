@@ -1,6 +1,6 @@
 <?php
 
-// session_start(); // Start the session
+// Start the session
 session_start();
 
 // Check if the user is logged in
@@ -10,10 +10,13 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-include 'db.php'; // Include the database connection
+// Include the database connection
+include 'db.php';
 
+// Get user email from session
 $email = $_SESSION['email'];
-//get user name and email from register table
+
+// Get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
@@ -519,105 +522,73 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
     <main id="main" class="main">
 
         <div class="col-12">
-
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
                     <h5 class="card-title">List of Boxes</h5>
 
                     <?php
                     if ($result->num_rows > 0) {
-                    ?>
-                        <table class="table datatable mt-4" style="table-layout: fixed;">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="width: 8%;">Box ID</th>
-                                    <th scope="col" style="width: 14%;">Barcode</th>
-                                    <th scope="col" style="width: 14%;">Company</th>
-                                    <th scope="col" style="width: 14%;">Branch</th>
-                                    <!-- <th scope="col" style="width: 24%;">Company Name</th> -->
-                                    <th scope="col" style="width: 14%;">Created at</th>
-                                    <!-- <th scope="col" style="width: 14%;">Receive Date</th> -->
-                                    <!-- <th scope="col" style="width: 10%;">Sender</th>
-                                    <th scope="col" style="width: 14%;">Received via</th> -->
+                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 8%;">Box ID</th>
+                            <th scope="col" style="width: 14%;">Barcode</th>
+                            <th scope="col" style="width: 14%;">Company</th>
+                            <th scope="col" style="width: 14%;">Branch</th>
+                            <th scope="col" style="width: 14%;">Created at</th>
+                            <th scope="col" style="width: 10%;">Status</th>
+                            <th scope="col" style="width: 10%;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody style="table-layout: fixed;">';
 
-                                    <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
-                                    <th scope="col" style="width: 10%;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody style="table-layout: fixed;">
-                                <?php
+                        // Counter variable
+                        $counter = 1;
 
-                                //counter variable
-                                $counter = 1;
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>' . ($row["box_id"]) . '</td>';
+                            echo '<td><a class="text-primary fw-bold" href="boxInfo.php?id=' . $row['box_id'] . '">' . $row['barcode'] . '</a></td>';
 
+                            // Get specific company id   
+                            $comp_id = $row['companiID_FK'];
+                            $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
+                            $result3 = $conn->query($sql3);
+                            if ($result3->num_rows > 0) {
+                                $row3 = $result3->fetch_assoc();
+                                $comp_name = $row3['comp_name'];
+                            }
+                            echo '<td>' . $comp_name . '</td>';
 
-                                while ($row = $result->fetch_assoc()) {
-
-
-                                    //dexlare variable for box_id
-
-                                    echo "<tr>";
-                                    echo "<tr>";
-                                    echo "<td>" . ($row["box_id"]) . "</td>";
-                                ?>
-                                    <td>
-                                        <a class="text-primary fw-bold" href="boxInfo.php?id=<?php echo $row['box_id']; ?>">
-                                            <?php echo $row['barcode']; ?>
-                                        </a>
-                                    </td>
-                                    <?php
-
-                                    //get specific company id   
-                                    $comp_id = $row['companiID_FK'];
-
-                                    //show company name of box
-                                    $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
-                                    $result3 = $conn->query($sql3);
-                                    if ($result3->num_rows > 0) {
-                                        $row3 = $result3->fetch_assoc();
-                                        $comp_name = $row3['comp_name'];
-                                    }
-
-
-                                    echo "<td>" . $comp_name . "</td>";
-
-
-                                    //get specific branch id   
-                                    $branch_id = $row['branchID_FK'];
-
-                                    //show branch name of box
-                                    $sql7 = "SELECT * FROM branch WHERE branch_id= '$branch_id'";
-                                    $result7 = $conn->query($sql7);
-                                    if ($result7->num_rows > 0) {
-                                        $row7 = $result7->fetch_assoc();
-                                        $branch_name = $row7['branch_name'];
-                                    }
-
-                                    echo "<td>" . $branch_name . "</td>";
-
-
-                                    echo "<td>" . ($row["created_at"]) . "</td>";
-                                    // echo "<td>" . ($row["rec_date"]) . "</td>";
-                                    // echo "<td>" . ($row["sender"]) . "</td>";
-                                    // echo "<td>" . ($row["rec_via"]) . "</td>";
-                                    // echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
-                                    ?>
-                                    <td>
-
-                                        <div style="display: flex; gap: 10px;">
-                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="boxUpdate.php?id=<?php echo $row['box_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-
-                                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                                onclick="return confirm('Are you sure you want to delete this record?');" href="boxDelete.php?id=<?php echo $row['box_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                        </div>
-                                    </td>
-                                    </tr>
-                                <?php
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    <?php
+                            // Get specific branch id   
+                            $branch_id = $row['branchID_FK'];
+                            $sql7 = "SELECT * FROM branch WHERE branch_id= '$branch_id'";
+                            $result7 = $conn->query($sql7);
+                            if ($result7->num_rows > 0) {
+                                $row7 = $result7->fetch_assoc();
+                                $branch_name = $row7['branch_name'];
+                            }
+                            echo '<td>' . $branch_name . '</td>';
+                            echo '<td>' . ($row["created_at"]) . '</td>';
+                            echo '<td><i class="';
+                            if ($row["status"] == 'In') {
+                                echo 'fas fa-check-circle text-success';
+                            } elseif ($row["status"] == 'Out') {
+                                echo 'fas fa-times-circle text-danger';
+                            } elseif ($row["status"] == 'Ready for Destroy') {
+                                echo 'fas fa-exclamation-triangle text-warning';
+                            }
+                            echo '"></i> ' . $row["status"] . '</td>';
+                            echo '<td>
+                        <div style="display: flex; gap: 10px;">
+                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="boxUpdate.php?id=' . $row['box_id'] . '"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                                onclick="return confirm(\'Are you sure you want to delete this record?\');" href="boxDelete.php?id=' . $row['box_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                        </div>
+                    </td>';
+                            echo '</tr>';
+                        }
+                        echo '</tbody></table>';
                     }
                     ?>
                 </div>

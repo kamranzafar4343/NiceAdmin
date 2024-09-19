@@ -1,8 +1,7 @@
 <?php
 
-// session_start(); // Start the session
+// Start the session
 session_start();
-
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
@@ -14,9 +13,11 @@ if (!isset($_SESSION['email'])) {
 include "db.php";
 
 $email = $_SESSION['email'];
-//get user name and email from register table
-$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+
+// Get user name and email from register table
+$getAdminData = "SELECT * FROM register WHERE email = '".mysqli_real_escape_string($conn, $email)."'";
 $resultData = mysqli_query($conn, $getAdminData);
+
 if ($resultData->num_rows > 0) {
     $row2 = $resultData->fetch_assoc();
     $adminName = $row2['name'];
@@ -24,23 +25,24 @@ if ($resultData->num_rows > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $company_id = $_POST['company'];
-    $branch_id = $_POST['branch'];
-    $barcode = $_POST['barcode'];
-    $rec_date= $_POST['rec_date'];
-    $sender=$_POST['sender'];
-    $rec_via=$_POST['rec_via'];
+    $company_id = mysqli_real_escape_string($conn, $_POST['company']);
+    $branch_id = mysqli_real_escape_string($conn, $_POST['branch']);
+    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
+    $rec_date = mysqli_real_escape_string($conn, $_POST['rec_date']);
+    $sender = mysqli_real_escape_string($conn, $_POST['sender']);
+    $rec_via = mysqli_real_escape_string($conn, $_POST['rec_via']);
+    $status = mysqli_real_escape_string($conn, $_POST['status']);
 
     // Check if the box name and barcode already exists in the database
-    $nameCheck = "SELECT * FROM `box` WHERE `box_name` = '$box_name' AND `barcode`='$barcode'";
+    $nameCheck = "SELECT * FROM `box` WHERE `barcode`='$barcode'";
     $nameCheckResult = $conn->query($nameCheck);
 
     if ($nameCheckResult->num_rows > 0) {
-        die("Error: The box name '$box_name' and barcode '$barcode' already exists.");
+        die("Error: The barcode '$barcode' already exists.");
     }
 
-    //insert data into box
-    $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via) VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via')";
+    // Insert data into box
+    $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via, status) VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via', '$status')";
 
     if ($conn->query($sql) === TRUE) {
         header("location: box.php");
@@ -459,7 +461,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-6">
                         <label for="sender">Sender</label>
                         <input type="text" class="form-control" name="sender">
-                        </div>
+                    </div>
                     
                     <div class="col-md-6">
                         <label for="rec_via">Receive via</label>
@@ -472,6 +474,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div id="barcodeFeedback" class="invalid-feedback">
                             <!-- Error message will be displayed here -->
                         </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="status">Status:</label>
+                        <select id="status" class="form-select" name="status" required>
+                            <option value="">Select Status</option>
+                            <option value="In">In</option>
+                            <option value="Out">Out</option>
+                            <option value="Ready for Destroy">Ready for Destroy</option>
+                        </select>
                     </div>
 
                     <div class="text-center mt-4 mb-2">

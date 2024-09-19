@@ -556,16 +556,53 @@ $result = $conn->query($sql);
 
     <div class="search-container">
         <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Enter item name or scan barcode..." autofocus>
+            <input type="text" id="searchInput" name="query" placeholder="Enter box name or scan barcode..." autofocus>
             <input type="submit" value="Search" class="btn btn-success btn-success">
         </form>
     </div>
 
     <main id="main" class="main">
-
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
+
+                    <h5 class="card-title">List of Items</h5>
+
+                    <?php if ($result->num_rows > 0) { ?>
+                        <table class="table datatable mt-4" style="table-layout: fixed;">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 10%;">#</th>
+                                    <th scope="col" style="width: 15%;">Item Name</th>
+                                    <th scope="col" style="width: 17%;">Box</th>
+                                    <th scope="col" style="width: 13%;">Condition</th>
+                                    <th scope="col" style="width: 20%;">Created at</th>
+                                    <th scope="col" style="width: 25%;">Barcode</th>
+                                    <th scope="col" style="width: 15%;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody style="table-layout: fixed;">
+
+                                <?php
+                                $counter = 1;
+                                while ($row = $result->fetch_assoc()) {
+                                    $box_id = $row['box_FK_item'];
+                                    $sql5 = "SELECT * FROM box WHERE box_id= '$box_id'";
+                                    $result5 = $conn->query($sql5);
+                                    $row5 = $result5->fetch_assoc();
+                                    $box_name = $row5['box_name'];
+                                ?>
+
+                                    <tr>
+                                        <td><?php echo $counter++; ?></td>
+                                        <td><?php echo $row["item_name"]; ?></td>
+                                        <td><?php echo $box_name; ?></td>
+                                        <td><span><?php echo $row["status"]; ?></span></td>
+                                        <td><?php echo $row["timestamp"]; ?></td>
+                                        <td>
+                                            <img class="barcode" alt="<?php echo $row["item_id"]; ?>" src="barcode.php?text=<?php echo urlencode($row["item_id"]); ?>&codetype=code128&orientation=horizontal&size=20&print=false" />
+                                        </td>
+
                     <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns search-results">
                         <h5 class="card-title">List of Items</h5>
 
@@ -616,36 +653,24 @@ $result = $conn->query($sql);
                                         echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
 
                                     ?>
+
                                         <td>
                                             <div style="display: flex; gap: 10px;">
-                                                <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="itemUpdate.php?id=<?php echo $row['item_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-
-                                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                                    onclick="return confirm('Are you sure you want to delete this record?');" href="itemDelete.php?id=<?php echo $row['item_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                                <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="itemUpdate.php?id=<?php echo $row['item_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="itemDelete.php?id=<?php echo $row['item_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                                             </div>
                                         </td>
-                                        </tr>
-                                    <?php
+                                    </tr>
 
+                                <?php } ?>
 
-                                    }
-                                    ?>
-
-                                </tbody>
-                            </table>
-                        <?php
-                        }
-
-                        ?>
-
-                    </div>
-
+                            </tbody>
+                        </table>
+                    <?php } ?>
                 </div>
             </div>
         </div>
-
-
-    </main><!-- End #main -->
+    </main>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->

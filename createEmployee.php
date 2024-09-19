@@ -31,7 +31,7 @@ if (isset($_POST['submit'])) {
   $emp_name = mysqli_real_escape_string($conn, $_POST['employee_name']);
   $emp_phone = mysqli_real_escape_string($conn, $_POST['phone']);
   $company_id = $_POST['company'];
-    $branch_id = $_POST['branch'];
+  $branch_id = $_POST['branch'];
   $emp_email = mysqli_real_escape_string($conn, $_POST['email']);
   $emp_gender = mysqli_real_escape_string($conn, $_POST['gender']);
   $emp_address = mysqli_real_escape_string($conn, $_POST['address']);
@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
             VALUES ('$emp_name', '$emp_phone', '$company_id', '$branch_id', '$emp_email', '$emp_gender', '$emp_address', '$emp_role')";
 
   if ($conn->query($sql) === TRUE) {
-    header("Location: companyInfo?id=". $company_id);
+    header("Location: companyInfo?id=" . $company_id);
     exit; // Ensure script ends after redirect
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
@@ -413,28 +413,28 @@ End Search Bar -->
           </div> -->
 
           <div class="col-md-6">
-                        <label for="company">Select Company:</label>
-                        <select id="company" class="form-select" name="company" required>
-                            <option value=""> Select a Company </option>
+            <label for="company">Select Company:</label>
+            <select id="company" class="form-select" name="company" required>
+              <option value=""> Select a Company </option>
 
-                            <?php
+              <?php
 
-                            //fetch companies
-                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
-                            }
-                            ?>
+              //fetch companies
+              $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+              while ($row = $result->fetch_assoc()) {
+                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+              }
+              ?>
 
-                        </select>
-                    </div>
+            </select>
+          </div>
 
-                    <div class="col-md-6">
-                        <label for="branch">Select a Branch:</label>
-                        <select id="branch" class="form-select" name="branch" required>
-                            <option value="">Select a Branch</option>
-                        </select>
-                    </div>
+          <div class="col-md-6">
+            <label for="branch">Select a Branch:</label>
+            <select id="branch" class="form-select" name="branch" required>
+              <option value="">Select a Branch</option>
+            </select>
+          </div>
 
           <div class="col-md-6">
             <label class="form-label">Employee Name</label>
@@ -464,7 +464,7 @@ End Search Bar -->
           </div>
 
           <div class="col-md-6">
-            <label for="">Select Gender:</label>
+            <label for="">Select Gender:</label><br>
             <input type="radio" id="male" name="gender" value="male">
             <label for="male">Male</label><br>
             <input type="radio" id="female" name="gender" value="female">
@@ -477,7 +477,7 @@ End Search Bar -->
             <label class="form-label">Address</label>
             <input type="text" class="form-control" name="address" required>
           </div>
-          
+
           <div class="col-12 d-flex justify-content-center">
             <button type="submit" class="btn btn-outline-primary" name="submit" value="submit">Submit</button>
           </div>
@@ -487,105 +487,105 @@ End Search Bar -->
   </div>
 
   <script>
-$(document).ready(function() {
-            // When company is changed, fetch the branches
-            $('#company').change(function() {
-                var company_id = $(this).val();
+    $(document).ready(function() {
+      // When company is changed, fetch the branches
+      $('#company').change(function() {
+        var company_id = $(this).val();
 
-                // AJAX request to get branches for the selected company
-                $.ajax({
-                    url: 'get_branches.php',
-                    type: 'POST',
-                    data: {
-                        company_id: company_id
-                    },
-                    success: function(response) {
-                        try {
-                            var branches = JSON.parse(response);
-                            // Clear existing branches
-                            $('#branch').empty();
-                            $('#branch').append('<option value="">Select a Branch</option>');
-                            // Add the new options from the response
-                            $.each(branches, function(index, branch) {
-                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
-                            });
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const companySelect = document.getElementById('company');
-            const branchSelect = document.getElementById('branch');
-            const boxSelect = document.getElementById('box');
-
-            // Retrieve the previously selected company from localStorage
-            const selectedCompany = localStorage.getItem('selectedCompany');
-            if (selectedCompany) {
-                companySelect.value = selectedCompany;
-                loadBranches(selectedCompany); // Load branches based on the selected company
+        // AJAX request to get branches for the selected company
+        $.ajax({
+          url: 'get_branches.php',
+          type: 'POST',
+          data: {
+            company_id: company_id
+          },
+          success: function(response) {
+            try {
+              var branches = JSON.parse(response);
+              // Clear existing branches
+              $('#branch').empty();
+              $('#branch').append('<option value="">Select a Branch</option>');
+              // Add the new options from the response
+              $.each(branches, function(index, branch) {
+                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+              });
+            } catch (e) {
+              console.error("Invalid JSON response", response);
             }
+          }
+        });
+      });
+    });
 
-            // Store the selected company in localStorage on change
-            companySelect.addEventListener('change', function() {
-                localStorage.setItem('selectedCompany', this.value);
-                loadBranches(this.value); // Load branches based on the new selection
-            });
+    document.addEventListener('DOMContentLoaded', function() {
+      const companySelect = document.getElementById('company');
+      const branchSelect = document.getElementById('branch');
+      const boxSelect = document.getElementById('box');
 
-            // Retrieve the previously selected branch from localStorage
-            const selectedBranch = localStorage.getItem('selectedBranch');
-            if (selectedBranch) {
+      // Retrieve the previously selected company from localStorage
+      const selectedCompany = localStorage.getItem('selectedCompany');
+      if (selectedCompany) {
+        companySelect.value = selectedCompany;
+        loadBranches(selectedCompany); // Load branches based on the selected company
+      }
+
+      // Store the selected company in localStorage on change
+      companySelect.addEventListener('change', function() {
+        localStorage.setItem('selectedCompany', this.value);
+        loadBranches(this.value); // Load branches based on the new selection
+      });
+
+      // Retrieve the previously selected branch from localStorage
+      const selectedBranch = localStorage.getItem('selectedBranch');
+      if (selectedBranch) {
+        branchSelect.value = selectedBranch;
+      }
+
+      // Store the selected branch in localStorage on change
+      branchSelect.addEventListener('change', function() {
+        localStorage.setItem('selectedBranch', this.value);
+        loadBoxes(this.value); // Load boxes based on the selected branch
+      });
+
+      // Retrieve the previously selected box from localStorage
+      const selectedBox = localStorage.getItem('selectedBox');
+      if (selectedBox) {
+        boxSelect.value = selectedBox;
+      }
+
+      // Store the selected box in localStorage on change
+      boxSelect.addEventListener('change', function() {
+        localStorage.setItem('selectedBox', this.value);
+      });
+
+      // Function to load branches via AJAX
+      function loadBranches(company_id) {
+        $.ajax({
+          url: 'get_branches.php',
+          type: 'POST',
+          data: {
+            company_id: company_id
+          },
+          success: function(response) {
+            try {
+              const branches = JSON.parse(response);
+              branchSelect.innerHTML = '<option value="">Select a Branch</option>';
+              branches.forEach(function(branch) {
+                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
+              });
+
+              // Set previously selected branch again, if available
+              const selectedBranch = localStorage.getItem('selectedBranch');
+              if (selectedBranch) {
                 branchSelect.value = selectedBranch;
+              }
+            } catch (e) {
+              console.error("Invalid JSON response", response);
             }
-
-            // Store the selected branch in localStorage on change
-            branchSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBranch', this.value);
-                loadBoxes(this.value); // Load boxes based on the selected branch
-            });
-
-            // Retrieve the previously selected box from localStorage
-            const selectedBox = localStorage.getItem('selectedBox');
-            if (selectedBox) {
-                boxSelect.value = selectedBox;
-            }
-
-            // Store the selected box in localStorage on change
-            boxSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBox', this.value);
-            });
-
-            // Function to load branches via AJAX
-            function loadBranches(company_id) {
-                $.ajax({
-                    url: 'get_branches.php',
-                    type: 'POST',
-                    data: {
-                        company_id: company_id
-                    },
-                    success: function(response) {
-                        try {
-                            const branches = JSON.parse(response);
-                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
-                            branches.forEach(function(branch) {
-                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
-                            });
-
-                            // Set previously selected branch again, if available
-                            const selectedBranch = localStorage.getItem('selectedBranch');
-                            if (selectedBranch) {
-                                branchSelect.value = selectedBranch;
-                            }
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            }
+          }
         });
+      }
+    });
 
     document.addEventListener('DOMContentLoaded', function() {
       const countryStateCityData = {

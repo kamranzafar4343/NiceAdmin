@@ -1,6 +1,10 @@
-<?php
+<?PHP
+
 // Start session
 session_start();
+
+
+
 
 // Check if user is logged in
 if (!isset($_SESSION['email'])) {
@@ -14,7 +18,7 @@ include 'db.php';
 // Check for POST request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get employee ID from hidden input field
-    $emp_id = $_POST['emp_id'];
+    $emp_id = mysqli_real_escape_string($conn, $_POST['emp_id']);
 
     // Get form data
     $employee_name = mysqli_real_escape_string($conn, $_POST['employee_name']);
@@ -35,9 +39,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         WHERE emp_id = $emp_id";
     // Execute query and handle result
     if ($conn->query($sql)) {
-        $_SESSION['data_updated'] = true;
-        header("Location: CompanyInfo.php?id=" . $emp_id);
-        exit();
+        // Retrieve company ID associated with the employee ID
+        $sql_comp_id = "SELECT comp_FK_emp FROM `employee` WHERE `emp_id`='$emp_id'";
+        $result_comp_id = $conn->query($sql_comp_id);
+        if ($result_comp_id->num_rows > 0) {
+            $row_comp_id = mysqli_fetch_array($result_comp_id);
+            $comp_id = $row_comp_id['comp_FK_emp'];
+            $_SESSION['data_updated'] = true;
+            header("Location: CompanyInfo.php?id=" . $comp_id);
+            exit();
+        } else {
+            // Handle error or exception
+        }
     } else {
         $_SESSION['data_updated'] = false;
         $error = "Error: " . $sql . "<br>" . $conn->error;

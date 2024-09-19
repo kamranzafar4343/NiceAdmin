@@ -89,7 +89,7 @@ if ($resultData->num_rows > 0) {
       margin-top: 26px;
     }
 
-    .mail {}
+    
   </style>
 
   <!-- Template Main CSS File -->

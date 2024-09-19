@@ -568,44 +568,6 @@ $result = $conn->query($sql);
 
                     <h5 class="card-title">List of Items</h5>
 
-                    <?php if ($result->num_rows > 0) { ?>
-                        <table class="table datatable mt-4" style="table-layout: fixed;">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="width: 10%;">#</th>
-                                    <th scope="col" style="width: 15%;">Item Name</th>
-                                    <th scope="col" style="width: 17%;">Box</th>
-                                    <th scope="col" style="width: 13%;">Condition</th>
-                                    <th scope="col" style="width: 20%;">Created at</th>
-                                    <th scope="col" style="width: 25%;">Barcode</th>
-                                    <th scope="col" style="width: 15%;">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody style="table-layout: fixed;">
-
-                                <?php
-                                $counter = 1;
-                                while ($row = $result->fetch_assoc()) {
-                                    $box_id = $row['box_FK_item'];
-                                    $sql5 = "SELECT * FROM box WHERE box_id= '$box_id'";
-                                    $result5 = $conn->query($sql5);
-                                    $row5 = $result5->fetch_assoc();
-                                    $box_name = $row5['box_name'];
-                                ?>
-
-                                    <tr>
-                                        <td><?php echo $counter++; ?></td>
-                                        <td><?php echo $row["item_name"]; ?></td>
-                                        <td><?php echo $box_name; ?></td>
-                                        <td><span><?php echo $row["status"]; ?></span></td>
-                                        <td><?php echo $row["timestamp"]; ?></td>
-                                        <td>
-                                            <img class="barcode" alt="<?php echo $row["item_id"]; ?>" src="barcode.php?text=<?php echo urlencode($row["item_id"]); ?>&codetype=code128&orientation=horizontal&size=20&print=false" />
-                                        </td>
-
-                    <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns search-results">
-                        <h5 class="card-title">List of Items</h5>
-
                         <?php
                         if ($result->num_rows > 0) {
                         ?>
@@ -636,17 +598,6 @@ $result = $conn->query($sql);
 
                                         //get specific box id   
                                         $box_id = $row['box_FK_item'];
-
-                                        // //show company name of box
-                                        // $sql5 = "SELECT * FROM box WHERE box_id= '$box_id'";
-                                        // $result5 = $conn->query($sql5);
-                                        // if ($result5->num_rows > 0) {
-                                        //     $row5 = $result5->fetch_assoc();
-                                        //     $barcode = $row5['barcode'];
-                                        // }
-
-                                        // echo "<td>" . $barcode . "</td>";
-
                                         echo "<td>" . ($row["barcode"]) . "</td>";
                                         echo "<td>" . ($row["timestamp"]) . "</td>";
 

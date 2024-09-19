@@ -26,7 +26,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
     $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
 
     // Search query: match barcode exactly or item name partially
-    $sql = "SELECT * FROM item WHERE barcode = '$searchQuery'";
+    $sql = "SELECT * FROM item WHERE barcode = '$searchQuery' OR item_name LIKE '%$searchQuery%'";
     $result = $conn->query($sql);
 } else {
     // Default query if no search is performed
@@ -565,6 +565,45 @@ $result = $conn->query($sql);
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
+
+                    <h5 class="card-title">List of Items</h5>
+
+                    <?php if ($result->num_rows > 0) { ?>
+                        <table class="table datatable mt-4" style="table-layout: fixed;">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 10%;">#</th>
+                                    <th scope="col" style="width: 15%;">Item Name</th>
+                                    <th scope="col" style="width: 17%;">Box</th>
+                                    <th scope="col" style="width: 13%;">Condition</th>
+                                    <th scope="col" style="width: 20%;">Created at</th>
+                                    <th scope="col" style="width: 25%;">Barcode</th>
+                                    <th scope="col" style="width: 15%;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody style="table-layout: fixed;">
+
+                                <?php
+                                $counter = 1;
+                                while ($row = $result->fetch_assoc()) {
+                                    $box_id = $row['box_FK_item'];
+                                    $sql5 = "SELECT * FROM box WHERE box_id= '$box_id'";
+                                    $result5 = $conn->query($sql5);
+                                    $row5 = $result5->fetch_assoc();
+                                    $box_name = $row5['box_name'];
+                                ?>
+
+                                    <tr>
+                                        <td><?php echo $counter++; ?></td>
+                                        <td><?php echo $row["item_name"]; ?></td>
+                                        <td><?php echo $box_name; ?></td>
+                                        <td><span><?php echo $row["status"]; ?></span></td>
+                                        <td><?php echo $row["timestamp"]; ?></td>
+                                        <td>
+                                            <img class="barcode" alt="<?php echo $row["item_id"]; ?>" src="barcode.php?text=<?php echo urlencode($row["item_id"]); ?>&codetype=code128&orientation=horizontal&size=20&print=false" />
+                                        </td>
+
+                    <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns search-results">
                         <h5 class="card-title">List of Items</h5>
 
                         <?php
@@ -652,14 +691,6 @@ $result = $conn->query($sql);
     <script src="assets/js/main.js"></script>
 
     <script>
-        // get current page url
-        function redirectToFormPage() {
-            // Get the current page URL
-            var referrer = encodeURIComponent(window.location.href);
-            // Redirect to the form page with the referrer URL as a query parameter
-            window.location.href = 'createItem.php?referrer=' + referrer;
-        }
-
         // Listen for the Enter key press
         document.getElementById("searchInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {

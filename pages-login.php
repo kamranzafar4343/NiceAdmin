@@ -113,7 +113,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <!-- ALERTIFY JavaScript -->
   <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
 
-  <!-- Display Alertify Pop-up at the Top of the Page -->
   <?php if (!empty($error_message)): ?>
     <script>
       // Set Alertify to display notifications at the top of the page

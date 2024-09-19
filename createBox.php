@@ -470,7 +470,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="box_barcode">
+                        <input type="text" class="form-control" name="barcode" id="box_barcode"  pattern="[a-zA-Z0-9]{7}" 
+                        title="Input must be exactly 7 characters long and contain letters and digits only.">
                         <div id="barcodeFeedback" class="invalid-feedback">
                             <!-- Error message will be displayed here -->
                         </div>

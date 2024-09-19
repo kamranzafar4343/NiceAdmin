@@ -26,7 +26,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
     $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
 
     // Search query: match barcode exactly or item name partially
-    $sql = "SELECT * FROM item WHERE barcode = '$searchQuery' OR item_name LIKE '%$searchQuery%'";
+    $sql = "SELECT * FROM item WHERE barcode = '$searchQuery'";
     $result = $conn->query($sql);
 } else {
     // Default query if no search is performed
@@ -565,6 +565,7 @@ $result = $conn->query($sql);
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
+
                     <h5 class="card-title">List of Items</h5>
 
                     <?php if ($result->num_rows > 0) { ?>
@@ -601,6 +602,58 @@ $result = $conn->query($sql);
                                         <td>
                                             <img class="barcode" alt="<?php echo $row["item_id"]; ?>" src="barcode.php?text=<?php echo urlencode($row["item_id"]); ?>&codetype=code128&orientation=horizontal&size=20&print=false" />
                                         </td>
+
+                    <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns search-results">
+                        <h5 class="card-title">List of Items</h5>
+
+                        <?php
+                        if ($result->num_rows > 0) {
+                        ?>
+                            <table class="table datatable mt-4" style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="width: 10%;">#</th>
+                                        <th scope="col" style="width: 17%;">Barcode</th>
+                                        <th scope="col" style="width: 20%;">Created at</th>
+                                        <th scope="col" style="width: 25%;"> Barcode </th>
+                                        <th scope="col" style="width: 15%;">Actions</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody style="table-layout: fixed;">
+
+
+
+                                    <?php
+
+                                    //counter variable
+                                    $counter = 1;
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>";
+                                        echo "<tr>";
+                                        echo "<td>" . $counter++ . "</td>";
+
+
+                                        //get specific box id   
+                                        $box_id = $row['box_FK_item'];
+
+                                        // //show company name of box
+                                        // $sql5 = "SELECT * FROM box WHERE box_id= '$box_id'";
+                                        // $result5 = $conn->query($sql5);
+                                        // if ($result5->num_rows > 0) {
+                                        //     $row5 = $result5->fetch_assoc();
+                                        //     $barcode = $row5['barcode'];
+                                        // }
+
+                                        // echo "<td>" . $barcode . "</td>";
+
+                                        echo "<td>" . ($row["barcode"]) . "</td>";
+                                        echo "<td>" . ($row["timestamp"]) . "</td>";
+
+                                        echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
+
+                                    ?>
+
                                         <td>
                                             <div style="display: flex; gap: 10px;">
                                                 <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="itemUpdate.php?id=<?php echo $row['item_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
@@ -638,6 +691,14 @@ $result = $conn->query($sql);
     <script src="assets/js/main.js"></script>
 
     <script>
+        // get current page url
+        function redirectToFormPage() {
+            // Get the current page URL
+            var referrer = encodeURIComponent(window.location.href);
+            // Redirect to the form page with the referrer URL as a query parameter
+            window.location.href = 'createItem.php?referrer=' + referrer;
+        }
+
         // Listen for the Enter key press
         document.getElementById("searchInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {

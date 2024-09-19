@@ -45,10 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode')";
 
     if ($conn->query($sql) === TRUE) {
-        header("location: createitem.php");
-
-        $selected_company = isset($_POST['comp_FK_item']) ? $_POST['comp_FK_item'] : '';  // For company selection
-
+        header("Location: $referrer");
+        exit();
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -478,8 +476,8 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="item_barcode"  pattern="[a-zA-Z0-9]{8}" 
-                        title="Input must be exactly 8 characters long">
+                        <input type="text" class="form-control" name="barcode" id="item_barcode" pattern="[a-zA-Z0-9]{8}"
+                            title="Input must be exactly 8 characters long">
                     </div>
 
                     <div class="text-center mt-4 mb-2">

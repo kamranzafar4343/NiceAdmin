@@ -1,6 +1,7 @@
 <?php
 // session_start(); // Start the session
 session_start();
+
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
   // If not logged in, redirect to login page
@@ -8,23 +9,13 @@ if (!isset($_SESSION['email'])) {
   exit();
 }
 
-// $email = $_SESSION['email'];
-// //get user name and email from register table
-// $getAdminData = "SELECT * FROM register WHERE email = '$email'";
-// $resultData = mysqli_query($conn, $getAdminData);
-// if ($resultData->num_rows > 0) {
-//   $row2 = $resultData->fetch_assoc();
-//   $adminName = $row2['name'];
-//   $adminEmail = $row2['email'];
-// }
-
-
 include "db.php";
 
+//get referer id from companyinfo page
+$referrer = isset($_GET['referrer']) ? $_GET['referrer'] : 'index.php';
 
 // Retrieve company ID from URL
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
 
 
 if (isset($_POST['submit'])) {
@@ -41,8 +32,9 @@ if (isset($_POST['submit'])) {
             VALUES ('$emp_name', '$emp_phone', '$company_id', '$branch_id', '$emp_email', '$emp_gender', '$emp_address', '$emp_role')";
 
   if ($conn->query($sql) === TRUE) {
-    header("Location: companyInfo?id=" . $company_id);
-    exit; // Ensure script ends after redirect
+    // Redirect back to the referrer page
+    header("Location: $referrer");
+    exit();
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }

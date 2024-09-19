@@ -595,7 +595,7 @@ $result = $conn->query($sql);
                                         echo "<tr>";
                                         echo "<tr>";
                                         echo "<td>" . $counter++ . "</td>";
-                                       
+
 
                                         //get specific box id   
                                         $box_id = $row['box_FK_item'];
@@ -607,9 +607,9 @@ $result = $conn->query($sql);
                                         //     $row5 = $result5->fetch_assoc();
                                         //     $barcode = $row5['barcode'];
                                         // }
-                                        
+
                                         // echo "<td>" . $barcode . "</td>";
-                                        
+
                                         echo "<td>" . ($row["barcode"]) . "</td>";
                                         echo "<td>" . ($row["timestamp"]) . "</td>";
 
@@ -666,6 +666,14 @@ $result = $conn->query($sql);
     <script src="assets/js/main.js"></script>
 
     <script>
+        // get current page url
+        function redirectToFormPage() {
+            // Get the current page URL
+            var referrer = encodeURIComponent(window.location.href);
+            // Redirect to the form page with the referrer URL as a query parameter
+            window.location.href = 'createItem.php?referrer=' + referrer;
+        }
+
         // Listen for the Enter key press
         document.getElementById("searchInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {

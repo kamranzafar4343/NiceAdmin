@@ -3,6 +3,9 @@
 // session_start(); // Start the session
 session_start();
 
+//for redirecting back to the referer page
+$_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
+
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
   // If not logged in, redirect to login page
@@ -93,6 +96,10 @@ $emp_data = $result_emp->fetch_assoc();
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
   <style>
     /* Custom CSS to decrease font size of the table */
+
+    .email-col{
+      width: 30px;
+    }
 
     .company-name {
       font-size: 1rem;
@@ -499,7 +506,7 @@ $emp_data = $result_emp->fetch_assoc();
           <div class="card-body" style="font-size: 0.8rem;">
             <div class="headerSetting">
               <h5 class="card-title">List of employees</h5>
-              <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createEmployee.php'" class="btn btn-primary mb-3">Add Employee</button>
+              <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()"  class="btn btn-primary mb-3">Add Employee</button>
             </div>
             <?php
             if ($result_emp->num_rows > 0) {
@@ -507,14 +514,14 @@ $emp_data = $result_emp->fetch_assoc();
               <table class="table datatable">
                 <thead>
                   <tr>
-                    <th scope="col">name</th>
-                    <th scope="col">email</th>
-                    <th scope="col">phone</th>
+                    <th scope="col">Name</th>
+                    <th scope="col" class="email-col">Email</th>
+                    <th scope="col">Phone</th>
                     <!-- <th scope="col" >Branch</th> -->
                     <!-- <th scope="col" style="width: 24%;">Company Name</th> -->
                     <th scope="col">Gender</th>
                     <th scope="col">Address</th>
-                    <th scope="col">Authority</th>
+                    <th scope="col">Role</th>
                     <!-- <th scope="col" >Received</th> -->
                     <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
                     <th scope="col">Action</th>
@@ -621,6 +628,16 @@ $emp_data = $result_emp->fetch_assoc();
   <script src="js/bootstrap.min.js"></script>
   <script src="js/main.js">
   </script>
+
+<script>
+  //used to refer to other page 
+  function redirectToFormPage() {
+            // Get the current page URL
+            var referrer = encodeURIComponent(window.location.href);
+            // Redirect to the form page with the referrer URL as a query parameter
+            window.location.href = 'createEmployee.php?referrer=' + referrer;
+        }
+</script>
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>

@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode')";
 
     if ($conn->query($sql) === TRUE) {
-        header("Location: $referrer");
+        header("Location: createitem.php");
         exit();
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -426,6 +426,22 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST">
+                    
+                <div class="col-md-6">
+                        <label class="form-label">Barcode</label>
+                        <input type="text" class="form-control" name="barcode" id="item_barcode" pattern="[a-zA-Z0-9]{8}"
+                            title="Input must be exactly 8 characters long" autofocus>
+                    </div>
+                
+                <!-- Select Box -->
+                <div class="col-md-6">
+                        <label for="box">Select Box:</label>
+                        <select id="box" class="form-select" name="box_FK_item" required>
+                            <option value="">Select a Box</option>
+                            <!-- The options will be populated via AJAX based on the selected branch -->
+                        </select>
+                    </div>
+                
                     <!-- Select Company -->
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>
@@ -450,14 +466,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         </select>
                     </div>
 
-                    <!-- Select Box -->
-                    <div class="col-md-6">
-                        <label for="box">Select Box:</label>
-                        <select id="box" class="form-select" name="box_FK_item" required>
-                            <option value="">Select a Box</option>
-                            <!-- The options will be populated via AJAX based on the selected branch -->
-                        </select>
-                    </div>
+                    
 
                     <!-- <div class="col-md-6">
                         <label for="comp_name" class="form-label">Item Name</label>
@@ -474,11 +483,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         <input type="text" class="form-control" name="item_quantity" required>
                     </div> -->
 
-                    <div class="col-md-6">
-                        <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="item_barcode" pattern="[a-zA-Z0-9]{8}"
-                            title="Input must be exactly 8 characters long">
-                    </div>
+                  
 
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>

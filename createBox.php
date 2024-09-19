@@ -32,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rec_via=$_POST['rec_via'];
 
     // Check if the box name and barcode already exists in the database
-    $nameCheck = "SELECT * FROM `box` WHERE `box_name` = '$box_name' AND `barcode`='$barcode'";
+    $nameCheck = "SELECT * FROM `box` WHERE `barcode`='$barcode'";
     $nameCheckResult = $conn->query($nameCheck);
 
     if ($nameCheckResult->num_rows > 0) {
-        die("Error: The box name '$box_name' and barcode '$barcode' already exists.");
+        die("Error: The barcode '$barcode' already exists.");
     }
 
     //insert data into box
@@ -468,7 +468,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="box_barcode">
+                        <input type="text" class="form-control" name="barcode" id="box_barcode"  pattern="[a-zA-Z0-9]{7}" 
+                        title="Input must be exactly 7 characters long and contain letters and digits only.">
                         <div id="barcodeFeedback" class="invalid-feedback">
                             <!-- Error message will be displayed here -->
                         </div>

@@ -25,25 +25,24 @@ if ($resultData->num_rows > 0) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
+    // $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
     $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
     $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
     $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
-    $status = mysqli_real_escape_string($conn, $_POST['status']);
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
 
     // Check if the box name and barcode already exists in the database
-    $nameCheck = "SELECT * FROM `item` WHERE `item_name` = '$item_name' AND `barcode`='$barcode'";
+    $nameCheck = "SELECT * FROM `item` WHERE  `barcode`='$barcode'";
     $nameCheckResult = $conn->query($nameCheck);
 
     //2 in 1 approach 
     if ($nameCheckResult->num_rows > 0) {
-        die("Error: The item name '$item_name' and barcode '$barcode' already exists.");
+        die("Error: The barcode '$barcode' already exists.");
     }
 
-    $sql = "INSERT INTO  item (comp_FK_item, box_FK_item, branch_FK_item, item_name, status, barcode) 
-            VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' ,'$item_name','$status', '$barcode')";
+    $sql = "INSERT INTO  item (comp_FK_item, box_FK_item, branch_FK_item, barcode) 
+            VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode')";
 
     if ($conn->query($sql) === TRUE) {
         header("location: createitem.php");
@@ -462,10 +461,10 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         </select>
                     </div>
 
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <label for="comp_name" class="form-label">Item Name</label>
                         <input type="text" class="form-control" name="item_name" id="item_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
-                    </div>
+                    </div> -->
 
                     <!-- <div class="col-md-6">
                         <label class="form-label">Item price</label>
@@ -478,19 +477,9 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     </div> -->
 
                     <div class="col-md-6">
-                        <label for="status" class="form-label">Item Condition</label>
-                        <select class="form-select" id="status" name="status">
-                            <option value="New" <?php echo ($selected_status == 'New') ? 'selected' : ''; ?>>New</option>
-                            <option value="Second Hand" <?php echo ($selected_status == 'Second Hand') ? 'selected' : ''; ?>>Second Hand</option>
-                            <option value="Damaged" <?php echo ($selected_status == 'Damaged') ? 'selected' : ''; ?>>Damaged</option>
-                            <option value="Defective" <?php echo ($selected_status == 'Defective') ? 'selected' : ''; ?>>Defective</option>
-                            <option value="Used - Good" <?php echo ($selected_status == 'Used - Good') ? 'selected' : ''; ?>>Used - Good</option>
-                            <option value="Used - Acceptable" <?php echo ($selected_status == 'Used - Acceptable') ? 'selected' : ''; ?>>Used - Acceptable</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="item_barcode">
+                        <input type="text" class="form-control" name="barcode" id="item_barcode"  pattern="[a-zA-Z0-9]{8}" 
+                        title="Input must be exactly 8 characters long">
                     </div>
 
                     <div class="text-center mt-4 mb-2">
@@ -573,7 +562,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             $('#box').append('<option value="">Select a Box</option>');
                             // Add the new options from the response
                             $.each(boxes, function(index, box) {
-                                $('#box').append('<option value="' + box.box_id + '">' + box.box_name + '</option>');
+                                $('#box').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
                             });
                         } catch (e) {
                             console.error("Invalid JSON response", response);
@@ -654,33 +643,6 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 });
             }
 
-            // Function to load boxes via AJAX
-            function loadBoxes(branch_id) {
-                $.ajax({
-                    url: 'get_boxes.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            var boxes = JSON.parse(response);
-                            boxSelect.innerHTML = '<option value="">Select a Box</option>';
-                            boxes.forEach(function(box) {
-                                boxSelect.innerHTML += '<option value="' + box.box_id + '">' + box.box_name + '</option>';
-                            });
-
-                            // Set the previously selected box
-                            const selectedBox = localStorage.getItem('selectedBox');
-                            if (selectedBox) {
-                                boxSelect.value = selectedBox;
-                            }
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            }
         });
     </script>
     <script>

@@ -271,11 +271,10 @@ $emp_data = $result_emp->fetch_assoc();
     }
 
     /*Employee header*/
-    .headerSetting{
+    .headerSetting {
       display: flex;
       gap: 250px;
     }
-
   </style>
 
   <!-- Template Main CSS File -->
@@ -454,7 +453,11 @@ $emp_data = $result_emp->fetch_assoc();
             </form>
           </div>
           <div class="card-body list-group">
-            <h4 class="card-title-info"><?php echo $company_data['comp_name']; ?></h4>
+            <?php if ($company_data !== null): ?>
+              <h4 class="card-title-info"><?php echo $company_data['comp_name']; ?></h4>
+            <?php else: ?>
+              <h4 class="card-title-info">No company data found</h4>
+            <?php endif; ?>
             <div class="d-flex justify-content-center">
               <a href="Branches.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
               <!-- <a href="showItems.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-shopping-cart-2-line remix" style="font-size: 30px;"></i></a> -->
@@ -490,14 +493,14 @@ $emp_data = $result_emp->fetch_assoc();
       </div>
 
       <!-- Table container -->
-       
+
       <div class="col-md-7 col-lg-8 mt-4">
         <div class="cardBranch recent-sales overflow-auto">
           <div class="card-body" style="font-size: 0.8rem;">
-          <div class="headerSetting">
-            <h5 class="card-title">List of employees</h5>
-          <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createEmployee.php'" class="btn btn-primary mb-3">Add Employee</button>
-          </div>
+            <div class="headerSetting">
+              <h5 class="card-title">List of employees</h5>
+              <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createEmployee.php'" class="btn btn-primary mb-3">Add Employee</button>
+            </div>
             <?php
             if ($result_emp->num_rows > 0) {
             ?>
@@ -566,26 +569,29 @@ $emp_data = $result_emp->fetch_assoc();
                     // echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
                   ?>
                     <td>
-
                       <div style="display: flex; gap: 10px;">
-                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="boxUpdate.php?id=<?php echo $row['box_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                        <a type="button" class="btn btn-success btn-sm"
+                          href="employeeUpdate.php?id=<?php echo $emp_data['emp_id']; ?>">
+                          <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </a>
 
-                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                          onclick="return confirm('Are you sure you want to delete this record?');" href="boxDelete.php?id=<?php echo $row['box_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                        <a type="button" class="btn btn-danger btn-sm"
+                          onclick="return confirm('Are you sure you want to delete this employee?');"
+                          href="employeeDelete.php?id=<?php echo $emp_data['emp_id']; ?>">
+                          <i class="fa-solid fa-trash"></i> Delete
+                        </a>
                       </div>
                     </td>
-                    </tr>
                   <?php
                   }
                   ?>
                 </tbody>
               </table>
             <?php
-            }
-            else{
+            } else {
 
               echo '<br>';
-              echo'No Employees found for Company '. '<b>'. $company_data['comp_name'] .'<b>';
+              echo 'No Employees found for Company ' . '<b>' . $company_data['comp_name'] . '<b>';
             }
             ?>
           </div>

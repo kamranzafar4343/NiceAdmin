@@ -31,7 +31,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
     $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
 
     // Search query: match barcode exactly or item name partially
-    $sql = "SELECT * FROM box WHERE barcode = '$searchQuery' OR box_name LIKE '%$searchQuery%'";
+    $sql = "SELECT * FROM box WHERE barcode = '%$searchQuery%'";
     $result = $conn->query($sql);
 } else {
     // Default query if no search is performed

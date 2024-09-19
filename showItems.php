@@ -373,23 +373,22 @@ $result = $conn->query($sql);
         }
 
         .datatable-input {
-            padding: 4px 10px !important;
-            width: 255px !important;
-            height: 33px;
+            
+            width: 240px;
+            height: 35px;
             font-size: 0.8rem;
-            margin-left: 6px;
+            margin-left: 401px;
             outline: none;
-            width: 148% !important;
-            max-width: 414px;
-            padding: 21px 23px !important;
+    
+        
+          
             font-size: 17px;
             border: 1px solid #ccc;
             border-radius: 6px;
             outline: none;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 14px;
-            margin-top: 8px !important;
+            margin-bottom: -25px;
         }
 
         /* .custom-header-col-name{
@@ -599,18 +598,13 @@ $result = $conn->query($sql);
                                     </tr>
                                 </thead>
                                 <tbody style="table-layout: fixed;">
-
-
-
                                     <?php
-
                                     //counter variable
                                     $counter = 1;
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<tr>";
                                         echo "<td>" . $counter++ . "</td>";
-
 
                                         //get specific box id   
                                         $box_id = $row['box_FK_item'];
@@ -619,9 +613,7 @@ $result = $conn->query($sql);
                                         echo "<td>" . ($row["timestamp"]) . "</td>";
 
                                         echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
-
                                     ?>
-
                                         <td>
                                             <div style="display: flex; gap: 10px;">
                                                 <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="itemUpdate.php?id=<?php echo $row['item_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>

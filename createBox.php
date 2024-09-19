@@ -24,6 +24,10 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
+//show default receive via value
+$pre_val_receive_via =  isset($_POST['rec_via']) ? $_POST['rec_via'] : 'default text';
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $company_id = mysqli_real_escape_string($conn, $_POST['company']);
     $branch_id = mysqli_real_escape_string($conn, $_POST['branch']);
@@ -51,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $conn->close();
+
 }
 
 ?>
@@ -409,13 +414,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </li><!-- End Contact Page Nav -->
 
         </ul>
-
+        
     </aside>
-
-
+    
+    
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
-
-
+    
+    
     <!--form--------------------------------------form--------------------------------------->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
@@ -429,15 +434,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST">
-
+                    
+                <div class="col-md-6">
+                        <label class="form-label">Barcode</label>
+                        <input type="text" class="form-control" name="barcode" id="box_barcode"  pattern="[a-zA-Z0-9]{7}" 
+                        title="Input must be exactly 7 characters long and contain letters and digits only." autofocus>
+                        <div id="barcodeFeedback" class="invalid-feedback" >
+                            <!-- Error message will be displayed here -->
+                        </div>
+                    </div>
+                    
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>
                         <select id="company" class="form-select" name="company" required>
                             <option value=""> Select a Company </option>
-
+                            
                             <?php
 
-                            //fetch companies
+//fetch companies
                             $result = $conn->query("SELECT comp_id, comp_name FROM compani");
                             while ($row = $result->fetch_assoc()) {
                                 echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
@@ -456,34 +470,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="col-md-6">
                         <label for="rec_date">Receive date</label>
-                        <input type="datetime-local" class="form-control" name="rec_date" required>
+                        <input type="datetime-local" class="form-control" name="rec_date" id="rec_date" required>
                     </div>
                     <div class="col-md-6">
                         <label for="sender">Sender</label>
-                        <input type="text" class="form-control" name="sender">
+                        <input type="text" class="form-control" name="sender" id="sender">
                     </div>
                     
                     <div class="col-md-6">
                         <label for="rec_via">Receive via</label>
-                        <input type="text" class="form-control" name="rec_via" required>
+                        <input type="text" class="form-control" name="rec_via" id="rec_via" value="<?= htmlspecialchars($pre_val_receive_via);?>" required>
                     </div>
                     
-                    <div class="col-md-6">
-                        <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="box_barcode"  pattern="[a-zA-Z0-9]{7}" 
-                        title="Input must be exactly 7 characters long and contain letters and digits only.">
-                        <div id="barcodeFeedback" class="invalid-feedback">
-                            <!-- Error message will be displayed here -->
-                        </div>
-                    </div>
 
                     <div class="col-md-6">
                         <label for="status">Status:</label>
                         <select id="status" class="form-select" name="status" required>
                             <option value="">Select Status</option>
-                            <option value="In">In</option>
-                            <option value="Out">Out</option>
-                            <option value="Ready for Destroy">Ready for Destroy</option>
+                            <option value="In" selected>In</option>
+                            <!-- <option value="Out">Out</option>
+                            <option value="Ready for Destroy">Ready for Destroy</option> -->
                         </select>
                     </div>
 
@@ -531,6 +537,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             const companySelect = document.getElementById('company');
             const branchSelect = document.getElementById('branch');
             const boxSelect = document.getElementById('box');
+            const senderSelect = document.getElementById('sender');
+            
 
             // Retrieve the previously selected company from localStorage
             const selectedCompany = localStorage.getItem('selectedCompany');
@@ -567,6 +575,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             boxSelect.addEventListener('change', function() {
                 localStorage.setItem('selectedBox', this.value);
             });
+
+            // Retrieve the previously selected sender from localStorage
+            const selectedSender = localStorage.getItem('selectedSender');
+            if (selectedSender) {
+                senderSelect.value = selectedSender;
+            }
+
+            // Store the selected box in localStorage on change
+            senderSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedSender', this.value);
+            });
+
 
             // Function to load branches via AJAX
             function loadBranches(company_id) {

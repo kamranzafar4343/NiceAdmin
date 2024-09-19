@@ -567,6 +567,22 @@ $result = $conn->query($sql);
                 <div class="card-body">
 
                     <h5 class="card-title">List of Items</h5>
+                    <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+                        <div class="datatable-top">
+                            <div class="datatable-dropdown">
+                                <label>
+                                    <select class="datatable-selector" name="per-page">
+                                        <option value="5">5</option>
+                                        <option value="10" selected="">10</option>
+                                        <option value="15">15</option>
+                                        <option value="-1">All</option>
+                                    </select> entries per page
+                                </label>
+                            </div>
+                            <div class="datatable-search">
+                                <input class="datatable-input" placeholder="Search..." type="search" name="search" title="Search within table">
+                            </div>
+                        </div>
 
                         <?php
                         if ($result->num_rows > 0) {
@@ -598,6 +614,7 @@ $result = $conn->query($sql);
 
                                         //get specific box id   
                                         $box_id = $row['box_FK_item'];
+
                                         echo "<td>" . ($row["barcode"]) . "</td>";
                                         echo "<td>" . ($row["timestamp"]) . "</td>";
 
@@ -611,16 +628,16 @@ $result = $conn->query($sql);
                                                 <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="itemDelete.php?id=<?php echo $row['item_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                                             </div>
                                         </td>
-                                    </tr>
+                                        </tr>
 
-                                <?php } ?>
+                                    <?php } ?>
 
-                            </tbody>
-                        </table>
-                    <?php } ?>
+                                </tbody>
+                            </table>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
-        </div>
     </main>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

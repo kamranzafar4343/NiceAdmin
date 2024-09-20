@@ -551,86 +551,67 @@ $result = $conn->query($sql);
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary mb-3">Add Item</button>
+   <!-- Button to add new item -->
+<button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary mb-3">Add Item</button>
 
-    <div class="search-container">
-        <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Enter box name or scan barcode..." autofocus>
-            <input type="submit" value="Search" class="btn btn-success btn-success">
-        </form>
-    </div>
+<!-- Search bar -->
+<div class="search-container">
+    <form id="searchForm" action="" method="GET">
+        <input type="text" id="searchInput" name="query" placeholder="Enter item name or scan barcode..." autofocus>
+        <input type="submit" value="Search" class="btn btn-success btn-success">
+    </form>
+</div>
 
-    <main id="main" class="main">
-        <div class="col-12">
-            <div class="cardBranch recent-sales overflow-auto">
-                <div class="card-body">
+<!-- Main content -->
+<main id="main" class="main">
+    <div class="col-12">
+        <div class="cardBranch recent-sales overflow-auto">
+            <div class="card-body">
+                <h5 class="card-title">List of Items</h5>
 
-                    <h5 class="card-title">List of Items</h5>
-                    <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
-                        <div class="datatable-top">
-                            <div class="datatable-dropdown">
-                                <label>
-                                    <select class="datatable-selector" name="per-page">
-                                        <option value="5">5</option>
-                                        <option value="10" selected="">10</option>
-                                        <option value="15">15</option>
-                                        <option value="-1">All</option>
-                                    </select> entries per page
-                                </label>
+                <?php
+                // Check if there are any results
+                if ($result->num_rows > 0) {
+                    // Display table
+                    echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 5%;">#</th>
+                            <th scope="col" style="width: 15%;">Barcode</th>
+                            <th scope="col" style="width: 20%;">Created at</th>
+                            <th scope="col" style="width: 25%;">Barcode Image</th>
+                            <th scope="col" style="width: 15%;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody style="table-layout: fixed;">';
+
+                    // Counter variable
+                    $counter = 1;
+
+                    // Loop through results
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<tr>';
+                        echo '<td>' . $counter++ . '</td>';
+                        echo '<td><a class="text-primary fw-bold" href="itemInfo.php?id=' . $row['item_id'] . '">' . $row['barcode'] . '</a></td>';
+                        echo '<td>' . ($row["timestamp"]) . '</td>';
+                        echo '<td><img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/></td>';
+                        echo '<td>
+                            <div style="display: flex; gap: 10px;">
+                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this record?\');" href="itemDelete.php?id=' . $row['item_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                             </div>
-                            <div class="datatable-search">
-                                <input class="datatable-input" placeholder="Search..." type="search" name="search" title="Search within table">
-                            </div>
-                        </div>
-
-                        <?php
-                        if ($result->num_rows > 0) {
-                        ?>
-                            <table class="table datatable mt-4" style="table-layout: fixed;">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" style="width: 10%;">#</th>
-                                        <th scope="col" style="width: 17%;">Barcode</th>
-                                        <th scope="col" style="width: 20%;">Created at</th>
-                                        <th scope="col" style="width: 25%;"> Barcode </th>
-                                        <th scope="col" style="width: 15%;">Actions</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody style="table-layout: fixed;">
-                                    <?php
-                                    //counter variable
-                                    $counter = 1;
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>";
-                                        echo "<tr>";
-                                        echo "<td>" . $counter++ . "</td>";
-
-                                        //get specific box id   
-                                        $box_id = $row['box_FK_item'];
-
-                                        echo "<td>" . ($row["barcode"]) . "</td>";
-                                        echo "<td>" . ($row["timestamp"]) . "</td>";
-
-                                        echo "<td>" . '<img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
-                                    ?>
-                                        <td>
-                                            <div style="display: flex; gap: 10px;">
-                                                <!-- <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="itemUpdate.php?id=<?php echo $row['item_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a> -->
-                                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="itemDelete.php?id=<?php echo $row['item_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                            </div>
-                                        </td>
-                                        </tr>
-
-                                    <?php } ?>
-
-                                </tbody>
-                            </table>
-                        <?php } ?>
-                    </div>
-                </div>
+                        </td>';
+                        echo '</tr>';
+                    }
+                    echo '</tbody></table>';
+                } else {
+                    // Display message if no results
+                    echo '<p>No items found.</p>';
+                }
+                ?>
             </div>
-    </main>
+        </div>
+    </div>
+</main>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->

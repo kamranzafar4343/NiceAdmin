@@ -31,8 +31,6 @@ if (isset($_GET['id'])) {
 
     $result = $conn->query($sql);
     $row = mysqli_fetch_array($result);
-
-    $box_name = $row['box_name'];
     $barcode = $row['barcode'];
 }
 
@@ -48,10 +46,9 @@ if (isset($_GET['id'])) {
 }
 //update the record
 if (isset($_POST['update'])) {
-    $box_name = mysqli_real_escape_string($conn, $_POST['box_name']);
     $barcode =  mysqli_real_escape_string($conn, $_POST['barcode']);
 
-    $sql = "UPDATE `box` SET `box_name`='$box_name', `barcode`='$barcode' WHERE `box_id`='$box_id'";
+    $sql = "UPDATE `box` SET `barcode`='$barcode' WHERE `box_id`='$box_id'";
 
     if (mysqli_query($conn, $sql)) {
         header("Location: box.php?id=" . $company_id);
@@ -639,11 +636,6 @@ End Search Bar -->
             <div class="card-body">
                 <!-- <h5 class="card-title">Update Company Information</h5> -->
                 <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
-                    <div class="col-md-6">
-                        <label class="form-label">box name</label>
-                        <input type="text" class="form-control" name="box_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $box_name; ?>" required>
-
-                    </div>
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
                         <input type="text" class="form-control" name="barcode" value="<?php echo $barcode; ?>" readonly>

@@ -1,5 +1,5 @@
 <?php
-// Simulate the previously selected value (from database or after form submission)
+// Simulate the previously selected dropdown value (from database or after form submission)
 $previous_value = isset($_POST['my_select']) ? $_POST['my_select'] : 'default_value';
 $previous_value2 = isset($_POST['my_select2']) ? $_POST['my_select2'] : 'default_value';
 ?>

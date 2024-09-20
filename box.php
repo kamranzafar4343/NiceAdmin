@@ -31,7 +31,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
     $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
 
     // Search query: match barcode exactly or item name partially
-    $sql = "SELECT * FROM box WHERE barcode = '$searchQuery' OR box_name LIKE '%$searchQuery%'";
+    $sql = "SELECT * FROM box WHERE barcode = '%$searchQuery%'";
     $result = $conn->query($sql);
 } else {
     // Default query if no search is performed
@@ -525,7 +525,16 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
                     <h5 class="card-title">List of Boxes</h5>
-
+                    <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns"><div class="datatable-top">
+    <div class="datatable-dropdown">
+            <label>
+                <select class="datatable-selector" name="per-page"><option value="5">5</option><option value="10" selected="">10</option><option value="15">15</option><option value="-1">All</option></select> entries per page
+            </label>
+        </div>
+    <div class="datatable-search">
+            <input class="datatable-input" placeholder="Search..." type="search" name="search" title="Search within table">
+        </div>
+</div>
                     <?php
                     if ($result->num_rows > 0) {
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">

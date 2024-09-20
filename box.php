@@ -39,6 +39,17 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
     $result = $conn->query($sql);
 }
 ?>
+<?php
+if (isset($_GET['comp_id'])) {
+    $comp_id = $_GET['comp_id'];
+    $sql = "SELECT * FROM box WHERE companiID_FK = '$comp_id'";
+    $result = $conn->query($sql);
+} else {
+    // Default query
+    $sql = "SELECT * FROM box";
+    $result = $conn->query($sql);
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -511,14 +522,35 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add box</button>
+    <!-- Button to add new box -->
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add Box</button>
 
-    <div class="search-container">
-        <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Enter box name or scan barcode..." autofocus>
-            <input type="submit" value="Search" class="btn btn-success btn-success">
-        </form>
+    <!-- Search bar and company filter -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="search-container">
+                <form id="searchForm" action="" method="GET">
+                    <input type="text" id="searchInput" name="query" placeholder="Enter box name or scan barcode..." autofocus>
+                    <input type="submit" value="Search" class="btn btn-success btn-success">
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="company">Select Company:</label>
+            <select id="company" class="form-select" name="comp_FK_item" required onchange="filterCompany(this.value)">
+                <option value="">Select a Company</option>
+                <?php
+                // Fetch the companies from the database
+                $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                while ($row = $result->fetch_assoc()) {
+                    echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                }
+                ?>
+            </select>
+        </div>
     </div>
+
+    <!-- Main content -->
     <main id="main" class="main">
 
         <div class="col-12">
@@ -527,6 +559,14 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
                     <h5 class="card-title">List of Boxes</h5>
 
                     <?php
+                    if (isset($_GET['comp_id'])) {
+                        $comp_id = $_GET['comp_id'];
+                        $sql = "SELECT * FROM box WHERE companiID_FK = '$comp_id'";
+                    } else {
+                        // Default query
+                        $sql = "SELECT * FROM box";
+                    }
+                    $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                     <thead>
@@ -550,7 +590,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
                             echo '<td>' . ($row["box_id"]) . '</td>';
                             echo '<td><a class="text-primary fw-bold" href="boxInfo.php?id=' . $row['box_id'] . '">' . $row['barcode'] . '</a></td>';
 
-                            // Get specific company id   
+                            // Get specific company id
                             $comp_id = $row['companiID_FK'];
                             $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
                             $result3 = $conn->query($sql3);
@@ -560,7 +600,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
                             }
                             echo '<td>' . $comp_name . '</td>';
 
-                            // Get specific branch id   
+                            // Get specific branch id
                             $branch_id = $row['branchID_FK'];
                             $sql7 = "SELECT * FROM branch WHERE branch_id= '$branch_id'";
                             $result7 = $conn->query($sql7);
@@ -581,22 +621,31 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
                             echo '"></i> ' . $row["status"] . '</td>';
                             echo '<td>
                         <div style="display: flex; gap: 10px;">
-                             
+
                             <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
                                 onclick="return confirm(\'Are you sure you want to delete this record?\');" href="boxDelete.php?id=' . $row['box_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                         </div>
                     </td>';
                             echo '</tr>';
+                            $counter++;
                         }
                         echo '</tbody></table>';
+                    } else {
+                        echo '<p>No boxes found.</p>';
                     }
                     ?>
                 </div>
             </div>
         </div>
-
-
     </main><!-- End #main -->
+
+
+    <script>
+        function filterCompany(comp_id) {
+            window.location.href = "box.php?comp_id=" + comp_id;
+        }
+    </script>
+
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->

@@ -55,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $conn->close();
-
 }
 
 ?>
@@ -414,13 +413,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </li><!-- End Contact Page Nav -->
 
         </ul>
-        
+
     </aside>
-    
-    
+
+
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
-    
-    
+
+
     <!--form--------------------------------------form--------------------------------------->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
@@ -434,24 +433,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST">
-                    
-                <div class="col-md-6">
+
+                    <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="box_barcode"  pattern="[a-zA-Z0-9]{7}" 
-                        title="Input must be exactly 7 characters long and contain letters and digits only." autofocus>
-                        <div id="barcodeFeedback" class="invalid-feedback" >
+                        <input type="text" class="form-control" name="barcode" id="box_barcode" pattern="[a-zA-Z0-9]{7}"
+                            title="Input must be exactly 7 characters long and contain letters and digits only." autofocus>
+                        <div id="barcodeFeedback" class="invalid-feedback">
                             <!-- Error message will be displayed here -->
                         </div>
                     </div>
-                    
+
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>
                         <select id="company" class="form-select" name="company" required>
                             <option value=""> Select a Company </option>
-                            
+
                             <?php
 
-//fetch companies
+                            //fetch companies
                             $result = $conn->query("SELECT comp_id, comp_name FROM compani");
                             while ($row = $result->fetch_assoc()) {
                                 echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
@@ -482,49 +481,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             pattern="[a-zA-Z\s]+"
                             title="Only alphabets and spaces are allowed"
                             required>
-                        <label for="sender">Sender</label>
-                        <input type="text" class="form-control" name="sender" id="sender">
-                    </div>
 
 
-                    <div class="col-md-6">
-                        <label for="rec_via">Receive via:</label>
-                        <select id="rec_via" class="form-select" name="rec_via" required>
-                            <option value="">Select an option</option>
-                            <option value="Self">Self</option>
-                            <option value="Courier">Courier</option>
-                        </select>
-                    </div>
-
-
-                    <div class="col-md-6">
-                        <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="box_barcode" pattern="[a-zA-Z0-9]{7}"
-                            title="Input must be exactly 7 characters long and contain letters and digits only.">
-                        <div id="barcodeFeedback" class="invalid-feedback">
-                            <!-- Error message will be displayed here -->
+                        <div class="col-md-6">
+                            <label for="rec_via">Receive via:</label>
+                            <select id="rec_via" class="form-select" name="rec_via" required>
+                                <option value="">Select an option</option>
+                                <option value="Self">Self</option>
+                                <option value="Courier">Courier</option>
+                            </select>
                         </div>
-                    </div>
-                        <label for="rec_via">Receive via</label>
-                        <input type="text" class="form-control" name="rec_via" id="rec_via" value="<?= htmlspecialchars($pre_val_receive_via);?>" required>
-                    </div>
-                    
 
 
-                    <div class="col-md-6">
-                        <label for="status">Status:</label>
-                        <select id="status" class="form-select" name="status" required>
-                            <option value="">Select Status</option>
-                            <option value="In" selected>In</option>
-                            <!-- <option value="Out">Out</option>
+
+                        <div class="col-md-6">
+                            <label for="status">Status:</label>
+                            <select id="status" class="form-select" name="status" required>
+                                <option value="">Select Status</option>
+                                <option value="In" selected>In</option>
+                                <!-- <option value="Out">Out</option>
                             <option value="Ready for Destroy">Ready for Destroy</option> -->
-                        </select>
-                    </div>
+                            </select>
+                        </div>
 
-                    <div class="text-center mt-4 mb-2">
-                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary ">Reset</button>
-                    </div>
+                        <div class="text-center mt-4 mb-2">
+                            <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
+                            <button type="reset" class="btn btn-outline-secondary ">Reset</button>
+                        </div>
                 </form>
             </div>
         </div>
@@ -566,7 +549,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             const branchSelect = document.getElementById('branch');
             const boxSelect = document.getElementById('box');
             const senderSelect = document.getElementById('sender');
-            
+
 
             // Retrieve the previously selected company from localStorage
             const selectedCompany = localStorage.getItem('selectedCompany');

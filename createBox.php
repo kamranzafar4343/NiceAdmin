@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via, status) VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via', '$status')";
 
     if ($conn->query($sql) === TRUE) {
-        header("location: box.php");
+        header("location: createBox.php");
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -481,33 +481,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             pattern="[a-zA-Z\s]+"
                             title="Only alphabets and spaces are allowed"
                             required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="rec_via">Receive via:</label>
+                        <select id="rec_via" class="form-select" name="rec_via" required>
+                            <option value="">Select an option</option>
+                            <option value="Self">Self</option>
+                            <option value="Courier">Courier</option>
+                        </select>
+                    </div>
 
 
-                        <div class="col-md-6">
-                            <label for="rec_via">Receive via:</label>
-                            <select id="rec_via" class="form-select" name="rec_via" required>
-                                <option value="">Select an option</option>
-                                <option value="Self">Self</option>
-                                <option value="Courier">Courier</option>
-                            </select>
-                        </div>
 
-
-
-                        <div class="col-md-6">
-                            <label for="status">Status:</label>
-                            <select id="status" class="form-select" name="status" required>
-                                <option value="">Select Status</option>
-                                <option value="In" selected>In</option>
-                                <!-- <option value="Out">Out</option>
+                    <div class="col-md-6">
+                        <label for="status">Status:</label>
+                        <select id="status" class="form-select" name="status" required>
+                            <option value="">Select Status</option>
+                            <option value="In" selected>In</option>
+                            <!-- <option value="Out">Out</option>
                             <option value="Ready for Destroy">Ready for Destroy</option> -->
-                            </select>
-                        </div>
+                        </select>
+                    </div>
 
-                        <div class="text-center mt-4 mb-2">
-                            <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
-                            <button type="reset" class="btn btn-outline-secondary ">Reset</button>
-                        </div>
+                    <div class="text-center mt-4 mb-2">
+                    <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'Box.php';">Cancel</button>
+                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
+                        <button type="reset" class="btn btn-outline-secondary" onclick="localStorage.clear()">Reset</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -544,12 +545,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             });
         });
+
         document.addEventListener('DOMContentLoaded', function() {
             const companySelect = document.getElementById('company');
             const branchSelect = document.getElementById('branch');
             const boxSelect = document.getElementById('box');
-            const senderSelect = document.getElementById('sender');
-
 
             // Retrieve the previously selected company from localStorage
             const selectedCompany = localStorage.getItem('selectedCompany');
@@ -587,17 +587,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 localStorage.setItem('selectedBox', this.value);
             });
 
-            // Retrieve the previously selected sender from localStorage
-            const selectedSender = localStorage.getItem('selectedSender');
-            if (selectedSender) {
-                senderSelect.value = selectedSender;
-            }
-
-            // Store the selected box in localStorage on change
-            senderSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedSender', this.value);
-            });
-
 
             // Function to load branches via AJAX
             function loadBranches(company_id) {
@@ -626,6 +615,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                 });
             }
+
+        });
+
+        //another function gets previous values of the sender, rec_via, rec_date
+        $(document).ready(function() {
+            // Utility function to safely set the value of an input field
+            function setInputValue(id, value) {
+                var element = document.getElementById(id);
+                if (element) {
+                    element.value = value;
+                }
+            }
+
+            // Retrieve the previously submitted form data from localStorage
+            const recDate = localStorage.getItem('rec_date');
+            const sender = localStorage.getItem('sender');
+            const recVia = localStorage.getItem('rec_via');
+
+            // Safely set the values if they exist in localStorage
+            if (recDate) {
+                setInputValue('rec_date', recDate);
+            }
+
+            if (sender) {
+                setInputValue('sender', sender);
+            }
+
+            if (recVia) {
+                setInputValue('rec_via', recVia);
+            }
+
+            // Store the values in localStorage when the user changes input
+            $('#rec_date').on('input', function() {
+                localStorage.setItem('rec_date', $(this).val());
+            });
+
+            $('#sender').on('input', function() {
+                localStorage.setItem('sender', $(this).val());
+            });
+
+            $('#rec_via').on('change', function() {
+                localStorage.setItem('rec_via', $(this).val());
+            });
         });
     </script>
 

@@ -486,7 +486,8 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                   
 
                     <div class="text-center mt-4 mb-2">
-                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
+                    <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'showItems.php';">Cancel</button>
+                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>
                     </div>
                 </form>

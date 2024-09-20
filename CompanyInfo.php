@@ -97,7 +97,7 @@ $emp_data = $result_emp->fetch_assoc();
   <style>
     /* Custom CSS to decrease font size of the table */
 
-    .email-col{
+    .email-col {
       width: 30px;
     }
 
@@ -506,7 +506,7 @@ $emp_data = $result_emp->fetch_assoc();
           <div class="card-body" style="font-size: 0.8rem;">
             <div class="headerSetting">
               <h5 class="card-title">List of employees</h5>
-              <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()"  class="btn btn-primary mb-3">Add Employee</button>
+              <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()" class="btn btn-primary mb-3">Add Employee</button>
             </div>
             <?php
             if ($result_emp->num_rows > 0) {
@@ -577,15 +577,18 @@ $emp_data = $result_emp->fetch_assoc();
                   ?>
                     <td>
                       <div style="display: flex; gap: 10px;">
-                        <a type="button" class="btn btn-success btn-sm"
+                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center"
+                          style="padding-bottom: 0px; width:25px; height: 28px;"
                           href="employeeUpdate.php?id=<?php echo $emp_data['emp_id']; ?>">
-                          <i class="fa-solid fa-pen-to-square"></i> Edit
+                          <i style="font-size: 20px;" class="ri-edit-box-line"></i>
                         </a>
 
-                        <a type="button" class="btn btn-danger btn-sm"
+                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center"
+                          style="padding-bottom: 0px; width:25px; height:28px"
+                          data-mdb-ripple-init
                           onclick="return confirm('Are you sure you want to delete this employee?');"
                           href="employeeDelete.php?id=<?php echo $emp_data['emp_id']; ?>">
-                          <i class="fa-solid fa-trash"></i> Delete
+                          <i style="font-size: 20px;" class="ri-delete-bin-6-line"></i>
                         </a>
                       </div>
                     </td>
@@ -629,15 +632,15 @@ $emp_data = $result_emp->fetch_assoc();
   <script src="js/main.js">
   </script>
 
-<script>
-  //used to refer to other page 
-  function redirectToFormPage() {
-            // Get the current page URL
-            var referrer = encodeURIComponent(window.location.href);
-            // Redirect to the form page with the referrer URL as a query parameter
-            window.location.href = 'createEmployee.php?referrer=' + referrer;
-        }
-</script>
+  <script>
+    //used to refer to other page 
+    function redirectToFormPage() {
+      // Get the current page URL
+      var referrer = encodeURIComponent(window.location.href);
+      // Redirect to the form page with the referrer URL as a query parameter
+      window.location.href = 'createEmployee.php?referrer=' + referrer;
+    }
+  </script>
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>

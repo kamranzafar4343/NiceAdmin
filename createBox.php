@@ -1,11 +1,8 @@
 <?php
-
-// Start the session
 session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-    // If not logged in, redirect to login page
     header("Location: pages-login.php");
     exit();
 }
@@ -14,7 +11,7 @@ include "db.php";
 
 $email = $_SESSION['email'];
 
-// Get user name and email from register table
+// Get user name and email from the register table
 $getAdminData = "SELECT * FROM register WHERE email = '" . mysqli_real_escape_string($conn, $email) . "'";
 $resultData = mysqli_query($conn, $getAdminData);
 
@@ -24,10 +21,7 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-//show default receive via value
-$pre_val_receive_via =  isset($_POST['rec_via']) ? $_POST['rec_via'] : 'default text';
-
-
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $company_id = mysqli_real_escape_string($conn, $_POST['company']);
     $branch_id = mysqli_real_escape_string($conn, $_POST['branch']);
@@ -37,16 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rec_via = mysqli_real_escape_string($conn, $_POST['rec_via']);
     $status = mysqli_real_escape_string($conn, $_POST['status']);
 
-    // Check if the box name and barcode already exists in the database
-    $nameCheck = "SELECT * FROM `box` WHERE `barcode`='$barcode'";
-    $nameCheckResult = $conn->query($nameCheck);
-
-    if ($nameCheckResult->num_rows > 0) {
-        die("Error: The barcode '$barcode' already exists.");
-    }
-
-    // Insert data into box
-    $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via, status) VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via', '$status')";
+    // Insert data into box table
+    $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via, status) 
+            VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via', '$status')";
 
     if ($conn->query($sql) === TRUE) {
         header("location: createBox.php");
@@ -55,6 +42,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $conn->close();
+}
+
+// Handle AJAX request to check if barcode already exists
+if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
+    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
+    $query = "SELECT * FROM `box` WHERE `barcode`='$barcode'";
+    $result = mysqli_query($conn, $query);
+
+    // If the barcode exists, return JSON response
+    if ($result->num_rows > 0) {
+        echo json_encode(['exists' => true]);
+    } else {
+        echo json_encode(['exists' => false]);
+    }
+    exit(); // Prevent further execution of the script
 }
 
 ?>
@@ -422,97 +424,129 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <!--form--------------------------------------form--------------------------------------->
     <div class="headerimg text-center">
-        <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Add a box</h2>
-    </div>
-    <!-- End Header form -->
-    <div class="container d-flex justify-content-center">
-        <div class="card custom-card shadow-lg mt-3">
-            <!-- <h5 class="card-title ml-4">Create Company </h5> -->
-            <div class="card-body">
-                <br>
-                <!-- Multi Columns Form -->
-                <form class="row g-3 needs-validation" action="" method="POST">
+    <img src="image/create.png" alt="network-logo" width="50" height="50">
+    <h2>Add a box</h2>
+</div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="box_barcode" pattern="[a-zA-Z0-9]{7}"
-                            title="Input must be exactly 7 characters long and contain letters and digits only." autofocus>
-                        <div id="barcodeFeedback" class="invalid-feedback">
-                            <!-- Error message will be displayed here -->
-                        </div>
+<div class="container d-flex justify-content-center">
+    <div class="card custom-card shadow-lg mt-3">
+        <div class="card-body">
+            <br>
+            <form class="row g-3 needs-validation" action="" method="POST" id="boxForm">
+
+                <div class="col-md-6">
+                    <label class="form-label">Barcode</label>
+                    <input type="text" class="form-control" name="barcode" id="box_barcode" pattern="[a-zA-Z0-9]{7}"
+                        title="Input must be exactly 7 characters long and contain letters and digits only." required>
+                    <div id="barcodeFeedback" class="invalid-feedback">
+                        <!-- Error message will be displayed here -->
                     </div>
+                </div>
 
-                    <div class="col-md-6">
-                        <label for="company">Select Company:</label>
-                        <select id="company" class="form-select" name="company" required>
-                            <option value=""> Select a Company </option>
+                <div class="col-md-6">
+                    <label for="company">Select Company:</label>
+                    <select id="company" class="form-select" name="company" required>
+                        <option value=""> Select a Company </option>
+                        <?php
+                        $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
 
-                            <?php
+                <div class="col-md-6">
+                    <label for="branch">Select a Branch:</label>
+                    <select id="branch" class="form-select" name="branch" required>
+                        <option value="">Select a Branch</option>
+                    </select>
+                </div>
 
-                            //fetch companies
-                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
-                            }
-                            ?>
+                <div class="col-md-6">
+                    <label for="rec_date">Receive date</label>
+                    <input type="datetime-local" class="form-control" name="rec_date" id="rec_date" required>
+                </div>
 
-                        </select>
-                    </div>
+                <div class="col-md-6">
+                    <label for="sender">Sender:</label>
+                    <input type="text" class="form-control" name="sender" id="sender" pattern="[a-zA-Z\s]+"
+                        title="Only alphabets and spaces are allowed" required>
+                </div>
 
-                    <div class="col-md-6">
-                        <label for="branch">Select a Branch:</label>
-                        <select id="branch" class="form-select" name="branch" required>
-                            <option value="">Select a Branch</option>
-                        </select>
-                    </div>
+                <div class="col-md-6">
+                    <label for="rec_via">Receive via:</label>
+                    <select id="rec_via" class="form-select" name="rec_via" required>
+                        <option value="">Select an option</option>
+                        <option value="Self">Self</option>
+                        <option value="Courier">Courier</option>
+                    </select>
+                </div>
 
-                    <div class="col-md-6">
-                        <label for="rec_date">Receive date</label>
-                        <input type="datetime-local" class="form-control" name="rec_date" id="rec_date" required>
-                    </div>
-                    <div class="col-md-6">
+                <div class="col-md-6">
+                    <label for="status">Status:</label>
+                    <select id="status" class="form-select" name="status" required>
+                        <option value="">Select Status</option>
+                        <option value="In" selected>In</option>
+                    </select>
+                </div>
 
-                        <label for="sender">Sender:</label>
-                        <input type="text"
-                            class="form-control"
-                            name="sender"
-                            id="sender"
-                            pattern="[a-zA-Z\s]+"
-                            title="Only alphabets and spaces are allowed"
-                            required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="rec_via">Receive via:</label>
-                        <select id="rec_via" class="form-select" name="rec_via" required>
-                            <option value="">Select an option</option>
-                            <option value="Self">Self</option>
-                            <option value="Courier">Courier</option>
-                        </select>
-                    </div>
-
-
-
-                    <div class="col-md-6">
-                        <label for="status">Status:</label>
-                        <select id="status" class="form-select" name="status" required>
-                            <option value="">Select Status</option>
-                            <option value="In" selected>In</option>
-                            <!-- <option value="Out">Out</option>
-                            <option value="Ready for Destroy">Ready for Destroy</option> -->
-                        </select>
-                    </div>
-
-                    <div class="text-center mt-4 mb-2">
+                <div class="text-center mt-4 mb-2">
                     <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'Box.php';">Cancel</button>
-                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary" onclick="localStorage.clear()">Reset</button>
-                    </div>
-                </form>
+                    <button type="submit" class="btn btn-outline-primary mr-1" id="submitBtn">Submit</button>
+                    <button type="reset" class="btn btn-outline-secondary" onclick="localStorage.clear()">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Duplicate Barcode -->
+<div class="modal fade" id="duplicateBarcodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Duplicate Barcode</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                The barcode you entered already exists. Please use a different barcode.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
+<script>
+    document.getElementById('box_barcode').addEventListener('input', function() {
+    let barcode = this.value;
+
+    if (barcode.length === 7) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'createBox.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let response = JSON.parse(xhr.responseText);
+                if (response.exists) {
+                    // Show modal popup if barcode exists
+                    let duplicateModal = new bootstrap.Modal(document.getElementById('duplicateBarcodeModal'));
+                    duplicateModal.show();
+                    document.getElementById('submitBtn').disabled = true; // Disable submit button
+                } else {
+                    document.getElementById('submitBtn').disabled = false; // Enable submit button
+                }
+            }
+        };
+        xhr.send('checkBarcode=true&barcode=' + barcode);
+    } else {
+        document.getElementById('submitBtn').disabled = false; // Enable submit button for other lengths
+    }
+});
+
+</script>
+
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <script>

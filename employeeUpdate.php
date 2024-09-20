@@ -763,9 +763,9 @@ End Search Bar -->
                     <div class="col-md-6">
                         <label class="form-label">Gender</label><br>
                         <input type="radio" id="male" name="gender" value="male" <?php if ($emp_gender == 'male') echo 'checked'; ?>>
-                        <label for="male">Male</label><br>
+                        <label for="male">Male</label>
                         <input type="radio" id="female" name="gender" value="female" <?php if ($emp_gender == 'female') echo 'checked'; ?>>
-                        <label for="female">Female</label><br>
+                        <label for="female">Female</label>
                         <input type="radio" id="other" name="gender" value="other" <?php if ($emp_gender == 'other') echo 'checked'; ?>>
                         <label for="other">Other</label>
                     </div>

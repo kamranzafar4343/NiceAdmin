@@ -33,7 +33,7 @@ if (isset($_GET['id'])) {
     $row = mysqli_fetch_array($result);
 
     $item_name = $row['item_name'];
-    $item_price = $row['item_price'];
+    // $item_price = $row['item_price'];
     $item_quantity = $row['item_quantity'];
     $status = $row['status'];
     $barcode = $row['barcode'];

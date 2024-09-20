@@ -15,7 +15,7 @@ include "db.php";
 $email = $_SESSION['email'];
 
 // Get user name and email from register table
-$getAdminData = "SELECT * FROM register WHERE email = '".mysqli_real_escape_string($conn, $email)."'";
+$getAdminData = "SELECT * FROM register WHERE email = '" . mysqli_real_escape_string($conn, $email) . "'";
 $resultData = mysqli_query($conn, $getAdminData);
 
 if ($resultData->num_rows > 0) {
@@ -459,19 +459,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="datetime-local" class="form-control" name="rec_date" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="sender">Sender</label>
-                        <input type="text" class="form-control" name="sender">
+                        <label for="sender">Sender:</label>
+                        <input type="text"
+                            class="form-control"
+                            name="sender"
+                            id="sender"
+                            pattern="[a-zA-Z\s]+"
+                            title="Only alphabets and spaces are allowed"
+                            required>
                     </div>
-                    
+
+
                     <div class="col-md-6">
-                        <label for="rec_via">Receive via</label>
-                        <input type="text" class="form-control" name="rec_via" required>
+                        <label for="rec_via">Receive via:</label>
+                        <select id="rec_via" class="form-select" name="rec_via" required>
+                            <option value="">Select an option</option>
+                            <option value="Self">Self</option>
+                            <option value="Courier">Courier</option>
+                        </select>
                     </div>
-                    
+
+
                     <div class="col-md-6">
                         <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="box_barcode"  pattern="[a-zA-Z0-9]{7}" 
-                        title="Input must be exactly 7 characters long and contain letters and digits only.">
+                        <input type="text" class="form-control" name="barcode" id="box_barcode" pattern="[a-zA-Z0-9]{7}"
+                            title="Input must be exactly 7 characters long and contain letters and digits only.">
                         <div id="barcodeFeedback" class="invalid-feedback">
                             <!-- Error message will be displayed here -->
                         </div>

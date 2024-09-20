@@ -458,9 +458,9 @@ End Search Bar -->
           <div class="col-md-6">
             <label for="">Select Gender:</label><br>
             <input type="radio" id="male" name="gender" value="male">
-            <label for="male">Male</label><br>
+            <label for="male">Male</label>
             <input type="radio" id="female" name="gender" value="female">
-            <label for="female">Female</label><br>
+            <label for="female">Female</label>
             <input type="radio" id="other" name="gender" value="other">
             <label for="other">Other</label>
           </div>

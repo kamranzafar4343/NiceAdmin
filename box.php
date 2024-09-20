@@ -272,7 +272,6 @@ if (isset($_GET['comp_id'])) {
 
         }
 
-
         /* Card */
         .cardBranch {
             margin-bottom: 30px;
@@ -363,6 +362,12 @@ if (isset($_GET['comp_id'])) {
 
         .datatable-bottom {
             width: 122%;
+        }
+
+        .drpdwn {
+            margin-left: 268px;
+            max-width: 424px;
+            margin-top: 28px;
         }
     </style>
 
@@ -527,15 +532,7 @@ if (isset($_GET['comp_id'])) {
 
     <!-- Search bar and company filter -->
     <div class="row">
-        <div class="col-md-6">
-            <div class="search-container">
-                <form id="searchForm" action="" method="GET">
-                    <input type="text" id="searchInput" name="query" placeholder="Enter box name or scan barcode..." autofocus>
-                    <input type="submit" value="Search" class="btn btn-success btn-success">
-                </form>
-            </div>
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-6 drpdwn">
             <label for="company">Select Company:</label>
             <select id="company" class="form-select" name="comp_FK_item" required onchange="filterCompany(this.value)">
                 <option value="">Select a Company</option>
@@ -548,6 +545,7 @@ if (isset($_GET['comp_id'])) {
                 ?>
             </select>
         </div>
+    </div>
     </div>
 
     <!-- Main content -->

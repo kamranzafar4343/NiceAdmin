@@ -282,6 +282,10 @@ $emp_data = $result_emp->fetch_assoc();
       display: flex;
       gap: 250px;
     }
+
+    .emp_tb{
+      border-radius: 20px;
+    }
   </style>
 
   <!-- Template Main CSS File -->
@@ -511,7 +515,7 @@ $emp_data = $result_emp->fetch_assoc();
             <?php
             if ($result_emp->num_rows > 0) {
             ?>
-              <table class="table datatable">
+              <table class="table datatable emp_tb">
                 <thead>
                   <tr>
                     <th scope="col">Name</th>

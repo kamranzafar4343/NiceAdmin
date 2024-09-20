@@ -433,15 +433,6 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             title="Input must be exactly 8 characters long" autofocus>
                     </div>
                 
-                <!-- Select Box -->
-                <div class="col-md-6">
-                        <label for="box">Select Box:</label>
-                        <select id="box" class="form-select" name="box_FK_item" required>
-                            <option value="">Select a Box</option>
-                            <!-- The options will be populated via AJAX based on the selected branch -->
-                        </select>
-                    </div>
-                
                     <!-- Select Company -->
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>
@@ -466,7 +457,14 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         </select>
                     </div>
 
-                    
+                    <!-- Select Box -->
+                <div class="col-md-6">
+                        <label for="box">Select Box:</label>
+                        <select id="box" class="form-select" name="box_FK_item" required>
+                            <option value="">Select a Box</option>
+                            <!-- The options will be populated via AJAX based on the selected branch -->
+                        </select>
+                    </div>
 
                     <!-- <div class="col-md-6">
                         <label for="comp_name" class="form-label">Item Name</label>

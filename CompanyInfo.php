@@ -541,32 +541,6 @@ $emp_data = $result_emp->fetch_assoc();
                     echo "<tr>";
                     echo "<td>" . ($emp_data["name"]) . "</td>";
 
-                    // //get specific company id   
-                    // $comp_id = $row['companiID_FK'];
-
-                    // //show company name of box
-                    // $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
-                    // $result3 = $conn->query($sql3);
-                    // if ($result3->num_rows > 0) {
-                    //   $row3 = $result3->fetch_assoc();
-                    //   $comp_name = $row3['comp_name'];
-                    // }
-
-
-                    // echo "<td>" . $comp_name . "</td>";
-
-
-                    // //get specific branch id   
-                    // $branch_id = $row['branchID_FK'];
-
-                    // //show branch name of box
-                    // $sql7 = "SELECT * FROM branch WHERE branch_id= '$branch_id'";
-                    // $result7 = $conn->query($sql7);
-                    // if ($result7->num_rows > 0) {
-                    //   $row7 = $result7->fetch_assoc();
-                    //   $branch_name = $row7['branch_name'];
-                    // }
-
                     // echo "<td>" . $branch_name . "</td>";
                     echo "<td>" . ($emp_data["email"]) . "</td>";
                     echo "<td>" . ($emp_data["phone"]) . "</td>";
@@ -577,18 +551,18 @@ $emp_data = $result_emp->fetch_assoc();
                   ?>
                     <td>
                       <div style="display: flex; gap: 10px;">
-                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center"
+                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center align-items-center text-center"
                           style="padding-bottom: 0px; width:25px; height: 28px;"
                           href="employeeUpdate.php?id=<?php echo $emp_data['emp_id']; ?>">
-                          <i style="font-size: 20px;" class="ri-edit-box-line"></i>
+                          <i class="ri-edit-box-line mb-1"></i>
                         </a>
 
-                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center"
-                          style="padding-bottom: 0px; width:25px; height:28px"
+                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center align-items-center text-center"
+                          style="padding-bottom: 0; width: 25px; height: 28px;"
                           data-mdb-ripple-init
                           onclick="return confirm('Are you sure you want to delete this employee?');"
                           href="employeeDelete.php?id=<?php echo $emp_data['emp_id']; ?>">
-                          <i style="font-size: 20px;" class="ri-delete-bin-6-line"></i>
+                          <i class="ri-delete-bin-6-line mb-1"></i>
                         </a>
                       </div>
                     </td>

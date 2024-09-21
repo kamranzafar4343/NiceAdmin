@@ -26,7 +26,7 @@ This project is a PHP-based admin panel designed to manage and interact with var
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/your-repository.git
+   git clone https://github.com/kamranzafar4343/NiceAdmin.git
    ```
 
 2. **Navigate to the Project Directory:**
@@ -48,7 +48,7 @@ This project is a PHP-based admin panel designed to manage and interact with var
    - Configure your web server to point to the `public` directory of this project.
 
 6. **Access the Admin Panel:**
-   - Open your browser and go to `http://localhost/your-repository/public` to access the admin panel.
+   - Open your browser and go to `http://localhost/index.php` to access the admin panel.
 
 ## Usage
 
@@ -72,11 +72,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 For any questions or issues, please contact kamranzafar4343@gmail.com
-
----
-
-Feel free to adjust the details based on your specific project needs and structure!
-https://dev.controloye.com/masiQul/index.php?route
-
-http://10.10.10.1/masiQul/index.php?route=/sql&server=1&db=catmarketing&table=compani&pos=0
-http://10.10.10.1/misc/kamran/NiceAdmin/

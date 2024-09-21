@@ -10,6 +10,7 @@ if (!isset($_SESSION['email'])) {
 }
 include 'db.php';
 
+//get email from session 
 $email = $_SESSION['email'];
 //get user name and email from register table
  $getAdminData = "SELECT * FROM register WHERE email = '$email'";

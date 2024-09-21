@@ -8,12 +8,14 @@ if (!isset($_SESSION['email'])) {
   header("Location: pages-login.php");
   exit();
 }
+
 include "db.php"; // Include the database connection
 
 $sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
 $result = $conn->query($sql);
 
-$email = $_SESSION['email'];
+//get session email 
+$email = $_SESSION['email']; 
 //get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
@@ -285,8 +287,8 @@ if ($resultData->num_rows > 0) {
                   <th scope="col" style="width:9%;">Actions</th>
                 </tr>
               </thead>
-              <tbody style="table-layout: fixed;">
 
+              <tbody style="table-layout: fixed;">
                 <?php
                 $counter = 1; // Initialize counter
                 while ($row = $result->fetch_assoc()) {
@@ -395,6 +397,8 @@ if ($resultData->num_rows > 0) {
   <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
   <script>
+
+
     new DataTable('#companies', {
       layout: {
         topStart: {

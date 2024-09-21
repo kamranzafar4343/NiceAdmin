@@ -333,10 +333,6 @@ $result = $conn->query($sql);
             width: 942px;
         }
 
-        .datatable-bottom {
-            width: 122%;
-        }
-
         .barcode {
             height: 37px;
             width: 167px;
@@ -602,6 +598,7 @@ $result = $conn->query($sql);
                                 <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this record?\');" href="itemDelete.php?id=' . $row['item_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                             </div>
                         </td>';
+                        
                             echo '</tr>';
                         }
                         echo '</tbody></table>';

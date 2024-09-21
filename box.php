@@ -25,28 +25,14 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-// Initialize query condition
-$searchQuery = "";
-if (isset($_GET['query']) && !empty($_GET['query'])) {
-    $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
+//select all columns of boxes 
+$sql = "SELECT * FROM box";
+$result = $conn->query($sql);
 
-    // Search query: match barcode exactly or item name partially
-    $sql = "SELECT * FROM box WHERE barcode = '%$searchQuery%'";
-    $result = $conn->query($sql);
-} else {
-    // Default query if no search is performed
-    $sql = "SELECT * FROM box";
-    $result = $conn->query($sql);
-}
-?>
-<?php
+
 if (isset($_GET['comp_id'])) {
     $comp_id = $_GET['comp_id'];
     $sql = "SELECT * FROM box WHERE companiID_FK = '$comp_id'";
-    $result = $conn->query($sql);
-} else {
-    // Default query
-    $sql = "SELECT * FROM box";
     $result = $conn->query($sql);
 }
 ?>
@@ -357,11 +343,6 @@ if (isset($_GET['comp_id'])) {
 
         .datatable-pagination {
             margin-left: 50px;
-        }
-
-
-        .datatable-bottom {
-            width: 122%;
         }
 
         .drpdwn {

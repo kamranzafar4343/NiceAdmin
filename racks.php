@@ -386,6 +386,7 @@ $result = $conn->query($sql);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: -25px;
         }
+
         .datatable-search {
             margin-left: 485px !important;
         }
@@ -561,13 +562,15 @@ $result = $conn->query($sql);
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <!-- Button to add new item -->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary mb-3">Add Item</button>
+    <!-- Button to add new rack -->
+    <!-- Add Rack Button -->
+    <button id="fixedButtonRack" type="button" onclick="window.location.href = 'createRack.php'" class="btn btn-primary mb-3">Add Rack</button>
 
-    <!-- Search bar -->
+
+    <!-- Search bar for racks -->
     <div class="search-container">
         <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Scan box barcode..." autofocus>
+            <input type="text" id="searchInput" name="query" placeholder="Search by rack code..." autofocus>
             <input type="submit" value="Search" class="btn btn-success btn-success">
         </form>
     </div>
@@ -577,115 +580,87 @@ $result = $conn->query($sql);
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title">List of Items</h5>
-                    <?php
-                    // Check if there are any results
-                    if ($result->num_rows > 0) {
-                        // Display table
-                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
-                    <thead>
-                        <tr>
-                            <th scope="col" style="width: 5%;">#</th>
-                            <th scope="col" style="width: 15%;">Barcode</th>
-                            <th scope="col" style="width: 20%;">Created at</th>
-                            <th scope="col" style="width: 25%;">Barcode Image</th>
-                            <th scope="col" style="width: 15%;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody style="table-layout: fixed;">';
+                    <h5 class="card-title">List of Racks</h5>
 
-                        // Counter variable
+                    <?php
+                    include 'db.php'; // Include the database connection
+
+                    // Search functionality
+                    $searchQuery = '';
+                    if (isset($_GET['query'])) {
+                        $searchQuery = $_GET['query'];
+                    }
+
+                    // SQL query to get racks based on search
+                    $sql = "SELECT * FROM racks WHERE rack_code LIKE '%$searchQuery%'";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        // Display table of racks
+                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="width: 5%;">#</th>
+                                <th scope="col" style="width: 20%;">Rack Code</th>
+                                <th scope="col" style="width: 20%;">Level</th>
+                                <th scope="col" style="width: 20%;">Horizontal</th>
+                                <th scope="col" style="width: 15%;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody style="table-layout: fixed;">';
+
+                        // Counter variable for row numbers
                         $counter = 1;
 
-                        // Loop through results
+                        // Loop through the results and display each row
                         while ($row = $result->fetch_assoc()) {
                             echo '<tr>';
                             echo '<td>' . $counter++ . '</td>';
-                            echo '<td><a class="text-primary fw-bold" href="itemInfo.php?id=' . $row['item_id'] . '">' . $row['barcode'] . '</a></td>';
-                            echo '<td>' . ($row["timestamp"]) . '</td>';
-                            echo '<td><img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/></td>';
+                            echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_code'] . '</a></td>';
+                            echo '<td>' . $row["level"] . '</td>';
+                            echo '<td>' . $row["horizontal"] . '</td>';
                             echo '<td>
-                            <div style="display: flex; gap: 10px;">
-                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this record?\');" href="itemDelete.php?id=' . $row['item_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                            </div>
-                        </td>';
-                        
+                                    <div style="display: flex; gap: 10px;">
+                                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this rack?\');" href="rackDelete.php?id=' . $row['id'] . '">
+                                            <i style="width: 20px;" class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </div>
+                                  </td>';
                             echo '</tr>';
                         }
                         echo '</tbody></table>';
                     } else {
-                        // Display message if no results
-                        echo '<p>No items found.</p>';
+                        // Display message if no racks found
+                        echo '<p>No racks found.</p>';
                     }
+
+                    // Close database connection
+                    $conn->close();
                     ?>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Back to top button -->
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
-
-    <!-- Template Main JS File -->
+    <script src="assets/js/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
     <script src="assets/js/main.js"></script>
 
     <script>
-        // Listen for the Enter key press
+        // Submit form when pressing enter in search input
         document.getElementById("searchInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault(); // Prevent default form submission
                 document.getElementById("searchForm").submit(); // Manually submit the form
             }
         });
-
-        //click on the picture to update with ajax
-        $(document).on('click', 'img', function() {
-            $(this).next('input[type="file"]').click();
-        });
-
-        function uploadImage(comp_id) {
-            var fileInput = document.getElementById('file-' + comp_id);
-            var file = fileInput.files[0];
-            var formData = new FormData();
-            formData.append('image', file);
-            formData.append('comp_id', comp_id);
-
-            $.ajax({
-                url: 'update_image.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    // Update the image source with the new image path
-                    $('#image-' + comp_id).attr('src', response);
-                },
-                error: function() {
-                    alert('Image upload failed. Please try again.');
-                }
-            });
-        }
-        import {
-            Ripple,
-            initMDB
-        } from "mdb-ui-kit";
-
-        initMDB({
-            Ripple
-        });
     </script>
+
 
 
 </body>

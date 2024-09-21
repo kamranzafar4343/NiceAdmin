@@ -590,7 +590,7 @@ input.btn.btn-success {
       gap: 250px;
     }
 
-    .emp_tb{
+    .emp_tb {
       border-radius: 20px;
     }
   </style>
@@ -698,6 +698,11 @@ input.btn.btn-success {
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
           <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+          <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
 

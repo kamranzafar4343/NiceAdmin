@@ -90,8 +90,6 @@ if ($resultData->num_rows > 0) {
       margin-left: 844px;
       margin-top: 26px;
     }
-
-    
   </style>
 
   <!-- Template Main CSS File -->
@@ -202,6 +200,11 @@ if ($resultData->num_rows > 0) {
           <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+          <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
 
       <li class="nav-heading">Pages</li>
 
@@ -253,7 +256,7 @@ if ($resultData->num_rows > 0) {
 
   <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Company</button>
   <button id="fixedButton" type="button" onclick="window.location.href = 'emailTable.php';" class="btn btn-outline-info mail">
-  <b><i class="ri-mail-line"></i></b>
+    <b><i class="ri-mail-line"></i></b>
   </button>
   <div class="container">
 

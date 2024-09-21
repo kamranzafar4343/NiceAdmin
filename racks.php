@@ -1,6 +1,5 @@
 <?php
-// session_start(); // Start the session
-session_start();
+session_start(); // Start the session
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
@@ -20,21 +19,21 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-// Initialize query condition
-$searchQuery = "";
-if (isset($_GET['query']) && !empty($_GET['query'])) {
-    $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
+// // Initialize query condition
+// $searchQuery = "";
+// if (isset($_GET['query']) && !empty($_GET['query'])) {
+//     $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
 
-    // Search query: match barcode exactly or item name partially
-    $sql = "SELECT * FROM box WHERE barcode = '%$searchQuery%'";
-    $result = $conn->query($sql);
-} else {
-    // Default query if no search is performed
-    $sql = "SELECT * FROM item";
-    $result = $conn->query($sql);
-}
+//     // Search query: match barcode exactly or item name partially
+//     $sql = "SELECT * FROM box WHERE barcode = '%$searchQuery%'";
+//     $result = $conn->query($sql);
+// } else {
+//     // Default query if no search is performed
+//     $sql = "SELECT * FROM item";
+//     $result = $conn->query($sql);
+// }
 
-$result = $conn->query($sql);
+// $result = $conn->query($sql);
 
 ?>
 

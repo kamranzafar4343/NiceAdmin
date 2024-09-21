@@ -1,6 +1,5 @@
 <?php
 
-// session_start(); // Start the session
 session_start();
 
 // Check if the user is logged in
@@ -13,7 +12,8 @@ if (!isset($_SESSION['email'])) {
 include "db.php";
 
 $email = $_SESSION['email'];
-//get user name and email from register table
+
+// Get user name and email from the register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
@@ -22,43 +22,36 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
+$error = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    // $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
     $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
     $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
     $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
-
-    // Check if the box name and barcode already exists in the database
-    $nameCheck = "SELECT * FROM `item` WHERE  `barcode`='$barcode'";
+    // Check if the barcode already exists
+    $nameCheck = "SELECT * FROM `item` WHERE `barcode`='$barcode'";
     $nameCheckResult = $conn->query($nameCheck);
 
-    //2 in 1 approach 
     if ($nameCheckResult->num_rows > 0) {
-        die("Error: The barcode '$barcode' already exists.");
-    }
-
-    $sql = "INSERT INTO  item (comp_FK_item, box_FK_item, branch_FK_item, barcode) 
-            VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode')";
-
-    if ($conn->query($sql) === TRUE) {
-        header("Location: createitem.php");
-        exit();
+        $error = true; // Set error to true if barcode exists
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
+        $sql = "INSERT INTO item (comp_FK_item, box_FK_item, branch_FK_item, barcode) 
+                VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode')";
 
-    $conn->close();
+        if ($conn->query($sql) === TRUE) {
+            header("Location: createitem.php");
+            exit();
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
 }
 
 $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
-
 ?>
-
 
 
 <!doctype html>
@@ -366,6 +359,11 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+                    <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
 
             <li class="nav-heading">Pages</li>
 
@@ -412,27 +410,23 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
 
     <!--form--------------------------------------form--------------------------------------->
-    <!-- Start Header form -->
-    <div class="headerimg text-center">
+   <!-- Start Header form -->
+   <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
         <h2>Add an item</h2>
     </div>
     <!-- End Header form -->
+
     <div class="container d-flex justify-content-center">
         <div class="card custom-card shadow-lg mt-3">
-            <!-- <h5 class="card-title ml-4">Create Company </h5> -->
             <div class="card-body">
-                <br>
-
-                <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST">
-                    
-                <div class="col-md-6">
+                    <div class="col-md-6">
                         <label class="form-label">Barcode</label>
                         <input type="text" class="form-control" name="barcode" id="item_barcode" pattern="[a-zA-Z0-9]{8}"
-                            title="Input must be exactly 8 characters long" autofocus>
+                            title="Input must be exactly 8 characters long" autofocus required>
                     </div>
-                
+
                     <!-- Select Company -->
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>
@@ -442,7 +436,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             // Fetch the companies from the database
                             $result = $conn->query("SELECT comp_id, comp_name FROM compani");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}' $selected>{$row['comp_name']}</option>";
+                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
                             }
                             ?>
                         </select>
@@ -458,7 +452,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     </div>
 
                     <!-- Select Box -->
-                <div class="col-md-6">
+                    <div class="col-md-6">
                         <label for="box">Select Box:</label>
                         <select id="box" class="form-select" name="box_FK_item" required>
                             <option value="">Select a Box</option>
@@ -466,32 +460,48 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         </select>
                     </div>
 
-                    <!-- <div class="col-md-6">
-                        <label for="comp_name" class="form-label">Item Name</label>
-                        <input type="text" class="form-control" name="item_name" id="item_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
-                    </div> -->
-
-                    <!-- <div class="col-md-6">
-                        <label class="form-label">Item price</label>
-                        <input type="text" class="form-control" name="item_price" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label">Item quantity</label>
-                        <input type="text" class="form-control" name="item_quantity" required>
-                    </div> -->
-
-                  
-
                     <div class="text-center mt-4 mb-2">
-                    <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'showItems.php';">Cancel</button>
+                        <button type="reset" class="btn btn-outline-info mr-1"
+                            onclick="window.location.href = 'showItems.php';">Cancel</button>
                         <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary ">Reset</button>
+                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- Modal for Barcode Error -->
+    <div class="modal fade" id="barcodeErrorModal" tabindex="-1" aria-labelledby="barcodeErrorModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="barcodeErrorModalLabel">Barcode Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    The barcode you entered already exists. Please try a different one.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script to show modal when barcode already exists -->
+    <?php if ($error): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var barcodeErrorModal = new bootstrap.Modal(document.getElementById('barcodeErrorModal'));
+                barcodeErrorModal.show();
+            });
+        </script>
+    <?php endif; ?>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->

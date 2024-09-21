@@ -12,13 +12,13 @@ include 'db.php';
 
 $email = $_SESSION['email'];
 //get user name and email from register table
- $getAdminData = "SELECT * FROM register WHERE email = '$email'";
- $resultData = mysqli_query($conn, $getAdminData);
- if($resultData ->num_rows > 0){
-  $row2= $resultData->fetch_assoc();
-  $adminName= $row2['name'];
-  $adminEmail=$row2['email'];
- }
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+$resultData = mysqli_query($conn, $getAdminData);
+if ($resultData->num_rows > 0) {
+  $row2 = $resultData->fetch_assoc();
+  $adminName = $row2['name'];
+  $adminEmail = $row2['email'];
+}
 
 //get total no of companies for compani card
 $query = "SELECT COUNT(*) AS count FROM compani";
@@ -166,6 +166,11 @@ $itemCount = $rowItem['item_count'];
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
           <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+          <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
       <li class="nav-heading">Pages</li>

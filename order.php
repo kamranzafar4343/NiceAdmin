@@ -287,66 +287,7 @@ $resultShowOrders = $conn->query($showOrders);
       box-sizing: border-box;
     }
 
-    .custom2 {
-      font-size: 0.8rem;
-      border-radius: 7px;
-      padding-top: 14px;
-      padding-bottom: 14px;
-      padding-right: 34px;
-      padding-left: 40px;
-      margin-left: 20px;
-    }
-
-    tbody,
-    td,
-    tr {
-      word-wrap: break-word;
-      max-width: 200px;
-    }
-
-    .datatable-table>tbody>tr>td,
-    .datatable-table>tbody>tr>th,
-    .datatable-table>tfoot>tr>td,
-    .datatable-table>tfoot>tr>th,
-    .datatable-table>thead>tr>td,
-    .datatable-table>thead>tr>th {
-      vertical-align: top;
-      padding: 8px 2px;
-    }
-
-    .image-circle {
-      display: flex;
-      justify-content: center;
-      /* Horizontally center */
-      align-items: center;
-      text-align: center;
-    }
-
-
-    .navbar-image {
-      width: 50px;
-      height: 50px;
-      margin-right: 7px;
-    }
-
-    .headerbox {
-
-      display: flex;
-    }
-
-    .datatable-table>thead>tr>th {
-      vertical-align: bottom;
-      text-align: left;
-      border-bottom: 0px solid #d9d9d9;
-    }
-
-    .pagetitleinside button {
-      width: 150px;
-    }
-
-    .datatable-pagination {
-      margin-left: 50px;
-    }
+    
   </style>
 
   <!-- Template Main CSS File -->
@@ -463,6 +404,12 @@ $resultShowOrders = $conn->query($showOrders);
           <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+          <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+
 
       <li class="nav-heading">Pages</li>
 

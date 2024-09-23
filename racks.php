@@ -520,117 +520,89 @@ if (isset($_GET['comp_id'])) {
 
     <!--new table design-->
     <!-- Button to add new box -->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add Box</button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php';" class="btn btn-primary mb-3">Add Rack</button>
 
-    <!-- Search bar and company filter -->
-    <div class="row">
-        <div class="col-md-6 drpdwn">
-            <label for="company">Select Company:</label>
-            <select id="company" class="form-select" name="comp_FK_item" required onchange="filterCompany(this.value)">
-                <option value="">Select a Company</option>
-                <?php
-                // Fetch the companies from the database
-                $result = $conn->query("SELECT comp_id, comp_name FROM compani");
-                while ($row = $result->fetch_assoc()) {
-                    echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
-                }
-                ?>
-            </select>
-        </div>
-    </div>
+    <!-- Search bar for racks -->
+    <div class="search-container">
+        <form id="searchForm" action="" method="GET">
+            <input type="text" id="searchInput" name="query" placeholder="Search by rack code..." autofocus>
+            <input type="submit" value="Search" class="btn btn-success btn-success">
+        </form>
     </div>
 
     <!-- Main content -->
     <main id="main" class="main">
-
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title">List of Boxes</h5>
+                    <h5 class="card-title">List of Racks</h5>
 
                     <?php
-                    if (isset($_GET['comp_id'])) {
-                        $comp_id = $_GET['comp_id'];
-                        $sql = "SELECT * FROM box WHERE companiID_FK = '$comp_id'";
-                    } else {
-                        // Default query
-                        $sql = "SELECT * FROM box";
+                    include 'db.php'; // Include the database connection
+
+                    // Search functionality
+                    $searchQuery = '';
+                    if (isset($_GET['query'])) {
+                        $searchQuery = $_GET['query'];
                     }
+
+                    // SQL query to get racks based on search
+                    $sql = "SELECT * FROM racks WHERE rack_code LIKE '%$searchQuery%'";
                     $result = $conn->query($sql);
+
                     if ($result->num_rows > 0) {
+                        // Display table of racks
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 8%;">Box ID</th>
-                            <th scope="col" style="width: 14%;">Barcode</th>
-                            <th scope="col" style="width: 14%;">Company</th>
-                            <th scope="col" style="width: 14%;">Branch</th>
-                            <th scope="col" style="width: 14%;">Created at</th>
-                            <th scope="col" style="width: 10%;">Status</th>
-                            <th scope="col" style="width: 10%;">Action</th>
+                            <th scope="col" style="width: 5%;">#</th>
+                            <th scope="col" style="width: 15%;">Rack Code</th>
+                            <th scope="col" style="width: 10%;">Level</th>
+                            <th scope="col" style="width: 10%;">Horizontal</th>
+                            <th scope="col" style="width: 10%;">Rack Number</th>
+                            <th scope="col" style="width: 15%;">Column Identifier</th>
+                            <th scope="col" style="width: 10%;">Position Number</th>
+                            <th scope="col" style="width: 15%;">Actions</th>
                         </tr>
                     </thead>
-                    <tbody style="table-layout: fixed;">';
+                    <tbody>';
 
-                        // Counter variable
+                        // Counter variable for row numbers
                         $counter = 1;
 
+                        // Loop through the results and display each row
                         while ($row = $result->fetch_assoc()) {
                             echo '<tr>';
-                            echo '<td>' . ($row["box_id"]) . '</td>';
-                            echo '<td><a class="text-primary fw-bold" href="boxInfo.php?id=' . $row['box_id'] . '">' . $row['barcode'] . '</a></td>';
-
-                            // Get specific company id
-                            $comp_id = $row['companiID_FK'];
-                            $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
-                            $result3 = $conn->query($sql3);
-                            if ($result3->num_rows > 0) {
-                                $row3 = $result3->fetch_assoc();
-                                $comp_name = $row3['comp_name'];
-                            }
-                            //show specific company name
-                            echo '<td>' . $comp_name . '</td>';
-
-                            // Get specific branch id
-                            $branch_id = $row['branchID_FK'];
-                            $sql7 = "SELECT * FROM branch WHERE branch_id= '$branch_id'";
-                            $result7 = $conn->query($sql7);
-                            if ($result7->num_rows > 0) {
-                                $row7 = $result7->fetch_assoc();
-                                $branch_name = $row7['branch_name'];
-                            }
-                            //show specific branch name
-                            echo '<td>' . $branch_name . '</td>';
-                            
-                            echo '<td>' . ($row["created_at"]) . '</td>';
-                            echo '<td><i class="';
-                            if ($row["status"] == 'In') {
-                                echo 'fas fa-check-circle text-success';
-                            } elseif ($row["status"] == 'Out') {
-                                echo 'fas fa-times-circle text-danger';
-                            } elseif ($row["status"] == 'Ready for Destroy') {
-                                echo 'fas fa-exclamation-triangle text-warning';
-                            }
-                            echo '"></i> ' . $row["status"] . '</td>';
+                            echo '<td>' . $counter++ . '</td>';
+                            echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_code'] . '</a></td>';
+                            echo '<td>' . $row["level"] . '</td>';
+                            echo '<td>' . $row["horizontal"] . '</td>';
+                            echo '<td>' . $row["rack_number"] . '</td>';
+                            echo '<td>' . $row["column_identifier"] . '</td>';
+                            echo '<td>' . $row["position_number"] . '</td>';
                             echo '<td>
-                        <div style="display: flex; gap: 10px;">
-
-                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                onclick="return confirm(\'Are you sure you want to delete this record?\');" href="boxDelete.php?id=' . $row['box_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                        </div>
-                    </td>';
+                                <div style="display: flex; gap: 10px;">
+                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this rack?\');" href="rackDelete.php?id=' . $row['id'] . '">
+                                        <i style="width: 20px;" class="fa-solid fa-trash"></i>
+                                    </a>
+                                </div>
+                              </td>';
                             echo '</tr>';
-                            $counter++;
                         }
                         echo '</tbody></table>';
                     } else {
-                        echo '<p>No boxes found.</p>';
+                        // Display message if no racks found
+                        echo '<p>No racks found.</p>';
                     }
+
+                    // Close database connection
+                    $conn->close();
                     ?>
                 </div>
             </div>
         </div>
-    </main><!-- End #main -->
+    </main>
+
 
 
     <script>

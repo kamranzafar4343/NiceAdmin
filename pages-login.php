@@ -43,8 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- ALERTIFY CSS -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"/>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css"/>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css" />
+  <!-- google recaptcha -->
 
   <style>
     .w-100 {
@@ -92,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                       <input type="password" name="password" class="form-control" id="yourPassword" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
-
+                    <div class="g-recaptcha" data-sitekey="6Lf4QEsqAAAAAPRiGiTg5AF0FsZ-Q6d7dAuAptOb"></div>
                     <div class="col-6 d-flex">
                       <button class="btn btn-outline-primary w-100" type="submit" name="submit" value="submit">Login</button>
                     </div>
@@ -107,6 +108,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </section>
   </main>
 
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -116,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <?php if (!empty($error_message)): ?>
     <script>
       // Set Alertify to display notifications at the top of the page
-      alertify.set('notifier','position', 'top-center');
+      alertify.set('notifier', 'position', 'top-center');
       alertify.error("<?= $error_message ?>");
     </script>
   <?php endif; ?>

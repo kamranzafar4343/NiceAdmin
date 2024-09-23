@@ -15,7 +15,7 @@ $sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, c
 $result = $conn->query($sql);
 
 //get session email 
-$email = $_SESSION['email']; 
+$email = $_SESSION['email'];
 //get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
@@ -205,6 +205,12 @@ if ($resultData->num_rows > 0) {
           <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+          <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+
 
       <li class="nav-heading">Pages</li>
 
@@ -400,8 +406,6 @@ if ($resultData->num_rows > 0) {
   <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
   <script>
-
-
     new DataTable('#companies', {
       layout: {
         topStart: {

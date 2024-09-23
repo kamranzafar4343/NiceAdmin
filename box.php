@@ -582,6 +582,7 @@ if (isset($_GET['comp_id'])) {
                                 $row3 = $result3->fetch_assoc();
                                 $comp_name = $row3['comp_name'];
                             }
+                            //show specific company name
                             echo '<td>' . $comp_name . '</td>';
 
                             // Get specific branch id
@@ -592,7 +593,9 @@ if (isset($_GET['comp_id'])) {
                                 $row7 = $result7->fetch_assoc();
                                 $branch_name = $row7['branch_name'];
                             }
+                            //show specific branch name
                             echo '<td>' . $branch_name . '</td>';
+                            
                             echo '<td>' . ($row["created_at"]) . '</td>';
                             echo '<td><i class="';
                             if ($row["status"] == 'In') {

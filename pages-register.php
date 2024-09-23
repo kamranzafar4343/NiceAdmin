@@ -1,14 +1,11 @@
 <?php
-if(!empty($_SESSION["id"])){
-  header("Location: index.php");
-}
+// note: session not applied
 
 require 'db.php';
 if(isset($_POST["submit"])){
   $name = mysqli_real_escape_string($conn, $_POST["name"]);
   $email = mysqli_real_escape_string($conn, $_POST["email"]);
   $password = mysqli_real_escape_string($conn, $_POST["password"]);
-
 
   // Check if the email already exists in the database
   $checkEmailQuery = "SELECT * FROM register WHERE email='$email'";
@@ -163,6 +160,7 @@ if(isset($_POST["submit"])){
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 </script>
+
 
 </body>
 

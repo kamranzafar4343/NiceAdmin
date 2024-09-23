@@ -1,8 +1,10 @@
 <?php
+
 session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
+    // If not logged in, redirect to login page
     header("Location: pages-login.php");
     exit();
 }
@@ -12,54 +14,40 @@ include "db.php";
 $email = $_SESSION['email'];
 
 // Get user name and email from the register table
-$getAdminData = "SELECT * FROM register WHERE email = '" . mysqli_real_escape_string($conn, $email) . "'";
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
-
 if ($resultData->num_rows > 0) {
     $row2 = $resultData->fetch_assoc();
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
 
-// Handle form submission
+$error = false;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $company_id = mysqli_real_escape_string($conn, $_POST['company']);
-    $branch_id = mysqli_real_escape_string($conn, $_POST['branch']);
-    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
-    $rec_date = mysqli_real_escape_string($conn, $_POST['rec_date']);
-    $sender = mysqli_real_escape_string($conn, $_POST['sender']);
-    $rec_via = mysqli_real_escape_string($conn, $_POST['rec_via']);
-    $status = mysqli_real_escape_string($conn, $_POST['status']);
+    $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
+    $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
+    $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
+    $barcode = mysqli_real_escape_string($conn, $_POST['item_barcode']);
+    $req_name = mysqli_real_escape_string($conn, $_POST['name']);
+    $req_role = mysqli_real_escape_string($conn, $_POST['role']);
+    $auth_status = mysqli_real_escape_string($conn, $_POST['auth_status']);
+    $req_date = mysqli_real_escape_string($conn, $_POST['date']);
 
-    // Insert data into box table
-    $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via, status) 
-            VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via', '$status')";
-
-    if ($conn->query($sql) === TRUE) {
-        header("location: createBox.php");
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        $sql = "INSERT INTO orders (company, branch, box, item, name, role, auth_status, date) 
+                VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode', '$req_name', '$req_role', '$auth_status', '$req_date')";
+        if ($conn->query($sql) === TRUE) {
+            header("Location: order.php");
+            exit();
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
     }
 
-    $conn->close();
-}
-
-// Handle AJAX request to check if barcode already exists
-if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
-    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
-    $query = "SELECT * FROM `box` WHERE `barcode`='$barcode'";
-    $result = mysqli_query($conn, $query);
-
-    // If the barcode exists, return JSON response
-    if ($result->num_rows > 0) {
-        echo json_encode(['exists' => true]);
-    } else {
-        echo json_encode(['exists' => false]);
-    }
-    exit(); // Prevent further execution of the script
-}
+$selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -86,8 +74,12 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
+    <!--bootstrap search and select-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.14/css/bootstrap-select.min.css">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -134,11 +126,6 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
             font-family: monospace;
         }
 
-        .mt-5 {
-            margin-top: 7rem !important;
-            margin-left: -1rem;
-        }
-
         .company-name {
             font-size: 1rem;
         }
@@ -171,6 +158,12 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
             margin-left: 19px;
         }
 
+
+        /*styles for form*/
+        .card-body {
+            padding: 0 20px 20px 20px;
+            font-size: 0.8rem;
+        }
 
         .form-control[type=file]:not(:disabled):not([readonly]) {
             cursor: pointer;
@@ -261,18 +254,12 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
             border: none;
         }
-
-        /*styles for form*/
-        .card-body {
-            padding: 0 20px 20px 20px;
-            font-size: 0.8rem;
-        }
     </style>
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>add box</title>
+    <title>Add Order</title>
 
 
 </head>
@@ -360,7 +347,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
             </li><!-- End Tables Nav -->
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
                     <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
@@ -371,7 +358,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
@@ -404,13 +391,6 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 </a>
             </li><!-- End Login Page Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="logout.php">
-                    <i class="bi bi-box-arrow-left"></i>
-                    <span>Logout</span>
-                </a>
-            </li><!-- End Login Page Nav -->
-
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-contact.php">
@@ -428,133 +408,155 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
 
     <!--form--------------------------------------form--------------------------------------->
+    <!-- Start Header form -->
     <div class="headerimg text-center">
-    <img src="image/create.png" alt="network-logo" width="50" height="50">
-    <h2>Add a box</h2>
-</div>
+        <img src="image/create.png" alt="network-logo" width="50" height="50">
+        <h2>Create an Order</h2>
+    </div>
+    <!-- End Header form -->
 
-<div class="container d-flex justify-content-center">
-    <div class="card custom-card shadow-lg mt-3">
-        <div class="card-body">
-            <br>
-            <form class="row g-3 needs-validation" action="" method="POST" id="boxForm">
+    <div class="container d-flex justify-content-center">
+        <div class="card custom-card shadow-lg mt-3">
+            <div class="card-body">
+                <form class="row g-3 needs-validation" action="" method="POST">
 
-                <div class="col-md-6">
-                    <label class="form-label">Barcode</label>
-                    <input type="text" class="form-control" name="barcode" id="box_barcode" required>
-                    <div id="barcodeFeedback" class="invalid-feedback">
-                        <!-- Error message will be displayed here -->
+
+                    <!-- Select Company -->
+                    <div class="col-md-6">
+                        <label for="company">Select Company:</label>
+                        <select id="company" class="form-select" name="comp_FK_item" required>
+                            <option value="">Select a Company</option>
+                            <?php
+                            // Fetch the companies from the database
+                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <label for="company">Select Company:</label>
-                    <select id="company" class="form-select" name="company" required>
-                        <option value=""> Select a Company </option>
-                        <?php
-                        $result = $conn->query("SELECT comp_id, comp_name FROM compani");
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                    <!-- Select Branch -->
+                    <div class="col-md-6">
+                        <label for="branch">Select a Branch:</label>
+                        <select id="branch" class="form-select" name="branch_FK_item" required>
+                            <option value="">Select a Branch</option>
+                            <!-- The options will be populated via AJAX based on the selected company -->
+                        </select>
+                    </div>
 
-                <div class="col-md-6">
-                    <label for="branch">Select a Branch:</label>
-                    <select id="branch" class="form-select" name="branch" required>
-                        <option value="">Select a Branch</option>
-                    </select>
-                </div>
+                    <!-- Select Box -->
+                    <div class="col-md-6">
+                        <label for="box">Select Box:</label>
+                        <select id="box" class="form-select" name="box_FK_item" required>
+                            <option value="">Select a Box</option>
+                            <!-- The options will be populated via AJAX based on the selected branch -->
+                        </select>
+                    </div>
 
-                <div class="col-md-6">
-                    <label for="rec_date">Receive date</label>
-                    <input type="datetime-local" class="form-control" name="rec_date" id="rec_date" required>
-                </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Item Barcode</label>
+                        <input type="text" class="form-control" name="item_barcode" id="item_barcode" required>
+                    </div>
 
-                <div class="col-md-6">
-                    <label for="sender">Sender:</label>
-                    <input type="text" class="form-control" name="sender" id="sender" pattern="[a-zA-Z\s]+"
-                        title="Only alphabets and spaces are allowed" required>
-                </div>
+                    <div class="col-md-6">
+                        <label class="form-label">requestor name</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
 
-                <div class="col-md-6">
-                    <label for="rec_via">Receive via:</label>
-                    <select id="rec_via" class="form-select" name="rec_via" required>
-                        <option value="">Select an option</option>
-                        <option value="Self">Self</option>
-                        <option value="Courier">Courier</option>
-                    </select>
-                </div>
+                    <div class="col-md-6">
+                        <label for="" class="form-label">requestor role</label>
+                        <select class="form-select" id="" name="role" required>
+                            <option value="">Select Role</option>
+                            <option value="Chief Operations Officer (COO)">Chief Operations Officer (COO)</option>
+                            <option value="Operations Manager">Operations Manager</option>
+                            <option value="Supply Chain Manager">Supply Chain Manager</option>
+                            <option value="Head of Operations">Head of Operations</option>
+                            <option value="Human Resources Manager">Human Resources Manager</option>
+                            <option value="Marketing Manager">Marketing Manager</option>
+                        </select>
+                    </div>
 
-                <div class="col-md-6">
-                    <label for="status">Status:</label>
-                    <select id="status" class="form-select" name="status" required>
-                        <option value="">Select Status</option>
-                        <option value="In" selected>In</option>
-                    </select>
-                </div>
 
-                <div class="text-center mt-4 mb-2">
-                    <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'Box.php';">Cancel</button>
-                    <button type="submit" class="btn btn-outline-primary mr-1" id="submitBtn">Submit</button>
-                    <button type="reset" class="btn btn-outline-secondary" onclick="localStorage.clear()">Reset</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+                    <div class="col-md-6">
+                        <label for="" class="form-label">auth_status</label>
+                        <select class="form-select" id="" name="auth_status" required>
+                            <option value="">Select Status</option>
+                            <option value="Authorized">Authorized</option>
+                            <option value="Not Authorized">Not Authorized</option>
+                        </select>
+                    </div>
 
-<!-- Modal for Duplicate Barcode -->
-<div class="modal fade" id="duplicateBarcodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Duplicate Barcode</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                The barcode you entered already exists. Please use a different barcode.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="col-md-6">
+                        <label class="form-label">request date</label>
+                        <input type="datetime-local" class="form-control" name="date" required>
+                    </div>
+
+                    <div class="text-center mt-4 mb-2">
+                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
+                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
-<script>
-    document.getElementById('box_barcode').addEventListener('input', function() {
-    let barcode = this.value;
 
-    if (barcode.length === 7) {
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', 'createBox.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = JSON.parse(xhr.responseText);
-                if (response.exists) {
-                    // Show modal popup if barcode exists
-                    let duplicateModal = new bootstrap.Modal(document.getElementById('duplicateBarcodeModal'));
-                    duplicateModal.show();
-                    document.getElementById('submitBtn').disabled = true; // Disable submit button
-                } else {
-                    document.getElementById('submitBtn').disabled = false; // Enable submit button
-                }
-            }
-        };
-        xhr.send('checkBarcode=true&barcode=' + barcode);
-    } else {
-        document.getElementById('submitBtn').disabled = false; // Enable submit button for other lengths
-    }
-});
+    <!-- Modal for Barcode Error -->
+    <div class="modal fade" id="barcodeErrorModal" tabindex="-1" aria-labelledby="barcodeErrorModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="barcodeErrorModalLabel">Barcode Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    The barcode you entered already exists. Please try a different one.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-</script>
+    <!-- Include Bootstrap JS (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Script to show modal when barcode already exists -->
+    <?php if ($error): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var barcodeErrorModal = new bootstrap.Modal(document.getElementById('barcodeErrorModal'));
+                barcodeErrorModal.show();
+            });
+        </script>
+    <?php endif; ?>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js">
+    </script>
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
+    <!-- Template Main JS File -->
+
 
     <script>
         $(document).ready(function() {
+
             // When company is changed, fetch the branches
             $('#company').change(function() {
                 var company_id = $(this).val();
@@ -582,8 +584,38 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     }
                 });
             });
-        });
 
+            // When company is changed, fetch the box
+            $('#branch').change(function() {
+                var branch_id = $(this).val();
+
+                // AJAX request to get box for the selected company
+                $.ajax({
+                    url: 'get_boxes.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var boxes = JSON.parse(response);
+                            // Clear existing branches
+                            $('#box').empty();
+                            $('#box').append('<option value="">Select a Box</option>');
+                            // Add the new options from the response
+                            $.each(boxes, function(index, box) {
+                                $('#box').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
+                            });
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const companySelect = document.getElementById('company');
             const branchSelect = document.getElementById('branch');
@@ -602,29 +634,16 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 loadBranches(this.value); // Load branches based on the new selection
             });
 
-            // Retrieve the previously selected branch from localStorage
-            const selectedBranch = localStorage.getItem('selectedBranch');
-            if (selectedBranch) {
-                branchSelect.value = selectedBranch;
-            }
-
             // Store the selected branch in localStorage on change
             branchSelect.addEventListener('change', function() {
                 localStorage.setItem('selectedBranch', this.value);
                 loadBoxes(this.value); // Load boxes based on the selected branch
             });
 
-            // Retrieve the previously selected box from localStorage
-            const selectedBox = localStorage.getItem('selectedBox');
-            if (selectedBox) {
-                boxSelect.value = selectedBox;
-            }
-
             // Store the selected box in localStorage on change
             boxSelect.addEventListener('change', function() {
                 localStorage.setItem('selectedBox', this.value);
             });
-
 
             // Function to load branches via AJAX
             function loadBranches(company_id) {
@@ -646,6 +665,35 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                             const selectedBranch = localStorage.getItem('selectedBranch');
                             if (selectedBranch) {
                                 branchSelect.value = selectedBranch;
+                                loadBoxes(selectedBranch); // Load boxes based on the selected branch
+                            }
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            }
+
+            // Function to load boxes via AJAX
+            function loadBoxes(branch_id) {
+                $.ajax({
+                    url: 'get_boxes.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            const boxes = JSON.parse(response);
+                            boxSelect.innerHTML = '<option value="">Select a Box</option>';
+                            boxes.forEach(function(box) {
+                                boxSelect.innerHTML += `<option value="${box.box_id}">${box.barcode}</option>`;
+                            });
+
+                            // Set previously selected box again, if available
+                            const selectedBox = localStorage.getItem('selectedBox');
+                            if (selectedBox) {
+                                boxSelect.value = selectedBox;
                             }
                         } catch (e) {
                             console.error("Invalid JSON response", response);
@@ -655,78 +703,26 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
             }
 
         });
-
-        //another function gets previous values of the sender, rec_via, rec_date
-        $(document).ready(function() {
-            // Utility function to safely set the value of an input field
-            function setInputValue(id, value) {
-                var element = document.getElementById(id);
-                if (element) {
-                    element.value = value;
-                }
-            }
-
-            // Retrieve the previously submitted form data from localStorage
-            const recDate = localStorage.getItem('rec_date');
-            const sender = localStorage.getItem('sender');
-            const recVia = localStorage.getItem('rec_via');
-
-            // Safely set the values if they exist in localStorage
-            if (recDate) {
-                setInputValue('rec_date', recDate);
-            }
-
-            if (sender) {
-                setInputValue('sender', sender);
-            }
-
-            if (recVia) {
-                setInputValue('rec_via', recVia);
-            }
-
-            // Store the values in localStorage when the user changes input
-            $('#rec_date').on('input', function() {
-                localStorage.setItem('rec_date', $(this).val());
-            });
-
-            $('#sender').on('input', function() {
-                localStorage.setItem('sender', $(this).val());
-            });
-
-            $('#rec_via').on('change', function() {
-                localStorage.setItem('rec_via', $(this).val());
-            });
-        });
     </script>
-
-    <!--corrected jquery version-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js">
+    <script>
+        const dataTable = new simpleDatatables.DataTable("#myTable2", {
+            searchable: false,
+            fixedHeight: true,
+        })
     </script>
-    <!-- Bootstrap JS (Optional)
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
- -->
-
-    <!-- <script>
-            const dataTable = new simpleDatatables.DataTable("#myTable2", {
-                searchable: false,
-                fixedHeight: true,
-            })
-        </script> -->
     <script src="assets/js/main.js"></script>
+
+    <!--datatable export buttons-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
 </body>
+
 
 </html>

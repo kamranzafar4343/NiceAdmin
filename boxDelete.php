@@ -4,7 +4,7 @@
 session_start();
 
 
-include "db.php";
+include 'config/db.php';
 
 if (isset($_GET['id'])) {
     $box_id = intval($_GET['id']); // Ensure box ID is an integer

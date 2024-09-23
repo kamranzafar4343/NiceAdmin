@@ -10,7 +10,7 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-include "db.php";
+include 'config/db.php';
 
 if (isset($_GET['id'])) {
     $branch_id = intval($_GET['id']); // Ensure branch ID is an integer

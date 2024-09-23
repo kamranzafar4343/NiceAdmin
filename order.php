@@ -8,7 +8,7 @@ if (!isset($_SESSION['email'])) {
   header("Location: pages-login.php");
   exit();
 }
-include "db.php"; // Include the database connection
+include 'config/db.php';
 
 $email = $_SESSION['email'];
 //get user name and email from register table

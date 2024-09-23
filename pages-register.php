@@ -1,7 +1,8 @@
 <?php
 // note: session not applied
 
-require 'db.php';
+include 'config/db.php';
+
 if(isset($_POST["submit"])){
   $name = mysqli_real_escape_string($conn, $_POST["name"]);
   $email = mysqli_real_escape_string($conn, $_POST["email"]);

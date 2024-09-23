@@ -11,7 +11,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include the database connection
-include 'db.php';
+include 'config/db.php';
 
 // Get user email from session
 $email = $_SESSION['email'];

@@ -1,5 +1,5 @@
 <?php
-include "db.php";
+include 'config/db.php';
 
 if (isset($_POST['company_id'])) {
     $company_id = $_POST['company_id'];

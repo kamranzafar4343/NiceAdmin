@@ -421,258 +421,141 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     <!--form--------------------------------------form--------------------------------------->
-    <!-- Start Header form -->
-    <div class="headerimg text-center">
-        <i class="fa-solid fa-box" style="font-size: 50px; color: #333;"></i>
-        <h2>Add a Rack</h2>
+
+<!-- Start Header Form -->
+<div class="headerimg text-center">
+    <i class="fa-solid fa-box" style="font-size: 50px; color: #333;"></i>
+    <h2>Add a Rack</h2>
+</div>
+<!-- End Header Form -->
+
+<!-- Start Form Container -->
+<div class="container d-flex justify-content-center">
+    <div class="card custom-card shadow-lg mt-3">
+        <div class="card-body">
+            <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
+                <!-- Rack Code -->
+                <div class="col-md-6">
+                    <label for="rack_code" class="form-label">Rack Code</label>
+                    <input type="text" class="form-control" id="rack_code" name="rack_code" required>
+                </div>
+
+                <!-- Rack Level -->
+                <div class="col-md-6">
+                    <label for="level" class="form-label">Level</label>
+                    <input type="text" class="form-control" id="level" name="level" required>
+                </div>
+
+                <!-- Horizontal Position -->
+                <div class="col-md-6">
+                    <label for="horizontal" class="form-label">Horizontal Position</label>
+                    <input type="text" class="form-control" id="horizontal" name="horizontal" required>
+                </div>
+
+                <!-- Rack Number -->
+                <div class="col-md-6">
+                    <label for="rack_number" class="form-label">Rack Number</label>
+                    <input type="text" class="form-control" id="rack_number" name="rack_number" required>
+                </div>
+
+                <!-- Column Identifier -->
+                <div class="col-md-6">
+                    <label for="column_identifier" class="form-label">Column Identifier</label>
+                    <input type="text" class="form-control" id="column_identifier" name="column_identifier" required>
+                </div>
+
+                <!-- Position Number -->
+                <div class="col-md-6">
+                    <label for="position_number" class="form-label">Position Number</label>
+                    <input type="text" class="form-control" id="position_number" name="position_number" required>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="text-center mt-4 mb-2">
+                    <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>
+                    <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
+                    <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
+<!-- End Form Container -->
 
-    <!-- End Header form -->
+<!-- Include Bootstrap JS (with Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <div class="container d-flex justify-content-center">
-        <div class="card custom-card shadow-lg mt-3">
-            <div class="card-body">
-                <form class="row g-3 needs-validation" action="" method="POST">
-
-                    <!-- Rack Code -->
-                    <div class="col-md-6">
-                        <label for="rack_code" class="form-label">Rack Code</label>
-                        <input type="text" class="form-control" id="rack_code" name="rack_code" required>
-                    </div>
-
-                    <!-- Rack Level -->
-                    <div class="col-md-6">
-                        <label for="level" class="form-label">Level</label>
-                        <input type="text" class="form-control" id="level" name="level" required>
-                    </div>
-
-                    <!-- Horizontal Position -->
-                    <div class="col-md-6">
-                        <label for="horizontal" class="form-label">Horizontal Position</label>
-                        <input type="text" class="form-control" id="horizontal" name="horizontal" required>
-                    </div>
-
-                    <!-- Rack Number -->
-                    <div class="col-md-6">
-                        <label for="rack_number" class="form-label">Rack Number</label>
-                        <input type="text" class="form-control" id="rack_number" name="rack_number" required>
-                    </div>
-
-                    <!-- Column Identifier -->
-                    <div class="col-md-6">
-                        <label for="column_identifier" class="form-label">Column Identifier</label>
-                        <input type="text" class="form-control" id="column_identifier" name="column_identifier" required>
-                    </div>
-
-                    <!-- Position Number -->
-                    <div class="col-md-6">
-                        <label for="position_number" class="form-label">Position Number</label>
-                        <input type="text" class="form-control" id="position_number" name="position_number" required>
-                    </div>
-
-                    <!-- Form Buttons -->
-                    <div class="text-center mt-4 mb-2">
-                        <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>
-                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
-                    </div>
-                </form>
+<!-- Modal for duplicate entry error -->
+<div class="modal fade" id="duplicateErrorModal" tabindex="-1" aria-labelledby="duplicateErrorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="duplicateErrorModalLabel">Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Duplicate entry detected. Please ensure all fields are unique.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
 
+<!-- Backend PHP code to process the form -->
+<?php
+include "db.php"; // Include the database connection file
 
-    <!-- Include Bootstrap JS (with Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+if (isset($_POST['submit'])) { // Check if the form has been submitted
+    // Establish connection to the database
+    $conn = new mysqli('localhost', 'root', '', 'catmarketing'); // Replace with actual database credentials
 
-    <!-- Script to show modal when barcode already exists -->
-    <?php if ($error): ?>
-        <script>
+    // Check for connection errors
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Get form data and escape for security
+    $rack_code = $conn->real_escape_string($_POST['rack_code']);
+    $rack_number = $conn->real_escape_string($_POST['rack_number']);
+    $level = $conn->real_escape_string($_POST['level']);
+    $horizontal = $conn->real_escape_string($_POST['horizontal']);
+    $column_identifier = $conn->real_escape_string($_POST['column_identifier']);
+    $position_number = $conn->real_escape_string($_POST['position_number']);
+
+    // Check if all fields exist in the database
+    $check_query = "SELECT * FROM racks WHERE rack_code = '$rack_code' AND rack_number = '$rack_number' 
+                    AND level = '$level' AND horizontal = '$horizontal' 
+                    AND column_identifier = '$column_identifier' AND position_number = '$position_number'";
+    $result = $conn->query($check_query);
+
+    if ($result->num_rows > 0) { // If a duplicate is found
+        echo "<script>
             document.addEventListener('DOMContentLoaded', function() {
-                var barcodeErrorModal = new bootstrap.Modal(document.getElementById('barcodeErrorModal'));
-                barcodeErrorModal.show();
+                var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
+                duplicateErrorModal.show();
             });
-        </script>
-    <?php endif; ?>
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+        </script>";
+    } else {
+        // Insert form data into the racks table if no duplicate is found
+        $insert_query = "INSERT INTO racks (rack_code, rack_number, level, horizontal, column_identifier, position_number) 
+                         VALUES ('$rack_code', '$rack_number', '$level', '$horizontal', '$column_identifier', '$position_number')";
 
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js">
-    </script>
-    <!-- Bootstrap JS (Optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
-    <!-- Template Main JS File -->
+        if ($conn->query($insert_query) === TRUE) {
+            // Redirect to racks page after successful insertion
+            echo "<script>window.location.href = 'racks.php';</script>";
+        } else {
+            // Handle insertion error
+            echo "Error: " . $insert_query . "<br>" . $conn->error;
+        }
+    }
 
+    // Close the database connection
+    $conn->close();
+}
+?>
 
-    <script>
-        $(document).ready(function() {
-
-            // When company is changed, fetch the branches
-            $('#company').change(function() {
-                var company_id = $(this).val();
-
-                // AJAX request to get branches for the selected company
-                $.ajax({
-                    url: 'get_branches.php',
-                    type: 'POST',
-                    data: {
-                        company_id: company_id
-                    },
-                    success: function(response) {
-                        try {
-                            var branches = JSON.parse(response);
-                            // Clear existing branches
-                            $('#branch').empty();
-                            $('#branch').append('<option value="">Select a Branch</option>');
-                            // Add the new options from the response
-                            $.each(branches, function(index, branch) {
-                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
-                            });
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            });
-
-            // When company is changed, fetch the box
-            $('#branch').change(function() {
-                var branch_id = $(this).val();
-
-                // AJAX request to get box for the selected company
-                $.ajax({
-                    url: 'get_boxes.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            var boxes = JSON.parse(response);
-                            // Clear existing branches
-                            $('#box').empty();
-                            $('#box').append('<option value="">Select a Box</option>');
-                            // Add the new options from the response
-                            $.each(boxes, function(index, box) {
-                                $('#box').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
-                            });
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const companySelect = document.getElementById('company');
-            const branchSelect = document.getElementById('branch');
-            const boxSelect = document.getElementById('box');
-
-            // Retrieve the previously selected company from localStorage
-            const selectedCompany = localStorage.getItem('selectedCompany');
-            if (selectedCompany) {
-                companySelect.value = selectedCompany;
-                loadBranches(selectedCompany); // Load branches based on the selected company
-            }
-
-            // Store the selected company in localStorage on change
-            companySelect.addEventListener('change', function() {
-                localStorage.setItem('selectedCompany', this.value);
-                loadBranches(this.value); // Load branches based on the new selection
-            });
-
-            // Store the selected branch in localStorage on change
-            branchSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBranch', this.value);
-                loadBoxes(this.value); // Load boxes based on the selected branch
-            });
-
-            // Store the selected box in localStorage on change
-            boxSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBox', this.value);
-            });
-
-            // Function to load branches via AJAX
-            function loadBranches(company_id) {
-                $.ajax({
-                    url: 'get_branches.php',
-                    type: 'POST',
-                    data: {
-                        company_id: company_id
-                    },
-                    success: function(response) {
-                        try {
-                            const branches = JSON.parse(response);
-                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
-                            branches.forEach(function(branch) {
-                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
-                            });
-
-                            // Set previously selected branch again, if available
-                            const selectedBranch = localStorage.getItem('selectedBranch');
-                            if (selectedBranch) {
-                                branchSelect.value = selectedBranch;
-                                loadBoxes(selectedBranch); // Load boxes based on the selected branch
-                            }
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            }
-
-            // Function to load boxes via AJAX
-            function loadBoxes(branch_id) {
-                $.ajax({
-                    url: 'get_boxes.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            const boxes = JSON.parse(response);
-                            boxSelect.innerHTML = '<option value="">Select a Box</option>';
-                            boxes.forEach(function(box) {
-                                boxSelect.innerHTML += `<option value="${box.box_id}">${box.barcode}</option>`;
-                            });
-
-                            // Set previously selected box again, if available
-                            const selectedBox = localStorage.getItem('selectedBox');
-                            if (selectedBox) {
-                                boxSelect.value = selectedBox;
-                            }
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            }
-
-        });
-    </script>
-    <script>
-        const dataTable = new simpleDatatables.DataTable("#myTable2", {
-            searchable: false,
-            fixedHeight: true,
-        })
-    </script>
-    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

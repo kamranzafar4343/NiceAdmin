@@ -1,5 +1,7 @@
 <?php
-session_start(); // Start the session
+
+// Start the session
+session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
@@ -7,10 +9,14 @@ if (!isset($_SESSION['email'])) {
     header("Location: pages-login.php");
     exit();
 }
-include 'db.php'; // Include the database connection
 
+// Include the database connection
+include 'db.php';
+
+// Get user email from session
 $email = $_SESSION['email'];
-//get user name and email from register table
+
+// Get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
@@ -19,22 +25,16 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-// // Initialize query condition
-// $searchQuery = "";
-// if (isset($_GET['query']) && !empty($_GET['query'])) {
-//     $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
+//select all columns of boxes 
+$sql = "SELECT * FROM box";
+$result = $conn->query($sql);
 
-//     // Search query: match barcode exactly or item name partially
-//     $sql = "SELECT * FROM box WHERE barcode = '%$searchQuery%'";
-//     $result = $conn->query($sql);
-// } else {
-//     // Default query if no search is performed
-//     $sql = "SELECT * FROM item";
-//     $result = $conn->query($sql);
-// }
 
-// $result = $conn->query($sql);
-
+if (isset($_GET['comp_id'])) {
+    $comp_id = $_GET['comp_id'];
+    $sql = "SELECT * FROM box WHERE companiID_FK = '$comp_id'";
+    $result = $conn->query($sql);
+}
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +44,10 @@ if ($resultData->num_rows > 0) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>items</title>
+    <title>boxes</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
@@ -120,15 +123,26 @@ if ($resultData->num_rows > 0) {
             font-size: 16px;
         }
 
-        .card-body {
-            margin-left: 37px !important;
-        }
-
         .pagetitle {
             display: flex;
             width: 989px;
             flex-direction: column;
+
         }
+
+        .barcode {
+            height: 55px;
+            width: 250px;
+            position: relative;
+            left: -38px;
+        }
+
+        /* 
+        #main {
+            margin-top: 20px !important;
+            padding: 20px 30px;
+            transition: all 0.3s;
+        } */
 
         .row {
             margin-left: 52px;
@@ -179,6 +193,10 @@ if ($resultData->num_rows > 0) {
             margin-left: 12px;
             margin-top: 12px;
             /* table-layout: fixed; */
+        }
+
+        .card-body {
+            padding: 0 20px 20px 60px !important;
         }
 
 
@@ -235,6 +253,11 @@ if ($resultData->num_rows > 0) {
             display: none;
         }
 
+        .datatable-top {
+            width: 942px;
+
+        }
+
         /* Card */
         .cardBranch {
             margin-bottom: 30px;
@@ -269,12 +292,6 @@ if ($resultData->num_rows > 0) {
             padding-right: 34px;
             padding-left: 40px;
             margin-left: 20px;
-
-            /* table-layout: fixed; */
-
-            /* overflow: hidden; */
-            /* text-overflow: ellipsis; */
-            /* white-space: nowrap; */
         }
 
         tbody,
@@ -328,71 +345,11 @@ if ($resultData->num_rows > 0) {
             margin-left: 50px;
         }
 
-        .datatable-top {
-            width: 942px;
+        .drpdwn {
+            margin-left: 268px;
+            max-width: 424px;
+            margin-top: 28px;
         }
-
-        .barcode {
-            height: 37px;
-            width: 167px;
-            position: relative;
-            left: -18px;
-        }
-
-        /* styles for card */
-        .card-body {
-            padding: 18px !important;
-            padding-left: 0 !important;
-            padding-top: 0 !important;
-        }
-
-        /*datatable top css*/
-        .datatable-top,
-        .datatable-bottom {
-            padding: 12px 10px;
-            margin-top: 4px;
-            display: flex !important;
-        }
-
-        .card-title {
-            padding: 5px 0 0px 0;
-            font-size: 23px;
-            font-weight: 500;
-            position: relative;
-            left: 11px;
-            color: #012970;
-            margin-top: 14px;
-            font-family: "Poppins", sans-serif;
-            /* font-family: "Poppins", sans-serif; */
-            width: 424px !important;
-        }
-
-        .datatable-input {
-
-            width: 240px;
-            height: 35px;
-            font-size: 0.8rem;
-            margin-left: 401px;
-            outline: none;
-
-
-
-            font-size: 17px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: -25px;
-        }
-
-        .datatable-search {
-            margin-left: 485px !important;
-        }
-
-        /* .custom-header-col-name{
-        margin-right: 1000px;
-    } */
     </style>
 
     <!-- Template Main CSS File -->
@@ -491,13 +448,12 @@ if ($resultData->num_rows > 0) {
             </li><!-- End Tables Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
                     <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
-
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
                     <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
@@ -514,6 +470,7 @@ if ($resultData->num_rows > 0) {
 
 
             <li class="nav-heading">Pages</li>
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="users-profile.php">
                     <i class="bi bi-person"></i>
@@ -558,13 +515,12 @@ if ($resultData->num_rows > 0) {
 
     </aside>
 
+
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <!-- Button to add new rack -->
-    <!-- Add Rack Button -->
-    <button id="fixedButtonRack" type="button" onclick="window.location.href = 'createRack.php'" class="btn btn-primary mb-3">Add Rack</button>
-
+    <!-- Button to add new box -->
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php';" class="btn btn-primary mb-3">Add Rack</button>
 
     <!-- Search bar for racks -->
     <div class="search-container">
@@ -597,16 +553,19 @@ if ($resultData->num_rows > 0) {
                     if ($result->num_rows > 0) {
                         // Display table of racks
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">
-                        <thead>
-                            <tr>
-                                <th scope="col" style="width: 5%;">#</th>
-                                <th scope="col" style="width: 20%;">Rack Code</th>
-                                <th scope="col" style="width: 20%;">Level</th>
-                                <th scope="col" style="width: 20%;">Horizontal</th>
-                                <th scope="col" style="width: 15%;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody style="table-layout: fixed;">';
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 5%;">#</th>
+                            <th scope="col" style="width: 15%;">Rack Code</th>
+                            <th scope="col" style="width: 10%;">Level</th>
+                            <th scope="col" style="width: 10%;">Horizontal</th>
+                            <th scope="col" style="width: 10%;">Rack Number</th>
+                            <th scope="col" style="width: 15%;">Column Identifier</th>
+                            <th scope="col" style="width: 10%;">Position Number</th>
+                            <th scope="col" style="width: 15%;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
 
                         // Counter variable for row numbers
                         $counter = 1;
@@ -618,13 +577,16 @@ if ($resultData->num_rows > 0) {
                             echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_code'] . '</a></td>';
                             echo '<td>' . $row["level"] . '</td>';
                             echo '<td>' . $row["horizontal"] . '</td>';
+                            echo '<td>' . $row["rack_number"] . '</td>';
+                            echo '<td>' . $row["column_identifier"] . '</td>';
+                            echo '<td>' . $row["position_number"] . '</td>';
                             echo '<td>
-                                    <div style="display: flex; gap: 10px;">
-                                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this rack?\');" href="rackDelete.php?id=' . $row['id'] . '">
-                                            <i style="width: 20px;" class="fa-solid fa-trash"></i>
-                                        </a>
-                                    </div>
-                                  </td>';
+                                <div style="display: flex; gap: 10px;">
+                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this rack?\');" href="rackDelete.php?id=' . $row['id'] . '">
+                                        <i style="width: 20px;" class="fa-solid fa-trash"></i>
+                                    </a>
+                                </div>
+                              </td>';
                             echo '</tr>';
                         }
                         echo '</tbody></table>';
@@ -641,17 +603,35 @@ if ($resultData->num_rows > 0) {
         </div>
     </main>
 
-    <!-- Back to top button -->
+
+
+    <script>
+        function filterCompany(comp_id) {
+            window.location.href = "box.php?comp_id=" + comp_id;
+        }
+    </script>
+
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
+    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/jquery-3.3.1.min.js"></script>
-    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
     <script>
-        // Submit form when pressing enter in search input
+        // event listener for search bar 
         document.getElementById("searchInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault(); // Prevent default form submission
@@ -659,9 +639,6 @@ if ($resultData->num_rows > 0) {
             }
         });
     </script>
-
-
-
 </body>
 
 </html>

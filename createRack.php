@@ -84,6 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -421,9 +423,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!--form--------------------------------------form--------------------------------------->
     <!-- Start Header form -->
     <div class="headerimg text-center">
-        <img src="image/rack.png" alt="rack-logo" width="50" height="50">
+        <i class="fa-solid fa-box" style="font-size: 50px; color: #333;"></i>
         <h2>Add a Rack</h2>
     </div>
+
     <!-- End Header form -->
 
     <div class="container d-flex justify-content-center">

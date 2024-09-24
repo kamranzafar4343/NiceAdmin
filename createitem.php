@@ -4,9 +4,11 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
+
     // If not logged in, redirect to login page
     header("Location: pages-login.php");
     exit();
+
 }
 
 include 'config/db.php';
@@ -460,10 +462,9 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     <!-- Select Box -->
                     <div class="col-md-6">
                         <label for="box">Select Box:</label>
-                        <select id="box" class="form-select" name="box_FK_item" required>
-                            <option value="">Select a Box</option>
-                            <!-- The options will be populated via AJAX based on the selected branch -->
-                        </select>
+                        <input id="box" class="form-select" name="box_FK_item" placeholder="scan box barcode" required>
+                           
+                        </input>
                     </div>
 
                     <div class="text-center mt-4 mb-2">
@@ -561,33 +562,33 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 });
             });
 
-            // When company is changed, fetch the box
-            $('#branch').change(function() {
-                var branch_id = $(this).val();
+        //     // When company is changed, fetch the box
+        //     $('#branch').change(function() {
+        //         var branch_id = $(this).val();
 
-                // AJAX request to get box for the selected company
-                $.ajax({
-                    url: 'get_boxes.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            var boxes = JSON.parse(response);
-                            // Clear existing branches
-                            $('#box').empty();
-                            $('#box').append('<option value="">Select a Box</option>');
-                            // Add the new options from the response
-                            $.each(boxes, function(index, box) {
-                                $('#box').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
-                            });
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            });
+        //         // AJAX request to get box for the selected company
+        //         $.ajax({
+        //             url: 'get_boxes.php',
+        //             type: 'POST',
+        //             data: {
+        //                 branch_id: branch_id
+        //             },
+        //             success: function(response) {
+        //                 try {
+        //                     var boxes = JSON.parse(response);
+        //                     // Clear existing branches
+        //                     $('#box').empty();
+        //                     $('#box').append('<option value="">Select a Box</option>');
+        //                     // Add the new options from the response
+        //                     $.each(boxes, function(index, box) {
+        //                         $('#box').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
+        //                     });
+        //                 } catch (e) {
+        //                     console.error("Invalid JSON response", response);
+        //                 }
+        //             }
+        //         });
+        //     });
         });
     </script>
 
@@ -595,7 +596,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
      document.addEventListener('DOMContentLoaded', function() {
     const companySelect = document.getElementById('company');
     const branchSelect = document.getElementById('branch');
-    const boxSelect = document.getElementById('box');
+    // const boxSelect = document.getElementById('box');
 
     // Retrieve the previously selected company from localStorage
     const selectedCompany = localStorage.getItem('selectedCompany');
@@ -616,10 +617,10 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
         loadBoxes(this.value); // Load boxes based on the selected branch
     });
 
-    // Store the selected box in localStorage on change
-    boxSelect.addEventListener('change', function() {
-        localStorage.setItem('selectedBox', this.value);
-    });
+    // // Store the selected box in localStorage on change
+    // boxSelect.addEventListener('change', function() {
+    //     localStorage.setItem('selectedBox', this.value);
+    // });
 
     // Function to load branches via AJAX
     function loadBranches(company_id) {
@@ -648,31 +649,31 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
         });
     }
 
-    // Function to load boxes via AJAX
-    function loadBoxes(branch_id) {
-        $.ajax({
-            url: 'get_boxes.php',
-            type: 'POST',
-            data: { branch_id: branch_id },
-            success: function(response) {
-                try {
-                    const boxes = JSON.parse(response);
-                    boxSelect.innerHTML = '<option value="">Select a Box</option>';
-                    boxes.forEach(function(box) {
-                        boxSelect.innerHTML += `<option value="${box.box_id}">${box.barcode}</option>`;
-                    });
+    // // Function to load boxes via AJAX
+    // function loadBoxes(branch_id) {
+    //     $.ajax({
+    //         url: 'get_boxes.php',
+    //         type: 'POST',
+    //         data: { branch_id: branch_id },
+    //         success: function(response) {
+    //             try {
+    //                 const boxes = JSON.parse(response);
+    //                 boxSelect.innerHTML = '<option value="">Select a Box</option>';
+    //                 boxes.forEach(function(box) {
+    //                     boxSelect.innerHTML += `<option value="${box.box_id}">${box.barcode}</option>`;
+    //                 });
 
-                    // Set previously selected box again, if available
-                    const selectedBox = localStorage.getItem('selectedBox');
-                    if (selectedBox) {
-                        boxSelect.value = selectedBox;
-                    }
-                } catch (e) {
-                    console.error("Invalid JSON response", response);
-                }
-            }
-        });
-    }
+    //                 // Set previously selected box again, if available
+    //                 const selectedBox = localStorage.getItem('selectedBox');
+    //                 if (selectedBox) {
+    //                     boxSelect.value = selectedBox;
+    //                 }
+    //             } catch (e) {
+    //                 console.error("Invalid JSON response", response);
+    //             }
+    //         }
+    //     });
+    // }
 
 });
     </script>

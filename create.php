@@ -536,7 +536,6 @@ if (isset($_POST['submit'])) {
                             <!-- Options will be dynamically populated based on selected country -->
                         </select>
                     </div>
-
                     <div class="col-md-4">
                         <label for="city" class="form-label">City</label>
                         <select class="form-select" id="city" name="city" required>

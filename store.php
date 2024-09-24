@@ -546,18 +546,18 @@ $result = $conn->query($sql);
                     <?php
                     if ($result->num_rows > 0) {
                         // Display table of box and rack details
-                        echo '<table class="table table-striped mt-4">
+                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Box Barcode</th>
-                                <th scope="col">Rack Code</th>
-                                <th scope="col">Level</th>
-                                <th scope="col">Horizontal</th>
-                                <th scope="col">Rack Number</th>
-                                <th scope="col">Column Identifier</th> <!-- Added column -->
-                                <th scope="col">Position Number</th> <!-- Added column -->
-                                <th scope="col">Actions</th>
+                                <th scope="col" style="width: 5%;">#</th>
+                                <th scope="col" style="width: 15%;">Box Barcode</th>
+                                <th scope="col" style="width: 15%;">Rack Code</th>
+                                <th scope="col" style="width: 10%;">Level</th>
+                                <th scope="col" style="width: 10%;">Horizontal</th>
+                                <th scope="col" style="width: 10%;">Rack Number</th>
+                                <th scope="col" style="width: 15%;">Column Identifier</th>
+                                <th scope="col" style="width: 10%;">Position Number</th>
+                                <th scope="col" style="width: 15%;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>';

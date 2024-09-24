@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-include "db.php"; // Include database connection
+include "config/db.php"; // Include database connection
 
 $email = $_SESSION['email'];
 

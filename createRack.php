@@ -505,7 +505,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!-- Backend PHP code to process the form -->
 <?php
-include "db.php"; // Include the database connection file
+include "config/db.php"; // Include the database connection file
 
 if (isset($_POST['submit'])) { // Check if the form has been submitted
     // Establish connection to the database

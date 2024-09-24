@@ -543,7 +543,7 @@ if (isset($_GET['comp_id'])) {
                     <h5 class="card-title">List of Racks</h5>
 
                     <?php
-                    include 'db.php'; // Include the database connection
+                    include 'config/db.php'; // Include the database connection
 
                     // Search functionality
                     $searchQuery = '';

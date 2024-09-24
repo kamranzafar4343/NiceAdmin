@@ -8,10 +8,7 @@ if (!isset($_SESSION['email'])) {
   header("Location: pages-login.php");
   exit();
 }
-include "db.php"; // Include the database connection
-
-$sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
-$result = $conn->query($sql);
+include 'config/db.php';
 
 $email = $_SESSION['email'];
 //get user name and email from register table
@@ -25,6 +22,7 @@ if ($resultData->num_rows > 0) {
 
 $showOrders = "Select * FROM Orders";
 $resultShowOrders = $conn->query($showOrders);
+
 ?>
 
 <!DOCTYPE html>
@@ -286,8 +284,6 @@ $resultShowOrders = $conn->query($showOrders);
 
       box-sizing: border-box;
     }
-
-    
   </style>
 
   <!-- Template Main CSS File -->
@@ -465,7 +461,7 @@ $resultShowOrders = $conn->query($showOrders);
           <h5 class="card-title">List of Orders</h5>
           <?php
           // Check if there are any results
-          if ($result->num_rows > 0) {
+          if ($resultShowOrders->num_rows > 0) {
             // Display table
             echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                     <thead>
@@ -492,7 +488,7 @@ $resultShowOrders = $conn->query($showOrders);
               echo '<tr>';
               echo '<td>' . $counter++ . '</td>';
 
-              // Get specific company
+              // Get company id
               $comp_id = $row['company'];
               $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
               $result3 = $conn->query($sql3);
@@ -500,22 +496,31 @@ $resultShowOrders = $conn->query($showOrders);
                 $row3 = $result3->fetch_assoc();
                 $comp_name = $row3['comp_name'];
               }
+              //Show result
               echo '<td>' . $comp_name . '</td>';
 
-              // // Get specific branch id
-              // $branch_id = $row['branch'];
-              // $sql7 = "SELECT * FROM branch WHERE branch_id= '$branch_id'";
-              // $result7 = $conn->query($sql7);
-              // if ($result7->num_rows > 0) {
-              //     $row7 = $result7->fetch_assoc();
-              //     $branch_name = $row7['branch_name'];
-              // }
-              // //show specific branch name
-              // echo '<td>' . $branch_name . '</td>';
+              //get brnch id
+              $branch_id= $row['branch'];
+              $branchSql="Select * From branch where branch_id = '$branch_id'";
+              $branchResult= $conn->query($branchSql);
+              if ($branchResult->num_rows>0){
+                $branchRow=$branchResult->fetch_assoc();
+                $brnach_name= $branchRow['branch_name'];
+              }
+              //show result
+              echo '<td>' . $brnach_name . '<td>';
 
-              echo '<td>' . ($row["branch"]) . '</td>';
+              //get box id
+              $box_id = $row['box'];
+              $boxSQL = "Select * From box where box_id = '$box_id'";
+              $boxSQLresult = $conn->query($boxSQL);
+              if ($boxSQLresult->num_rows > 0) {
+                $boxRow = $boxSQLresult->fetch_assoc();
+                $box_barc = $boxRow['barcode'];
+              }
+              //Show result
+              echo  $box_barc;
 
-              echo '<td>' . ($row["box"]) . '</td>';
               echo '<td>' . ($row["item"]) . '</td>';
               echo '<td>' . ($row["name"]) . '</td>';
               echo '<td>' . ($row["role"]) . '</td>';
@@ -533,7 +538,6 @@ $resultShowOrders = $conn->query($showOrders);
       </div>
     </div>
   </main>
-
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

@@ -9,7 +9,7 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-include "db.php";
+include 'config/db.php';
 
 $email = $_SESSION['email'];
 
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $req_date = mysqli_real_escape_string($conn, $_POST['date']);
 
         $sql = "INSERT INTO orders (company, branch, box, item, name, role, auth_status, date) 
-                VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode', '$req_name', '$req_role', '$auth_status', '$req_date')";
+                VALUES ('$company_FK_item', '$branch_FK_item' , '$box_FK_item', '$barcode', '$req_name', '$req_role', '$auth_status', '$req_date')";
         if ($conn->query($sql) === TRUE) {
             header("Location: order.php");
             exit();
@@ -461,7 +461,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
                     <div class="col-md-6">
                         <label class="form-label">requestor name</label>
-                        <input type="text" class="form-control" name="name" required>
+                        <input type="text" class="form-control" name="name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
                     </div>
 
                     <div class="col-md-6">

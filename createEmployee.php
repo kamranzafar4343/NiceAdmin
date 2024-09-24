@@ -9,7 +9,7 @@ if (!isset($_SESSION['email'])) {
   exit();
 }
 
-include "db.php";
+include 'config/db.php';
 
 //get referer id from companyinfo page
 $referrer = isset($_GET['referrer']) ? $_GET['referrer'] : 'index.php';

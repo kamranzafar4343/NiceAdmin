@@ -3,9 +3,6 @@
 // Start session
 session_start();
 
-
-
-
 // Check if user is logged in
 if (!isset($_SESSION['email'])) {
     header("Location: pages-login.php");
@@ -13,7 +10,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include database connection
-include 'db.php';
+include 'config/db.php';
 
 // Check for POST request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

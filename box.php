@@ -11,7 +11,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include the database connection
-include 'db.php';
+include 'config/db.php';
 
 // Get user email from session
 $email = $_SESSION['email'];
@@ -557,6 +557,7 @@ if (isset($_GET['comp_id'])) {
                         $sql = "SELECT * FROM box";
                     }
                     $result = $conn->query($sql);
+                    
                     if ($result->num_rows > 0) {
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                     <thead>

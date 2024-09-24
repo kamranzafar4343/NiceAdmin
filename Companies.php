@@ -9,7 +9,7 @@ if (!isset($_SESSION['email'])) {
   exit();
 }
 
-include "db.php"; // Include the database connection
+include 'config/db.php'; // Include the database connection
 
 $sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
 $result = $conn->query($sql);

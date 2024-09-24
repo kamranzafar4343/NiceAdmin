@@ -168,8 +168,8 @@ $emp_data = $result_emp->fetch_assoc();
 
     #fixedButtonBranch {
       position: relative;
-      top: 110px;
-      left: 1187px;
+      top: 47px;
+      left: 419px;
     }
 
     .row {
@@ -350,9 +350,10 @@ $emp_data = $result_emp->fetch_assoc();
 
     /* styles for card */
     .card-body {
-      padding: 18px !important;
+      padding: 10px !important;
       padding-left: 0 !important;
       padding-top: 0 !important;
+      margin-left: 12px !important;
     }
 
     /*datatable top css*/
@@ -399,7 +400,16 @@ $emp_data = $result_emp->fetch_assoc();
       margin-left: 485px !important;
     }
 
-
+    @media (min-width: 992px) {
+     .col-lg-4 {
+        flex: 0 0 auto;
+        width: 31.333333%;
+    }
+    .col-lg-8 {
+        flex: 0 0 auto;
+        width: 59.666667% !important;
+    }
+  }
 
     /* Custom CSS to decrease font size of the table */
 
@@ -586,14 +596,17 @@ $emp_data = $result_emp->fetch_assoc();
       /* Hide the file input */
     }
 
-    /*Employee header*/
+    /*Employee header
     .headerSetting {
       display: flex;
-      gap: 250px;
-    }
+      }*/
 
     .emp_tb {
       border-radius: 20px;
+    }
+    .emp-card{
+      margin-bottom: 20px;
+      margin-top: 0;
     }
   </style>
 
@@ -769,8 +782,90 @@ $emp_data = $result_emp->fetch_assoc();
     <!-- Main content container -->
     <div class="d-flex flex-wrap">
 
-      <!-- Card container -->
-      <div class="col-md-6 col-lg-4 pb-3">
+      <!-- Table container -->
+
+      <div class="col-md-7 col-lg-8 mt-4">
+        <div class="cardBranch recent-sales overflow-auto">
+          <div class="card-body" style="font-size: 0.8rem;">
+            <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()" class="btn btn-primary mb-3">Add Employee</button>
+            <h5 class="card-title emp-card">List of employees</h5>
+            <?php
+            if ($result_emp->num_rows > 0) {
+            ?>
+              <table class="table datatable emp_tb">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col" class="email-col">Email</th>
+                    <th scope="col">Phone</th>
+                    <!-- <th scope="col" >Branch</th> -->
+                    <!-- <th scope="col" style="width: 24%;">Company Name</th> -->
+                    <!-- <th scope="col">Gender</th> -->
+                    <!-- <th scope="col">Address</th> -->
+                    <th scope="col">Role</th>
+                    <!-- <th scope="col" >Received</th> -->
+                    <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody style="table-layout: fixed;">
+                  <?php
+
+                  //counter variable
+                  $counter = 1;
+
+                  while ($emp_data = $result_emp->fetch_assoc()) {
+
+                    //dexlare variable for box_id
+
+                    echo "<tr>";
+                    echo "<tr>";
+                    echo "<td>" . ($emp_data["name"]) . "</td>";
+
+                    // echo "<td>" . $branch_name . "</td>";
+                    echo "<td>" . ($emp_data["email"]) . "</td>";
+                    echo "<td>" . ($emp_data["phone"]) . "</td>";
+                    // echo "<td>" . ($emp_data["gender"]) . "</td>";
+                    // echo "<td>" . ($emp_data["Address"]) . "</td>";
+                    echo "<td>" . ($emp_data["Authority"]) . "</td>";
+                    // echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
+                  ?>
+                    <td>
+                      <div style="display: flex; gap: 10px;">
+                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center align-items-center text-center"
+                          style="padding-bottom: 0px; width:25px; height: 28px;"
+                          href="employeeUpdate.php?id=<?php echo $emp_data['emp_id']; ?>">
+                          <i class="ri-edit-box-line mb-1"></i>
+                        </a>
+
+                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center align-items-center text-center"
+                          style="padding-bottom: 0; width: 25px; height: 28px;"
+                          data-mdb-ripple-init
+                          onclick="return confirm('Are you sure you want to delete this employee?');"
+                          href="employeeDelete.php?id=<?php echo $emp_data['emp_id']; ?>">
+                          <i class="ri-delete-bin-6-line mb-1"></i>
+                        </a>
+                      </div>
+                    </td>
+                  <?php
+                  }
+                  ?>
+                </tbody>
+              </table>
+            <?php
+            } else {
+
+              echo '<br>';
+              echo 'No Employees found for Company ' . '<b>' . $company_data['comp_name'] . '<b>';
+            }
+            ?>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- Card container -->
+    <div class="col-md-6 col-lg-4 pb-3">
         <div class="card card-custom bg-white border-white border-0">
 
           <div class="card-custom-img"></div>
@@ -822,91 +917,6 @@ $emp_data = $result_emp->fetch_assoc();
           </div>
         </div>
       </div>
-
-      <!-- Table container -->
-
-      <div class="col-md-7 col-lg-8 mt-4">
-        <div class="cardBranch recent-sales overflow-auto">
-          <div class="card-body" style="font-size: 0.8rem;">
-            <div class="headerSetting">
-              <h5 class="card-title">List of employees</h5>
-              <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()" class="btn btn-primary mb-3">Add Employee</button>
-            </div>
-            <?php
-            if ($result_emp->num_rows > 0) {
-            ?>
-              <table class="table datatable emp_tb">
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col" class="email-col">Email</th>
-                    <th scope="col">Phone</th>
-                    <!-- <th scope="col" >Branch</th> -->
-                    <!-- <th scope="col" style="width: 24%;">Company Name</th> -->
-                    <th scope="col">Gender</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Role</th>
-                    <!-- <th scope="col" >Received</th> -->
-                    <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody style="table-layout: fixed;">
-                  <?php
-
-                  //counter variable
-                  $counter = 1;
-
-                  while ($emp_data = $result_emp->fetch_assoc()) {
-
-                    //dexlare variable for box_id
-
-                    echo "<tr>";
-                    echo "<tr>";
-                    echo "<td>" . ($emp_data["name"]) . "</td>";
-
-                    // echo "<td>" . $branch_name . "</td>";
-                    echo "<td>" . ($emp_data["email"]) . "</td>";
-                    echo "<td>" . ($emp_data["phone"]) . "</td>";
-                    echo "<td>" . ($emp_data["gender"]) . "</td>";
-                    echo "<td>" . ($emp_data["Address"]) . "</td>";
-                    echo "<td>" . ($emp_data["Authority"]) . "</td>";
-                    // echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
-                  ?>
-                    <td>
-                      <div style="display: flex; gap: 10px;">
-                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center align-items-center text-center"
-                          style="padding-bottom: 0px; width:25px; height: 28px;"
-                          href="employeeUpdate.php?id=<?php echo $emp_data['emp_id']; ?>">
-                          <i class="ri-edit-box-line mb-1"></i>
-                        </a>
-
-                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center align-items-center text-center"
-                          style="padding-bottom: 0; width: 25px; height: 28px;"
-                          data-mdb-ripple-init
-                          onclick="return confirm('Are you sure you want to delete this employee?');"
-                          href="employeeDelete.php?id=<?php echo $emp_data['emp_id']; ?>">
-                          <i class="ri-delete-bin-6-line mb-1"></i>
-                        </a>
-                      </div>
-                    </td>
-                  <?php
-                  }
-                  ?>
-                </tbody>
-              </table>
-            <?php
-            } else {
-
-              echo '<br>';
-              echo 'No Employees found for Company ' . '<b>' . $company_data['comp_name'] . '<b>';
-            }
-            ?>
-          </div>
-        </div>
-      </div>
-
-    </div>
 
     </div>
     <!-- End d-flex container -->

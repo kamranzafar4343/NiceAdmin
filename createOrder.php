@@ -1,7 +1,5 @@
 <?php
 
-
-// session_start(); // Start the session
 session_start();
 
 // Check if the user is logged in
@@ -10,10 +8,12 @@ if (!isset($_SESSION['email'])) {
     header("Location: pages-login.php");
     exit();
 }
+
 include 'config/db.php';
 
 $email = $_SESSION['email'];
-//get user name and email from register table
+
+// Get user name and email from the register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
@@ -22,92 +22,32 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
+$error = false;
 
-if (isset($_POST['submit'])) {
-    $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
-    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
+    $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
+    $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
+    $barcode = mysqli_real_escape_string($conn, $_POST['item_barcode']);
+    $req_name = mysqli_real_escape_string($conn, $_POST['name']);
+    $req_role = mysqli_real_escape_string($conn, $_POST['role']);
+    $auth_status = mysqli_real_escape_string($conn, $_POST['auth_status']);
+    $req_date = mysqli_real_escape_string($conn, $_POST['date']);
 
-    // Check if the email already exists in the database
-    $emailCheckQuery = "SELECT * FROM `compani` WHERE `email` = '$email'";
-    $emailCheckResult = $conn->query($emailCheckQuery);
-
-    if ($emailCheckResult->num_rows > 0) {
-        die("Error: The email '$email' already exists.");
+        $sql = "INSERT INTO orders (company, branch, box, item, name, role, auth_status, date) 
+                VALUES ('$company_FK_item', '$branch_FK_item' , '$box_FK_item', '$barcode', '$req_name', '$req_role', '$auth_status', '$req_date')";
+        if ($conn->query($sql) === TRUE) {
+            header("Location: order.php");
+            exit();
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
     }
 
-    //---------------------------set image variable------------------------ and its validation
+$selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
-
-    // Validate if the image is uploaded without errors
-    if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-        die("File upload error: " . $_FILES['image']['error']);
-    }
-
-    // Check for maximum file size (5MB)
-    $maxFileSize = 5 * 1024 * 1024; // 5 MB
-    if ($_FILES['image']['size'] > $maxFileSize) {
-        die("File size exceeds the 5 MB limit.");
-    }
-
-    // Check allowed MIME types
-    $allowedTypes = ['image/jpeg', 'image/png'];
-    $fileType = $_FILES['image']['type'];
-    if (!in_array($fileType, $allowedTypes)) {
-        die("Invalid file type. Only JPEG and PNG files are allowed.");
-    }
-
-    // Check allowed file extensions
-    $allowedExtensions = ['jpg', 'jpeg', 'png'];
-    $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-    if (!in_array($fileExtension, $allowedExtensions)) {
-        die("Invalid file extension. Only .jpg, .jpeg, and .png files are allowed.");
-    }
-
-    // Sanitize and set the file name and destination
-    $img_name = preg_replace("/[^a-zA-Z0-9.]/", "_", basename($_FILES['image']['name']));
-    $img_des = "image/" . $img_name;
-
-    // Move the uploaded file to the destination directory
-    if (!move_uploaded_file($_FILES['image']['tmp_name'], $img_des)) {
-        die("Failed to upload image.");
-    }
-
-    //------------------end---------------------------------- of image variable and its validation
-
-
-    $city = mysqli_real_escape_string($conn, $_POST['city']);
-    $state = mysqli_real_escape_string($conn, $_POST['state']);
-    $country = mysqli_real_escape_string($conn, $_POST['country']);
-    $registration = mysqli_real_escape_string($conn, $_POST['registration']);
-    $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
-
-    // Insert the record into the database
-    $sql = "INSERT INTO `compani` (`comp_name`, `phone`, `email`, `password`, `image`, `city`, `state`, `country`, `registration`, `expiry`) 
-            VALUES ('$comp_name', '$phone', '$email', '$hashedPassword', '$img_des', '$city', '$state', '$country', '$registration', '$expiry')";
-
-
-    //added code to insert data into branch table and redirect to branches table of specific company
-    if (mysqli_query($conn, $sql)) {
-
-        // Step 2: Get the ID of the newly inserted company
-        $newCompanyId = mysqli_insert_id($conn);
-
-        $insertBranchSql = "INSERT INTO `branch` (`compID_FK`, `branch_name`, `ContactPersonName`, `ContactPersonPhone`, `ContactPersonResignation`, `City`, `State`, `Country`) VALUES ('$newCompanyId', '$comp_name <b>HQ</b>', 'null', '$phone', 'null', '$city', '$state', '$country')";
-    }
-
-    if (mysqli_query($conn, $insertBranchSql)) {
-        header("Location: Branches.php?id=" . $newCompanyId);
-        exit; // Stop further script execution
-    } else {
-        echo "Error creating branch: " . mysqli_error($conn);
-    }
-
-    $conn->close();
-}
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -133,6 +73,9 @@ if (isset($_POST['submit'])) {
     <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <!--bootstrap search and select-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.14/css/bootstrap-select.min.css">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -316,7 +259,7 @@ if (isset($_POST['submit'])) {
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Register Company</title>
+    <title>Add Order</title>
 
 
 </head>
@@ -396,8 +339,9 @@ if (isset($_POST['submit'])) {
                 </a>
             </li><!-- End Dashboard Nav -->
 
+
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
@@ -414,16 +358,10 @@ if (isset($_POST['submit'])) {
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
-                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-
 
             <li class="nav-heading">Pages</li>
 
@@ -473,91 +411,127 @@ if (isset($_POST['submit'])) {
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Create Company</h2>
+        <h2>Create an Order</h2>
     </div>
     <!-- End Header form -->
+
     <div class="container d-flex justify-content-center">
         <div class="card custom-card shadow-lg mt-3">
-            <!-- <h5 class="card-title ml-4">Create Company </h5> -->
             <div class="card-body">
-                <br>
-                <!-- Multi Columns Form -->
-                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
-                    <div class="col-md-6">
-                        <label for="comp_name" class="form-label">Company Name</label>
-                        <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="phone" name="phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+                <form class="row g-3 needs-validation" action="" method="POST">
 
-                        <div id="emailFeedback" class="invalid-feedback">
-                            <!-- Error message will be displayed here -->
-                        </div>
-                    </div>
+
+                    <!-- Select Company -->
                     <div class="col-md-6">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required minlength="8" maxlength="12" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                            title="It must be 8-16 characters, include at least one number, one uppercase and one lowercase letter">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="image" class="form-label" style="font-size: 0.8rem;">Image</label>
-                        <input type="file" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
-                        <!-- Error messages -->
-                        <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
-                        <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
-                        <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
+                        <label for="company">Select Company:</label>
+                        <select id="company" class="form-select" name="comp_FK_item" required>
+                            <option value="">Select a Company</option>
+                            <?php
+                            // Fetch the companies from the database
+                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
 
+                    <!-- Select Branch -->
                     <div class="col-md-6">
-                        <label for="country" class="form-label">Country</label>
-                        <select class="form-select" id="country" name="country" required>
-                            <option value="">Select Country</option>
-                            <option value="Pakistan">Pakistan</option>
-                            <option value="USA">USA</option>
-                            <option value="Canada">Canada</option>
-                            <option value="UK">UK</option>
-                            <!-- Add more countries as needed -->
+                        <label for="branch">Select a Branch:</label>
+                        <select id="branch" class="form-select" name="branch_FK_item" required>
+                            <option value="">Select a Branch</option>
+                            <!-- The options will be populated via AJAX based on the selected company -->
+                        </select>
+                    </div>
+
+                    <!-- Select Box -->
+                    <div class="col-md-6">
+                        <label for="box">Select Box:</label>
+                        <select id="box" class="form-select" name="box_FK_item" required>
+                            <option value="">Select a Box</option>
+                            <!-- The options will be populated via AJAX based on the selected branch -->
                         </select>
                     </div>
 
                     <div class="col-md-6">
-                        <label for="state" class="form-label">State</label>
-                        <select class="form-select" id="state" name="state" required>
-                            <option value="">Select State</option>
-                            <!-- Options will be dynamically populated based on selected country -->
+                        <label class="form-label">Item Barcode</label>
+                        <input type="text" class="form-control" name="item_barcode" id="item_barcode" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">requestor name</label>
+                        <input type="text" class="form-control" name="name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="" class="form-label">requestor role</label>
+                        <select class="form-select" id="" name="role" required>
+                            <option value="">Select Role</option>
+                            <option value="Chief Operations Officer (COO)">Chief Operations Officer (COO)</option>
+                            <option value="Operations Manager">Operations Manager</option>
+                            <option value="Supply Chain Manager">Supply Chain Manager</option>
+                            <option value="Head of Operations">Head of Operations</option>
+                            <option value="Human Resources Manager">Human Resources Manager</option>
+                            <option value="Marketing Manager">Marketing Manager</option>
+                        </select>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label for="" class="form-label">auth_status</label>
+                        <select class="form-select" id="" name="auth_status" required>
+                            <option value="">Select Status</option>
+                            <option value="Authorized">Authorized</option>
+                            <option value="Not Authorized">Not Authorized</option>
                         </select>
                     </div>
 
                     <div class="col-md-6">
-                        <label for="city" class="form-label">City</label>
-                        <select class="form-select" id="city" name="city" required>
-                            <option value="">Select City</option>
-                            <!-- Options will be dynamically populated based on selected state -->
-                        </select>
+                        <label class="form-label">request date</label>
+                        <input type="datetime-local" class="form-control" name="date" required>
                     </div>
-                    <div class="col-md-6">
-                        <label for="registration" class="form-label">Registration Date</label>
-                        <input type="date" class="form-control" id="registration" name="registration" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="expiry" class="form-label">Expiry Date</label>
-                        <input type="date" class="form-control" id="expiry" name="expiry" required>
-                    </div>
+
                     <div class="text-center mt-4 mb-2">
-                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary ">Reset</button>
+                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
+                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
                     </div>
                 </form>
-                <!------------------------  Form end ---------------------->
-
             </div>
         </div>
     </div>
+
+    <!-- Modal for Barcode Error -->
+    <div class="modal fade" id="barcodeErrorModal" tabindex="-1" aria-labelledby="barcodeErrorModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="barcodeErrorModalLabel">Barcode Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    The barcode you entered already exists. Please try a different one.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script to show modal when barcode already exists -->
+    <?php if ($error): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var barcodeErrorModal = new bootstrap.Modal(document.getElementById('barcodeErrorModal'));
+                barcodeErrorModal.show();
+            });
+        </script>
+    <?php endif; ?>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
@@ -580,133 +554,156 @@ if (isset($_POST['submit'])) {
     <!-- Template Main JS File -->
 
 
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const countryStateCityData = {
-                Pakistan: {
-                    Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-                    KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-                    Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-                    Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
+        $(document).ready(function() {
 
-                },
-                USA: {
-                    California: ["Los Angeles", "San Francisco", "San Diego"],
-                    Texas: ["Houston", "Austin", "Dallas"]
-                    // Add more states and cities
-                },
-                Canada: {
-                    Ontario: ["Toronto", "Ottawa", "Hamilton"],
-                    Quebec: ["Montreal", "Quebec City"]
-                    // Add more provinces and cities
-                },
-            };
+            // When company is changed, fetch the branches
+            $('#company').change(function() {
+                var company_id = $(this).val();
 
-            const countrySelect = document.getElementById('country');
-            const stateSelect = document.getElementById('state');
-            const citySelect = document.getElementById('city');
-
-            // Update states dropdown when a country is selected
-            countrySelect.addEventListener('change', function() {
-                const selectedCountry = countrySelect.value;
-                stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-                citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-                if (selectedCountry) {
-                    const states = Object.keys(countryStateCityData[selectedCountry]);
-                    states.forEach(function(state) {
-                        const option = document.createElement('option');
-                        option.value = state;
-                        option.text = state;
-                        stateSelect.add(option);
-                    });
-                }
+                // AJAX request to get branches for the selected company
+                $.ajax({
+                    url: 'get_branches.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            var branches = JSON.parse(response);
+                            // Clear existing branches
+                            $('#branch').empty();
+                            $('#branch').append('<option value="">Select a Branch</option>');
+                            // Add the new options from the response
+                            $.each(branches, function(index, branch) {
+                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                            });
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
             });
 
-            // Update cities dropdown when a state is selected
-            stateSelect.addEventListener('change', function() {
-                const selectedCountry = countrySelect.value;
-                const selectedState = stateSelect.value;
-                citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+            // When company is changed, fetch the box
+            $('#branch').change(function() {
+                var branch_id = $(this).val();
 
-                if (selectedCountry && selectedState) {
-                    const cities = countryStateCityData[selectedCountry][selectedState];
-                    cities.forEach(function(city) {
-                        const option = document.createElement('option');
-                        option.value = city;
-                        option.text = city;
-                        citySelect.add(option);
-                    });
-                }
+                // AJAX request to get box for the selected company
+                $.ajax({
+                    url: 'get_boxes.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var boxes = JSON.parse(response);
+                            // Clear existing branches
+                            $('#box').empty();
+                            $('#box').append('<option value="">Select a Box</option>');
+                            // Add the new options from the response
+                            $.each(boxes, function(index, box) {
+                                $('#box').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
+                            });
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
             });
         });
     </script>
+
     <script>
-    document.getElementById('image').addEventListener('change', function() {
-        const file = this.files[0];
-        const imageError = document.getElementById('image-error');
-        const sizeError = document.getElementById('size-error');
-        const dimensionError = document.getElementById('dimension-error');
+        document.addEventListener('DOMContentLoaded', function() {
+            const companySelect = document.getElementById('company');
+            const branchSelect = document.getElementById('branch');
+            const boxSelect = document.getElementById('box');
 
-        // Reset error messages
-        imageError.style.display = 'none';
-        sizeError.style.display = 'none';
-        dimensionError.style.display = 'none';
-
-        if (file) {
-            const reader = new FileReader();
-
-            // Validate file size (2 MB limit)
-            const maxSize = 2 * 1024 * 1024; // 2MB
-            if (file.size > maxSize) {
-                sizeError.style.display = 'block';
-                this.value = ''; // Clear the file input
-                return;
+            // Retrieve the previously selected company from localStorage
+            const selectedCompany = localStorage.getItem('selectedCompany');
+            if (selectedCompany) {
+                companySelect.value = selectedCompany;
+                loadBranches(selectedCompany); // Load branches based on the selected company
             }
 
-            // Validate file header (magic number)
-            reader.onload = function(e) {
-                const header = new Uint8Array(e.target.result).subarray(0, 4);
-                let valid = false;
+            // Store the selected company in localStorage on change
+            companySelect.addEventListener('change', function() {
+                localStorage.setItem('selectedCompany', this.value);
+                loadBranches(this.value); // Load branches based on the new selection
+            });
 
-                const jpg = header[0] === 0xFF && header[1] === 0xD8 && header[2] === 0xFF;
-                const png = header[0] === 0x89 && header[1] === 0x50 && header[2] === 0x4E && header[3] === 0x47;
+            // Store the selected branch in localStorage on change
+            branchSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedBranch', this.value);
+                loadBoxes(this.value); // Load boxes based on the selected branch
+            });
 
-                if (jpg || png) {
-                    valid = true;
-                }
+            // Store the selected box in localStorage on change
+            boxSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedBox', this.value);
+            });
 
-                if (!valid) {
-                    imageError.style.display = 'block';
-                    document.getElementById('image').value = ''; // Clear the file input
-                    return;
-                } else {
-                    imageError.style.display = 'none';
+            // Function to load branches via AJAX
+            function loadBranches(company_id) {
+                $.ajax({
+                    url: 'get_branches.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            const branches = JSON.parse(response);
+                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
+                            branches.forEach(function(branch) {
+                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
+                            });
 
-                    // Validate image dimensions
-                    const img = new Image();
-                    img.src = URL.createObjectURL(file);
-
-                    img.onload = function() {
-                        const maxWidth = 1024; // Example standard width
-                        const maxHeight = 768; // Example standard height
-
-                        if (img.width > maxWidth || img.height > maxHeight) {
-                            dimensionError.style.display = 'block';
-                            document.getElementById('image').value = ''; // Clear the file input
-                        } else {
-                            dimensionError.style.display = 'none';
+                            // Set previously selected branch again, if available
+                            const selectedBranch = localStorage.getItem('selectedBranch');
+                            if (selectedBranch) {
+                                branchSelect.value = selectedBranch;
+                                loadBoxes(selectedBranch); // Load boxes based on the selected branch
+                            }
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
                         }
-                    };
-                }
-            };
+                    }
+                });
+            }
 
-            reader.readAsArrayBuffer(file);
-        }
-    });
-</script>
-<!-- Validation Script of the header and the size of the image -->
+            // Function to load boxes via AJAX
+            function loadBoxes(branch_id) {
+                $.ajax({
+                    url: 'get_boxes.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            const boxes = JSON.parse(response);
+                            boxSelect.innerHTML = '<option value="">Select a Box</option>';
+                            boxes.forEach(function(box) {
+                                boxSelect.innerHTML += `<option value="${box.box_id}">${box.barcode}</option>`;
+                            });
+
+                            // Set previously selected box again, if available
+                            const selectedBox = localStorage.getItem('selectedBox');
+                            if (selectedBox) {
+                                boxSelect.value = selectedBox;
+                            }
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            }
+
+        });
+    </script>
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {
             searchable: false,
@@ -714,6 +711,18 @@ if (isset($_POST['submit'])) {
         })
     </script>
     <script src="assets/js/main.js"></script>
+
+    <!--datatable export buttons-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
 </body>
+
 
 </html>

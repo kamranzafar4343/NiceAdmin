@@ -1,5 +1,6 @@
 <?php
-include "db.php";
+
+include 'config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $comp_id = $_POST['comp_id'];

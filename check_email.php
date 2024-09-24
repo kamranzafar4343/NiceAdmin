@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include 'config/db.php';
 
 if (isset($_POST['email'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);

@@ -10,9 +10,7 @@ if (!isset($_SESSION['email'])) {
     header("Location: pages-login.php");
     exit();
 }
-
-include "db.php";
-
+include 'config/db.php';
 
 if (isset($_GET['id'])) {
     $user_id = intval($_GET['id']); // Ensure ID is an int

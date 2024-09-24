@@ -11,7 +11,7 @@ if (!isset($_SESSION['email'])) {
   exit();
 }
 
-include "db.php";
+include 'config/db.php';
 
 $email = $_SESSION['email'];
 //get user name and email from register table
@@ -621,6 +621,11 @@ End Search Bar -->
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
           <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+          <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
 

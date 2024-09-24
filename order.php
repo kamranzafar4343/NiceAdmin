@@ -8,10 +8,7 @@ if (!isset($_SESSION['email'])) {
   header("Location: pages-login.php");
   exit();
 }
-include "db.php"; // Include the database connection
-
-$sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
-$result = $conn->query($sql);
+include 'config/db.php';
 
 $email = $_SESSION['email'];
 //get user name and email from register table
@@ -22,6 +19,9 @@ if ($resultData->num_rows > 0) {
   $adminName = $row2['name'];
   $adminEmail = $row2['email'];
 }
+
+$showOrders = "Select * FROM Orders";
+$resultShowOrders = $conn->query($showOrders);
 
 ?>
 
@@ -83,13 +83,207 @@ if ($resultData->num_rows > 0) {
     /* Custom CSS to decrease font size of the table */
 
     .add {
-      cursor: pointer;
-      width: 143px;
-      margin-left: 844px;
-      margin-top: 26px;
+      /* cursor: pointer; */
+      width: 144px;
+      margin-left: 1144px;
+      margin-top: 89px;
+      margin-bottom: 103px;
     }
 
-    
+    /* Basic styling for search bar */
+    input.btn.btn-success {
+      margin-left: 7px;
+      height: 41px;
+      padding: 2%;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      text-align: center;
+      justify-items: center;
+
+    }
+
+    .search-container {
+      margin: 50px;
+      margin-left: 320px;
+      margin-bottom: 3px !important;
+    }
+
+    #main {
+
+      margin-top: 0 !important;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      font-size: 0.9rem;
+      width: 363px;
+    }
+
+    input[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+    .pagetitle {
+      display: flex;
+      width: 989px;
+      flex-direction: column;
+
+    }
+
+    .barcode {
+      height: 55px;
+      width: 250px;
+      position: relative;
+      left: -38px;
+    }
+
+    /* 
+        #main {
+            margin-top: 20px !important;
+            padding: 20px 30px;
+            transition: all 0.3s;
+        } */
+
+    .row {
+      margin-left: 52px;
+      --bs-gutter-x: 1.5rem;
+      --bs-gutter-y: 0;
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: calc(var(--bs-gutter-y)* -1);
+      margin-right: calc(var(--bs-gutter-x)* 1.5);
+      margin-left: calc(var(--bs-gutter-x)* 0.2);
+    }
+
+    .datatable-container {
+      border: none;
+      margin-left: 12px;
+      margin-top: 12px;
+      /* table-layout: fixed; */
+    }
+
+
+    /* Define the pulse animation */
+    .pagetitle {
+      display: flex;
+      width: 989px;
+      flex-direction: column;
+
+    }
+
+    #fixedButtonBranch {
+      position: relative;
+      top: 110px;
+      left: 1187px;
+    }
+
+    .row {
+      margin-left: 52px;
+      --bs-gutter-x: 1.5rem;
+      --bs-gutter-y: 0;
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: calc(var(--bs-gutter-y)* -1);
+      margin-right: calc(var(--bs-gutter-x)* 1.5);
+      margin-left: calc(var(--bs-gutter-x)* 0.2);
+    }
+
+    .datatable-container {
+      border: none;
+      margin-left: 12px;
+      margin-top: 12px;
+      /* table-layout: fixed; */
+    }
+
+    .card-body {
+      padding: 0 20px 20px 60px !important;
+    }
+
+
+    /* Define the pulse animation */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Define the click animation */
+    @keyframes clickEffect {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(0.9);
+        opacity: 0.7;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .company-name {
+      color: #000;
+      text-decoration: none;
+      display: inline-block;
+      transition: color 0.3s ease;
+    }
+
+    .mt-4 {
+      margin-top: 1.5rem !important;
+      margin-right: 214px;
+    }
+
+    .datatable-dropdown label {
+      font-size: 0.9rem;
+    }
+
+    .datatable-info {
+      display: none;
+    }
+
+    .datatable-top {
+      width: 942px;
+
+    }
+
+    /* Card */
+    .cardBranch {
+      margin-bottom: 30px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+      background-color: white;
+      font-size: 0.8rem;
+
+    }
+
+    .company-name:active {
+      animation: clickEffect 0.s ease;
+      /* Apply the click effect animation on click */
+      color: #0056b3;
+      /* Darken color on click */
+    }
+
+    * {
+      margin: 0;
+
+      padding: 0;
+
+      box-sizing: border-box;
+    }
   </style>
 
   <!-- Template Main CSS File -->
@@ -206,6 +400,12 @@ if ($resultData->num_rows > 0) {
           <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+          <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+
 
       <li class="nav-heading">Pages</li>
 
@@ -251,9 +451,94 @@ if ($resultData->num_rows > 0) {
     </ul>
 
   </aside>
-
-
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
+  <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-3 add">Order</button>
+  <!-- Main content -->
+  <main id="main" class="main">
+    <div class="col-12">
+      <div class="cardBranch recent-sales overflow-auto">
+        <div class="card-body">
+          <h5 class="card-title">List of Orders</h5>
+          <?php
+          // Check if there are any results
+          if ($resultShowOrders->num_rows > 0) {
+            // Display table
+            echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 5%;">#</th>
+                            <th scope="col" style="width: 10%;">Company</th>
+                            <th scope="col" style="width: 10%;">Branch</th>
+                             <th scope="col" style="width: 10%;">Box</th>
+                            <th scope="col" style="width: 10%;">Item</th>
+                            <th scope="col" style="width: 13%;">requestor name</th>
+                            <th scope="col" style="width: 11%;">requestor role</th>
+                                <th scope="col" style="width: 10%;">auth_status</th>                        
+                            <th scope="col" style="width: 15%;">request date</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody style="table-layout: fixed;">';
+
+            // Counter variable
+            $counter = 1;
+
+            // Loop through results
+            while ($row = $resultShowOrders->fetch_assoc()) {
+              echo '<tr>';
+              echo '<td>' . $counter++ . '</td>';
+
+              // Get company id
+              $comp_id = $row['company'];
+              $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
+              $result3 = $conn->query($sql3);
+              if ($result3->num_rows > 0) {
+                $row3 = $result3->fetch_assoc();
+                $comp_name = $row3['comp_name'];
+              }
+              //Show result
+              echo '<td>' . $comp_name . '</td>';
+
+              //get brnch id
+              $branch_id= $row['branch'];
+              $branchSql="Select * From branch where branch_id = '$branch_id'";
+              $branchResult= $conn->query($branchSql);
+              if ($branchResult->num_rows>0){
+                $branchRow=$branchResult->fetch_assoc();
+                $brnach_name= $branchRow['branch_name'];
+              }
+              //show result
+              echo '<td>' . $brnach_name . '<td>';
+
+              //get box id
+              $box_id = $row['box'];
+              $boxSQL = "Select * From box where box_id = '$box_id'";
+              $boxSQLresult = $conn->query($boxSQL);
+              if ($boxSQLresult->num_rows > 0) {
+                $boxRow = $boxSQLresult->fetch_assoc();
+                $box_barc = $boxRow['barcode'];
+              }
+              //Show result
+              echo  $box_barc;
+
+              echo '<td>' . ($row["item"]) . '</td>';
+              echo '<td>' . ($row["name"]) . '</td>';
+              echo '<td>' . ($row["role"]) . '</td>';
+              echo '<td>' . ($row["auth_status"]) . '</td>';
+              echo '<td>' . ($row["date"]) . '</td>';
+              echo '</tr>';
+            }
+            echo '</tbody></table>';
+          } else {
+            // Display message if no results
+            echo '<p>No items found.</p>';
+          }
+          ?>
+        </div>
+      </div>
+    </div>
+  </main>
+
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!--datatable export buttons-->

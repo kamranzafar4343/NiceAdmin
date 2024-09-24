@@ -9,7 +9,7 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-include "db.php";
+include 'config/db.php';
 
 $email = $_SESSION['email'];
 
@@ -364,6 +364,12 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+
 
             <li class="nav-heading">Pages</li>
 

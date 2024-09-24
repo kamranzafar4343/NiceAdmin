@@ -8,11 +8,13 @@ if (!isset($_SESSION['email'])) {
   header("Location: pages-login.php");
   exit();
 }
-include "db.php"; // Include the database connection
+
+include 'config/db.php'; // Include the database connection
 
 $sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
 $result = $conn->query($sql);
 
+//get session email 
 $email = $_SESSION['email'];
 //get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
@@ -203,6 +205,12 @@ if ($resultData->num_rows > 0) {
           <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+          <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+
 
       <li class="nav-heading">Pages</li>
 
@@ -288,8 +296,8 @@ if ($resultData->num_rows > 0) {
                   <th scope="col" style="width:9%;">Actions</th>
                 </tr>
               </thead>
-              <tbody style="table-layout: fixed;">
 
+              <tbody style="table-layout: fixed;">
                 <?php
                 $counter = 1; // Initialize counter
                 while ($row = $result->fetch_assoc()) {

@@ -9,7 +9,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include database connection
-include 'db.php';
+include 'config/db.php';
 
 // Get employee ID from query string
 $emp_id = $_GET['id'];

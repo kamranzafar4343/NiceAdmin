@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-include "db.php";
+include 'config/db.php';
 
 $email = $_SESSION['email'];
 
@@ -375,6 +375,12 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+
 
             <li class="nav-heading">Pages</li>
 
@@ -441,8 +447,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
                 <div class="col-md-6">
                     <label class="form-label">Barcode</label>
-                    <input type="text" class="form-control" name="barcode" id="box_barcode" pattern="[a-zA-Z0-9]{7}"
-                        title="Input must be exactly 7 characters long and contain letters and digits only." required>
+                    <input type="text" class="form-control" name="barcode" id="box_barcode" required>
                     <div id="barcodeFeedback" class="invalid-feedback">
                         <!-- Error message will be displayed here -->
                     </div>

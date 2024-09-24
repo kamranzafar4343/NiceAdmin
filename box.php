@@ -11,7 +11,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include the database connection
-include 'db.php';
+include 'config/db.php';
 
 // Get user email from session
 $email = $_SESSION['email'];
@@ -25,28 +25,14 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-// Initialize query condition
-$searchQuery = "";
-if (isset($_GET['query']) && !empty($_GET['query'])) {
-    $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
+//select all columns of boxes 
+$sql = "SELECT * FROM box";
+$result = $conn->query($sql);
 
-    // Search query: match barcode exactly or item name partially
-    $sql = "SELECT * FROM box WHERE barcode = '%$searchQuery%'";
-    $result = $conn->query($sql);
-} else {
-    // Default query if no search is performed
-    $sql = "SELECT * FROM box";
-    $result = $conn->query($sql);
-}
-?>
-<?php
+
 if (isset($_GET['comp_id'])) {
     $comp_id = $_GET['comp_id'];
     $sql = "SELECT * FROM box WHERE companiID_FK = '$comp_id'";
-    $result = $conn->query($sql);
-} else {
-    // Default query
-    $sql = "SELECT * FROM box";
     $result = $conn->query($sql);
 }
 ?>
@@ -359,11 +345,6 @@ if (isset($_GET['comp_id'])) {
             margin-left: 50px;
         }
 
-
-        .datatable-bottom {
-            width: 122%;
-        }
-
         .drpdwn {
             margin-left: 268px;
             max-width: 424px;
@@ -481,6 +462,12 @@ if (isset($_GET['comp_id'])) {
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+
 
             <li class="nav-heading">Pages</li>
 
@@ -570,6 +557,7 @@ if (isset($_GET['comp_id'])) {
                         $sql = "SELECT * FROM box";
                     }
                     $result = $conn->query($sql);
+                    
                     if ($result->num_rows > 0) {
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                     <thead>
@@ -601,6 +589,7 @@ if (isset($_GET['comp_id'])) {
                                 $row3 = $result3->fetch_assoc();
                                 $comp_name = $row3['comp_name'];
                             }
+                            //show specific company name
                             echo '<td>' . $comp_name . '</td>';
 
                             // Get specific branch id
@@ -611,7 +600,9 @@ if (isset($_GET['comp_id'])) {
                                 $row7 = $result7->fetch_assoc();
                                 $branch_name = $row7['branch_name'];
                             }
+                            //show specific branch name
                             echo '<td>' . $branch_name . '</td>';
+                            
                             echo '<td>' . ($row["created_at"]) . '</td>';
                             echo '<td><i class="';
                             if ($row["status"] == 'In') {

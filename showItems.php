@@ -8,7 +8,7 @@ if (!isset($_SESSION['email'])) {
     header("Location: pages-login.php");
     exit();
 }
-include 'db.php'; // Include the database connection
+include 'config/db.php'; // Include the database connection
 
 $email = $_SESSION['email'];
 //get user name and email from register table
@@ -333,10 +333,6 @@ $result = $conn->query($sql);
             width: 942px;
         }
 
-        .datatable-bottom {
-            width: 122%;
-        }
-
         .barcode {
             height: 37px;
             width: 167px;
@@ -510,6 +506,12 @@ $result = $conn->query($sql);
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+
 
             <li class="nav-heading">Pages</li>
             <li class="nav-item">
@@ -607,6 +609,7 @@ $result = $conn->query($sql);
                                 <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this record?\');" href="itemDelete.php?id=' . $row['item_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                             </div>
                         </td>';
+                        
                             echo '</tr>';
                         }
                         echo '</tbody></table>';

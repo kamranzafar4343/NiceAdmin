@@ -13,7 +13,7 @@ if (!isset($_SESSION['email'])) {
   exit();
 }
 
-include 'db.php';
+include 'config/db.php';
 
 $email = $_SESSION['email'];
 //get user name and email from register table
@@ -95,6 +95,312 @@ $emp_data = $result_emp->fetch_assoc();
 
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
   <style>
+    /* copied css start */
+    input.btn.btn-success {
+      margin-left: 7px;
+      height: 41px;
+      padding: 2%;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      text-align: center;
+      justify-items: center;
+
+    }
+
+    .search-container {
+      margin: 50px;
+      margin-left: 320px;
+      margin-bottom: 3px !important;
+    }
+
+    #main {
+
+      margin-top: 0 !important;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      font-size: 0.9rem;
+      width: 363px;
+    }
+
+    input[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+    .card-body {
+      margin-left: 37px !important;
+    }
+
+    .pagetitle {
+      display: flex;
+      width: 989px;
+      flex-direction: column;
+    }
+
+    .row {
+      margin-left: 52px;
+      --bs-gutter-x: 1.5rem;
+      --bs-gutter-y: 0;
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: calc(var(--bs-gutter-y)* -1);
+      margin-right: calc(var(--bs-gutter-x)* 1.5);
+      margin-left: calc(var(--bs-gutter-x)* 0.2);
+    }
+
+    .datatable-container {
+      border: none;
+      margin-left: 12px;
+      margin-top: 12px;
+      /* table-layout: fixed; */
+    }
+
+
+    /* Define the pulse animation */
+    .pagetitle {
+      display: flex;
+      width: 989px;
+      flex-direction: column;
+
+    }
+
+    #fixedButtonBranch {
+      position: relative;
+      top: 110px;
+      left: 1187px;
+    }
+
+    .row {
+      margin-left: 52px;
+      --bs-gutter-x: 1.5rem;
+      --bs-gutter-y: 0;
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: calc(var(--bs-gutter-y)* -1);
+      margin-right: calc(var(--bs-gutter-x)* 1.5);
+      margin-left: calc(var(--bs-gutter-x)* 0.2);
+    }
+
+    .datatable-container {
+      border: none;
+      margin-left: 12px;
+      margin-top: 12px;
+      /* table-layout: fixed; */
+    }
+
+
+    /* Define the pulse animation */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Define the click animation */
+    @keyframes clickEffect {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(0.9);
+        opacity: 0.7;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .company-name {
+      color: #000;
+      text-decoration: none;
+      display: inline-block;
+      transition: color 0.3s ease;
+    }
+
+    .mt-4 {
+      margin-top: 1.5rem !important;
+      margin-right: 214px;
+    }
+
+    .datatable-dropdown label {
+      font-size: 0.9rem;
+    }
+
+    .datatable-info {
+      display: none;
+    }
+
+    /* Card */
+    .cardBranch {
+      margin-bottom: 30px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+      background-color: white;
+      font-size: 0.8rem;
+
+    }
+
+    .company-name:active {
+      animation: clickEffect 0.s ease;
+      /* Apply the click effect animation on click */
+      color: #0056b3;
+      /* Darken color on click */
+    }
+
+    * {
+      margin: 0;
+
+      padding: 0;
+
+      box-sizing: border-box;
+    }
+
+    .custom2 {
+      font-size: 0.8rem;
+      border-radius: 7px;
+      padding-top: 14px;
+      padding-bottom: 14px;
+      padding-right: 34px;
+      padding-left: 40px;
+      margin-left: 20px;
+
+      /* table-layout: fixed; */
+
+      /* overflow: hidden; */
+      /* text-overflow: ellipsis; */
+      /* white-space: nowrap; */
+    }
+
+    tbody,
+    td,
+    tr {
+      word-wrap: break-word;
+      max-width: 200px;
+    }
+
+    .datatable-table>tbody>tr>td,
+    .datatable-table>tbody>tr>th,
+    .datatable-table>tfoot>tr>td,
+    .datatable-table>tfoot>tr>th,
+    .datatable-table>thead>tr>td,
+    .datatable-table>thead>tr>th {
+      vertical-align: top;
+      padding: 8px 2px;
+    }
+
+    .image-circle {
+      display: flex;
+      justify-content: center;
+      /* Horizontally center */
+      align-items: center;
+      text-align: center;
+    }
+
+
+    .navbar-image {
+      width: 50px;
+      height: 50px;
+      margin-right: 7px;
+    }
+
+    .headerbox {
+
+      display: flex;
+    }
+
+    .datatable-table>thead>tr>th {
+      vertical-align: bottom;
+      text-align: left;
+      border-bottom: 0px solid #d9d9d9;
+    }
+
+    .pagetitleinside button {
+      width: 150px;
+    }
+
+    .datatable-pagination {
+      margin-left: 50px;
+    }
+
+    .datatable-top {
+      width: 942px;
+    }
+
+    .barcode {
+      height: 37px;
+      width: 167px;
+      position: relative;
+      left: -18px;
+    }
+
+    /* styles for card */
+    .card-body {
+      padding: 18px !important;
+      padding-left: 0 !important;
+      padding-top: 0 !important;
+    }
+
+    /*datatable top css*/
+    .datatable-top,
+    .datatable-bottom {
+      padding: 12px 10px;
+      margin-top: 4px;
+      display: flex !important;
+    }
+
+    .card-title {
+      padding: 5px 0 0px 0;
+      font-size: 23px;
+      font-weight: 500;
+      position: relative;
+      left: 11px;
+      color: #012970;
+      margin-top: 14px;
+      font-family: "Poppins", sans-serif;
+      /* font-family: "Poppins", sans-serif; */
+      width: 424px !important;
+    }
+
+    .datatable-input {
+
+      width: 240px;
+      height: 35px;
+      font-size: 0.8rem;
+      margin-left: 401px;
+      outline: none;
+
+
+
+      font-size: 17px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: -25px;
+    }
+
+    .datatable-search {
+      margin-left: 485px !important;
+    }
+
+
+
     /* Custom CSS to decrease font size of the table */
 
     .email-col {
@@ -177,6 +483,9 @@ $emp_data = $result_emp->fetch_assoc();
       font-family: "Open Sans";
       width: 84%;
     }
+
+    /* copied css from other table start */
+
 
     /* Custom CSS to place card and table side by side */
     .side-by-side-container {
@@ -398,6 +707,12 @@ $emp_data = $result_emp->fetch_assoc();
           <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+          <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
+
 
       <li class="nav-heading">Pages</li>
 

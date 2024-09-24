@@ -1,8 +1,7 @@
 <?php
 
-// session_start(); // Start the session
+// Start the session
 session_start();
-
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
@@ -11,10 +10,13 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
+// Include the database connection
 include 'config/db.php';
 
+// Get user email from session
 $email = $_SESSION['email'];
-//get user name and email from register table
+
+// Get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
@@ -22,26 +24,19 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
+$error = false;
 
-// Get company ID from query string
-$company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-// Fetch branches of the company
-$sql = "SELECT * FROM branch WHERE compID_FK = $company_id";
+// Fetch data from the store table and join with boxes and racks
+$sql = "
+    SELECT store.id AS store_id, box.barcode, racks.rack_code, racks.level, racks.horizontal, racks.rack_number, racks.column_identifier, racks.position_number 
+    FROM store
+    JOIN box ON store.box_id = box.box_id  -- Specify the correct table and column
+    JOIN racks ON store.rack_id = racks.id
+";
 $result = $conn->query($sql);
 
-//2nd query to fetch the comp_name
-$sql2 = "Select comp_name from compani where comp_id= $company_id";
-$result2 = $conn->query($sql2);
-
-$comp_name = "";
-
-if ($result2->num_rows > 0) {
-    $row2 = $result2->fetch_assoc();
-    $comp_name = $row2['comp_name'];
-}
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +45,7 @@ if ($result2->num_rows > 0) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Branches</title>
+    <title>boxes</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -95,12 +90,60 @@ if ($result2->num_rows > 0) {
     <style>
         /* Custom CSS to decrease font size of the table */
 
+        /* Basic styling for search bar */
+        input.btn.btn-success {
+            margin-left: 7px;
+            height: 41px;
+            padding: 2%;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            text-align: center;
+            justify-items: center;
+
+        }
+
+        .search-container {
+            margin: 50px;
+            margin-left: 320px;
+            margin-bottom: 3px !important;
+        }
+
+        #main {
+
+            margin-top: 0 !important;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 0.9rem;
+            width: 363px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
         .pagetitle {
             display: flex;
             width: 989px;
             flex-direction: column;
 
         }
+
+        .barcode {
+            height: 55px;
+            width: 250px;
+            position: relative;
+            left: -38px;
+        }
+
+        /* 
+        #main {
+            margin-top: 20px !important;
+            padding: 20px 30px;
+            transition: all 0.3s;
+        } */
 
         .row {
             margin-left: 52px;
@@ -151,6 +194,10 @@ if ($result2->num_rows > 0) {
             margin-left: 12px;
             margin-top: 12px;
             /* table-layout: fixed; */
+        }
+
+        .card-body {
+            padding: 0 20px 20px 60px !important;
         }
 
 
@@ -208,10 +255,9 @@ if ($result2->num_rows > 0) {
         }
 
         .datatable-top {
-            width: 1048px;
+            width: 942px;
 
         }
-
 
         /* Card */
         .cardBranch {
@@ -221,7 +267,7 @@ if ($result2->num_rows > 0) {
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
-            margin-top: 30px;
+
         }
 
         .company-name:active {
@@ -247,12 +293,6 @@ if ($result2->num_rows > 0) {
             padding-right: 34px;
             padding-left: 40px;
             margin-left: 20px;
-
-            /* table-layout: fixed; */
-
-            /* overflow: hidden; */
-            /* text-overflow: ellipsis; */
-            /* white-space: nowrap; */
         }
 
         tbody,
@@ -306,17 +346,11 @@ if ($result2->num_rows > 0) {
             margin-left: 50px;
         }
 
-        .datatable-top {
-            width: 844px;
+        .drpdwn {
+            margin-left: 268px;
+            max-width: 424px;
+            margin-top: 28px;
         }
-
-        .datatable-bottom {
-            width: 122%;
-        }
-
-        /* .custom-header-col-name{
-        margin-right: 1000px;
-    } */
     </style>
 
     <!-- Template Main CSS File -->
@@ -351,8 +385,6 @@ if ($result2->num_rows > 0) {
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
         </div><!-- End Search Bar -->
-
-        <h3>List of Branches</h3>
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
@@ -411,18 +443,16 @@ if ($result2->num_rows > 0) {
 
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
-
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
                     <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
-
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
                     <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
@@ -438,6 +468,13 @@ if ($result2->num_rows > 0) {
                     <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
+                    <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+
+
 
             <li class="nav-heading">Pages</li>
 
@@ -449,10 +486,27 @@ if ($result2->num_rows > 0) {
             </li>
             <!-- End Profile Page Nav -->
 
+
+
+            <!-- <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-register.php">
+          <i class="bi bi-card-list"></i>
+          <span>Register</span>
+        </a>
+      </li> -->
+            <!-- End Register Page Nav -->
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
                     <i class="bi bi-box-arrow-in-right"></i>
                     <span>Login</span>
+                </a>
+            </li><!-- End Login Page Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="logout.php">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>Logout</span>
                 </a>
             </li><!-- End Login Page Nav -->
 
@@ -470,77 +524,89 @@ if ($result2->num_rows > 0) {
 
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
+
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
-    <!-- 
-  <h1>Companies List</h1> -->
+    <!-- Button to add new box -->
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'storedata.php';" class="btn btn-primary mb-3">Add Box & Rack</button>
+
+    <!-- Search bar for racks -->
+    <div class="search-container">
+        <form id="searchForm" action="" method="GET">
+            <input type="text" id="searchInput" name="query" placeholder="Search by rack code..." autofocus>
+            <input type="submit" value="Search" class="btn btn-success btn-success">
+        </form>
+    </div>
+
     <main id="main" class="main">
-
         <div class="col-12">
-
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
+                    <h5 class="card-title">List of Boxes and Rack Details</h5>
 
                     <?php
                     if ($result->num_rows > 0) {
-                    ?>
-                        <table class="table table-borderless datatable" style="table-layout: fixed;">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Branch Name</th>
-                                    <th scope="col">FOC</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">FOC Role</th>
-                                    <th scope="col">City</th>
-                                    <th scope="col">State</th>
-                                    <th scope="col">Country</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody style="table-layout: fixed;">
+                        // Display table of box and rack details
+                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="width: 5%;">#</th>
+                                <th scope="col" style="width: 15%;">Box Barcode</th>
+                                <th scope="col" style="width: 15%;">Rack Code</th>
+                                <th scope="col" style="width: 10%;">Level</th>
+                                <th scope="col" style="width: 10%;">Horizontal</th>
+                                <th scope="col" style="width: 10%;">Rack Number</th>
+                                <th scope="col" style="width: 15%;">Column Identifier</th>
+                                <th scope="col" style="width: 10%;">Position Number</th>
+                                <th scope="col" style="width: 15%;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
 
-                                <?php
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<tr>";
-                                    echo "<td>" . ($row["branch_name"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonName"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonPhone"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonResignation"]) . "</td>";
-                                    echo "<td>" . ($row["City"]) . "</td>";
-                                    echo "<td>" . ($row["State"]) . "</td>";
-                                    echo "<td>" . ($row["Country"]) . "</td>";
-                                ?>
-                                    <td>
-                                        <div style="display: flex; gap: 10px;">
+                        // Counter variable for row numbers
+                        $counter = 1;
 
-                                            <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
-                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-
-                                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                                onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-
-                                        </div>
-                                    </td>
-                                    </tr>
-                                <?php
-                                }
-                                ?>
-
-                            </tbody>
-                        </table>
-                    <?php
+                        // Loop through the results and display each row
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>' . $counter++ . '</td>';
+                            echo '<td>' . htmlspecialchars($row["barcode"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["rack_code"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["level"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["horizontal"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["rack_number"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["column_identifier"]) . '</td>'; // Added column
+                            echo '<td>' . htmlspecialchars($row["position_number"]) . '</td>'; // Added column
+                            echo '<td>
+                            <div style="display: flex; gap: 10px;">
+                                <a class="btn btn-danger btn-sm" href="deleteStore.php?id=' . $row['store_id'] . '" onclick="return confirm(\'Are you sure you want to delete this entry?\');">Delete</a>
+                            </div>
+                          </td>';
+                            echo '</tr>';
+                        }
+                        echo '</tbody></table>';
+                    } else {
+                        // Display message if no data found
+                        echo '<p>No box and rack data found.</p>';
                     }
+
+                    // Close the database connection
+                    $conn->close();
                     ?>
-
                 </div>
-
             </div>
         </div>
+    </main>
 
 
-    </main><!-- End #main -->
+
+
+
+    <script>
+        function filterCompany(comp_id) {
+            window.location.href = "box.php?comp_id=" + comp_id;
+        }
+    </script>
+
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
@@ -561,64 +627,14 @@ if ($result2->num_rows > 0) {
     <script src="assets/js/main.js"></script>
 
     <script>
-        //click on the picture to update with ajax
-        $(document).on('click', 'img', function() {
-            $(this).next('input[type="file"]').click();
+        // event listener for search bar 
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default form submission
+                document.getElementById("searchForm").submit(); // Manually submit the form
+            }
         });
-
-        function uploadImage(comp_id) {
-            var fileInput = document.getElementById('file-' + comp_id);
-            var file = fileInput.files[0];
-            var formData = new FormData();
-            formData.append('image', file);
-            formData.append('comp_id', comp_id);
-
-            $.ajax({
-                url: 'update_image.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    // Update the image source with the new image path
-                    $('#image-' + comp_id).attr('src', response);
-                },
-                error: function() {
-                    alert('Image upload failed. Please try again.');
-                }
-            });
-        }
-        import {
-            Ripple,
-            initMDB
-        } from "mdb-ui-kit";
-
-        initMDB({
-            Ripple
-        });
-
-        // function confirmDelete() {
-        //     // Display a confirmation dialog
-        //     var confirmation = confirm("Are you sure you want to delete this record?");
-
-        //     if (confirmation) {
-        //         // User clicked OK, proceed with deletion
-        //         deleteRecord();
-        //     } else {
-        //         // User clicked Cancel, do nothing
-        //         console.log("Record deletion canceled.");
-        //     }
-        // }
-
-        // function deleteRecord() {
-        //     // Your deletion logic here
-        //     console.log("Record deleted.");
-        //     // Example: You might want to make an AJAX request to delete the record from the server
-        //     // fetch('/delete-record', { method: 'POST' }).then(response => response.json()).then(data => console.log(data));
-        // }
     </script>
-
-
 </body>
 
 </html>

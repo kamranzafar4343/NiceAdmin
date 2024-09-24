@@ -3,9 +3,6 @@
 // Start session
 session_start();
 
-
-
-
 // Check if user is logged in
 if (!isset($_SESSION['email'])) {
     header("Location: pages-login.php");
@@ -13,7 +10,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include database connection
-include 'db.php';
+include 'config/db.php';
 
 // Check for POST request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -682,6 +679,16 @@ End Search Bar -->
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
                     <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+                    <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
+                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
 

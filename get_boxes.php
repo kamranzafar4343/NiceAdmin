@@ -1,7 +1,6 @@
 <?php
 
-include "db.php";
-
+include 'config/db.php';
 if (isset($_POST['branch_id'])) {
     $branch_id = $_POST['branch_id'];
     

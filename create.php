@@ -27,7 +27,7 @@ if (isset($_POST['submit'])) {
     $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
     $phone = mysqli_real_escape_string($conn, $_POST['phone']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    // $password = mysqli_real_escape_string($conn, $_POST['password']);
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
     // Check if the email already exists in the database
@@ -83,10 +83,13 @@ if (isset($_POST['submit'])) {
     $country = mysqli_real_escape_string($conn, $_POST['country']);
     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
+    $foc = mysqli_real_escape_string($conn, $_POST['foc']);
+    $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
+    $foc_role = mysqli_real_escape_string($conn, $_POST['foc_role']);
 
     // Insert the record into the database
-    $sql = "INSERT INTO `compani` (`comp_name`, `phone`, `email`, `password`, `image`, `city`, `state`, `country`, `registration`, `expiry`) 
-            VALUES ('$comp_name', '$phone', '$email', '$hashedPassword', '$img_des', '$city', '$state', '$country', '$registration', '$expiry')";
+    $sql = "INSERT INTO `compani` (`comp_name`, `phone`, `email`, `image`, `city`, `state`, `country`, `registration`, `expiry`, `foc`, `foc_phone`, `foc_role`) 
+            VALUES ('$comp_name', '$phone', '$email', '$img_des', '$city', '$state', '$country', '$registration', '$expiry', '$foc', '$foc_phone', '$foc_role')";
 
 
     //added code to insert data into branch table and redirect to branches table of specific company
@@ -95,7 +98,7 @@ if (isset($_POST['submit'])) {
         // Step 2: Get the ID of the newly inserted company
         $newCompanyId = mysqli_insert_id($conn);
 
-        $insertBranchSql = "INSERT INTO `branch` (`compID_FK`, `branch_name`, `ContactPersonName`, `ContactPersonPhone`, `ContactPersonResignation`, `City`, `State`, `Country`) VALUES ('$newCompanyId', '$comp_name <b>HQ</b>', 'null', '$phone', 'null', '$city', '$state', '$country')";
+        $insertBranchSql = "INSERT INTO `branch` (`compID_FK`, `branch_name`, `ContactPersonName`, `ContactPersonPhone`, `ContactPersonResignation`, `City`, `State`, `Country`) VALUES ('$newCompanyId', '$comp_name <b>HQ</b>', '$foc', '$foc_phone', '$foc_role', '$city', '$state', '$country')";
     }
 
     if (mysqli_query($conn, $insertBranchSql)) {
@@ -488,6 +491,14 @@ if (isset($_POST['submit'])) {
                         <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
                     </div>
                     <div class="col-md-6">
+                        <label for="image" class="form-label" style="font-size: 0.8rem;">Logo</label>
+                        <input type="file" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
+                        <!-- Error messages -->
+                        <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
+                        <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
+                        <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
+                    </div>
+                    <div class="col-md-6">
                         <label for="phone" class="form-label">Phone</label>
                         <input type="text" class="form-control" id="phone" name="phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
                     </div>
@@ -499,21 +510,14 @@ if (isset($_POST['submit'])) {
                             <!-- Error message will be displayed here -->
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" name="password" required minlength="8" maxlength="12" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                             title="It must be 8-16 characters, include at least one number, one uppercase and one lowercase letter">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="image" class="form-label" style="font-size: 0.8rem;">Image</label>
-                        <input type="file" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
-                        <!-- Error messages -->
-                        <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
-                        <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
-                        <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
-                    </div>
+                    </div> -->
+                    
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="country" class="form-label">Country</label>
                         <select class="form-select" id="country" name="country" required>
                             <option value="">Select Country</option>
@@ -525,15 +529,14 @@ if (isset($_POST['submit'])) {
                         </select>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="state" class="form-label">State</label>
                         <select class="form-select" id="state" name="state" required>
                             <option value="">Select State</option>
                             <!-- Options will be dynamically populated based on selected country -->
                         </select>
                     </div>
-
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="city" class="form-label">City</label>
                         <select class="form-select" id="city" name="city" required>
                             <option value="">Select City</option>
@@ -547,6 +550,28 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-6 mb-3">
                         <label for="expiry" class="form-label">Expiry Date</label>
                         <input type="date" class="form-control" id="expiry" name="expiry" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="" class="form-label">Focal person</label>
+                        <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label"> FOC Phone</label>
+                        <input type="text" class="form-control" id="" name="foc_phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="" class="form-label">FOC Role</label>
+                        <select class="form-select" id="" name="foc_role" required>
+                            <option value="">Select Role</option>
+                            <option value="ceo">CEO</option>
+                            <option value="cfo">CFO</option>
+                            <option value="cto">CTO</option>
+                            <option value="hr">HR</option>
+                            <option value="product-manager">product manager</option>
+                            <option value="sales-manager">sales manager</option>
+                            <option value="IT-manager">IT manager</option>
+                            <!-- Add more countries as needed -->
+                        </select>
                     </div>
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
@@ -643,70 +668,70 @@ if (isset($_POST['submit'])) {
         });
     </script>
     <script>
-    document.getElementById('image').addEventListener('change', function() {
-        const file = this.files[0];
-        const imageError = document.getElementById('image-error');
-        const sizeError = document.getElementById('size-error');
-        const dimensionError = document.getElementById('dimension-error');
+        document.getElementById('image').addEventListener('change', function() {
+            const file = this.files[0];
+            const imageError = document.getElementById('image-error');
+            const sizeError = document.getElementById('size-error');
+            const dimensionError = document.getElementById('dimension-error');
 
-        // Reset error messages
-        imageError.style.display = 'none';
-        sizeError.style.display = 'none';
-        dimensionError.style.display = 'none';
+            // Reset error messages
+            imageError.style.display = 'none';
+            sizeError.style.display = 'none';
+            dimensionError.style.display = 'none';
 
-        if (file) {
-            const reader = new FileReader();
+            if (file) {
+                const reader = new FileReader();
 
-            // Validate file size (2 MB limit)
-            const maxSize = 2 * 1024 * 1024; // 2MB
-            if (file.size > maxSize) {
-                sizeError.style.display = 'block';
-                this.value = ''; // Clear the file input
-                return;
-            }
-
-            // Validate file header (magic number)
-            reader.onload = function(e) {
-                const header = new Uint8Array(e.target.result).subarray(0, 4);
-                let valid = false;
-
-                const jpg = header[0] === 0xFF && header[1] === 0xD8 && header[2] === 0xFF;
-                const png = header[0] === 0x89 && header[1] === 0x50 && header[2] === 0x4E && header[3] === 0x47;
-
-                if (jpg || png) {
-                    valid = true;
-                }
-
-                if (!valid) {
-                    imageError.style.display = 'block';
-                    document.getElementById('image').value = ''; // Clear the file input
+                // Validate file size (2 MB limit)
+                const maxSize = 2 * 1024 * 1024; // 2MB
+                if (file.size > maxSize) {
+                    sizeError.style.display = 'block';
+                    this.value = ''; // Clear the file input
                     return;
-                } else {
-                    imageError.style.display = 'none';
-
-                    // Validate image dimensions
-                    const img = new Image();
-                    img.src = URL.createObjectURL(file);
-
-                    img.onload = function() {
-                        const maxWidth = 1024; // Example standard width
-                        const maxHeight = 768; // Example standard height
-
-                        if (img.width > maxWidth || img.height > maxHeight) {
-                            dimensionError.style.display = 'block';
-                            document.getElementById('image').value = ''; // Clear the file input
-                        } else {
-                            dimensionError.style.display = 'none';
-                        }
-                    };
                 }
-            };
 
-            reader.readAsArrayBuffer(file);
-        }
-    });
-</script>
-<!-- Validation Script of the header and the size of the image -->
+                // Validate file header (magic number)
+                reader.onload = function(e) {
+                    const header = new Uint8Array(e.target.result).subarray(0, 4);
+                    let valid = false;
+
+                    const jpg = header[0] === 0xFF && header[1] === 0xD8 && header[2] === 0xFF;
+                    const png = header[0] === 0x89 && header[1] === 0x50 && header[2] === 0x4E && header[3] === 0x47;
+
+                    if (jpg || png) {
+                        valid = true;
+                    }
+
+                    if (!valid) {
+                        imageError.style.display = 'block';
+                        document.getElementById('image').value = ''; // Clear the file input
+                        return;
+                    } else {
+                        imageError.style.display = 'none';
+
+                        // Validate image dimensions
+                        const img = new Image();
+                        img.src = URL.createObjectURL(file);
+
+                        img.onload = function() {
+                            const maxWidth = 1024; // Example standard width
+                            const maxHeight = 768; // Example standard height
+
+                            if (img.width > maxWidth || img.height > maxHeight) {
+                                dimensionError.style.display = 'block';
+                                document.getElementById('image').value = ''; // Clear the file input
+                            } else {
+                                dimensionError.style.display = 'none';
+                            }
+                        };
+                    }
+                };
+
+                reader.readAsArrayBuffer(file);
+            }
+        });
+    </script>
+    <!-- Validation Script of the header and the size of the image -->
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {
             searchable: false,

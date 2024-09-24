@@ -413,171 +413,138 @@ if (isset($_POST['submit'])) {
 
     <!--form--------------------------------------form--------------------------------------->
 
-    <!-- Start Header Form -->
-    <div class="headerimg text-center">
-        <i class="fa-solid fa-box" style="font-size: 50px; color: #333;"></i>
-        <h2>Add Box & Rack</h2>
-    </div>
-    <!-- End Header Form -->
+   <!-- Start Header Form -->
+<div class="headerimg text-center">
+    <i class="fa-solid fa-box" style="font-size: 50px; color: #333;"></i>
+    <h2>Add Box & Rack</h2>
+</div>
+<!-- End Header Form -->
 
-    <!-- Start Form Container -->
-    <div class="container d-flex justify-content-center">
-        <div class="card custom-card shadow-lg mt-3">
-            <div class="card-body">
-                <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
-                    <!-- Select Barcode -->
-                    <div class="col-md-6">
-                        <label for="barcode_select" class="form-label">Select Box Barcode</label>
-                        <select class="form-select" id="barcode_select" name="barcode_select" required onchange="fetchItemBarcode()">
-                            <option value="" disabled selected>Select a barcode</option>
-                            <?php
-                            include "db.php"; // Include the database connection file
+<!-- Start Form Container -->
+<div class="container d-flex justify-content-center">
+    <div class="card custom-card shadow-lg mt-3">
+        <div class="card-body">
+            <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
+                <!-- Select Barcode -->
+                <div class="col-md-6">
+                    <label for="barcode_select" class="form-label">Select Box Barcode</label>
+                    <select class="form-select" id="barcode_select" name="barcode_select" required>
+                        <option value="" disabled selected>Select a barcode</option>
+                        <?php
+                        include "db.php"; // Include the database connection file
 
-                            // Fetch barcodes from the database
-                            $sql = "SELECT box_id, barcode FROM box";
-                            $result = $conn->query($sql);
+                        // Fetch barcodes from the database
+                        $sql = "SELECT box_id, barcode FROM box";
+                        $result = $conn->query($sql);
 
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<option value='" . $row['box_id'] . "'>" . $row['barcode'] . "</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <!-- Item Barcode -->
-                    <!-- <div class="col-md-6">
-                    <label for="item_barcode" class="form-label">Item Barcode</label>
-                    <input type="text" class="form-control" id="item_barcode" name="item_barcode" required readonly>
-                </div> -->
-
-
-                    <!-- Select Rack -->
-                    <div class="col-md-6">
-                        <label for="rack_select" class="form-label">Select Rack</label>
-                        <select class="form-select" id="rack_select" name="rack_select" required>
-                            <option value="" disabled selected>Select a rack</option>
-                            <?php
-                            // Fetch racks from the database including additional columns
-                            $query = "
-            SELECT id, rack_code, rack_number, level, horizontal, column_identifier, position_number 
-            FROM racks
-        ";
-                            $result = $conn->query($query);
-
+                        if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                // Create a display text combining all relevant rack details
-                                $display_text = $row['rack_code'] . ' - ' .
-                                    $row['rack_number'] . ' - ' .
-                                    $row['level'] . ' - ' .
-                                    $row['horizontal'] . ' - ' .
-                                    $row['column_identifier'] . ' - ' .
-                                    $row['position_number'];
-                                echo "<option value='" . $row['id'] . "'>$display_text</option>";
+                                echo "<option value='" . $row['box_id'] . "'>" . $row['barcode'] . "</option>";
                             }
-                            ?>
-                        </select>
-                    </div>
+                        }
+                        ?>
+                    </select>
+                </div>
 
+                <!-- Select Rack -->
+                <div class="col-md-6">
+                    <label for="rack_select" class="form-label">Select Rack</label>
+                    <select class="form-select" id="rack_select" name="rack_select" required>
+                        <option value="" disabled selected>Select a rack</option>
+                        <?php
+                        // Fetch racks from the database including additional columns
+                        $query = "SELECT id, rack_code, rack_number, level, horizontal, column_identifier, position_number FROM racks";
+                        $result = $conn->query($query);
 
-                    <!-- Form Buttons -->
-                    <div class="text-center mt-4 mb-2">
-                        <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>
-                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
-                    </div>
-                </form>
+                        while ($row = $result->fetch_assoc()) {
+                            // Create a display text combining all relevant rack details
+                            $display_text = $row['rack_code'] . ' - ' . $row['rack_number'] . ' - ' . $row['level'] . ' - ' . $row['horizontal'] . ' - ' . $row['column_identifier'] . ' - ' . $row['position_number'];
+                            echo "<option value='" . $row['id'] . "'>$display_text</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="text-center mt-4 mb-2">
+                    <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>
+                    <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
+                    <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Form Container -->
+
+<!-- Include Bootstrap JS (with Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Modal for duplicate entry error -->
+<div class="modal fade" id="duplicateErrorModal" tabindex="-1" aria-labelledby="duplicateErrorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="duplicateErrorModalLabel">Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Duplicate entry detected. Please ensure all fields are unique.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
-    <!-- End Form Container -->
+</div>
 
-    <!-- Include Bootstrap JS (with Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Backend PHP code to process the form -->
+<?php
+if (isset($_POST['submit'])) {
+    include "db.php"; // Include the database connection file
 
-    <!-- Modal for duplicate entry error -->
-    <div class="modal fade" id="duplicateErrorModal" tabindex="-1" aria-labelledby="duplicateErrorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="duplicateErrorModalLabel">Error</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Duplicate entry detected. Please ensure all fields are unique.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    // Establish connection to the database
+    $conn = new mysqli('localhost', 'root', '', 'catmarketing');
 
-    <script>
-        function fetchItemBarcode() {
-            var boxId = document.getElementById('barcode_select').value;
-
-            if (boxId) {
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "fetch_item_barcode.php?box_id=" + boxId, true);
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        document.getElementById('item_barcode').value = xhr.responseText; // Set the item barcode
-                    }
-                };
-                xhr.send();
-            } else {
-                document.getElementById('item_barcode').value = ""; // Clear the item barcode if no box is selected
-            }
-        }
-    </script>
-
-    <!-- Backend PHP code to process the form -->
-    <?php
-    if (isset($_POST['submit'])) {
-        include "db.php"; // Include the database connection file
-
-        // Establish connection to the database
-        $conn = new mysqli('localhost', 'root', '', 'catmarketing');
-
-        // Check for connection errors
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
-        // Get form data
-        $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
-        $rack_select = $conn->real_escape_string($_POST['rack_select']);
-
-        // Check for duplicate entry in the racks table
-        $check_query = "SELECT * FROM racks WHERE box_id = '$barcode_select' AND rack_id = '$rack_select'";
-        $result = $conn->query($check_query);
-
-        if ($result->num_rows > 0) {
-            echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
-                duplicateErrorModal.show();
-            });
-        </script>";
-        } else {
-            // Insert form data into the racks table if no duplicate is found
-            $insert_query = "INSERT INTO racks (box_id, rack_id) VALUES ('$barcode_select', '$rack_select')";
-
-            if ($conn->query($insert_query) === TRUE) {
-                // Redirect to racks page after successful insertion
-                echo "<script>window.location.href = 'store.php';</script>";
-            } else {
-                // Handle insertion error
-                echo "Error: " . $insert_query . "<br>" . $conn->error;
-            }
-        }
-
-        // Close the database connection
-        $conn->close();
+    // Check for connection errors
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
-    ?>
+
+    // Get form data
+    $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
+    $rack_select = $conn->real_escape_string($_POST['rack_select']);
+
+    // Check for duplicate entry in the racks table
+    $check_query = "SELECT * FROM store WHERE box_id = '$barcode_select' AND rack_id = '$rack_select'";
+    $result = $conn->query($check_query);
+
+    if ($result->num_rows > 0) {
+        echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
+            duplicateErrorModal.show();
+        });
+        </script>";
+    } else {
+        // Insert form data into the racks table if no duplicate is found
+        $insert_query = "INSERT INTO store (box_id, rack_id) VALUES ('$barcode_select', '$rack_select')";
+
+        if ($conn->query($insert_query) === TRUE) {
+            // Redirect to racks page after successful insertion
+            echo "<script>window.location.href = 'store.php';</script>";
+        } else {
+            // Handle insertion error
+            echo "Error: " . $insert_query . "<br>" . $conn->error;
+        }
+    }
+
+    // Close the database connection
+    $conn->close();
+}
+?>
+
+
 </body>
 
 </html>

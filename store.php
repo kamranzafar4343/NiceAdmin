@@ -538,15 +538,15 @@ $result = $conn->query($sql);
     </div>
 
     <main id="main" class="main">
-    <div class="col-12">
-        <div class="cardBranch recent-sales overflow-auto">
-            <div class="card-body">
-                <h5 class="card-title">List of Boxes and Rack Details</h5>
+        <div class="col-12">
+            <div class="cardBranch recent-sales overflow-auto">
+                <div class="card-body">
+                    <h5 class="card-title">List of Boxes and Rack Details</h5>
 
-                <?php
-                if ($result->num_rows > 0) {
-                    // Display table of box and rack details
-                    echo '<table class="table table-striped mt-4">
+                    <?php
+                    if ($result->num_rows > 0) {
+                        // Display table of box and rack details
+                        echo '<table class="table table-striped mt-4">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -562,40 +562,40 @@ $result = $conn->query($sql);
                         </thead>
                         <tbody>';
 
-                    // Counter variable for row numbers
-                    $counter = 1;
+                        // Counter variable for row numbers
+                        $counter = 1;
 
-                    // Loop through the results and display each row
-                    while ($row = $result->fetch_assoc()) {
-                        echo '<tr>';
-                        echo '<td>' . $counter++ . '</td>';
-                        echo '<td>' . htmlspecialchars($row["barcode"]) . '</td>';
-                        echo '<td>' . htmlspecialchars($row["rack_code"]) . '</td>';
-                        echo '<td>' . htmlspecialchars($row["level"]) . '</td>';
-                        echo '<td>' . htmlspecialchars($row["horizontal"]) . '</td>';
-                        echo '<td>' . htmlspecialchars($row["rack_number"]) . '</td>';
-                        echo '<td>' . htmlspecialchars($row["column_identifier"]) . '</td>'; // Added column
-                        echo '<td>' . htmlspecialchars($row["position_number"]) . '</td>'; // Added column
-                        echo '<td>
+                        // Loop through the results and display each row
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>' . $counter++ . '</td>';
+                            echo '<td>' . htmlspecialchars($row["barcode"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["rack_code"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["level"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["horizontal"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["rack_number"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["column_identifier"]) . '</td>'; // Added column
+                            echo '<td>' . htmlspecialchars($row["position_number"]) . '</td>'; // Added column
+                            echo '<td>
                             <div style="display: flex; gap: 10px;">
                                 <a class="btn btn-danger btn-sm" href="deleteStore.php?id=' . $row['store_id'] . '" onclick="return confirm(\'Are you sure you want to delete this entry?\');">Delete</a>
                             </div>
                           </td>';
-                        echo '</tr>';
+                            echo '</tr>';
+                        }
+                        echo '</tbody></table>';
+                    } else {
+                        // Display message if no data found
+                        echo '<p>No box and rack data found.</p>';
                     }
-                    echo '</tbody></table>';
-                } else {
-                    // Display message if no data found
-                    echo '<p>No box and rack data found.</p>';
-                }
 
-                // Close the database connection
-                $conn->close();
-                ?>
+                    // Close the database connection
+                    $conn->close();
+                    ?>
+                </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
 
 

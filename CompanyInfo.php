@@ -865,7 +865,7 @@ $emp_data = $result_emp->fetch_assoc();
 
     </div>
     <!-- Card container -->
-    <div class="col-md-6 col-lg-4 pb-3">
+      <div class="col-md-6 col-lg-4 pb-3">
         <div class="card card-custom bg-white border-white border-0">
 
           <div class="card-custom-img"></div>

@@ -1,19 +1,17 @@
 <?php
-
 session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-    // If not logged in, redirect to login page
     header("Location: pages-login.php");
     exit();
 }
 
-include 'config/db.php';
+include "config/db.php"; // Include database connection
 
 $email = $_SESSION['email'];
 
-// Get user name and email from the register table
+// Get user data from the register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
@@ -21,40 +19,8 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
-
-$error = false;
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get form data and escape special characters for security
-    $rack_code = mysqli_real_escape_string($conn, $_POST['rack_code']);
-    $level = mysqli_real_escape_string($conn, $_POST['level']);
-    $horizontal = mysqli_real_escape_string($conn, $_POST['horizontal']);
-    $rack_number = mysqli_real_escape_string($conn, $_POST['rack_number']);
-    $column_identifier = mysqli_real_escape_string($conn, $_POST['column_identifier']);
-    $position_number = mysqli_real_escape_string($conn, $_POST['position_number']);
-
-    // Check if the rack already exists (you can change this based on specific column uniqueness)
-    $rackCheck = "SELECT * FROM `racks` WHERE `rack_code`='$rack_code' AND `level`='$level'";
-    $rackCheckResult = $conn->query($rackCheck);
-
-    if ($rackCheckResult->num_rows > 0) {
-        $error = true; // Set error to true if rack already exists
-    } else {
-        // Insert new rack into the racks table
-        $sql = "INSERT INTO racks (rack_code, level, horizontal, rack_number, column_identifier, position_number) 
-                VALUES ('$rack_code', '$level', '$horizontal', '$rack_number', '$column_identifier', '$position_number')";
-
-        if ($conn->query($sql) === TRUE) {
-            // Redirect back to add rack form after successful insert
-            header("Location: racks.php");
-            exit();
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-    }
-}
-
 ?>
+
 
 
 
@@ -422,140 +388,148 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <!--form--------------------------------------form--------------------------------------->
 
-<!-- Start Header Form -->
-<div class="headerimg text-center">
-    <i class="fa-solid fa-box" style="font-size: 50px; color: #333;"></i>
-    <h2>Add a Rack</h2>
-</div>
-<!-- End Header Form -->
-
-<!-- Start Form Container -->
-<div class="container d-flex justify-content-center">
-    <div class="card custom-card shadow-lg mt-3">
-        <div class="card-body">
-            <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
-                <!-- Rack Code -->
-                <div class="col-md-6">
-                    <label for="rack_code" class="form-label">Rack Code</label>
-                    <input type="text" class="form-control" id="rack_code" name="rack_code" required>
-                </div>
-
-                <!-- Rack Level -->
-                <div class="col-md-6">
-                    <label for="level" class="form-label">Level</label>
-                    <input type="text" class="form-control" id="level" name="level" required>
-                </div>
-
-                <!-- Horizontal Position -->
-                <div class="col-md-6">
-                    <label for="horizontal" class="form-label">Horizontal Position</label>
-                    <input type="text" class="form-control" id="horizontal" name="horizontal" required>
-                </div>
-
-                <!-- Rack Number -->
-                <div class="col-md-6">
-                    <label for="rack_number" class="form-label">Rack Number</label>
-                    <input type="text" class="form-control" id="rack_number" name="rack_number" required>
-                </div>
-
-                <!-- Column Identifier -->
-                <div class="col-md-6">
-                    <label for="column_identifier" class="form-label">Column Identifier</label>
-                    <input type="text" class="form-control" id="column_identifier" name="column_identifier" required>
-                </div>
-
-                <!-- Position Number -->
-                <div class="col-md-6">
-                    <label for="position_number" class="form-label">Position Number</label>
-                    <input type="text" class="form-control" id="position_number" name="position_number" required>
-                </div>
-
-                <!-- Form Buttons -->
-                <div class="text-center mt-4 mb-2">
-                    <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>
-                    <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
-                    <button type="reset" class="btn btn-outline-secondary">Reset</button>
-                </div>
-            </form>
-        </div>
+    <!-- Start Header Form -->
+    <div class="headerimg text-center">
+        <i class="fa-solid fa-box" style="font-size: 50px; color: #333;"></i>
+        <h2>Add Box & Rack</h2>
     </div>
-</div>
-<!-- End Form Container -->
+    <!-- End Header Form -->
 
-<!-- Include Bootstrap JS (with Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Start Form Container -->
+    <div class="container d-flex justify-content-center">
+        <div class="card custom-card shadow-lg mt-3">
+            <div class="card-body">
+                <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
+                    <!-- Select Barcode -->
+                    <div class="col-md-6">
+                        <label for="barcode_select" class="form-label">Select Box Barcode</label>
+                        <select class="form-select" id="barcode_select" name="barcode_select" required>
+                            <option value="" disabled selected>Select a barcode</option>
+                            <?php
+                            // Fetch barcodes from the box table
+                            $sql = "SELECT box_id, barcode FROM box";
+                            $result = $conn->query($sql);
 
-<!-- Modal for duplicate entry error -->
-<div class="modal fade" id="duplicateErrorModal" tabindex="-1" aria-labelledby="duplicateErrorModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="duplicateErrorModalLabel">Error</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Duplicate entry detected. Please ensure all fields are unique.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<option value='" . $row['box_id'] . "'>" . $row['barcode'] . "</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <!-- Select Rack -->
+                    <div class="col-md-6">
+                        <label for="rack_select" class="form-label">Select Rack</label>
+                        <select class="form-select" id="rack_select" name="rack_select" required>
+                            <option value="" disabled selected>Select a rack</option>
+                            <?php
+                            // Fetch rack details from the racks table
+                            $query = "SELECT id, rack_code, rack_number, level, horizontal, column_identifier, position_number FROM racks";
+                            $result = $conn->query($query);
+
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $display_text = $row['rack_code'] . ' - ' . $row['rack_number'] . ' - ' . $row['level'] . ' - ' . $row['horizontal'] . ' - ' . $row['column_identifier'] . ' - ' . $row['position_number'];
+                                    echo "<option value='" . $row['id'] . "'>$display_text</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <!-- Form Buttons -->
+                    <div class="text-center mt-4 mb-2">
+                        <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>
+                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
+                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
+    <!-- End Form Container -->
 
-<!-- Backend PHP code to process the form -->
-<?php
-include "config/db.php"; // Include the database connection file
+    <!-- Include Bootstrap JS (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-if (isset($_POST['submit'])) { // Check if the form has been submitted
-    // Establish connection to the database
-    $conn = new mysqli('localhost', 'root', '', 'catmarketing'); // Replace with actual database credentials
+    <!-- Modal for duplicate entry error -->
+    <div class="modal fade" id="duplicateErrorModal" tabindex="-1" aria-labelledby="duplicateErrorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="duplicateErrorModalLabel">Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Duplicate entry detected. Please ensure all fields are unique.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    // Check for connection errors
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    <!-- JavaScript to prevent form submission when duplicate detected -->
+    <script>
+        document.getElementById('rackForm').addEventListener('submit', function(event) {
+            if (document.querySelector('#duplicateErrorModal').classList.contains('show')) {
+                event.preventDefault();
+            }
+        });
+    </script>
 
-    // Get form data and escape for security
-    $rack_code = $conn->real_escape_string($_POST['rack_code']);
-    $rack_number = $conn->real_escape_string($_POST['rack_number']);
-    $level = $conn->real_escape_string($_POST['level']);
-    $horizontal = $conn->real_escape_string($_POST['horizontal']);
-    $column_identifier = $conn->real_escape_string($_POST['column_identifier']);
-    $position_number = $conn->real_escape_string($_POST['position_number']);
+    <!-- Backend PHP code to process the form -->
+    <?php
+    if (isset($_POST['submit'])) {
+        // Get form data
+        $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
+        $rack_select = $conn->real_escape_string($_POST['rack_select']);
 
-    // Check if all fields exist in the database
-    $check_query = "SELECT * FROM racks WHERE rack_code = '$rack_code' AND rack_number = '$rack_number' 
-                    AND level = '$level' AND horizontal = '$horizontal' 
-                    AND column_identifier = '$column_identifier' AND position_number = '$position_number'";
-    $result = $conn->query($check_query);
+        // Check for duplicate box barcode and rack in the store table
+        $check_barcode_query = "SELECT * FROM store WHERE box_id = '$barcode_select'";
+        $check_rack_query = "SELECT * FROM store WHERE rack_id = '$rack_select'";
 
-    if ($result->num_rows > 0) { // If a duplicate is found
-        echo "<script>
+        $barcode_result = $conn->query($check_barcode_query);
+        $rack_result = $conn->query($check_rack_query);
+
+        // Check if the barcode is already used
+        if ($barcode_result->num_rows > 0) {
+            echo "<script>
             document.addEventListener('DOMContentLoaded', function() {
                 var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
                 duplicateErrorModal.show();
+                document.querySelector('#duplicateErrorModal .modal-body').textContent = 'Duplicate box barcode detected. Please choose a different barcode.';
             });
         </script>";
-    } else {
-        // Insert form data into the racks table if no duplicate is found
-        $insert_query = "INSERT INTO racks (rack_code, rack_number, level, horizontal, column_identifier, position_number) 
-                         VALUES ('$rack_code', '$rack_number', '$level', '$horizontal', '$column_identifier', '$position_number')";
-
-        if ($conn->query($insert_query) === TRUE) {
-            // Redirect to racks page after successful insertion
-            echo "<script>window.location.href = 'racks.php';</script>";
-        } else {
-            // Handle insertion error
-            echo "Error: " . $insert_query . "<br>" . $conn->error;
         }
+        // Check if the rack is already used
+        else if ($rack_result->num_rows > 0) {
+            echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
+                duplicateErrorModal.show();
+                document.querySelector('#duplicateErrorModal .modal-body').textContent = 'Duplicate rack detected. Please choose a different rack.';
+            });
+        </script>";
+        }
+        // If no duplicates found, insert the new entry
+        else {
+            $insert_query = "INSERT INTO store (box_id, rack_id) VALUES ('$barcode_select', '$rack_select')";
+
+            if ($conn->query($insert_query) === TRUE) {
+                echo "<script>window.location.href = 'store.php';</script>";
+            } else {
+                echo "Error: " . $insert_query . "<br>" . $conn->error;
+            }
+        }
+
+        // Close the database connection
+        $conn->close();
     }
-
-    // Close the database connection
-    $conn->close();
-}
-?>
-
+    ?>
 </body>
 
 </html>

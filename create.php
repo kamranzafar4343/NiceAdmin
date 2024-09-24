@@ -491,6 +491,14 @@ if (isset($_POST['submit'])) {
                         <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
                     </div>
                     <div class="col-md-6">
+                        <label for="image" class="form-label" style="font-size: 0.8rem;">Logo</label>
+                        <input type="file" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
+                        <!-- Error messages -->
+                        <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
+                        <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
+                        <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
+                    </div>
+                    <div class="col-md-6">
                         <label for="phone" class="form-label">Phone</label>
                         <input type="text" class="form-control" id="phone" name="phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
                     </div>
@@ -502,21 +510,14 @@ if (isset($_POST['submit'])) {
                             <!-- Error message will be displayed here -->
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" name="password" required minlength="8" maxlength="12" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                             title="It must be 8-16 characters, include at least one number, one uppercase and one lowercase letter">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="image" class="form-label" style="font-size: 0.8rem;">Image</label>
-                        <input type="file" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
-                        <!-- Error messages -->
-                        <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
-                        <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
-                        <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
-                    </div>
+                    </div> -->
+                    
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="country" class="form-label">Country</label>
                         <select class="form-select" id="country" name="country" required>
                             <option value="">Select Country</option>
@@ -528,7 +529,7 @@ if (isset($_POST['submit'])) {
                         </select>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="state" class="form-label">State</label>
                         <select class="form-select" id="state" name="state" required>
                             <option value="">Select State</option>
@@ -536,7 +537,7 @@ if (isset($_POST['submit'])) {
                         </select>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="city" class="form-label">City</label>
                         <select class="form-select" id="city" name="city" required>
                             <option value="">Select City</option>

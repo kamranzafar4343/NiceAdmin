@@ -500,6 +500,13 @@ if (isset($_GET['comp_id'])) {
                     <span>Login</span>
                 </a>
             </li><!-- End Login Page Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="pages-register.php">
+                    <i class="bi bi-person-plus"></i>
+                    <span>Register</span>
+                </a>
+            </li><!-- End Register Page Nav -->
+
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="logout.php">

@@ -4,7 +4,8 @@ session_start();
 include 'config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  // Get user input and escape for security
+
+  // Get the user input and escape it for security
   $email = $conn->real_escape_string($_POST['email']);
   $password = $conn->real_escape_string($_POST['password']);
 

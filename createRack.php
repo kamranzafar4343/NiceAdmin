@@ -384,6 +384,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <i class="bi bi-box"></i><span>Racks</span>
                 </a>
             </li><!-- End Racks Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
+                    <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
 
             <!-- Pages Heading -->
             <li class="nav-heading">Pages</li>

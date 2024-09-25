@@ -401,15 +401,16 @@ $emp_data = $result_emp->fetch_assoc();
     }
 
     @media (min-width: 992px) {
-     .col-lg-4 {
+      .col-lg-4 {
         flex: 0 0 auto;
         width: 31.333333%;
-    }
-    .col-lg-8 {
+      }
+
+      .col-lg-8 {
         flex: 0 0 auto;
         width: 59.666667% !important;
+      }
     }
-  }
 
     /* Custom CSS to decrease font size of the table */
 
@@ -604,7 +605,8 @@ $emp_data = $result_emp->fetch_assoc();
     .emp_tb {
       border-radius: 20px;
     }
-    .emp-card{
+
+    .emp-card {
       margin-bottom: 20px;
       margin-top: 0;
     }
@@ -725,6 +727,11 @@ $emp_data = $result_emp->fetch_assoc();
           <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
+          <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
 
 
       <li class="nav-heading">Pages</li>
@@ -784,6 +791,61 @@ $emp_data = $result_emp->fetch_assoc();
 
       <!-- Table container -->
 
+      </div>
+    <!-- Card container -->
+    <div class="col-md-6 col-lg-4 pb-3">
+      <div class="card card-custom bg-white border-white border-0">
+
+        <div class="card-custom-img"></div>
+        <div class="card-custom-avatar">
+          <form id="updateImageForm" action="update_image.php" method="POST" enctype="multipart/form-data">
+            <!-- Display the company image -->
+
+            <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" width="70px" alt="image" id="image-<?php echo $company_data['comp_id']; ?>">
+
+
+          </form>
+        </div>
+        <div class="card-body list-group">
+          <?php if ($company_data !== null): ?>
+            <h4 class="card-title-info"><?php echo $company_data['comp_name']; ?></h4>
+          <?php else: ?>
+            <h4 class="card-title-info">No company data found</h4>
+          <?php endif; ?>
+          <div class="d-flex justify-content-center">
+            <a href="Branches.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
+            <!-- <a href="showItems.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-shopping-cart-2-line remix" style="font-size: 30px;"></i></a> -->
+          </div>
+          <hr>
+          <ul class="list-group list-group-horizontal d-flex justify-content-between">
+            <li class="list-group-item" style="color:grey;  width: 30%;">Email</li>
+            <li class="list-group-item text-end" style="text-align: right; width: 75%;"><?php echo $company_data['email']; ?></li>
+          </ul>
+          <ul class="list-group list-group-horizontal-sm d-flex justify-content-between">
+            <li class="list-group-item" style="color:grey; width: 30%;">Phone</li>
+            <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $company_data['phone']; ?></li>
+          </ul>
+          <ul class="list-group list-group-horizontal-md d-flex justify-content-between">
+            <li class="list-group-item" style="color:grey; width:50%">Reg. Date</li>
+            <li class="list-group-item" style="text-align: right;width: 55%;"><?php echo $company_data['registration']; ?></li>
+          </ul>
+          <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
+            <li class="list-group-item" style="color:grey; width: 30%;">Ex. Date</li>
+            <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $company_data['expiry']; ?></li>
+          </ul>
+          <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
+            <li class="list-group-item" style="color:grey; width: 30%;">City</li>
+            <li class="list-group-item " style="text-align: right; width: 55%;"><?php echo $company_data['city']; ?></li>
+          </ul>
+          <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
+            <li class="list-group-item" style="color:grey; width: 30%;">Country</li>
+            <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $company_data['country']; ?></li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+      
       <div class="col-md-7 col-lg-8 mt-4">
         <div class="cardBranch recent-sales overflow-auto">
           <div class="card-body" style="font-size: 0.8rem;">
@@ -863,60 +925,7 @@ $emp_data = $result_emp->fetch_assoc();
         </div>
       </div>
 
-    </div>
-    <!-- Card container -->
-      <div class="col-md-6 col-lg-4 pb-3">
-        <div class="card card-custom bg-white border-white border-0">
 
-          <div class="card-custom-img"></div>
-          <div class="card-custom-avatar">
-            <form id="updateImageForm" action="update_image.php" method="POST" enctype="multipart/form-data">
-              <!-- Display the company image -->
-
-              <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" width="70px" alt="image" id="image-<?php echo $company_data['comp_id']; ?>">
-
-
-            </form>
-          </div>
-          <div class="card-body list-group">
-            <?php if ($company_data !== null): ?>
-              <h4 class="card-title-info"><?php echo $company_data['comp_name']; ?></h4>
-            <?php else: ?>
-              <h4 class="card-title-info">No company data found</h4>
-            <?php endif; ?>
-            <div class="d-flex justify-content-center">
-              <a href="Branches.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
-              <!-- <a href="showItems.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-shopping-cart-2-line remix" style="font-size: 30px;"></i></a> -->
-            </div>
-            <hr>
-            <ul class="list-group list-group-horizontal d-flex justify-content-between">
-              <li class="list-group-item" style="color:grey;  width: 30%;">Email</li>
-              <li class="list-group-item text-end" style="text-align: right; width: 75%;"><?php echo $company_data['email']; ?></li>
-            </ul>
-            <ul class="list-group list-group-horizontal-sm d-flex justify-content-between">
-              <li class="list-group-item" style="color:grey; width: 30%;">Phone</li>
-              <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $company_data['phone']; ?></li>
-            </ul>
-            <ul class="list-group list-group-horizontal-md d-flex justify-content-between">
-              <li class="list-group-item" style="color:grey; width:50%">Reg. Date</li>
-              <li class="list-group-item" style="text-align: right;width: 55%;"><?php echo $company_data['registration']; ?></li>
-            </ul>
-            <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
-              <li class="list-group-item" style="color:grey; width: 30%;">Ex. Date</li>
-              <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $company_data['expiry']; ?></li>
-            </ul>
-            <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
-              <li class="list-group-item" style="color:grey; width: 30%;">City</li>
-              <li class="list-group-item " style="text-align: right; width: 55%;"><?php echo $company_data['city']; ?></li>
-            </ul>
-            <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
-              <li class="list-group-item" style="color:grey; width: 30%;">Country</li>
-              <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $company_data['country']; ?></li>
-            </ul>
-
-          </div>
-        </div>
-      </div>
 
     </div>
     <!-- End d-flex container -->

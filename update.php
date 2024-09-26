@@ -260,7 +260,7 @@ if ($resultData->num_rows > 0) {
 
 <body>
   <?php
-  include "db.php";
+  include "config/db.php";
 
   //get company id for updating the specific company
   if (isset($_GET['id'])) {

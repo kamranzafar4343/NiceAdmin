@@ -405,6 +405,11 @@ $resultShowOrders = $conn->query($showOrders);
           <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
+          <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li>
 
 
       <li class="nav-heading">Pages</li>
@@ -500,12 +505,12 @@ $resultShowOrders = $conn->query($showOrders);
               echo '<td>' . $comp_name . '</td>';
 
               //get brnch id
-              $branch_id= $row['branch'];
-              $branchSql="Select * From branch where branch_id = '$branch_id'";
-              $branchResult= $conn->query($branchSql);
-              if ($branchResult->num_rows>0){
-                $branchRow=$branchResult->fetch_assoc();
-                $brnach_name= $branchRow['branch_name'];
+              $branch_id = $row['branch'];
+              $branchSql = "Select * From branch where branch_id = '$branch_id'";
+              $branchResult = $conn->query($branchSql);
+              if ($branchResult->num_rows > 0) {
+                $branchRow = $branchResult->fetch_assoc();
+                $brnach_name = $branchRow['branch_name'];
               }
               //show result
               echo '<td>' . $brnach_name . '<td>';

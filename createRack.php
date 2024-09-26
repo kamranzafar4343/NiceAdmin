@@ -384,6 +384,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <i class="bi bi-box"></i><span>Racks</span>
                 </a>
             </li><!-- End Racks Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
+                    <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
 
             <!-- Pages Heading -->
             <li class="nav-heading">Pages</li>
@@ -436,31 +441,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
                 <!-- Rack Code -->
                 <div class="col-md-6">
-                    <label for="rack_code" class="form-label">Rack Code</label>
+                    <label for="rack_code" class="form-label">Rack</label>
                     <input type="text" class="form-control" id="rack_code" name="rack_code" required>
                 </div>
 
                 <!-- Rack Level -->
                 <div class="col-md-6">
-                    <label for="level" class="form-label">Level</label>
+                    <label for="level" class="form-label">Number</label>
                     <input type="text" class="form-control" id="level" name="level" required>
                 </div>
 
                 <!-- Horizontal Position -->
                 <div class="col-md-6">
-                    <label for="horizontal" class="form-label">Horizontal Position</label>
+                    <label for="horizontal" class="form-label">Horizontal</label>
                     <input type="text" class="form-control" id="horizontal" name="horizontal" required>
                 </div>
 
                 <!-- Rack Number -->
                 <div class="col-md-6">
-                    <label for="rack_number" class="form-label">Rack Number</label>
+                    <label for="rack_number" class="form-label">Number</label>
                     <input type="text" class="form-control" id="rack_number" name="rack_number" required>
                 </div>
 
                 <!-- Column Identifier -->
                 <div class="col-md-6">
-                    <label for="column_identifier" class="form-label">Column Identifier</label>
+                    <label for="column_identifier" class="form-label">Column</label>
                     <input type="text" class="form-control" id="column_identifier" name="column_identifier" required>
                 </div>
 

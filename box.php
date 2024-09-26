@@ -366,159 +366,12 @@ if (isset($_GET['comp_id'])) {
 
 <body>
 
-    <!-- ======= Header ======= -->
-    <header id="header" class="header fixed-top d-flex align-items-center">
-
-        <div class="d-flex align-items-center justify-content-between">
-            <img class="navbar-image" src="assets/img/logo3.png" alt="">
-
-            <a href="index.php" class="logo d-flex align-items-center">
-                <span class="d-none d-lg-block">FingerLog</span>
-            </a>
-            <i class="bi bi-list toggle-sidebar-btn"></i>
-        </div><!-- End Logo -->
-
-        <div class="search-bar">
-            <form class="search-form d-flex align-items-center" method="POST" action="#">
-                <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-            </form>
-        </div><!-- End Search Bar -->
-
-        <nav class="header-nav ms-auto">
-            <ul class="d-flex align-items-center">
-
-                <li class="nav-item d-block d-lg-none">
-                    <a class="nav-link nav-icon search-bar-toggle " href="#">
-                        <i class="bi bi-search"></i>
-                    </a>
-                </li><!-- End Search Icon-->
-
-
-                </li><!-- End Messages Nav -->
-
-                <li class="nav-item dropdown pe-3 mr-4">
-
-                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
-                    </a><!-- End Profile Image Icon -->
-
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                        <li class="dropdown-header">
-                            <h6><?php echo $adminName ?></h6>
-                            <span><?php echo $adminEmail ?></span>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                </li>
-                <li>
-                    <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Sign Out</span>
-                    </a>
-                </li>
-
-            </ul><!-- End Profile Dropdown Items -->
-            </li><!-- End Profile Nav -->
-
-            </ul>
-        </nav><!-- End Icons Navigation -->
-
-    </header><!-- End Header -->
+    <!-- ======= header ======= -->
+    <?php include 'headerfile.php'; ?>
 
     <!-- ======= Sidebar ======= -->
-    <aside id="sidebar" class="sidebar">
+    <?php include 'sidebar_1.php'; ?>
 
-        <ul class="sidebar-nav" id="sidebar-nav">
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="index.php">
-                    <i class="ri-home-8-line"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li><!-- End Dashboard Nav -->
-
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-                    <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li><!-- End Tables Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
-                    <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
-                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-
-
-            <li class="nav-heading">Pages</li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-            <!-- End Profile Page Nav -->
-
-
-
-            <!-- <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-register.php">
-          <i class="bi bi-card-list"></i>
-          <span>Register</span>
-        </a>
-      </li> -->
-            <!-- End Register Page Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
-                </a>
-            </li><!-- End Login Page Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="logout.php">
-                    <i class="bi bi-box-arrow-left"></i>
-                    <span>Logout</span>
-                </a>
-            </li><!-- End Login Page Nav -->
-
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-contact.php">
-                    <i class="bi bi-envelope"></i>
-                    <span>Contact</span>
-                </a>
-            </li><!-- End Contact Page Nav -->
-
-        </ul>
-
-    </aside>
-
-
-    <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
-
-    <!--new table design-->
     <!-- Button to add new box -->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add Box</button>
 
@@ -557,7 +410,7 @@ if (isset($_GET['comp_id'])) {
                         $sql = "SELECT * FROM box";
                     }
                     $result = $conn->query($sql);
-                    
+
                     if ($result->num_rows > 0) {
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                     <thead>
@@ -602,7 +455,7 @@ if (isset($_GET['comp_id'])) {
                             }
                             //show specific branch name
                             echo '<td>' . $branch_name . '</td>';
-                            
+
                             echo '<td>' . ($row["created_at"]) . '</td>';
                             echo '<td><i class="';
                             if ($row["status"] == 'In') {

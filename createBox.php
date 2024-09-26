@@ -502,9 +502,9 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 </div>
 
                 <div class="text-center mt-4 mb-2">
-                    <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'Box.php';">Cancel</button>
+                    <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'Box.php';">Go back</button>
                     <button type="submit" class="btn btn-outline-primary mr-1" id="submitBtn">Submit</button>
-                    <button type="reset" class="btn btn-outline-secondary" onclick="localStorage.clear()">Reset</button>
+                    <button type="reset" class="btn btn-outline-secondary" onclick="localStorage.clear()">Finalize</button>
                 </div>
             </form>
         </div>

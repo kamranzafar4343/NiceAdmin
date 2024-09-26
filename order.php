@@ -284,6 +284,13 @@ $resultShowOrders = $conn->query($showOrders);
 
       box-sizing: border-box;
     }
+
+    .req_span{
+      font-size: 10px;
+    }
+    .req_auth_span{
+      font-size: 10px;
+    }
   </style>
 
   <!-- Template Main CSS File -->
@@ -471,11 +478,9 @@ $resultShowOrders = $conn->query($showOrders);
                             <th scope="col" style="width: 10%;">Branch</th>
                              <th scope="col" style="width: 10%;">Box</th>
                             <th scope="col" style="width: 10%;">Item</th>
-                            <th scope="col" style="width: 13%;">requestor name</th>
-                            <th scope="col" style="width: 11%;">requestor role</th>
-                                <th scope="col" style="width: 10%;">auth_status</th>                        
+                            <th scope="col" style="width: 17%;">requestor</th>                        
                             <th scope="col" style="width: 15%;">request date</th>
-                           
+                            <th scope="col" style="width: 15%;">Actions</th>
                         </tr>
                     </thead>
                     <tbody style="table-layout: fixed;">';
@@ -520,12 +525,32 @@ $resultShowOrders = $conn->query($showOrders);
               }
               //Show result
               echo  $box_barc;
-
+              
+              
+              $empSQL = "Select * From employee where branch_FK_emp = '$branch_id'";
+              $empSQLresult = $conn->query($empSQL);
+              if ($empSQLresult->num_rows > 0) {
+                $empRow = $empSQLresult->fetch_assoc();
+                $Role = $empRow['Authority'];
+                $Auth_status = $empRow['auth_status'];
+              }
+              
               echo '<td>' . ($row["item"]) . '</td>';
-              echo '<td>' . ($row["name"]) . '</td>';
-              echo '<td>' . ($row["role"]) . '</td>';
-              echo '<td>' . ($row["auth_status"]) . '</td>';
+              echo '<td> <span class="req_span">Name:  </span>' . ($row["name"]) .'<br>  <span class="req_span">Role:  </span>'. $Role . '</td>';
               echo '<td>' . ($row["date"]) . '</td>';
+              ?>
+                                    <td>
+                                        <div style="display: flex; gap: 10px;">
+
+                                            <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
+                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="OrderUpdate.php?id=<?php echo $row['branch']; ?>"><i style="width: 20px;" class=""></i></a>
+
+                                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                                                onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=<?php echo $row['branch']; ?>"> <i style="width: 20px;" class=""></i></a>
+
+                                        </div>
+                                    </td>
+                                <?php
               echo '</tr>';
             }
             echo '</tbody></table>';
@@ -536,6 +561,7 @@ $resultShowOrders = $conn->query($showOrders);
           ?>
         </div>
       </div>
+      
     </div>
   </main>
 

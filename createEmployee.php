@@ -27,9 +27,10 @@ if (isset($_POST['submit'])) {
   $emp_gender = mysqli_real_escape_string($conn, $_POST['gender']);
   $emp_address = mysqli_real_escape_string($conn, $_POST['address']);
   $emp_role = mysqli_real_escape_string($conn, $_POST['role']);
-
-  $sql = "INSERT INTO employee (name, phone, comp_FK_emp, branch_FK_emp, email, gender, Address, Authority) 
-            VALUES ('$emp_name', '$emp_phone', '$company_id', '$branch_id', '$emp_email', '$emp_gender', '$emp_address', '$emp_role')";
+  $auth_status = mysqli_real_escape_string($conn, $_POST['auth_status']);
+  
+  $sql = "INSERT INTO employee (name, phone, comp_FK_emp, branch_FK_emp, email, gender, Address, Authority, auth_status) 
+            VALUES ('$emp_name', '$emp_phone', '$company_id', '$branch_id', '$emp_email', '$emp_gender', '$emp_address', '$emp_role', '$auth_status')";
 
   if ($conn->query($sql) === TRUE) {
     // Redirect back to the referrer page
@@ -456,7 +457,15 @@ End Search Bar -->
               <option value="product-manager">product manager</option>
               <option value="sales-manager">sales manager</option>
               <option value="IT-manager">IT manager</option>
-              <!-- Add more countries as needed -->
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="" class="form-label">Auth_status</label>
+            <select class="form-select" id="" name="auth_status" required>
+              <option value="">Select Status</option>
+              <option value="Authorized">Authorized</option>
+              <option value="Not Authorized">Not Authorized</option>
             </select>
           </div>
 

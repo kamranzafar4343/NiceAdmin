@@ -24,25 +24,36 @@ if ($resultData->num_rows > 0) {
 
 $error = false;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
-    $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
-    $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
+if (isset($_POST['submit'])) {
+    $company_FK_emp = mysqli_real_escape_string($conn, $_POST['comp_FK_emp']);
+    $box_FK_emp = mysqli_real_escape_string($conn, $_POST['box_FK_emp']);
+    $branch_FK_emp = mysqli_real_escape_string($conn, $_POST['branch_FK_emp']);
     $barcode = mysqli_real_escape_string($conn, $_POST['item_barcode']);
     $req_name = mysqli_real_escape_string($conn, $_POST['name']);
-    $req_role = mysqli_real_escape_string($conn, $_POST['role']);
-    $auth_status = mysqli_real_escape_string($conn, $_POST['auth_status']);
     $req_date = mysqli_real_escape_string($conn, $_POST['date']);
 
-        $sql = "INSERT INTO orders (company, branch, box, item, name, role, auth_status, date) 
-                VALUES ('$company_FK_item', '$branch_FK_item' , '$box_FK_item', '$barcode', '$req_name', '$req_role', '$auth_status', '$req_date')";
-        if ($conn->query($sql) === TRUE) {
+    // exceed only if emp exist for that specific company and Authorized
+    $empCheckQuery = "SELECT * FROM `employee` WHERE `name` = '$req_name' AND branch_FK_emp = '$branch_FK_emp' AND auth_status='Authorized'";
+
+    $result = (mysqli_query($conn, $empCheckQuery));
+
+    if (mysqli_num_rows($result) > 0) {
+        $sql = "INSERT INTO orders (company, branch, box, item, name, date) 
+        VALUES ('$company_FK_emp', '$branch_FK_emp' , '$box_FK_emp', '$barcode', '$req_name', '$req_date')";
+
+        if ($conn->query($sql) == TRUE) {
             header("Location: order.php");
             exit();
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
+    } else {
+        echo 'emp not authorized';
     }
+}
+
+
+
 
 $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
@@ -421,10 +432,15 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 <form class="row g-3 needs-validation" action="" method="POST">
 
 
+                    <div class="col-md-6">
+                        <label class="form-label">requestor name</label>
+                        <input type="text" class="form-control" name="name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
+                    </div>
+
                     <!-- Select Company -->
                     <div class="col-md-6">
                         <label for="company">Select Company:</label>
-                        <select id="company" class="form-select" name="comp_FK_item" required>
+                        <select id="company" class="form-select" name="comp_FK_emp" required>
                             <option value="">Select a Company</option>
                             <?php
                             // Fetch the companies from the database
@@ -439,7 +455,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     <!-- Select Branch -->
                     <div class="col-md-6">
                         <label for="branch">Select a Branch:</label>
-                        <select id="branch" class="form-select" name="branch_FK_item" required>
+                        <select id="branch" class="form-select" name="branch_FK_emp" required>
                             <option value="">Select a Branch</option>
                             <!-- The options will be populated via AJAX based on the selected company -->
                         </select>
@@ -448,7 +464,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     <!-- Select Box -->
                     <div class="col-md-6">
                         <label for="box">Select Box:</label>
-                        <select id="box" class="form-select" name="box_FK_item" required>
+                        <select id="box" class="form-select" name="box_FK_emp" required>
                             <option value="">Select a Box</option>
                             <!-- The options will be populated via AJAX based on the selected branch -->
                         </select>
@@ -459,33 +475,6 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         <input type="text" class="form-control" name="item_barcode" id="item_barcode" required>
                     </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">requestor name</label>
-                        <input type="text" class="form-control" name="name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="" class="form-label">requestor role</label>
-                        <select class="form-select" id="" name="role" required>
-                            <option value="">Select Role</option>
-                            <option value="Chief Operations Officer (COO)">Chief Operations Officer (COO)</option>
-                            <option value="Operations Manager">Operations Manager</option>
-                            <option value="Supply Chain Manager">Supply Chain Manager</option>
-                            <option value="Head of Operations">Head of Operations</option>
-                            <option value="Human Resources Manager">Human Resources Manager</option>
-                            <option value="Marketing Manager">Marketing Manager</option>
-                        </select>
-                    </div>
-
-
-                    <div class="col-md-6">
-                        <label for="" class="form-label">auth_status</label>
-                        <select class="form-select" id="" name="auth_status" required>
-                            <option value="">Select Status</option>
-                            <option value="Authorized">Authorized</option>
-                            <option value="Not Authorized">Not Authorized</option>
-                        </select>
-                    </div>
 
                     <div class="col-md-6">
                         <label class="form-label">request date</label>

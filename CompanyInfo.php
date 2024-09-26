@@ -868,6 +868,7 @@ $emp_data = $result_emp->fetch_assoc();
                     <!-- <th scope="col" >Received</th> -->
                     <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
                     <th scope="col">Action</th>
+                    <th scope="col">Auth_status</th>
                   </tr>
                 </thead>
                 <tbody style="table-layout: fixed;">
@@ -890,6 +891,8 @@ $emp_data = $result_emp->fetch_assoc();
                     // echo "<td>" . ($emp_data["gender"]) . "</td>";
                     // echo "<td>" . ($emp_data["Address"]) . "</td>";
                     echo "<td>" . ($emp_data["Authority"]) . "</td>";
+                    echo "<td>" . ($emp_data["auth_status"]) . "</td>";
+       
                     // echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
                   ?>
                     <td>

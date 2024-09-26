@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
         $sql = "INSERT INTO orders (company, branch, box, item, name, date) 
         VALUES ('$company_FK_emp', '$branch_FK_emp' , '$box_FK_emp', '$barcode', '$req_name', '$req_date')";
 
-        if ($conn->query($sql) == TRUE) {
+        if ($conn->query($sql) === TRUE) {
             header("Location: order.php");
             exit();
         } else {
@@ -372,7 +372,8 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
-            </li>            <li class="nav-item">
+            </li>
+            <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
                     <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
@@ -443,57 +444,59 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
                     <div class="col-md-6">
                         <label class="form-label">requestor name</label>
-                        <input type="text" class="form-control" name="name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
-                    </div>
+                        <input type="text" class="form-control" name="name" id="requestor" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
+                        <div id="requestorFeedback" class="valid-feedback"></div>
+                        <div id="requestorFeedback" class="invalid-feedback"></div>
+                        </div>
 
-                    <!-- Select Company -->
-                    <div class="col-md-6">
-                        <label for="company">Select Company:</label>
-                        <select id="company" class="form-select" name="comp_FK_emp" required>
-                            <option value="">Select a Company</option>
-                            <?php
-                            // Fetch the companies from the database
-                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
+                        <!-- Select Company -->
+                        <div class="col-md-6">
+                            <label for="company">Select Company:</label>
+                            <select id="company" class="form-select" name="comp_FK_emp" required>
+                                <option value="">Select a Company</option>
+                                <?php
+                                // Fetch the companies from the database
+                                $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-                    <!-- Select Branch -->
-                    <div class="col-md-6">
-                        <label for="branch">Select a Branch:</label>
-                        <select id="branch" class="form-select" name="branch_FK_emp" required>
-                            <option value="">Select a Branch</option>
-                            <!-- The options will be populated via AJAX based on the selected company -->
-                        </select>
-                    </div>
+                        <!-- Select Branch -->
+                        <div class="col-md-6">
+                            <label for="branch">Select a Branch:</label>
+                            <select id="branch" class="form-select" name="branch_FK_emp" required>
+                                <option value="">Select a Branch</option>
+                                <!-- The options will be populated via AJAX based on the selected company -->
+                            </select>
+                        </div>
 
-                    <!-- Select Box -->
-                    <div class="col-md-6">
-                        <label for="box">Select Box:</label>
-                        <select id="box" class="form-select" name="box_FK_emp" required>
-                            <option value="">Select a Box</option>
-                            <!-- The options will be populated via AJAX based on the selected branch -->
-                        </select>
-                    </div>
+                        <!-- Select Box -->
+                        <div class="col-md-6">
+                            <label for="box">Select Box:</label>
+                            <select id="box" class="form-select" name="box_FK_emp" required>
+                                <option value="">Select a Box</option>
+                                <!-- The options will be populated via AJAX based on the selected branch -->
+                            </select>
+                        </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Item Barcode</label>
-                        <input type="text" class="form-control" name="item_barcode" id="item_barcode" required>
-                    </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Item Barcode</label>
+                            <input type="text" class="form-control" name="item_barcode" id="item_barcode" required>
+                        </div>
 
 
-                    <div class="col-md-6">
-                        <label class="form-label">request date</label>
-                        <input type="datetime-local" class="form-control" name="date" required>
-                    </div>
+                        <div class="col-md-6">
+                            <label class="form-label">request date</label>
+                            <input type="datetime-local" class="form-control" name="date" required>
+                        </div>
 
-                    <div class="text-center mt-4 mb-2">
-                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
-                    </div>
+                        <div class="text-center mt-4 mb-2">
+                            <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
+                            <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                        </div>
                 </form>
             </div>
         </div>

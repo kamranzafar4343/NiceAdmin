@@ -346,10 +346,15 @@ if ($resultData->num_rows > 0) {
             <!-- Racks Nav -->
             <!-- Set this to 'active' to highlight Racks as the current page -->
             <li class="nav-item">
-                <a class="nav-link active" href="racks.php">
+                <a class="nav-link collapsed" href="racks.php">
                     <i class="bi bi-box"></i><span>Racks</span>
                 </a>
             </li><!-- End Racks Nav -->
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
+                    <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
 
             <!-- Pages Heading -->
             <li class="nav-heading">Pages</li>
@@ -400,6 +405,25 @@ if ($resultData->num_rows > 0) {
         <div class="card custom-card shadow-lg mt-3">
             <div class="card-body">
                 <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
+                     <!-- Select Rack -->
+                     <div class="col-md-6">
+                        <label for="rack_select" class="form-label">Select Rack</label>
+                        <select class="form-select" id="rack_select" name="rack_select" required>
+                            <option value="" disabled selected>Select a rack</option>
+                            <?php
+                            // Fetch rack details from the racks table
+                            $query = "SELECT id, rack_code, rack_number, level, horizontal, column_identifier, position_number FROM racks";
+                            $result = $conn->query($query);
+
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $display_text = $row['rack_code'] . ' - ' . $row['rack_number'] . ' - ' . $row['level'] . ' - ' . $row['horizontal'] . ' - ' . $row['column_identifier'] . ' - ' . $row['position_number'];
+                                    echo "<option value='" . $row['id'] . "'>$display_text</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
                     <!-- Select Barcode -->
                     <div class="col-md-6">
                         <label for="barcode_select" class="form-label">Select Box Barcode</label>
@@ -419,25 +443,7 @@ if ($resultData->num_rows > 0) {
                         </select>
                     </div>
 
-                    <!-- Select Rack -->
-                    <div class="col-md-6">
-                        <label for="rack_select" class="form-label">Select Rack</label>
-                        <select class="form-select" id="rack_select" name="rack_select" required>
-                            <option value="" disabled selected>Select a rack</option>
-                            <?php
-                            // Fetch rack details from the racks table
-                            $query = "SELECT id, rack_code, rack_number, level, horizontal, column_identifier, position_number FROM racks";
-                            $result = $conn->query($query);
-
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $display_text = $row['rack_code'] . ' - ' . $row['rack_number'] . ' - ' . $row['level'] . ' - ' . $row['horizontal'] . ' - ' . $row['column_identifier'] . ' - ' . $row['position_number'];
-                                    echo "<option value='" . $row['id'] . "'>$display_text</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
+                   
 
                     <!-- Form Buttons -->
                     <div class="text-center mt-4 mb-2">
@@ -483,53 +489,57 @@ if ($resultData->num_rows > 0) {
 
     <!-- Backend PHP code to process the form -->
     <?php
-    if (isset($_POST['submit'])) {
-        // Get form data
-        $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
-        $rack_select = $conn->real_escape_string($_POST['rack_select']);
+if (isset($_POST['submit'])) {
+    // Get form data safely
+    $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
+    $rack_select = $conn->real_escape_string($_POST['rack_select']);
 
-        // Check for duplicate box barcode and rack in the store table
-        $check_barcode_query = "SELECT * FROM store WHERE box_id = '$barcode_select'";
-        $check_rack_query = "SELECT * FROM store WHERE rack_id = '$rack_select'";
+    // Check if box barcode already exists in the 'store' table
+    $check_barcode_query = "SELECT * FROM store WHERE box_id = '$barcode_select'";
+    $barcode_result = $conn->query($check_barcode_query);
 
-        $barcode_result = $conn->query($check_barcode_query);
-        $rack_result = $conn->query($check_rack_query);
+    // Check if rack already has 9 boxes stored
+    $check_rack_box_count_query = "SELECT COUNT(*) AS box_count FROM store WHERE rack_id = '$rack_select'";
+    $rack_box_count_result = $conn->query($check_rack_box_count_query);
+    $rack_box_count = $rack_box_count_result->fetch_assoc()['box_count'];
 
-        // Check if the barcode is already used
-        if ($barcode_result->num_rows > 0) {
-            echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
-                duplicateErrorModal.show();
-                document.querySelector('#duplicateErrorModal .modal-body').textContent = 'Duplicate box barcode detected. Please choose a different barcode.';
-            });
+    // Handle duplicate barcode case
+    if ($barcode_result->num_rows > 0) {
+        echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
+            duplicateErrorModal.show();
+            document.querySelector('#duplicateErrorModal .modal-body').textContent = 'Duplicate box barcode detected. Please choose a different barcode.';
+        });
         </script>";
-        }
-        // Check if the rack is already used
-        else if ($rack_result->num_rows > 0) {
-            echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
-                duplicateErrorModal.show();
-                document.querySelector('#duplicateErrorModal .modal-body').textContent = 'Duplicate rack detected. Please choose a different rack.';
-            });
+    } 
+    // Handle full rack case (9 boxes)
+    else if ($rack_box_count >= 9) {
+        echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
+            duplicateErrorModal.show();
+            document.querySelector('#duplicateErrorModal .modal-body').textContent = 'This rack already has 9 boxes. Please choose a different rack.';
+        });
         </script>";
-        }
-        // If no duplicates found, insert the new entry
-        else {
-            $insert_query = "INSERT INTO store (box_id, rack_id) VALUES ('$barcode_select', '$rack_select')";
+    } 
+    // If no errors, insert the box and rack into the 'store' table
+    else {
+        $insert_query = "INSERT INTO store (box_id, rack_id) VALUES ('$barcode_select', '$rack_select')";
 
-            if ($conn->query($insert_query) === TRUE) {
-                echo "<script>window.location.href = 'store.php';</script>";
-            } else {
-                echo "Error: " . $insert_query . "<br>" . $conn->error;
-            }
+        if ($conn->query($insert_query) === TRUE) {
+            // Redirect after successful submission
+            echo "<script>window.location.href = 'store.php';</script>";
+        } else {
+            // Debug error
+            echo "Error: " . $conn->error;
         }
-
-        // Close the database connection
-        $conn->close();
     }
-    ?>
+
+    // Close database connection
+    $conn->close();
+}
+?>
 </body>
 
 </html>

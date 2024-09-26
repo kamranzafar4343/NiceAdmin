@@ -500,6 +500,13 @@ if (isset($_GET['comp_id'])) {
                     <span>Login</span>
                 </a>
             </li><!-- End Login Page Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="pages-register.php">
+                    <i class="bi bi-person-plus"></i>
+                    <span>Register</span>
+                </a>
+            </li><!-- End Register Page Nav -->
+
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="logout.php">
@@ -561,11 +568,11 @@ if (isset($_GET['comp_id'])) {
                     <thead>
                         <tr>
                             <th scope="col" style="width: 5%;">#</th>
-                            <th scope="col" style="width: 15%;">Rack Code</th>
-                            <th scope="col" style="width: 10%;">Level</th>
+                            <th scope="col" style="width: 15%;">Rack</th>
+                            <th scope="col" style="width: 10%;">Number</th>
                             <th scope="col" style="width: 10%;">Horizontal</th>
-                            <th scope="col" style="width: 10%;">Rack Number</th>
-                            <th scope="col" style="width: 15%;">Column Identifier</th>
+                            <th scope="col" style="width: 10%;">Number</th>
+                            <th scope="col" style="width: 15%;">Column</th>
                             <th scope="col" style="width: 10%;">Position Number</th>
                             <th scope="col" style="width: 15%;">Actions</th>
                         </tr>

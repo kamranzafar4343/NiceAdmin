@@ -551,11 +551,11 @@ $result = $conn->query($sql);
                             <tr>
                                 <th scope="col" style="width: 5%;">#</th>
                                 <th scope="col" style="width: 15%;">Box Barcode</th>
-                                <th scope="col" style="width: 15%;">Rack Code</th>
-                                <th scope="col" style="width: 10%;">Level</th>
+                                <th scope="col" style="width: 15%;">Rack</th>
+                                <th scope="col" style="width: 10%;">Number</th>
                                 <th scope="col" style="width: 10%;">Horizontal</th>
-                                <th scope="col" style="width: 10%;">Rack Number</th>
-                                <th scope="col" style="width: 15%;">Column Identifier</th>
+                                <th scope="col" style="width: 10%;">Number</th>
+                                <th scope="col" style="width: 15%;">Column</th>
                                 <th scope="col" style="width: 10%;">Position Number</th>
                                 <th scope="col" style="width: 15%;">Actions</th>
                             </tr>

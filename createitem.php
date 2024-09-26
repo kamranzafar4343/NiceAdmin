@@ -371,6 +371,11 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
+                    <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
 
 
             <li class="nav-heading">Pages</li>

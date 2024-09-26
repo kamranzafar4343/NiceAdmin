@@ -405,6 +405,26 @@ if ($resultData->num_rows > 0) {
         <div class="card custom-card shadow-lg mt-3">
             <div class="card-body">
                 <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
+                     <!-- Select Rack -->
+                     <div class="col-md-6">
+                        <label for="rack_select" class="form-label">Select Rack</label>
+                        <select class="form-select" id="rack_select" name="rack_select" required>
+                            <option value="" disabled selected>Select a rack</option>
+                            <?php
+                            // Fetch rack details from the racks table
+                            $query = "SELECT id, rack_code, rack_number, level, horizontal, column_identifier, position_number FROM racks";
+                            $result = $conn->query($query);
+
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $display_text = $row['rack_code'] . ' - ' . $row['rack_number'] . ' - ' . $row['level'] . ' - ' . $row['horizontal'] . ' - ' . $row['column_identifier'] . ' - ' . $row['position_number'];
+                                    echo "<option value='" . $row['id'] . "'>$display_text</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    
                     <!-- Select Barcode -->
                     <div class="col-md-6">
                         <label for="barcode_select" class="form-label">Select Box Barcode</label>
@@ -424,25 +444,7 @@ if ($resultData->num_rows > 0) {
                         </select>
                     </div>
 
-                    <!-- Select Rack -->
-                    <div class="col-md-6">
-                        <label for="rack_select" class="form-label">Select Rack</label>
-                        <select class="form-select" id="rack_select" name="rack_select" required>
-                            <option value="" disabled selected>Select a rack</option>
-                            <?php
-                            // Fetch rack details from the racks table
-                            $query = "SELECT id, rack_code, rack_number, level, horizontal, column_identifier, position_number FROM racks";
-                            $result = $conn->query($query);
-
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $display_text = $row['rack_code'] . ' - ' . $row['rack_number'] . ' - ' . $row['level'] . ' - ' . $row['horizontal'] . ' - ' . $row['column_identifier'] . ' - ' . $row['position_number'];
-                                    echo "<option value='" . $row['id'] . "'>$display_text</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
+                   
 
                     <!-- Form Buttons -->
                     <div class="text-center mt-4 mb-2">

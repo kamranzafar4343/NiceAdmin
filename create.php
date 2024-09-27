@@ -520,7 +520,6 @@ if (isset($_POST['submit'])) {
                         <input type="password" class="form-control" id="password" name="password" required minlength="8" maxlength="12" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                             title="It must be 8-16 characters, include at least one number, one uppercase and one lowercase letter">
                     </div> -->
-                    
 
                     <div class="col-md-4">
                         <label for="country" class="form-label">Country</label>

@@ -1,28 +1,44 @@
 <?php
 session_start();
 
-include 'config/db.php';
+include 'config/db.php'; // Make sure your database connection is correct
 
 if (isset($_POST['register'])) {
-    // Get form data
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $role = mysqli_real_escape_string($conn, $_POST['role']);
+    // Get form data and sanitize inputs
+    $name = mysqli_real_escape_string($conn, trim($_POST['name']));
+    $email = mysqli_real_escape_string($conn, trim($_POST['email']));
+    $password = mysqli_real_escape_string($conn, trim($_POST['password']));
+    $role = mysqli_real_escape_string($conn, trim($_POST['role']));
 
-    // Password encryption (optional but recommended)
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-    // Insert data into the database
-    $sql = "INSERT INTO register (name, email, password, role) VALUES ('$name', '$email', '$hashed_password', '$role')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "Registration successful!";
-        header('Location:  pages-login.php'); // Redirect to login page after registration
+    // Validate inputs
+    if (empty($name) || empty($email) || empty($password) || empty($role)) {
+        $error_message = "All fields are required!";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error_message = "Invalid email format!";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
+        // Check if the email is already registered
+        $email_check_query = "SELECT * FROM register WHERE email='$email' LIMIT 1";
+        $result = mysqli_query($conn, $email_check_query);
+        $user = mysqli_fetch_assoc($result);
 
+        if ($user) { // if email exists
+            $error_message = "Email is already registered!";
+        } else {
+            // Encrypt password before saving to the database
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            // Insert data into the database
+            $sql = "INSERT INTO register (name, email, password, role) VALUES ('$name', '$email', '$hashed_password', '$role')";
+
+            if ($conn->query($sql) === TRUE) {
+                $_SESSION['message'] = "Registration successful!";
+                header('Location: pages-login.php'); // Redirect to login page after successful registration
+                exit();
+            } else {
+                $error_message = "Error: " . $conn->error;
+            }
+        }
+    }
     $conn->close();
 }
 ?>
@@ -37,8 +53,7 @@ if (isset($_POST['register'])) {
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <title>Login</title>
+    <title>Register</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Nunito|Poppins" rel="stylesheet">
@@ -49,7 +64,6 @@ if (isset($_POST['register'])) {
     <!-- ALERTIFY CSS -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css" />
-    <!-- google recaptcha -->
 
     <style>
         .w-100 {
@@ -70,7 +84,6 @@ if (isset($_POST['register'])) {
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-
                             <div class="d-flex justify-content-center py-4">
                                 <a href="index.php" class="logo d-flex align-items-center w-auto">
                                     <img src="assets/img/logo3.png" alt="">
@@ -85,7 +98,7 @@ if (isset($_POST['register'])) {
                                         <p class="text-center small">Enter your name, email, password, and select your role</p>
                                     </div>
 
-                                    <form class="row g-3 needs-validation" method="POST" action="register.php">
+                                    <form class="row g-3 needs-validation" method="POST" action="" novalidate>
                                         <div class="col-12">
                                             <label for="yourName" class="form-label">Your Name</label>
                                             <input type="text" name="name" class="form-control" id="yourName" required>
@@ -100,40 +113,36 @@ if (isset($_POST['register'])) {
 
                                         <div class="col-12">
                                             <label for="yourPassword" class="form-label">Password</label>
-                                            <input type="password" name="password" class="form-control" id="yourPassword" required>
-                                            <div class="invalid-feedback">Please enter your password!</div>
+                                            <input type="password" name="password" class="form-control" id="yourPassword" required minlength="8">
+                                            <div class="invalid-feedback">Please enter a password with at least 8 characters!</div>
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="country" class="form-label">Role</label>
+                                            <label for="role" class="form-label">Role</label>
                                             <select class="form-select" id="role" name="role" required>
                                                 <option value="">Select Role</option>
-                                                <option value="admin">admin</option>
-                                                <option value="user">user</option>
-                                                <!-- <option value="cto">CTO</option>
-                                                <option value="hr">HR</option>
-                                                <option value="product-manager">product manager</option>
-                                                <option value="sales-manager">sales manager</option>
-                                                <option value="IT-manager">IT manager</option> -->
-                                                <!-- Add more countries as needed -->
+                                                <option value="admin">Admin</option>
+                                                <option value="user">User</option>
                                             </select>
+                                            <div class="invalid-feedback">Please select a role!</div>
                                         </div>
 
-                                        <div class="col-6 d-flex">
-                                            <button class="btn btn-outline-primary w-100" type="submit" name="register" value="register">Register</button>
+                                        <div class="col-12 d-flex justify-content-between">
+                                            <button class="btn btn-outline-primary" type="submit" name="register" value="register">Register</button>
+                                            <button class="btn btn-outline-secondary" type="reset">Reset</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
 
-
                         </div>
                     </div>
                 </div>
+            </section>
         </div>
-        </section>
     </main>
 
+    <!-- Google reCAPTCHA -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <!-- Vendor JS Files -->

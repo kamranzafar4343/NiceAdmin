@@ -457,6 +457,7 @@ if (isset($_GET['comp_id'])) {
                             echo '<td>' . $branch_name . '</td>';
 
                             echo '<td>' . ($row["created_at"]) . '</td>';
+                            
                             echo '<td><i class="';
                             if ($row["status"] == 'In') {
                                 echo 'fas fa-check-circle text-success';

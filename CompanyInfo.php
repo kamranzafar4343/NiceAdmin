@@ -846,7 +846,7 @@ $emp_data = $result_emp->fetch_assoc();
       </div>
     </div>
       
-      <div class="col-md-7 col-lg-8 mt-4">
+      <div class="col-md-7 col-lg-10 mt-4">
         <div class="cardBranch recent-sales overflow-auto">
           <div class="card-body" style="font-size: 0.8rem;">
             <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()" class="btn btn-primary mb-3">Add Employee</button>

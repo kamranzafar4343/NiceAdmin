@@ -20,7 +20,7 @@ if ($resultData->num_rows > 0) {
   $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM Orders";
+$showOrders = "Select * FROM delivery_orders";
 $resultShowOrders = $conn->query($showOrders);
 
 ?>
@@ -32,7 +32,7 @@ $resultShowOrders = $conn->query($showOrders);
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Work Orders</title>
+  <title>Delivered</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -242,7 +242,7 @@ $resultShowOrders = $conn->query($showOrders);
     }
 
     .mt-4 {
-      margin-top: 1.5rem !important;
+      margin-top: 4.5rem !important;
       margin-right: 214px;
     }
 
@@ -465,18 +465,18 @@ $resultShowOrders = $conn->query($showOrders);
 
   </aside>
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
-  <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-3 add">Order</button>
+
   <!-- Main content -->
   <main id="main" class="main">
-    <div class="col-12">
+    <div class="col-12 mt-4">
       <div class="cardBranch recent-sales overflow-auto">
         <div class="card-body">
-          <h5 class="card-title">List of Orders</h5>
+          <h5 class="card-title">List of Delivered Orders</h5>
           <?php
           // Check if there are any results
           if ($resultShowOrders->num_rows > 0) {
             // Display table
-            echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+            echo '<table class="table datatable mt-3" style="table-layout: fixed;">
                     <thead>
                         <tr>
                             <th scope="col" style="width: 5%;">#</th>
@@ -486,7 +486,7 @@ $resultShowOrders = $conn->query($showOrders);
                             <th scope="col" style="width: 10%;">Item</th>
                             <th scope="col" style="width: 17%;">requestor</th>                        
                             <th scope="col" style="width: 15%;">request date</th>
-                            <th scope="col" style="width: 15%;">Actions</th>
+                           
                         </tr>
                     </thead>
                     <tbody style="table-layout: fixed;">';
@@ -544,19 +544,6 @@ $resultShowOrders = $conn->query($showOrders);
               echo '<td>' . ($row["item"]) . '</td>';
               echo '<td> <span class="req_span">Name:  </span>' . ($row["name"]) . '<br>  <span class="req_span">Role:  </span>' . $Role . '</td>';
               echo '<td>' . ($row["date"]) . '</td>';
-          ?>
-              <td>
-                <div style="display: flex; gap: 10px;">
-
-                  <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
-                  <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a>
-
-                  <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
-                    onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=<?php echo $row['id']; ?>">Access</a> -->
-
-                </div>
-              </td>
-          <?php
               echo '</tr>';
             }
             echo '</tbody></table>';

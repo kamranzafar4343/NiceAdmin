@@ -72,3 +72,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 For any questions or issues, please contact kamranzafar4343@gmail.com
+<a href="https://github.com/kamranzafar4343/NiceAdmin/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=kamranzafar4343/NiceAdmin" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks)

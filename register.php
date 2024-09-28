@@ -24,11 +24,8 @@ if (isset($_POST['register'])) {
         if ($user) { // if email exists
             $error_message = "Email is already registered!";
         } else {
-            // Encrypt password before saving to the database
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-            // Insert data into the database
-            $sql = "INSERT INTO register (name, email, password, role) VALUES ('$name', '$email', '$hashed_password', '$role')";
+            // Store the plain password directly (not recommended for security reasons)
+            $sql = "INSERT INTO register (name, email, password, role) VALUES ('$name', '$email', '$password', '$role')";
 
             if ($conn->query($sql) === TRUE) {
                 $_SESSION['message'] = "Registration successful!";

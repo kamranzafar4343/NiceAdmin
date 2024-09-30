@@ -403,7 +403,7 @@ $resultShowOrders = $conn->query($showOrders);
       </li>
 
       <li class="nav-item">
-        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
           <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
@@ -464,6 +464,7 @@ $resultShowOrders = $conn->query($showOrders);
 
   </aside>
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
+  <!-- Add the buttton for the work order -->
   <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-3 add">Order</button>
   <!-- Main content -->
   <main id="main" class="main">

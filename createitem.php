@@ -8,7 +8,6 @@ if (!isset($_SESSION['email'])) {
     // If not logged in, redirect to login page
     header("Location: pages-login.php");
     exit();
-
 }
 
 include 'config/db.php';
@@ -330,12 +329,16 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
     </header><!-- End Header -->
 
+    <?php
+    include "config/db.php";
+    $role = $_SESSION['role'];
+    ?>
 
     <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="sidebar">
-
         <ul class="sidebar-nav" id="sidebar-nav">
 
+            <!-- Dashboard Link (Visible to all users) -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="index.php">
                     <i class="ri-home-8-line"></i>
@@ -343,70 +346,98 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 </a>
             </li><!-- End Dashboard Nav -->
 
+            <?php if ($_SESSION['role'] == 'admin') { ?>
+                <!-- Admin-only Links -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="Companies.php">
+                        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Companies Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-                    <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li><!-- End Tables Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
-                    <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
-                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
-                    <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+
+            <?php } else { ?>
+                <!-- User-only Links -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+            <?php } ?>
 
 
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
+                    <i class="bi bi-person"></i><span>Profile</span>
                 </a>
-            </li>
-            <!-- End Profile Page Nav -->
-
-
-
-            <!-- <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-register.php">
-      <i class="bi bi-card-list"></i>
-      <span>Register</span>
-    </a>
-  </li> -->
-
-            <!-- End Register Page Nav -->
+            </li><!-- End Profile Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
+                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
                 </a>
-            </li><!-- End Login Page Nav -->
+            </li><!-- End Login Nav -->
 
-
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="logout.php">
+                    <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+                </a>
+            </li><!-- End Logout Nav -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-contact.php">
                     <i class="bi bi-envelope"></i>
@@ -415,16 +446,16 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
             </li><!-- End Contact Page Nav -->
 
         </ul>
-
     </aside>
+    <!--------------- End sidebar ------------------>
 
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
 
     <!--form--------------------------------------form--------------------------------------->
-   <!-- Start Header form -->
-   <div class="headerimg text-center">
+    <!-- Start Header form -->
+    <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
         <h2>Add an item</h2>
     </div>
@@ -599,89 +630,93 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     </script>
 
     <script>
-     document.addEventListener('DOMContentLoaded', function() {
-    const companySelect = document.getElementById('company');
-    const branchSelect = document.getElementById('branch');
-    // const boxSelect = document.getElementById('box');
+        document.addEventListener('DOMContentLoaded', function() {
+            const companySelect = document.getElementById('company');
+            const branchSelect = document.getElementById('branch');
+            // const boxSelect = document.getElementById('box');
 
-    // Retrieve the previously selected company from localStorage
-    const selectedCompany = localStorage.getItem('selectedCompany');
-    if (selectedCompany) {
-        companySelect.value = selectedCompany;
-        loadBranches(selectedCompany); // Load branches based on the selected company
-    }
-
-    // Store the selected company in localStorage on change
-    companySelect.addEventListener('change', function() {
-        localStorage.setItem('selectedCompany', this.value);
-        loadBranches(this.value); // Load branches based on the new selection
-    });
-
-    // Store the selected branch in localStorage on change
-    branchSelect.addEventListener('change', function() {
-        localStorage.setItem('selectedBranch', this.value);
-        loadBoxes(this.value); // Load boxes based on the selected branch
-    });
-
-    // Store the selected box in localStorage on change
-    boxSelect.addEventListener('change', function() {
-        localStorage.setItem('selectedBox', this.value);
-    });
-
-    // Function to load branches via AJAX
-    function loadBranches(company_id) {
-        $.ajax({
-            url: 'get_branches.php',
-            type: 'POST',
-            data: { company_id: company_id },
-            success: function(response) {
-                try {
-                    const branches = JSON.parse(response);
-                    branchSelect.innerHTML = '<option value="">Select a Branch</option>';
-                    branches.forEach(function(branch) {
-                        branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
-                    });
-
-                    // Set previously selected branch again, if available
-                    const selectedBranch = localStorage.getItem('selectedBranch');
-                    if (selectedBranch) {
-                        branchSelect.value = selectedBranch;
-                        loadBoxes(selectedBranch); // Load boxes based on the selected branch
-                    }
-                } catch (e) {
-                    console.error("Invalid JSON response", response);
-                }
+            // Retrieve the previously selected company from localStorage
+            const selectedCompany = localStorage.getItem('selectedCompany');
+            if (selectedCompany) {
+                companySelect.value = selectedCompany;
+                loadBranches(selectedCompany); // Load branches based on the selected company
             }
-        });
-    }
 
-    // Function to load boxes via AJAX
-    function loadBoxes(branch_id) {
-        $.ajax({
-            url: 'get_boxes.php',
-            type: 'POST',
-            data: { branch_id: branch_id },
-            success: function(response) {
-                try {
-                    const boxes = JSON.parse(response);
-                    boxSelect.innerHTML = '<option value="">Select a Box</option>';
-                    boxes.forEach(function(box) {
-                        boxSelect.innerHTML += `<option value="${box.box_id}">${box.barcode}</option>`;
-                    });
+            // Store the selected company in localStorage on change
+            companySelect.addEventListener('change', function() {
+                localStorage.setItem('selectedCompany', this.value);
+                loadBranches(this.value); // Load branches based on the new selection
+            });
 
-                    // Set previously selected box again, if available
-                    const selectedBox = localStorage.getItem('selectedBox');
-                    if (selectedBox) {
-                        boxSelect.value = selectedBox;
+            // Store the selected branch in localStorage on change
+            branchSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedBranch', this.value);
+                loadBoxes(this.value); // Load boxes based on the selected branch
+            });
+
+            // Store the selected box in localStorage on change
+            boxSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedBox', this.value);
+            });
+
+            // Function to load branches via AJAX
+            function loadBranches(company_id) {
+                $.ajax({
+                    url: 'get_branches.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            const branches = JSON.parse(response);
+                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
+                            branches.forEach(function(branch) {
+                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
+                            });
+
+                            // Set previously selected branch again, if available
+                            const selectedBranch = localStorage.getItem('selectedBranch');
+                            if (selectedBranch) {
+                                branchSelect.value = selectedBranch;
+                                loadBoxes(selectedBranch); // Load boxes based on the selected branch
+                            }
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
                     }
-                } catch (e) {
-                    console.error("Invalid JSON response", response);
-                }
+                });
             }
-        });
-    }
 
-});
+            // Function to load boxes via AJAX
+            function loadBoxes(branch_id) {
+                $.ajax({
+                    url: 'get_boxes.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            const boxes = JSON.parse(response);
+                            boxSelect.innerHTML = '<option value="">Select a Box</option>';
+                            boxes.forEach(function(box) {
+                                boxSelect.innerHTML += `<option value="${box.box_id}">${box.barcode}</option>`;
+                            });
+
+                            // Set previously selected box again, if available
+                            const selectedBox = localStorage.getItem('selectedBox');
+                            if (selectedBox) {
+                                boxSelect.value = selectedBox;
+                            }
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            }
+
+        });
     </script>
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {

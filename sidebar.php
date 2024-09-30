@@ -254,6 +254,13 @@ $role = $_SESSION['role'];
                 <i class="bi bi-box-arrow-left"></i><span>Logout</span>
             </a>
         </li><!-- End Logout Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="register.php">
+                    <i class="bi bi-person-plus"></i>
+                    <span>Register</span>
+                </a>
+            </li><!-- End Register Page Nav -->
+
         <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-contact.php">
                     <i class="bi bi-envelope"></i>

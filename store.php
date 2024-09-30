@@ -595,8 +595,14 @@ $result = $conn->query($sql);
                             echo '<td>' . htmlspecialchars($row["position_number"]) . '</td>'; // Added column
                             echo '<td>
                             <div style="display: flex; gap: 10px;">
-                                <a class="btn btn-danger btn-sm" href="deleteStore.php?id=' . $row['store_id'] . '" onclick="return confirm(\'Are you sure you want to delete this entry?\');">Delete</a>
+                                
+                           <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this rack?\');" href="deleteStore.php?id=' . $row['store_id'] . '">
+                               <i style="width: 20px;" class="fa-solid fa-trash"></i>
+                               </a>
                             </div>
+
+
+                                              
                           </td>';
                             echo '</tr>';
                         }

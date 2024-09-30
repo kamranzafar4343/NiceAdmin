@@ -9,7 +9,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include database connection
-include "db.php";
+include "config/db.php";
 
 // Check if the 'id' parameter is set in the URL
 if (isset($_GET['id'])) {

@@ -147,7 +147,6 @@
 
 <?php
 include "config/db.php";
-
 $role = $_SESSION['role'];
 ?>
 

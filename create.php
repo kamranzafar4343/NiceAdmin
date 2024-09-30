@@ -1,27 +1,37 @@
 <?php
 
-
-// session_start(); // Start the session
+// Start the session
 session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-    // If not logged in, redirect to login page
-    header("Location: pages-login.php");
-    exit();
+  // If not logged in, redirect to login page
+  header("Location: pages-login.php");
+  exit();
 }
-include 'config/db.php';
 
+// Include the database connection
+include 'config/db.php'; 
+
+// Get session email 
 $email = $_SESSION['email'];
-//get user name and email from register table
+
+// Get user name, email, and role from the register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
-    $row2 = $resultData->fetch_assoc();
-    $adminName = $row2['name'];
-    $adminEmail = $row2['email'];
+  $row2 = $resultData->fetch_assoc();
+  $adminName = $row2['name'];
+  $adminEmail = $row2['email'];
+  $userRole = $row2['role']; // Assuming you have a 'role' column in the 'register' table
 }
 
+// Check if the user is an admin, otherwise redirect
+if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
+  // If the user is not an Admin, redirect to index page
+  header("Location: index.php");
+  exit();
+}
 
 if (isset($_POST['submit'])) {
     $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);

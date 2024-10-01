@@ -1,24 +1,29 @@
 <?php
 session_start();
-
 include 'config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-  // Get the user input and escape it for security
+  // Get user input and escape for security
   $email = $conn->real_escape_string($_POST['email']);
   $password = $conn->real_escape_string($_POST['password']);
 
-  // Query to check if the email and password are correct
+  // Query to check if the email and password are correct and retrieve the role
   $result = $conn->query("SELECT * FROM register WHERE email='$email' AND password='$password'");
 
-  // If a match is found, set the session
+  // If a match is found, set session and redirect based on role
   if ($result->num_rows > 0) {
-    $_SESSION['email'] = $email; // Set session variable
-    header("Location: index.php"); // Redirect to the dashboard or home page
+    $user = $result->fetch_assoc();
+    
+    // Set session variables
+    $_SESSION['email'] = $email;
+    $_SESSION['role'] = $user['role'];  // Store the role (admin or user)
+
+    // Redirect to index.php
+    header("Location: index.php"); 
     exit();
   } else {
-    // Store the error message in a variable to use in the HTML
+    // Error message for invalid login
     $error_message = "Invalid email or password!";
   }
 }

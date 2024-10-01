@@ -341,99 +341,113 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
 
     <!-- ======= Sidebar ======= -->
-    <aside id="sidebar" class="sidebar">
+  <aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
 
-        <ul class="sidebar-nav" id="sidebar-nav">
+        <!-- Dashboard Link (Visible to all users) -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="index.php">
+                <i class="ri-home-8-line"></i>
+                <span>Dashboard</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="index.php">
-                    <i class="ri-home-8-line"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li><!-- End Dashboard Nav -->
+        <?php if ($_SESSION['role'] == 'admin') { ?>
+        <!-- Admin-only Links -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="Companies.php">
+                <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Companies Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link active" href="box.php">
+                <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Boxes Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="showItems.php">
+                <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Items Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="order.php">
+                <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Work Orders Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="racks.php">
+                <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Racks Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="store.php">
+                <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Store Nav -->
+
+        <?php } else { ?>
+        <!-- User-only Links -->
+         
+        <li class="nav-item">
+            <a class="nav-link active" href="box.php">
+                <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Boxes Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="showItems.php">
+                <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Items Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="order.php">
+                <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Work Orders Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="racks.php">
+                <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Racks Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="store.php">
+                <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Store Nav -->
+        <?php } ?>
 
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-                    <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li><!-- End Tables Nav -->
+        <li class="nav-heading">Pages</li>
 
-            <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="users-profile.php">
+                <i class="bi bi-person"></i><span>Profile</span>
+            </a>
+        </li><!-- End Profile Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
-                    <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
-                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
-                    <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="pages-login.php">
+                <i class="bi bi-box-arrow-right"></i><span>Login</span>
+            </a>
+        </li><!-- End Login Nav -->
 
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="logout.php">
+                <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+            </a>
+        </li><!-- End Logout Nav -->
 
-            <li class="nav-heading">Pages</li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-            <!-- End Profile Page Nav -->
-
-
-
-            <!-- <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-register.php">
-      <i class="bi bi-card-list"></i>
-      <span>Register</span>
-    </a>
-  </li> -->
-
-            <!-- End Register Page Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
-                </a>
-            </li><!-- End Login Page Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="logout.php">
-                    <i class="bi bi-box-arrow-left"></i>
-                    <span>Logout</span>
-                </a>
-            </li><!-- End Login Page Nav -->
-
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-contact.php">
-                    <i class="bi bi-envelope"></i>
-                    <span>Contact</span>
-                </a>
-            </li><!-- End Contact Page Nav -->
-
-        </ul>
-
-    </aside>
-
+    </ul>
+</aside>
+<!--------------- End sidebar ------------------>
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
@@ -552,99 +566,11 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                         } else {
                             document.getElementById('submitBtn').disabled = false; // Enable submit button
                         }
-<<<<<<< HEAD
                     }
                 };
                 xhr.send('checkBarcode=true&barcode=' + barcode);
             } else {
                 document.getElementById('submitBtn').disabled = false; // Enable submit button for other lengths
-=======
-                        ?>
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label for="branch">Select a Branch:</label>
-                    <select id="branch" class="form-select" name="branch" required>
-                        <option value="">Select a Branch</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label for="rec_date">Receive date</label>
-                    <input type="datetime-local" class="form-control" name="rec_date" id="rec_date" required>
-                </div>
-
-                <div class="col-md-6">
-                    <label for="sender">Sender:</label>
-                    <input type="text" class="form-control" name="sender" id="sender" pattern="[a-zA-Z\s]+"
-                        title="Only alphabets and spaces are allowed" required>
-                </div>
-
-                <div class="col-md-6">
-                    <label for="rec_via">Receive via:</label>
-                    <select id="rec_via" class="form-select" name="rec_via" required>
-                        <option value="">Select an option</option>
-                        <option value="Self">Self</option>
-                        <option value="Courier">Courier</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label for="status">Status:</label>
-                    <select id="status" class="form-select" name="status" required>
-                        <option value="">Select Status</option>
-                        <option value="In" selected>In</option>
-                    </select>
-                </div>
-
-                <div class="text-center mt-4 mb-2">
-                    <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'Box.php';">Go back</button>
-                    <button type="submit" class="btn btn-outline-primary mr-1" id="submitBtn">Submit</button>
-                    <button type="reset" class="btn btn-outline-secondary" onclick="localStorage.clear()">Finalize</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal for Duplicate Barcode -->
-<div class="modal fade" id="duplicateBarcodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Duplicate Barcode</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                The barcode you entered already exists. Please use a different barcode.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    document.getElementById('box_barcode').addEventListener('input', function() {
-    let barcode = this.value;
-
-    if (barcode.length === 7) {
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', 'createBox.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = JSON.parse(xhr.responseText);
-                if (response.exists) {
-                    // Show modal popup if barcode exists
-                    let duplicateModal = new bootstrap.Modal(document.getElementById('duplicateBarcodeModal'));
-                    duplicateModal.show();
-                    document.getElementById('submitBtn').disabled = true; // Disable submit button
-                } else {
-                    document.getElementById('submitBtn').disabled = false; // Enable submit button
-                }
->>>>>>> c29283f9bd1b46ca4bacf5448a857399e52b80c2
             }
         });
     </script>

@@ -874,8 +874,9 @@ $emp_data = $result_emp->fetch_assoc();
                     <th scope="col">Role</th>
                     <!-- <th scope="col" >Received</th> -->
                     <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
-                    <th scope="col">Action</th>
                     <th scope="col">Auth_status</th>
+
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody style="table-layout: fixed;">

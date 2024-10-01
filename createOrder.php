@@ -32,26 +32,36 @@ if (isset($_POST['submit'])) {
     $req_name = mysqli_real_escape_string($conn, $_POST['name']);
     $req_date = mysqli_real_escape_string($conn, $_POST['date']);
     $order_no = mysqli_real_escape_string($conn, $_POST['order_no']);
-    
-    // exceed only if emp exist for that specific company and Authorized
-    $empCheckQuery = "SELECT * FROM `employee` WHERE `name` = '$req_name' AND branch_FK_emp = '$branch_FK_emp' AND auth_status='Authorized'";
 
-    $result = (mysqli_query($conn, $empCheckQuery));
 
-    if (mysqli_num_rows($result) > 0) {
-        $sql = "INSERT INTO orders (company, branch, box, item, name, date) 
-        VALUES ('$company_FK_emp', '$branch_FK_emp' , '$box_FK_emp', '$barcode', '$req_name', '$req_date')";
+    //check that no duplicate order_no exist
+    $checkOrder = "SELECT * FROM orders Where `order_no` = '$order_no' OR `box` ='$box_FK_emp'";
+    $result_dup_order = mysqli_query($conn, $checkOrder);
 
-        if ($conn->query($sql) === TRUE) {
-            header("Location: order.php");
-            exit();
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
+    if (mysqli_num_rows($result_dup_order) > 0) {
+        die('Error: duplicate order no or box');
     } else {
-        echo 'emp not authorized';
+        // exceed only if emp exist for that specific company and Authorized
+        $empCheckQuery = "SELECT * FROM `employee` WHERE `name` = '$req_name' AND branch_FK_emp = '$branch_FK_emp' AND auth_status='Authorized'";
+
+        $result = (mysqli_query($conn, $empCheckQuery));
+
+        if (mysqli_num_rows($result) > 0) {
+            $sql = "INSERT INTO orders (company, branch, box, item, name, date, order_no) 
+     VALUES ('$company_FK_emp', '$branch_FK_emp' , '$box_FK_emp', '$barcode', '$req_name', '$req_date', '$order_no')";
+
+            if ($conn->query($sql) === TRUE) {
+                header("Location: order.php");
+                exit();
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+        } else {
+            echo 'emp not authorized';
+        }
     }
 }
+
 
 
 
@@ -471,7 +481,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 <form class="row g-3 needs-validation" action="" method="POST">
 
 
-                <div class="col-md-6">
+                    <div class="col-md-6">
                         <label class="form-label">order no.</label>
                         <input type="text" class="form-control" name="order_no" id="order_no" required>
                     </div>

@@ -1,0 +1,9 @@
+# Ignore composer vendor directory (for PHP projects)
+composer.json
+composer.lock
+
+# Ignore node_modules (for JavaScript projects)
+node_modules/
+
+#igonre .env file
+.env

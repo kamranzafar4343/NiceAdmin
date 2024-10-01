@@ -20,7 +20,7 @@ if ($resultData->num_rows > 0) {
   $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM Orders";
+$showOrders = "Select * FROM orders";
 $resultShowOrders = $conn->query($showOrders);
 
 ?>
@@ -497,9 +497,9 @@ $resultShowOrders = $conn->query($showOrders);
             echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 5%;">#</th>
+                            <th scope="col" style="width: 10%;">order no</th>
                             <th scope="col" style="width: 10%;">Company</th>
-                            <th scope="col" style="width: 10%;">Branch</th>
+                            <th scope="col" style="width: 15%;">Branch</th>
                              <th scope="col" style="width: 10%;">Box</th>
                             <th scope="col" style="width: 10%;">Item</th>
                             <th scope="col" style="width: 17%;">requestor</th>                        
@@ -515,7 +515,7 @@ $resultShowOrders = $conn->query($showOrders);
             // Loop through results
             while ($row = $resultShowOrders->fetch_assoc()) {
               echo '<tr>';
-              echo '<td>' . $counter++ . '</td>';
+              echo '<td>' .($row['order_no']). '</td>';
 
               // Get company id
               $comp_id = $row['company'];

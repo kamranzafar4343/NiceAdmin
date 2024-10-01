@@ -581,12 +581,7 @@ $result = $conn->query($sql);
                     <i class="bi bi-box-arrow-left"></i><span>Logout</span>
                 </a>
             </li><!-- End Logout Nav -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-contact.php">
-                    <i class="bi bi-envelope"></i>
-                    <span>Contact</span>
-                </a>
-            </li><!-- End Contact Page Nav -->
+
 
         </ul>
     </aside>

@@ -20,7 +20,7 @@ if ($resultData->num_rows > 0) {
   $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM Orders";
+$showOrders = "Select * FROM orders";
 $resultShowOrders = $conn->query($showOrders);
 
 ?>
@@ -404,7 +404,7 @@ $resultShowOrders = $conn->query($showOrders);
       </li>
 
       <li class="nav-item">
-        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
+        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
           <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
@@ -479,9 +479,9 @@ $resultShowOrders = $conn->query($showOrders);
             echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 5%;">#</th>
+                            <th scope="col" style="width: 10%;">order no</th>
                             <th scope="col" style="width: 10%;">Company</th>
-                            <th scope="col" style="width: 10%;">Branch</th>
+                            <th scope="col" style="width: 15%;">Branch</th>
                              <th scope="col" style="width: 10%;">Box</th>
                             <th scope="col" style="width: 10%;">Item</th>
                             <th scope="col" style="width: 17%;">requestor</th>                        
@@ -497,7 +497,7 @@ $resultShowOrders = $conn->query($showOrders);
             // Loop through results
             while ($row = $resultShowOrders->fetch_assoc()) {
               echo '<tr>';
-              echo '<td>' . $counter++ . '</td>';
+              echo '<td>' .($row['order_no']). '</td>';
 
               // Get company id
               $comp_id = $row['company'];
@@ -549,7 +549,7 @@ $resultShowOrders = $conn->query($showOrders);
                 <div style="display: flex; gap: 10px;">
 
                   <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
-                  <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a>
+                  <a type="button" style="font-size: 10px; padding:5px;" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['order_no']; ?>">Deliver</a>
 
                   <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
                     onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=<?php echo $row['id']; ?>">Access</a> -->

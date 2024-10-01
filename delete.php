@@ -16,7 +16,7 @@ if (isset($_GET['id'])) {
     $user_id = intval($_GET['id']); // Ensure ID is an int
 
     // Prepare and execute the delete query
-   echo $sql = "DELETE FROM `compani` WHERE `comp_id`='$user_id'";
+   $sql = "DELETE FROM `compani` WHERE `comp_id`='$user_id'";
     
     if ($conn->query($sql) === TRUE) {
         

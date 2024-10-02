@@ -465,7 +465,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
                 <!-- Rack Code -->
                 <div class="col-md-6">
-                    <label for="rack_code" class="form-label">Rack</label>
+                    <label for="rack_code" class="form-label">Location</label>
                     <input type="text" class="form-control" id="rack_code" name="rack_code" required>
                 </div>
 
@@ -477,7 +477,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <!-- Horizontal Position -->
                 <div class="col-md-6">
-                    <label for="horizontal" class="form-label">Horizontal</label>
+                    <label for="horizontal" class="form-label">Rack</label>
                     <input type="text" class="form-control" id="horizontal" name="horizontal" required>
                 </div>
 

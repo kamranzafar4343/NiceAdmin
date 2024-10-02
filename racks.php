@@ -585,9 +585,9 @@ if (isset($_GET['comp_id'])) {
                 <thead>
                     <tr>
                         <th scope="col" style="width: 5%;">#</th>
-                        <th scope="col" style="width: 15%;">Rack</th>
+                        <th scope="col" style="width: 15%;">Location</th>
                         <th scope="col" style="width: 10%;">Number</th>
-                        <th scope="col" style="width: 10%;">Horizontal</th>
+                        <th scope="col" style="width: 10%;">Rack</th>
                         <th scope="col" style="width: 10%;">Number</th>
                         <th scope="col" style="width: 15%;">Column</th>
                         <th scope="col" style="width: 10%;">Position Number</th>';

@@ -44,7 +44,7 @@ if (isset($_GET['comp_id'])) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>boxes</title>
+    <title>Racks</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -560,55 +560,63 @@ if (isset($_GET['comp_id'])) {
     </div>
 
     <!-- Main content -->
-    <main id="main" class="main">
-        <div class="col-12">
-            <div class="cardBranch recent-sales overflow-auto">
-                <div class="card-body">
-                    <h5 class="card-title">List of Racks</h5>
+<main id="main" class="main">
+    <div class="col-12">
+        <div class="cardBranch recent-sales overflow-auto">
+            <div class="card-body">
+                <h5 class="card-title">List of Racks</h5>
 
-                    <?php
-                    include 'config/db.php'; // Include the database connection
+                <?php
+                include 'config/db.php'; // Include the database connection
 
-                    // Search functionality
-                    $searchQuery = '';
-                    if (isset($_GET['query'])) {
-                        $searchQuery = $_GET['query'];
+                // Search functionality
+                $searchQuery = '';
+                if (isset($_GET['query'])) {
+                    $searchQuery = $_GET['query'];
+                }
+
+                // SQL query to get racks based on search
+                $sql = "SELECT * FROM racks WHERE rack_code LIKE '%$searchQuery%'";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    // Display table of racks
+                    echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 5%;">#</th>
+                        <th scope="col" style="width: 15%;">Rack</th>
+                        <th scope="col" style="width: 10%;">Number</th>
+                        <th scope="col" style="width: 10%;">Horizontal</th>
+                        <th scope="col" style="width: 10%;">Number</th>
+                        <th scope="col" style="width: 15%;">Column</th>
+                        <th scope="col" style="width: 10%;">Position Number</th>';
+                    
+                    // Show "Actions" column only if the user is an admin
+                    if ($_SESSION['role'] == 'admin') {
+                        echo '<th scope="col" style="width: 15%;">Actions</th>';
                     }
 
-                    // SQL query to get racks based on search
-                    $sql = "SELECT * FROM racks WHERE rack_code LIKE '%$searchQuery%'";
-                    $result = $conn->query($sql);
+                    echo '</tr>
+                </thead>
+                <tbody>';
 
-                    if ($result->num_rows > 0) {
-                        // Display table of racks
-                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
-                    <thead>
-                        <tr>
-                            <th scope="col" style="width: 5%;">#</th>
-                            <th scope="col" style="width: 15%;">Rack</th>
-                            <th scope="col" style="width: 10%;">Number</th>
-                            <th scope="col" style="width: 10%;">Horizontal</th>
-                            <th scope="col" style="width: 10%;">Number</th>
-                            <th scope="col" style="width: 15%;">Column</th>
-                            <th scope="col" style="width: 10%;">Position Number</th>
-                            <th scope="col" style="width: 15%;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>';
+                    // Counter variable for row numbers
+                    $counter = 1;
 
-                        // Counter variable for row numbers
-                        $counter = 1;
-
-                        // Loop through the results and display each row
-                        while ($row = $result->fetch_assoc()) {
-                            echo '<tr>';
-                            echo '<td>' . $counter++ . '</td>';
-                            echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_code'] . '</a></td>';
-                            echo '<td>' . $row["level"] . '</td>';
-                            echo '<td>' . $row["horizontal"] . '</td>';
-                            echo '<td>' . $row["rack_number"] . '</td>';
-                            echo '<td>' . $row["column_identifier"] . '</td>';
-                            echo '<td>' . $row["position_number"] . '</td>';
+                    // Loop through the results and display each row
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<tr>';
+                        echo '<td>' . $counter++ . '</td>';
+                        echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_code'] . '</a></td>';
+                        echo '<td>' . $row["level"] . '</td>';
+                        echo '<td>' . $row["horizontal"] . '</td>';
+                        echo '<td>' . $row["rack_number"] . '</td>';
+                        echo '<td>' . $row["column_identifier"] . '</td>';
+                        echo '<td>' . $row["position_number"] . '</td>';
+                        
+                        // Show "Actions" button only for admins
+                        if ($_SESSION['role'] == 'admin') {
                             echo '<td>
                                 <div style="display: flex; gap: 10px;">
                                     <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this rack?\');" href="rackDelete.php?id=' . $row['id'] . '">
@@ -616,21 +624,24 @@ if (isset($_GET['comp_id'])) {
                                     </a>
                                 </div>
                               </td>';
-                            echo '</tr>';
                         }
-                        echo '</tbody></table>';
-                    } else {
-                        // Display message if no racks found
-                        echo '<p>No racks found.</p>';
-                    }
 
-                    // Close database connection
-                    $conn->close();
-                    ?>
-                </div>
+                        echo '</tr>';
+                    }
+                    echo '</tbody></table>';
+                } else {
+                    // Display message if no racks found
+                    echo '<p>No racks found.</p>';
+                }
+
+                // Close database connection
+                $conn->close();
+                ?>
             </div>
         </div>
-    </main>
+    </div>
+</main>
+
 
 
 

@@ -45,7 +45,7 @@ $result = $conn->query($sql);
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>boxes</title>
+    <title>Store</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -564,20 +564,25 @@ $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         // Display table of box and rack details
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">
-                        <thead>
-                            <tr>
-                                <th scope="col" style="width: 5%;">#</th>
-                                <th scope="col" style="width: 15%;">Box Barcode</th>
-                                <th scope="col" style="width: 15%;">Rack</th>
-                                <th scope="col" style="width: 10%;">Number</th>
-                                <th scope="col" style="width: 10%;">Horizontal</th>
-                                <th scope="col" style="width: 10%;">Number</th>
-                                <th scope="col" style="width: 15%;">Column</th>
-                                <th scope="col" style="width: 10%;">Position Number</th>
-                                <th scope="col" style="width: 15%;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>';
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 5%;">#</th>
+                            <th scope="col" style="width: 15%;">Box Barcode</th>
+                            <th scope="col" style="width: 15%;">Rack</th>
+                            <th scope="col" style="width: 10%;">Number</th>
+                            <th scope="col" style="width: 10%;">Horizontal</th>
+                            <th scope="col" style="width: 10%;">Number</th>
+                            <th scope="col" style="width: 15%;">Column</th>
+                            <th scope="col" style="width: 10%;">Position Number</th>';
+
+                        // Show "Actions" column only if the user is an admin
+                        if ($_SESSION['role'] == 'admin') {
+                            echo '<th scope="col" style="width: 15%;">Actions</th>';
+                        }
+
+                        echo '</tr>
+                    </thead>
+                    <tbody>';
 
                         // Counter variable for row numbers
                         $counter = 1;
@@ -591,19 +596,20 @@ $result = $conn->query($sql);
                             echo '<td>' . htmlspecialchars($row["level"]) . '</td>';
                             echo '<td>' . htmlspecialchars($row["horizontal"]) . '</td>';
                             echo '<td>' . htmlspecialchars($row["rack_number"]) . '</td>';
-                            echo '<td>' . htmlspecialchars($row["column_identifier"]) . '</td>'; // Added column
-                            echo '<td>' . htmlspecialchars($row["position_number"]) . '</td>'; // Added column
-                            echo '<td>
+                            echo '<td>' . htmlspecialchars($row["column_identifier"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["position_number"]) . '</td>';
+
+                            // Show "Actions" button only for admins
+                            if ($_SESSION['role'] == 'admin') {
+                                echo '<td>
                             <div style="display: flex; gap: 10px;">
-                                
-                           <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this rack?\');" href="deleteStore.php?id=' . $row['store_id'] . '">
-                               <i style="width: 20px;" class="fa-solid fa-trash"></i>
-                               </a>
+                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this rack?\');" href="deleteStore.php?id=' . $row['store_id'] . '">
+                                    <i style="width: 20px;" class="fa-solid fa-trash"></i>
+                                </a>
                             </div>
+                            </td>';
+                            }
 
-
-                                              
-                          </td>';
                             echo '</tr>';
                         }
                         echo '</tbody></table>';
@@ -619,6 +625,7 @@ $result = $conn->query($sql);
             </div>
         </div>
     </main>
+
 
 
 

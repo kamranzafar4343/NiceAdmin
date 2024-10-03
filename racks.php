@@ -562,7 +562,7 @@ if (isset($_GET['comp_id'])) {
             <div class="col-12">
                 <div class="cardBranch recent-sales overflow-auto">
                     <div class="card-body">
-                        <h5 class="card-title">Filtered List of Racks</h5>
+                        <h5 class="card-title">List of Racks</h5>
 
                         <?php
                         include 'config/db.php'; // Include the database connection

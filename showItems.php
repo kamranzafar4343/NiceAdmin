@@ -612,16 +612,21 @@ $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         // Display table
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">
-                    <thead>
-                        <tr>
-                            <th scope="col" style="width: 5%;">#</th>
-                            <th scope="col" style="width: 15%;">Barcode</th>
-                            <th scope="col" style="width: 20%;">Created at</th>
-                            <th scope="col" style="width: 25%;">Barcode Image</th>
-                            <th scope="col" style="width: 15%;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody style="table-layout: fixed;">';
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 5%;">#</th>
+                        <th scope="col" style="width: 15%;">Barcode</th>
+                        <th scope="col" style="width: 20%;">Created at</th>
+                        <th scope="col" style="width: 25%;">Barcode Image</th>';
+
+                        // Show "Actions" column only if the user is an admin
+                        if ($_SESSION['role'] == 'admin') {
+                            echo '<th scope="col" style="width: 15%;">Actions</th>';
+                        }
+
+                        echo '</tr>
+                </thead>
+                <tbody style="table-layout: fixed;">';
 
                         // Counter variable
                         $counter = 1;
@@ -633,11 +638,15 @@ $result = $conn->query($sql);
                             echo '<td><a class="text-primary fw-bold" href="itemInfo.php?id=' . $row['item_id'] . '">' . $row['barcode'] . '</a></td>';
                             echo '<td>' . ($row["timestamp"]) . '</td>';
                             echo '<td><img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/></td>';
-                            echo '<td>
+
+                            // Show "Actions" only if the user is an admin
+                            if ($_SESSION['role'] == 'admin') {
+                                echo '<td>
                             <div style="display: flex; gap: 10px;">
                                 <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this record?\');" href="itemDelete.php?id=' . $row['item_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                             </div>
                         </td>';
+                            }
 
                             echo '</tr>';
                         }
@@ -651,6 +660,7 @@ $result = $conn->query($sql);
             </div>
         </div>
     </main>
+
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->

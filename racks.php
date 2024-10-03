@@ -628,9 +628,10 @@ if (isset($_GET['comp_id'])) {
                                 // Show "Actions" button only for admins
                                 if ($_SESSION['role'] == 'admin') {
                                     echo '<td>
-                                    <div style="display: flex; gap: 10px;">
-                                        <a class="btn btn-danger" href="rackDelete.php?id=' . $row['id'] . '">Delete</a>
+                                     <div style="display: flex; gap: 10px;">
+                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this record?\');" href="rackDelete.php?id=' .  $row['id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                                     </div>
+                                    
                                   </td>';
                                 }
 

@@ -547,138 +547,144 @@ if (isset($_GET['comp_id'])) {
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
-    <!--new table design-->
-    <!-- Button to add new box -->
+    <!-- Button to add a new rack -->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php';" class="btn btn-primary mb-3">Add Rack</button>
 
-    <!-- Search bar for racks -->
-    <div class="search-container">
-        <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Search by rack code..." autofocus>
-            <input type="submit" value="Search" class="btn btn-success btn-success">
-        </form>
-    </div>
+    < <!-- Search bar for racks -->
+        <div class="search-container">
+            <form id="searchForm" action="" method="GET">
+                <input type="text" id="searchInput" name="query" placeholder="Search by rack ..." autofocus>
+                <input type="submit" value="Search" class="btn btn-success btn-success">
+            </form>
+        </div>
+        <!-- Main content -->
+        <main id="main" class="main">
+            <div class="col-12">
+                <div class="cardBranch recent-sales overflow-auto">
+                    <div class="card-body">
+                        <h5 class="card-title">Filtered List of Racks</h5>
 
-    <!-- Main content -->
-<main id="main" class="main">
-    <div class="col-12">
-        <div class="cardBranch recent-sales overflow-auto">
-            <div class="card-body">
-                <h5 class="card-title">List of Racks</h5>
+                        <?php
+                        include 'config/db.php'; // Include the database connection
 
-                <?php
-                include 'config/db.php'; // Include the database connection
+                        // Initialize filter variables
+                        $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
+                        $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
+                        $location = isset($_GET['location']) ? $_GET['location'] : '';
 
-                // Search functionality
-                $searchQuery = '';
-                if (isset($_GET['query'])) {
-                    $searchQuery = $_GET['query'];
-                }
+                        // Build SQL query with filters
+                        $sql = "SELECT * FROM racks WHERE 1 = 1";
 
-                // SQL query to get racks based on search
-                $sql = "SELECT * FROM racks WHERE rack_code LIKE '%$searchQuery%'";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                    // Display table of racks
-                    echo '<table class="table datatable mt-4" style="table-layout: fixed;">
-                <thead>
-                    <tr>
-                        <th scope="col" style="width: 5%;">#</th>
-                        <th scope="col" style="width: 15%;">Location</th>
-                        <th scope="col" style="width: 10%;">Number</th>
-                        <th scope="col" style="width: 10%;">Rack</th>
-                        <th scope="col" style="width: 10%;">Number</th>
-                        <th scope="col" style="width: 15%;">Column</th>
-                        <th scope="col" style="width: 10%;">Position Number</th>';
-                    
-                    // Show "Actions" column only if the user is an admin
-                    if ($_SESSION['role'] == 'admin') {
-                        echo '<th scope="col" style="width: 15%;">Actions</th>';
-                    }
-
-                    echo '</tr>
-                </thead>
-                <tbody>';
-
-                    // Counter variable for row numbers
-                    $counter = 1;
-
-                    // Loop through the results and display each row
-                    while ($row = $result->fetch_assoc()) {
-                        echo '<tr>';
-                        echo '<td>' . $counter++ . '</td>';
-                        echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_code'] . '</a></td>';
-                        echo '<td>' . $row["level"] . '</td>';
-                        echo '<td>' . $row["horizontal"] . '</td>';
-                        echo '<td>' . $row["rack_number"] . '</td>';
-                        echo '<td>' . $row["column_identifier"] . '</td>';
-                        echo '<td>' . $row["position_number"] . '</td>';
-                        
-                        // Show "Actions" button only for admins
-                        if ($_SESSION['role'] == 'admin') {
-                            echo '<td>
-                                <div style="display: flex; gap: 10px;">
-                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this rack?\');" href="rackDelete.php?id=' . $row['id'] . '">
-                                        <i style="width: 20px;" class="fa-solid fa-trash"></i>
-                                    </a>
-                                </div>
-                              </td>';
+                        // If 'from' date is set, filter by date range
+                        if (!empty($from_date)) {
+                            $sql .= " AND created_at >= '$from_date'";
+                        }
+                        if (!empty($to_date)) {
+                            $sql .= " AND created_at <= '$to_date'";
                         }
 
-                        echo '</tr>';
-                    }
-                    echo '</tbody></table>';
-                } else {
-                    // Display message if no racks found
-                    echo '<p>No racks found.</p>';
-                }
+                        // Filter by location if provided
+                        if (!empty($location)) {
+                            $sql .= " AND location = '$location'";
+                        }
 
-                // Close database connection
-                $conn->close();
-                ?>
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // Display table of racks
+                            echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 5%;">#</th>
+                                    <th scope="col" style="width: 15%;">Rack Location</th>
+                                    <th scope="col" style="width: 20%;">Rack Description</th>
+                                    <th scope="col" style="width: 10%;">Object Code</th>
+                                    <th scope="col" style="width: 10%;">Capacity</th>
+                                    <th scope="col" style="width: 10%;">Created Date</th>';
+
+                            // Show "Actions" column only if the user is an admin
+                            if ($_SESSION['role'] == 'admin') {
+                                echo '<th scope="col" style="width: 15%;">Actions</th>';
+                            }
+
+                            echo '</tr>
+                        </thead>
+                        <tbody>';
+
+                            // Counter variable for row numbers
+                            $counter = 1;
+
+                            // Loop through the results and display each row
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<tr>';
+                                echo '<td>' . $counter++ . '</td>';
+                                echo '<td>' . $row["rack_location"] . '</td>';
+                                echo '<td>' . $row["rack_description"] . '</td>';
+                                echo '<td>' . $row["object_code"] . '</td>';
+                                echo '<td>' . $row["capacity"] . '</td>';
+                                echo '<td>' . $row["created_at"] . '</td>';
+
+                                // Show "Actions" button only for admins
+                                if ($_SESSION['role'] == 'admin') {
+                                    echo '<td>
+                                    <div style="display: flex; gap: 10px;">
+                                        <a class="btn btn-danger" href="rackDelete.php?id=' . $row['id'] . '">Delete</a>
+                                    </div>
+                                  </td>';
+                                }
+
+                                echo '</tr>';
+                            }
+                            echo '</tbody></table>';
+                        } else {
+                            // Display message if no racks found
+                            echo '<p>No racks found based on the selected filters.</p>';
+                        }
+
+                        // Close database connection
+                        $conn->close();
+                        ?>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</main>
+        </main>
 
 
 
-
-    <script>
-        function filterCompany(comp_id) {
-            window.location.href = "box.php?comp_id=" + comp_id;
-        }
-    </script>
-
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
-
-    <!-- Template Main JS File -->
-    <script src="assets/js/main.js"></script>
-
-    <script>
-        // event listener for search bar 
-        document.getElementById("searchInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault(); // Prevent default form submission
-                document.getElementById("searchForm").submit(); // Manually submit the form
+        <script>
+            function filterCompany(comp_id) {
+                window.location.href = "box.php?comp_id=" + comp_id;
             }
-        });
-    </script>
+        </script>
+
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+        <!-- Vendor JS Files -->
+        <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+        <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/vendor/chart.js/chart.umd.js"></script>
+        <script src="assets/vendor/echarts/echarts.min.js"></script>
+        <script src="assets/vendor/quill/quill.js"></script>
+        <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+        <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+        <script src="assets/vendor/php-email-form/validate.js"></script>
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Template Main JS File -->
+        <script src="assets/js/main.js"></script>
+
+        <script>
+            // event listener for search bar 
+            document.getElementById("searchInput").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent default form submission
+                    document.getElementById("searchForm").submit(); // Manually submit the form
+                }
+            });
+        </script>
 </body>
 
 </html>

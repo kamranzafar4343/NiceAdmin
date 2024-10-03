@@ -513,7 +513,9 @@ $rack_data = $result->fetch_assoc();
 
                 
                         <h4 class="card-title-info"><b><?php echo $rack_data['rack_location']; ?></b></h4>
-
+                        <div class="text-center mt-4 mb-2">
+                        <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>

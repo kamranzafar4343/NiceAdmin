@@ -25,35 +25,41 @@ if ($resultData->num_rows > 0) {
 $error = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get form data and escape special characters for security
-    $rack_code = mysqli_real_escape_string($conn, $_POST['rack_code']);
-    $level = mysqli_real_escape_string($conn, $_POST['level']);
-    $horizontal = mysqli_real_escape_string($conn, $_POST['horizontal']);
-    $rack_number = mysqli_real_escape_string($conn, $_POST['rack_number']);
-    $column_identifier = mysqli_real_escape_string($conn, $_POST['column_identifier']);
-    $position_number = mysqli_real_escape_string($conn, $_POST['position_number']);
 
-    // Check if the rack already exists (you can change this based on specific column uniqueness)
-    $rackCheck = "SELECT * FROM `racks` WHERE `rack_code`='$rack_code' AND `level`='$level'";
-    $rackCheckResult = $conn->query($rackCheck);
+    // Get form data and escape for security
+    $rack_location = $conn->real_escape_string($_POST['rack_location']);
+    $rack_description = $conn->real_escape_string($_POST['rack_description']);
+    $object_code = $conn->real_escape_string($_POST['object_code']);
+    $capacity = (int)$conn->real_escape_string($_POST['capacity']);
 
-    if ($rackCheckResult->num_rows > 0) {
-        $error = true; // Set error to true if rack already exists
+    // Check if a duplicate entry exists in the database
+    $check_query = "SELECT * FROM racks WHERE rack_location = '$rack_location' AND rack_description = '$rack_description'";
+    $result = $conn->query($check_query);
+
+    if ($result->num_rows > 0) { // If a duplicate is found
+        echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
+                duplicateErrorModal.show();
+            });
+        </script>";
     } else {
-        // Insert new rack into the racks table
-        $sql = "INSERT INTO racks (rack_code, level, horizontal, rack_number, column_identifier, position_number) 
-                VALUES ('$rack_code', '$level', '$horizontal', '$rack_number', '$column_identifier', '$position_number')";
+        // Insert form data into the racks table if no duplicate is found
+        $insert_query = "INSERT INTO racks (rack_location, rack_description, object_code, capacity) 
+                         VALUES ('$rack_location', '$rack_description', '$object_code', $capacity)";
 
-        if ($conn->query($sql) === TRUE) {
-            // Redirect back to add rack form after successful insert
-            header("Location: racks.php");
-            exit();
+        if ($conn->query($insert_query) === TRUE) {
+            // Redirect to racks page after successful insertion
+            echo "<script>window.location.href = 'racks.php';</script>";
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            // Handle insertion error
+            echo "Error: " . $insert_query . "<br>" . $conn->error;
         }
     }
-}
 
+    // Close the database connection
+    $conn->close();
+}
 ?>
 
 
@@ -527,58 +533,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
 
-    <!-- Backend PHP code to process the form -->
-    <?php
-    include "config/db.php"; // Include the database connection file
-
-    if (isset($_POST['submit'])) { // Check if the form has been submitted
-        // Establish connection to the database
-        $conn = new mysqli('localhost', 'root', '', 'catmarketing'); // Replace with actual database credentials
-
-        // Check for connection errors
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
-        // Get form data and escape for security
-        $rack_code = $conn->real_escape_string($_POST['rack_code']);
-        $rack_number = $conn->real_escape_string($_POST['rack_number']);
-        $level = $conn->real_escape_string($_POST['level']);
-        $horizontal = $conn->real_escape_string($_POST['horizontal']);
-        $column_identifier = $conn->real_escape_string($_POST['column_identifier']);
-        $position_number = $conn->real_escape_string($_POST['position_number']);
-
-        // Check if all fields exist in the database
-        $check_query = "SELECT * FROM racks WHERE rack_code = '$rack_code' AND rack_number = '$rack_number' 
-                    AND level = '$level' AND horizontal = '$horizontal' 
-                    AND column_identifier = '$column_identifier' AND position_number = '$position_number'";
-        $result = $conn->query($check_query);
-
-        if ($result->num_rows > 0) { // If a duplicate is found
-            echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
-                duplicateErrorModal.show();
-            });
-        </script>";
-        } else {
-            // Insert form data into the racks table if no duplicate is found
-            $insert_query = "INSERT INTO racks (rack_code, rack_number, level, horizontal, column_identifier, position_number) 
-                         VALUES ('$rack_code', '$rack_number', '$level', '$horizontal', '$column_identifier', '$position_number')";
-
-            if ($conn->query($insert_query) === TRUE) {
-                // Redirect to racks page after successful insertion
-                echo "<script>window.location.href = 'racks.php';</script>";
-            } else {
-                // Handle insertion error
-                echo "Error: " . $insert_query . "<br>" . $conn->error;
-            }
-        }
-
-        // Close the database connection
-        $conn->close();
-    }
-    ?>
 
 </body>
 

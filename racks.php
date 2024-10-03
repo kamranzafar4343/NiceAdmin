@@ -618,7 +618,8 @@ if (isset($_GET['comp_id'])) {
                             while ($row = $result->fetch_assoc()) {
                                 echo '<tr>';
                                 echo '<td>' . $counter++ . '</td>';
-                                echo '<td>' . $row["rack_location"] . '</td>';
+                                echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_location'] . '</a></td>';
+                                // echo '<td>' . $row["rack_location"] . '</td>';
                                 echo '<td>' . $row["rack_description"] . '</td>';
                                 echo '<td>' . $row["object_code"] . '</td>';
                                 echo '<td>' . $row["capacity"] . '</td>';

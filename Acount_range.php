@@ -419,7 +419,7 @@ if ($resultData->num_rows > 0) {
     <!-- Start Header Form -->
     <div class="headerimg text-center">
         <i class="bi bi-shop" style="font-size: 50px; color: #333;"></i>
-        <h2>Add Box & Rack</h2>
+        <h2>Account Range</h2>
     </div>
     <!-- End Header Form -->
 
@@ -447,55 +447,7 @@ if ($resultData->num_rows > 0) {
                         <input type="text" id="level3" class="form-control" name="level3" required>
                     </div>
 
-                    <!-- Select Barcode -->
-                    <div class="col-md-6">
-                        <label for="barcode_select" class="form-label">Select Box Barcode</label>
-                        <select class="form-select" id="barcode_select" name="barcode_select" required>
-                            <option value="" disabled selected>Select a barcode</option>
-                            <?php
-                            // Fetch barcodes from the box table
-                            $sql = "SELECT box_id, barcode FROM box";
-                            $result = $conn->query($sql);
-
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<option value='" . $row['box_id'] . "'>" . $row['barcode'] . "</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <!-- FOR the alternative code -->
-                    <div class="col-md-6">
-                        <label for="alt_code" class="form-label">Alt Code </label>
-                        <input type="text" class="form-control" id="alt_code" name="alt_code" required>
-                    </div>
-                    <!--  Description -->
-                    <div class="col-md-6">
-                        <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
-                    </div>
-
-
-                    <!-- Select Rack -->
-                    <div class="col-md-6">
-                        <label for="rack_select" class="form-label">Select Rack</label>
-                        <select class="form-select" id="rack_select" name="rack_select" required>
-                            <option value="" disabled selected>Select a rack Location</option>
-                            <?php
-                            // Fetch rack details from the racks table
-                            $query = "SELECT id, rack_location  FROM racks";
-                            $result = $conn->query($query);
-
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $display_text = $row['rack_location'];
-                                    echo "<option value='" . $row['id'] . "'>$display_text</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
+                   
                     <!-- Object Code -->
                     <div class="col-md-6">
                         <label for="object_code" class="form-label">Object Code</label>
@@ -504,50 +456,17 @@ if ($resultData->num_rows > 0) {
                             <option value="FileFolder">FileFolder</option>
                         </select>
                     </div>
-                    <!-- For thr status -->
-                    <div class="col-md-6">
-                        <label for="status">Status:</label>
-                        <select id="status" class="form-select" name="status" required>
-                            <option value="">Select Status</option>
-                            <option value="In" selected>In</option>
-                        </select>
+                     <!-- For the Level 2 field -->
+                     <div class="col-md-6">
+                        <label for="begin_code">Begin Code:</label>
+                        <input type="text" id="begin_code" class="form-control" name="begin_code" required>
                     </div>
-                    <!-- For the current date -->
-                    <div class="col-md-6">
-                        <label for="date">Add Date:</label>
-                        <input type="date" id="current-date" class="form-control" name="date" required>
+                     <!-- For the Level 2 field -->
+                     <div class="col-md-6">
+                        <label for="end_code">End code:</label>
+                        <input type="text" id="end_code" class="form-control" name="end_code" required>
                     </div>
-
-                    <!-- For the date 10 years from today -->
-                    <div class="col-md-6">
-                        <label for="future-date">Destroy:</label>
-                        <input type="date" id="future-date" class="form-control" name="future_date" required>
-                    </div>
-
-
-                    <script>
-                        // Get today's date
-                        const today = new Date();
-                        const tenYearsFromToday = new Date();
-
-                        // Add 10 years to today's date
-                        tenYearsFromToday.setFullYear(today.getFullYear() + 10);
-
-                        // Function to format date as YYYY-MM-DD for date input
-                        const formatDate = (date) => {
-                            const year = date.getFullYear();
-                            const month = ('0' + (date.getMonth() + 1)).slice(-2); // Adding leading zero
-                            const day = ('0' + date.getDate()).slice(-2); // Adding leading zero
-                            return `${year}-${month}-${day}`;
-                        };
-
-                        // Set the current date
-                        document.getElementById('current-date').value = formatDate(today);
-
-                        // Set the date 10 years from today
-                        document.getElementById('future-date').value = formatDate(tenYearsFromToday);
-                    </script>
-
+                   
                     <!-- Form Buttons -->
                     <div class="text-center mt-4 mb-2">
                         <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>

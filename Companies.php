@@ -33,7 +33,7 @@ if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
 }
 
 // SQL query to get company details
-$sql = "SELECT comp_id, comp_name, phone, email, password, image, city, state, country, registration, expiry FROM compani";
+$sql = "SELECT * FROM compani";
 $result = $conn->query($sql);
 
 ?>
@@ -326,11 +326,11 @@ $result = $conn->query($sql);
             <table id="companies" class="">
               <thead>
                 <tr>
-                  <th scope="col" style="width:0%;">#</th>
+                  <th scope="col" style="width:10%;">Acc-Lev-1</th>
                   <th scope="col" style="width:10%;">Name</th>
                   <th scope="col" style="width:12%;">Image</th>
                   <th scope="col" style="width:14%;">Phone</th>
-                  <th scope="col" style="width:15%;">Email</th>
+                  <th scope="col" style="width:14%;">Email</th>
                   <!-- <th scope="col">Password</th> -->
                   <th scope="col" style="width:8%;">City</th>
                   <th scope="col" style="width:9%;">Country</th>
@@ -342,10 +342,13 @@ $result = $conn->query($sql);
 
               <tbody style="table-layout: fixed;">
                 <?php
-                $counter = 1; // Initialize counter
                 while ($row = $result->fetch_assoc()) {
                   echo "<tr>";
-                  echo "<td>" . $counter++ . "</td>";
+                  echo "<td>" . $row['account_no'] . "</td>";
+                ?>
+
+                <?php
+             
                 ?>
                   <td>
                     <a class="text-primary fw-bold" href="CompanyInfo.php?id=<?php echo $row['comp_id']; ?>">

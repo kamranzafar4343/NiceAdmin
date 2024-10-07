@@ -449,7 +449,7 @@ if ($resultData->num_rows > 0) {
 
                    
                     <!-- Object Code -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="object_code" class="form-label">Object Code</label>
                         <select class="form-select" id="object_code" name="object_code" required>
                             <option value="Container">Container</option>
@@ -457,12 +457,12 @@ if ($resultData->num_rows > 0) {
                         </select>
                     </div>
                      <!-- For the Level 2 field -->
-                     <div class="col-md-6">
+                     <div class="col-md-4">
                         <label for="begin_code">Begin Code:</label>
                         <input type="text" id="begin_code" class="form-control" name="begin_code" required>
                     </div>
                      <!-- For the Level 2 field -->
-                     <div class="col-md-6">
+                     <div class="col-md-4">
                         <label for="end_code">End code:</label>
                         <input type="text" id="end_code" class="form-control" name="end_code" required>
                     </div>

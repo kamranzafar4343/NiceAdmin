@@ -330,6 +330,9 @@ $emp_data = $result_emp->fetch_assoc();
       display: flex;
     }
 
+    .datatable-table{
+      margin-left: 347px !important;
+    }
     .datatable-table>thead>tr>th {
       vertical-align: bottom;
       text-align: left;
@@ -385,23 +388,21 @@ $emp_data = $result_emp->fetch_assoc();
     }
 
     .datatable-input {
-
-      width: 240px;
-      height: 35px;
-      font-size: 0.8rem;
-      margin-left: 401px;
-      outline: none;
-
-
-
-      font-size: 17px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      outline: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      margin-bottom: -25px;
-    }
+    width: 840px !important;
+    height: 43px !important;
+    font-size: 0.8rem !important;
+    margin-left: 60px !important;
+    outline: none !important;
+    width: 179% !important;
+    /* max-width: 400px; */
+    padding: 17px 21px !important;
+    /* font-size: 17px; */
+    /* border: 1px solid #ccc; */
+    border-radius: 6px !important; 
+    /* transition: all 0.3s ease; */
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    margin-bottom: 14px !important;
+}
 
     .datatable-search {
       margin-left: 485px !important;
@@ -832,7 +833,7 @@ $emp_data = $result_emp->fetch_assoc();
       </div>
     </div>
 
-    <div class="col-md-7 col-lg-10 mt-4">
+    <div class="col-md-10 col-lg-12 mt-4">
       <div class="cardBranch recent-sales overflow-auto">
         <div class="card-body" style="font-size: 0.8rem;">
           <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()" class="btn btn-primary mb-3">Add Employee</button>

@@ -19,6 +19,33 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
+if (isset($_POST['submit'])) {
+    // Collect form data
+    $level1 = $conn->real_escape_string($_POST['level1']);
+    $level2 = $conn->real_escape_string($_POST['level2']);
+    $level3 = $conn->real_escape_string($_POST['level3']);
+    $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
+    $alt_code = $conn->real_escape_string($_POST['alt_code']);
+    $description = $conn->real_escape_string($_POST['description']);
+    $rack_select = $conn->real_escape_string($_POST['rack_select']);
+    $object_code = $conn->real_escape_string($_POST['object_code']);
+    $status = $conn->real_escape_string($_POST['status']);
+    $add_date = $conn->real_escape_string($_POST['date']);
+    $destroy_date = $conn->real_escape_string($_POST['future_date']);
+
+    // SQL query to insert data into the database
+    $sql = "INSERT INTO store (level1, level2, level3, barcode_select, alt_code, description, rack_select, object_code, status, add_date, destroy_date)
+            VALUES ('$level1', '$level2', '$level3', '$barcode_select', '$alt_code', '$description', '$rack_select', '$object_code', '$status', '$add_date', '$destroy_date')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Record added successfully!";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    // Close the connection
+    $conn->close();
+}
 ?>
 
 

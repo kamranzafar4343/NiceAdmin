@@ -1,6 +1,6 @@
 <?php
 
-// Start the session
+// session_start(); // Start the session
 session_start();
 
 // Check if the user is logged in
@@ -10,13 +10,10 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-// Include the database connection
 include 'config/db.php';
 
-// Get user email from session
 $email = $_SESSION['email'];
-
-// Get user name and email from register table
+//get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
@@ -24,16 +21,16 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
-$error = false;
 
-// Fetch data from the store table and join with boxes and racks
-$sql = "
-    SELECT store.id AS store_id, box.barcode, racks.rack_code, racks.level, racks.horizontal, racks.rack_number, racks.column_identifier, racks.position_number 
-    FROM store
-    JOIN box ON store.box_id = box.box_id  -- Specify the correct table and column
-    JOIN racks ON store.rack_id = racks.id
-";
+$result = [];
+$rack_data = null;
+// Get company ID from query string
+$rack_id = $_GET['id'];
+
+// Fetch company details
+$sql = "SELECT * FROM racks WHERE id = $rack_id";
 $result = $conn->query($sql);
+$rack_data = $result->fetch_assoc();
 
 ?>
 
@@ -45,11 +42,29 @@ $result = $conn->query($sql);
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Store</title>
+    <title>Rack Details</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
@@ -67,139 +82,29 @@ $result = $conn->query($sql);
     <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
     <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="fonts/icomoon/style.css">
-
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-
-    <!-- Style -->
-    <link rel="stylesheet" href="css/style.css">
     <style>
         /* Custom CSS to decrease font size of the table */
 
-        /* Basic styling for search bar */
-        input.btn.btn-success {
-            margin-left: 7px;
-            height: 41px;
-            padding: 2%;
-            padding-top: 3px;
-            padding-bottom: 3px;
-            text-align: center;
-            justify-items: center;
-
+        .company-name {
+            font-size: 1rem;
         }
 
-        .search-container {
-            margin: 50px;
-            margin-left: 320px;
-            margin-bottom: 3px !important;
-        }
-
-        #main {
-
-            margin-top: 0 !important;
-        }
-
-        input[type="text"] {
-            padding: 8px;
-            font-size: 0.9rem;
-            width: 363px;
-        }
-
-        input[type="submit"] {
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-
-        .pagetitle {
-            display: flex;
-            width: 989px;
-            flex-direction: column;
-
-        }
-
-        .barcode {
-            height: 55px;
-            width: 250px;
-            position: relative;
-            left: -38px;
-        }
-
-        /* 
-        #main {
-            margin-top: 20px !important;
-            padding: 20px 30px;
-            transition: all 0.3s;
-        } */
-
-        .row {
-            margin-left: 52px;
-            --bs-gutter-x: 1.5rem;
-            --bs-gutter-y: 0;
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: calc(var(--bs-gutter-y)* -1);
-            margin-right: calc(var(--bs-gutter-x)* 1.5);
-            margin-left: calc(var(--bs-gutter-x)* 0.2);
-        }
-
-        .datatable-container {
+        .datatable-wrapper.no-footer .datatable-container {
             border: none;
-            margin-left: 12px;
-            margin-top: 12px;
-            /* table-layout: fixed; */
+            margin-left: -315px !important;
+            width: 700px !important;
         }
 
-
-        /* Define the pulse animation */
-        .pagetitle {
-            display: flex;
-            width: 989px;
-            flex-direction: column;
-
+        .company-title {
+            font-size: 1.1rem;
         }
 
-        #fixedButtonBranch {
-            position: relative;
-            top: 110px;
-            left: 1187px;
+        .burger {
+            left: -10px;
+            top: -20px;
         }
-
-        .row {
-            margin-left: 52px;
-            --bs-gutter-x: 1.5rem;
-            --bs-gutter-y: 0;
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: calc(var(--bs-gutter-y)* -1);
-            margin-right: calc(var(--bs-gutter-x)* 1.5);
-            margin-left: calc(var(--bs-gutter-x)* 0.2);
-        }
-
-        .datatable-container {
-            border: none;
-            margin-left: 12px;
-            margin-top: 12px;
-            /* table-layout: fixed; */
-        }
-
-        .card-body {
-            padding: 0 20px 20px 60px !important;
-        }
-
 
         /* Define the pulse animation */
         @keyframes pulse {
@@ -234,6 +139,41 @@ $result = $conn->query($sql);
             }
         }
 
+        .customImage {
+            border: 1px solid white;
+            position: relative;
+            top: 36%;
+            left: 25%;
+
+        }
+
+        .card {
+            margin-bottom: 30px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+            background-color: white;
+            font-size: 0.8rem;
+            margin-top: 38px;
+        }
+
+        .container-card {
+            font-size: 0.8rem;
+            color: #666666;
+            font-family: "Open Sans";
+            width: 84%;
+        }
+
+        /* Custom CSS to place card and table side by side */
+        .side-by-side-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            /* Align items to the start of the container */
+            gap: 20px;
+            /* Space between the card and table */
+        }
+
         .company-name {
             color: #000;
             text-decoration: none;
@@ -241,33 +181,17 @@ $result = $conn->query($sql);
             transition: color 0.3s ease;
         }
 
-        .mt-4 {
-            margin-top: 1.5rem !important;
-            margin-right: 214px;
+        .img-fluid {
+            margin-top: 20px;
+            margin-left: 37px !important;
+            margin-bottom: 15px;
         }
 
-        .datatable-dropdown label {
-            font-size: 0.9rem;
-        }
-
-        .datatable-info {
-            display: none;
-        }
-
-        .datatable-top {
-            width: 942px;
-
-        }
-
-        /* Card */
-        .cardBranch {
-            margin-bottom: 30px;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
-            background-color: white;
-            font-size: 0.8rem;
-
+        .company-name:hover {
+            color: #007bff;
+            /* Change color on hover */
+            animation: pulse 10s ease-in-out;
+            /* Apply the pulse animation on hover */
         }
 
         .company-name:active {
@@ -275,6 +199,10 @@ $result = $conn->query($sql);
             /* Apply the click effect animation on click */
             color: #0056b3;
             /* Darken color on click */
+        }
+
+        .pagetitleinside {
+            padding-left: 600px;
         }
 
         * {
@@ -285,14 +213,24 @@ $result = $conn->query($sql);
             box-sizing: border-box;
         }
 
-        .custom2 {
+        .remix {
+            margin-right: 5px;
+        }
+
+        /* styles for card */
+        .custom {
             font-size: 0.8rem;
             border-radius: 7px;
             padding-top: 14px;
             padding-bottom: 14px;
-            padding-right: 34px;
-            padding-left: 40px;
-            margin-left: 20px;
+            padding-right: 14px;
+            padding-left: 18px;
+            margin-left: 307px;
+            /* table-layout: fixed; */
+            /* width: 100%; */
+            /* overflow: hidden; */
+            /* text-overflow: ellipsis; */
+            /* white-space: nowrap; */
         }
 
         tbody,
@@ -302,54 +240,40 @@ $result = $conn->query($sql);
             max-width: 200px;
         }
 
-        .datatable-table>tbody>tr>td,
-        .datatable-table>tbody>tr>th,
-        .datatable-table>tfoot>tr>td,
-        .datatable-table>tfoot>tr>th,
-        .datatable-table>thead>tr>td,
-        .datatable-table>thead>tr>th {
-            vertical-align: top;
-            padding: 8px 2px;
-        }
-
-        .image-circle {
-            display: flex;
-            justify-content: center;
-            /* Horizontally center */
-            align-items: center;
+        .card-title-info {
             text-align: center;
         }
 
-
-        .navbar-image {
-            width: 50px;
-            height: 50px;
-            margin-right: 7px;
+        .datatable-top {
+            margin-left: 10px !important;
+            width: 0px;
         }
 
-        .headerbox {
+        .customImage {
+            border: 1px solid white;
+            position: relative;
+            top: 36%;
+            left: 25%;
 
+            /* Change cursor to indicate clickability */
+        }
+
+        .hiddenFileInput {
+            display: none;
+            /* Hide the file input */
+        }
+
+        /*Employee header*/
+        .headerSetting {
             display: flex;
+            gap: 250px;
         }
 
-        .datatable-table>thead>tr>th {
-            vertical-align: bottom;
-            text-align: left;
-            border-bottom: 0px solid #d9d9d9;
-        }
-
-        .pagetitleinside button {
-            width: 150px;
-        }
-
-        .datatable-pagination {
-            margin-left: 50px;
-        }
-
-        .drpdwn {
-            margin-left: 268px;
-            max-width: 424px;
-            margin-top: 28px;
+        .barcode {
+            height: 55px;
+            width: 250px;
+            position: relative;
+            left: -38px;
         }
     </style>
 
@@ -366,7 +290,6 @@ $result = $conn->query($sql);
 </head>
 
 <body>
-
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -429,7 +352,13 @@ $result = $conn->query($sql);
 
     </header><!-- End Header -->
 
-    <!-- ======= Sidebar ======= -->
+      <!-- ======= header ======= -->
+      <?php include 'headerfile.php'; ?>
+    <?php
+    include "config/db.php";
+    $role = $_SESSION['role'];
+    ?>
+
     <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="sidebar">
         <ul class="sidebar-nav" id="sidebar-nav">
@@ -469,13 +398,13 @@ $result = $conn->query($sql);
                 </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="racks.php">
+                    <a class="nav-link active" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Racks Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="store.php">
+                    <a class="nav-link collapsed" href="store.php">
                         <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Store Nav -->
@@ -502,13 +431,13 @@ $result = $conn->query($sql);
                 </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="racks.php">
+                    <a class="nav-link active" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Racks Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="store.php">
+                    <a class="nav-link collapsed" href="store.php">
                         <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Store Nav -->
@@ -539,104 +468,64 @@ $result = $conn->query($sql);
     </aside>
     <!--------------- End sidebar ------------------>
 
-
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
-    <!--new table design-->
-    <!-- Button to add new box -->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'storedata.php';" class="btn btn-primary mb-3">Add Box & Rack</button>
-
-    <!-- Search bar for racks -->
-    <div class="search-container">
-        <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Search by rack code..." autofocus>
-            <input type="submit" value="Search" class="btn btn-success btn-success">
-        </form>
-    </div>
 
     <main id="main" class="main">
-        <div class="col-12">
-            <div class="cardBranch recent-sales overflow-auto">
-                <div class="card-body">
-                    <h5 class="card-title">List of Boxes and Rack Details</h5>
+        <div class="headerbox">
+        </div><!-- End Page Title -->
+        <div class="pagetitleinside mt-1">
+        </div>
+        </div>
 
-                    <?php
-                    if ($result->num_rows > 0) {
-                        // Display table of box and rack details
-                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
-                    <thead>
-                        <tr>
-                            <th scope="col" style="width: 5%;">#</th>
-                            <th scope="col" style="width: 15%;">Box Barcode</th>
-                            <th scope="col" style="width: 15%;">Location</th>
-                            <th scope="col" style="width: 10%;">Number</th>
-                            <th scope="col" style="width: 10%;">Rack</th>
-                            <th scope="col" style="width: 10%;">Number</th>
-                            <th scope="col" style="width: 15%;">Column</th>
-                            <th scope="col" style="width: 10%;">Position Number</th>';
+        <!-- Main content container -->
+        <div class="d-flex flex-wrap">
 
-                        // Show "Actions" column only if the user is an admin
-                        if ($_SESSION['role'] == 'admin') {
-                            echo '<th scope="col" style="width: 15%;">Actions</th>';
-                        }
+            <!-- Card container -->
+            <div class="col-md-6 col-lg-4 pb-3">
+                <div class="card card-custom bg-white border-white border-0">
 
-                        echo '</tr>
-                    </thead>
-                    <tbody>';
+                    <div class="card-body list-group mt-3">
 
-                        // Counter variable for row numbers
-                        $counter = 1;
+                        <h4 class="card-title-info"><b>Rack Info</b></h4>
 
-                        // Loop through the results and display each row
-                        while ($row = $result->fetch_assoc()) {
-                            echo '<tr>';
-                            echo '<td>' . $counter++ . '</td>';
-                            echo '<td>' . htmlspecialchars($row["barcode"]) . '</td>';
-                            echo '<td>' . htmlspecialchars($row["rack_code"]) . '</td>';
-                            echo '<td>' . htmlspecialchars($row["level"]) . '</td>';
-                            echo '<td>' . htmlspecialchars($row["horizontal"]) . '</td>';
-                            echo '<td>' . htmlspecialchars($row["rack_number"]) . '</td>';
-                            echo '<td>' . htmlspecialchars($row["column_identifier"]) . '</td>';
-                            echo '<td>' . htmlspecialchars($row["position_number"]) . '</td>';
+                        <ul class="list-group list-group-horizontal d-flex justify-content-between">
+                            <li class="list-group-item" style="color:grey;  width: 35%;">Rack location</li>
+                            <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $rack_data['rack_location']; ?></li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal-sm d-flex justify-content-between">
+                            <li class="list-group-item" style="color:grey; width: 39%;">Rack Descruption</li>
+                            <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $rack_data['rack_description']; ?></li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal-md d-flex justify-content-between">
+                            <!--change name to contact person or focal person-->
+                            <li class="list-group-item" style="color:grey; width:50%">Object Code</li>
+                            <li class="list-group-item" style="text-align: right;width: 55%;"><?php echo $rack_data['object_code']; ?></li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
+                            <li class="list-group-item" style="color:grey; width: 39%;">Capacity</li>
+                            <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $rack_data['capacity']; ?></li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
+                            <li class="list-group-item" style="color:grey; width: 39%;">Createcd At</li>
+                            <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $rack_data['created_at']; ?></li>
+                        </ul>
 
-                            // Show "Actions" button only for admins
-                            if ($_SESSION['role'] == 'admin') {
-                                echo '<td>
-                            <div style="display: flex; gap: 10px;">
-                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this rack?\');" href="deleteStore.php?id=' . $row['store_id'] . '">
-                                    <i style="width: 20px;" class="fa-solid fa-trash"></i>
-                                </a>
-                            </div>
-                            </td>';
-                            }
-
-                            echo '</tr>';
-                        }
-                        echo '</tbody></table>';
-                    } else {
-                        // Display message if no data found
-                        echo '<p>No box and rack data found.</p>';
-                    }
-
-                    // Close the database connection
-                    $conn->close();
-                    ?>
+                
+                        <h4 class="card-title-info"><b><?php echo $rack_data['rack_location']; ?></b></h4>
+                        <div class="text-center mt-4 mb-2">
+                        <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
-    </main>
+        </div>
+        <!-- End d-flex container -->
+    </main><!-- End #main -->
 
-
-
-
-
-
-    <script>
-        function filterCompany(comp_id) {
-            window.location.href = "box.php?comp_id=" + comp_id;
-        }
-    </script>
-
+    <!-- End #main -->
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
@@ -648,23 +537,22 @@ $result = $conn->query($sql);
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script>
+        const dataTable = new simpleDatatables.DataTable("#myTable2", {
+            searchable: false,
+            fixedHeight: true,
+        })
+    </script>
+
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/main.js">
+    </script>
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
-    <script>
-        // event listener for search bar 
-        document.getElementById("searchInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault(); // Prevent default form submission
-                document.getElementById("searchForm").submit(); // Manually submit the form
-            }
-        });
-    </script>
 </body>
 
 </html>

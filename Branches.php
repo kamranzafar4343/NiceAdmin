@@ -503,6 +503,7 @@ if ($result2->num_rows > 0) {
                         <table class="table table-borderless datatable" style="table-layout: fixed;">
                             <thead>
                                 <tr>
+                                    <th scope="col">Acc- Lev- 2</th>
                                     <th scope="col">Branch Name</th>
                                     <th scope="col">FOC</th>
                                     <th scope="col">Phone</th>
@@ -519,7 +520,8 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                    echo "<td>" . ($row["branch_name"]) . "</td>";
+                                   echo "<td>" . ($row["account_level_no"]) . "</td>";
+                                   echo "<td>" . ($row["branch_name"]) . "</td>";
                                     echo "<td>" . ($row["ContactPersonName"]) . "</td>";
                                     echo "<td>" . ($row["ContactPersonPhone"]) . "</td>";
                                     echo "<td>" . ($row["ContactPersonResignation"]) . "</td>";
@@ -572,7 +574,7 @@ if ($result2->num_rows > 0) {
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
 
-    <!-- Template Main JS File -->
+    <!-- Template Main JS File --> 
     <script src="assets/js/main.js"></script>
 
     <script>

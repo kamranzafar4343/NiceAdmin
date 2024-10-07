@@ -5,10 +5,10 @@
 // $dotenv->Load();
 
 //using env. var's
-$HOSTNAME = 'sql12.freemysqlhosting.net';
-$USERNAME = 'sql12733988';
-$PASSWORD = 'uUqxLbg8KS';
-$DATABASE = 'sql12733988';
+$HOSTNAME = 'localhost';
+$USERNAME = 'root';
+$PASSWORD = '';
+$DATABASE = 'catmarketing';
 
 $conn = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $DATABASE);
 

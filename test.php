@@ -27,26 +27,26 @@ if ($resultData->num_rows > 0) {
 $error = false;
 
 // Fetch data from the store table and join with boxes and racks
-// $sql = "
-//    SELECT 
-//     store.id AS store_id, store.level1, store.level2, store.level3, box.barcode AS select_barcode, 
-//     store.alt_code, store.description, racks.rack_location AS select_rack, 
-//     store.object_code, store.status, store.add_date, store.destroy_date
-// FROM store
-// JOIN box ON store.barcode_select = box.barcode 
-// JOIN racks ON store.rack_select = racks.id
+$sql = "
+   SELECT 
+    store.id AS store_id, store.level1, store.level2, store.level3, box.barcode AS select_barcode, 
+    store.alt_code, store.description, racks.rack_location AS select_rack, 
+    store.object_code, store.status, store.add_date, store.destroy_date
+FROM store
+JOIN box ON store.barcode_select = box.barcode 
+JOIN racks ON store.rack_select = racks.id
 
-// ";
-// if ($result = $conn->query($sql)) {
-//     // Process the result
-// } else {
-//     echo "Error: " . $conn->error;
-// }
+";
+if ($result = $conn->query($sql)) {
+    // Process the result
+} else {
+    echo "Error: " . $conn->error;
+}
 
 
 //select all columns of boxes 
-$sql = "SELECT * FROM store";
-$result = $conn->query($sql);
+// $sql = "SELECT * FROM store";
+// $result = $conn->query($sql);
 
 
 // Close the connection
@@ -570,13 +570,14 @@ $conn->close();
         </form>
     </div>
     <main id="main" class="main">
-    <div class="col-12">
-        <div class="cardBranch recent-sales overflow-auto">
-            <div class="card-body">
-                <h5 class="card-title">List of Boxes and Rack Details</h5>
-
-                <?php if ($result->num_rows > 0): ?>
-                    <table class="table datatable mt-4" style="table-layout: fixed;">
+        <div class="col-12">
+            <div class="cardBranch recent-sales overflow-auto">
+                <div class="card-body">
+                    <h5 class="card-title">List of Boxes and Rack Details</h5>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        // Display table of racks
+                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                         <thead>
                             <tr>
                                 <th scope="col" style="width: 5%;">#</th>
@@ -590,59 +591,63 @@ $conn->close();
                                 <th scope="col" style="width: 10%;">Object Code</th>
                                 <th scope="col" style="width: 10%;">Status</th>
                                 <th scope="col" style="width: 15%;">Add Date</th>
-                                <th scope="col" style="width: 15%;">Destroy Date</th>
-                                
-                                <!-- Show "Actions" column only if the user is an admin -->
-                                <?php if ($_SESSION['role'] == 'admin'): ?>
-                                    <th scope="col" style="width: 15%;">Actions</th>
-                                <?php endif; ?>
+                                <th scope="col" style="width: 15%;">Destroy Date</th>';
+
+                        // Show "Actions" column only if the user is an admin
+                        if ($_SESSION['role'] == 'admin') {
+                            echo '<th scope="col" style="width: 15%;">Actions</th>';
+                        }
+
+                        echo '
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- Counter variable for row numbers -->
-                            <?php $counter = 1; ?>
-                            
-                            <!-- Loop through the results and display each row -->
-                            <?php while ($row = $result->fetch_assoc()): ?>
-                                <tr>
-                                    <td><?= $counter++ ?></td>
-                                    <td><?= htmlspecialchars($row["select_barcode"]) ?></td>
-                                    <td><?= htmlspecialchars($row["select_rack"]) ?></td>
-                                    <td><?= htmlspecialchars($row["level1"]) ?></td>
-                                    <td><?= htmlspecialchars($row["level2"]) ?></td>
-                                    <td><?= htmlspecialchars($row["level3"]) ?></td>
-                                    <td><?= htmlspecialchars($row["alt_code"]) ?></td>
-                                    <td><?= htmlspecialchars($row["description"]) ?></td>
-                                    <td><?= htmlspecialchars($row["object_code"]) ?></td>
-                                    <td><?= htmlspecialchars($row["status"]) ?></td>
-                                    <td><?= htmlspecialchars($row["add_date"]) ?></td>
-                                    <td><?= htmlspecialchars($row["destroy_date"]) ?></td>
+                        <tbody>';
 
-                                    <!-- Show actions only if user is admin -->
-                                    <?php if ($_SESSION['role'] == 'admin'): ?>
-                                        <td>
-                                            <div class="action-buttons" style="display: flex; gap: 10px;">
-                                                <a type="button" class="btn btn-danger btn-floating" 
-                                                   style="width:25px; height:28px" 
-                                                   data-mdb-ripple-init 
-                                                   onclick="return confirm('Are you sure you want to delete this rack?');" 
-                                                   href="deleteStore.php?id=<?= $row['store_id'] ?>">
-                                                    <i class="fa-solid fa-trash" style="width: 20px;"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    <?php endif; ?>
-                                </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    </table>
-                <?php else: ?>
-                    <p>No box and rack data found.</p>
-                <?php endif; ?>
+                        // Counter variable for row numbers
+                        $counter = 1;
+
+                        // Loop through the results and display each row
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td><?= htmlspecialchars($row["select_barcode"]) ?></td>';
+                            echo '<td><?= htmlspecialchars($row["select_rack"]) ?></td>';
+                            echo '<td><?= htmlspecialchars($row["level1"]) ?></td>';
+                            echo '<td><?= htmlspecialchars($row["level2"]) ?></td>';
+                            echo '<td><?= htmlspecialchars($row["level3"]) ?></td>';
+                            echo '<td><?= htmlspecialchars($row["alt_code"]) ?></td>';
+                            echo '<td><?= htmlspecialchars($row["description"]) ?></td>';
+                            echo '<td><?= htmlspecialchars($row["object_code"]) ?></td>';
+                            echo '<td><?= htmlspecialchars($row["status"]) ?></td>';
+                            echo '<td><?= htmlspecialchars($row["add_date"]) ?></td>';
+                            echo '<td><?= htmlspecialchars($row["destroy_date"]) ?></td>';
+
+                            // Show "Actions" button only for admins
+                            if ($_SESSION['role'] == 'admin') {
+                                echo '<td>
+                                    <div style="display: flex; gap: 10px;">
+                                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this record?\');" href="rackDelete.php?id=' .  $row['id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                    </div>
+
+                                </td>';
+                            }
+
+                            echo '</tr>';
+                        }
+                        echo '</tbody>
+                    </table>';
+                    } else {
+                        // Display message if no racks found
+                        echo '<p>No racks found based on the selected filters.</p>';
+                    }
+
+                    // Close database connection
+                    $conn->close();
+                    ?>
+                </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
+
 
 
 

@@ -19,53 +19,6 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
-if (isset($_POST['submit'])) {
-    // Collect form data
-    $level1 = $conn->real_escape_string($_POST['level1']);
-    $level2 = $conn->real_escape_string($_POST['level2']);
-    $level3 = $conn->real_escape_string($_POST['level3']);
-    $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
-    $alt_code = $conn->real_escape_string($_POST['alt_code']);
-    $description = $conn->real_escape_string($_POST['description']);
-    $rack_select = $conn->real_escape_string($_POST['rack_select']);
-    $object_code = $conn->real_escape_string($_POST['object_code']);
-    $status = $conn->real_escape_string($_POST['status']);
-    $add_date = $conn->real_escape_string($_POST['date']);
-    $destroy_date = $conn->real_escape_string($_POST['future_date']);
-
-    // Check if the barcode is already used (no duplicates allowed)
-    $duplicate_check_sql = "SELECT * FROM store WHERE barcode_select = '$barcode_select'";
-    $duplicate_check_result = $conn->query($duplicate_check_sql);
-
-    if ($duplicate_check_result->num_rows > 0) {
-        // Barcode already exists, show error
-        echo "<script>alert('Duplicate barcode detected. Please use a unique barcode.'); window.location.href = 'storedata.php';</script>";
-    } else {
-        // Check if the selected rack already contains 9 boxes (max limit for each rack)
-        $rack_limit_check_sql = "SELECT COUNT(*) as total_boxes FROM store WHERE rack_select = '$rack_select'";
-        $rack_limit_check_result = $conn->query($rack_limit_check_sql);
-        $rack_data = $rack_limit_check_result->fetch_assoc();
-
-        if ($rack_data['total_boxes'] >= 9) {
-            // Rack already contains 9 boxes, show error
-            echo "<script>alert('This rack already contains 9 boxes. Please select another rack.'); window.location.href = 'storedata.php';</script>";
-        } else {
-            // SQL query to insert data into the database
-            $sql = "INSERT INTO store (level1, level2, level3, barcode_select, alt_code, description, rack_select, object_code, status, add_date, destroy_date)
-                    VALUES ('$level1', '$level2', '$level3', '$barcode_select', '$alt_code', '$description', '$rack_select', '$object_code', '$status', '$add_date', '$destroy_date')";
-
-            if ($conn->query($sql) === TRUE) {
-                echo "<script>window.location.href = 'store.php';</script>";
-            } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
-            }
-        }
-    }
-
-    // Close the connection
-    $conn->close();
-}
-
 ?>
 
 
@@ -466,7 +419,7 @@ if (isset($_POST['submit'])) {
     <!-- Start Header Form -->
     <div class="headerimg text-center">
         <i class="bi bi-shop" style="font-size: 50px; color: #333;"></i>
-        <h2>Add Box & Rack</h2>
+        <h2>Account Range</h2>
     </div>
     <!-- End Header Form -->
 
@@ -494,111 +447,30 @@ if (isset($_POST['submit'])) {
                         <input type="text" id="level3" class="form-control" name="level3" required>
                     </div>
 
-                    <!-- Select Barcode -->
-                    <div class="col-md-6">
-                        <label for="barcode_select" class="form-label">Select Box Barcode</label>
-                        <select class="form-select" id="barcode_select" name="barcode_select" required>
-                            <option value="" disabled selected>Select a barcode</option>
-                            <?php
-                            // Fetch barcodes from the box table
-                            $sql = "SELECT box_id, barcode FROM box";
-                            $result = $conn->query($sql);
-
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<option value='" . $row['box_id'] . "'>" . $row['barcode'] . "</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <!-- FOR the alternative code -->
-                    <div class="col-md-6">
-                        <label for="alt_code" class="form-label">Alt Code </label>
-                        <input type="text" class="form-control" id="alt_code" name="alt_code">
-                    </div>
-                    <!--  Description -->
-                    <div class="col-md-6">
-                        <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
-                    </div>
-
-
-                    <!-- Select Rack -->
-                    <div class="col-md-6">
-                        <label for="rack_select" class="form-label">Select Rack</label>
-                        <select class="form-select" id="rack_select" name="rack_select" required>
-                            <option value="" disabled selected>Select a rack Location</option>
-                            <?php
-                            // Fetch rack details from the racks table
-                            $query = "SELECT id, rack_location  FROM racks";
-                            $result = $conn->query($query);
-
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $display_text = $row['rack_location'];
-                                    echo "<option value='" . $row['id'] . "'>$display_text</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
+                   
                     <!-- Object Code -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="object_code" class="form-label">Object Code</label>
                         <select class="form-select" id="object_code" name="object_code" required>
                             <option value="Container">Container</option>
                             <option value="FileFolder">FileFolder</option>
                         </select>
                     </div>
-                    <!-- For thr status -->
-                    <div class="col-md-6">
-                        <label for="status">Status:</label>
-                        <select id="status" class="form-select" name="status" required>
-                            <option value="">Select Status</option>
-                            <option value="In" selected>In</option>
-                        </select>
+                     <!-- For the Level 2 field -->
+                     <div class="col-md-4">
+                        <label for="begin_code">Begin Code:</label>
+                        <input type="text" id="begin_code" class="form-control" name="begin_code" required>
                     </div>
-                    <!-- For the current date -->
-                    <div class="col-md-6">
-                        <label for="date">Add Date:</label>
-                        <input type="date" id="current-date" class="form-control" name="date" required>
+                     <!-- For the Level 2 field -->
+                     <div class="col-md-4">
+                        <label for="end_code">End code:</label>
+                        <input type="text" id="end_code" class="form-control" name="end_code" required>
                     </div>
-
-                    <!-- For the date 10 years from today -->
-                    <div class="col-md-6">
-                        <label for="future-date">Destroy:</label>
-                        <input type="date" id="future-date" class="form-control" name="future_date" required>
-                    </div>
-
-
-                    <script>
-                        // Get today's date
-                        const today = new Date();
-                        const tenYearsFromToday = new Date();
-
-                        // Add 10 years to today's date
-                        tenYearsFromToday.setFullYear(today.getFullYear() + 10);
-
-                        // Function to format date as YYYY-MM-DD for date input
-                        const formatDate = (date) => {
-                            const year = date.getFullYear();
-                            const month = ('0' + (date.getMonth() + 1)).slice(-2); // Adding leading zero
-                            const day = ('0' + date.getDate()).slice(-2); // Adding leading zero
-                            return `${year}-${month}-${day}`;
-                        };
-
-                        // Set the current date
-                        document.getElementById('current-date').value = formatDate(today);
-
-                        // Set the date 10 years from today
-                        document.getElementById('future-date').value = formatDate(tenYearsFromToday);
-                    </script>
-
+                   
                     <!-- Form Buttons -->
                     <div class="text-center mt-4 mb-2">
-                        <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'store.php';">Cancel</button>
-                        <button type="submit" class="btn btn-outline-primary mr-1"  name="submit" value="submit">Submit</button>
+                        <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>
+                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary">Reset</button>
                     </div>
                 </form> 
@@ -637,7 +509,59 @@ if (isset($_POST['submit'])) {
         });
     </script>
 
-   
+    <!-- Backend PHP code to process the form -->
+    <?php
+    if (isset($_POST['submit'])) {
+        // Get form data safely
+        $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
+        $rack_select = $conn->real_escape_string($_POST['rack_select']);
+
+        // Check if box barcode already exists in the 'store' table
+        $check_barcode_query = "SELECT * FROM store WHERE box_id = '$barcode_select'";
+        $barcode_result = $conn->query($check_barcode_query);
+
+        // Check if rack already has 9 boxes stored
+        $check_rack_box_count_query = "SELECT COUNT(*) AS box_count FROM store WHERE rack_id = '$rack_select'";
+        $rack_box_count_result = $conn->query($check_rack_box_count_query);
+        $rack_box_count = $rack_box_count_result->fetch_assoc()['box_count'];
+
+        // Handle duplicate barcode case
+        if ($barcode_result->num_rows > 0) {
+            echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
+            duplicateErrorModal.show();
+            document.querySelector('#duplicateErrorModal .modal-body').textContent = 'Duplicate box barcode detected. Please choose a different barcode.';
+        });
+        </script>";
+        }
+        // Handle full rack case (9 boxes)
+        else if ($rack_box_count >= 9) {
+            echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
+            duplicateErrorModal.show();
+            document.querySelector('#duplicateErrorModal .modal-body').textContent = 'This rack already has 9 boxes. Please choose a different rack.';
+        });
+        </script>";
+        }
+        // If no errors, insert the box and rack into the 'store' table
+        else {
+            $insert_query = "INSERT INTO store (box_id, rack_id) VALUES ('$barcode_select', '$rack_select')";
+
+            if ($conn->query($insert_query) === TRUE) {
+                // Redirect after successful submission
+                echo "<script>window.location.href = 'store.php';</script>";
+            } else {
+                // Debug error
+                echo "Error: " . $conn->error;
+            }
+        }
+
+        // Close database connection
+        $conn->close();
+    }
+    ?>
 </body>
 
 </html>

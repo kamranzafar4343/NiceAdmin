@@ -9,6 +9,9 @@ $HOSTNAME = 'localhost';
 $USERNAME = 'root';
 $PASSWORD = '';
 $DATABASE = 'catmarketing';
+
+=======
+
 $conn = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $DATABASE);
 
 if (!$conn) {

@@ -632,12 +632,12 @@ $conn->close();
                                         <?php if ($_SESSION['role'] == 'admin'): ?>
                                             <td>
                                                 <div class="action-buttons" style="display: flex; gap: 10px;">
-                                                    <a type="button" class="btn btn-danger btn-floating"
+                                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center"
                                                         style="width:25px; height:28px"
                                                         data-mdb-ripple-init
                                                         onclick="return confirm('Are you sure you want to delete this rack?');"
-                                                        href="deleteStore.php?id=<?= $row['store_id'] ?>">
-                                                        <i class="fa-solid fa-trash" style="width: 20px;"></i>
+                                                        href="deleteStore.php?id=<?= $row['id'] ?>">
+                                                        <i class="fa-solid fa-trash" style="width: 15px;"></i>
                                                     </a>
                                                 </div>
                                             </td>

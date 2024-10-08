@@ -5,13 +5,13 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-  // If not logged in, redirect to login page
-  header("Location: pages-login.php");
-  exit();
+    // If not logged in, redirect to login page
+    header("Location: pages-login.php");
+    exit();
 }
 
 // Include the database connection
-include 'config/db.php'; 
+include 'config/db.php';
 
 // Get session email 
 $email = $_SESSION['email'];
@@ -20,26 +20,25 @@ $email = $_SESSION['email'];
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
-  $row2 = $resultData->fetch_assoc();
-  $adminName = $row2['name'];
-  $adminEmail = $row2['email'];
-  $userRole = $row2['role']; // Assuming you have a 'role' column in the 'register' table
+    $row2 = $resultData->fetch_assoc();
+    $adminName = $row2['name'];
+    $adminEmail = $row2['email'];
+    $userRole = $row2['role']; // Assuming you have a 'role' column in the 'register' table
 }
 
 // Check if the user is an admin, otherwise redirect
-if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
-  // If the user is not an Admin, redirect to index page
-  header("Location: index.php");
-  exit();
+if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
+    // If the user is not an Admin, redirect to index page
+    header("Location: index.php");
+    exit();
 }
 
-if (isset($_POST['submit'])) {
-    $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
-    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    // $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
+
+if (isset($_POST['submit'])) {
+    $acc_1 = mysqli_real_escape_string($conn, $_POST['acc_level_no']);
+    $acc_2 = mysqli_real_escape_string($conn, $_POST['acc_lev_2']);
+    
     // Check if the email already exists in the database
     $emailCheckQuery = "SELECT * FROM `compani` WHERE `email` = '$email'";
     $emailCheckResult = $conn->query($emailCheckQuery);
@@ -48,47 +47,7 @@ if (isset($_POST['submit'])) {
         die("Error: The email '$email' already exists.");
     }
 
-    //---------------------------set image variable------------------------ and its validation
-
-
-    // Validate if the image is uploaded without errors
-    if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-        die("File upload error: " . $_FILES['image']['error']);
-    }
-
-    // Check for maximum file size (5MB)
-    $maxFileSize = 5 * 1024 * 1024; // 5 MB
-    if ($_FILES['image']['size'] > $maxFileSize) {
-        die("File size exceeds the 5 MB limit.");
-    }
-
-    // Check allowed MIME types
-    $allowedTypes = ['image/jpeg', 'image/png'];
-    $fileType = $_FILES['image']['type'];
-    if (!in_array($fileType, $allowedTypes)) {
-        die("Invalid file type. Only JPEG and PNG files are allowed.");
-    }
-
-    // Check allowed file extensions
-    $allowedExtensions = ['jpg', 'jpeg', 'png'];
-    $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-    if (!in_array($fileExtension, $allowedExtensions)) {
-        die("Invalid file extension. Only .jpg, .jpeg, and .png files are allowed.");
-    }
-
-    // Sanitize and set the file name and destination
-    $img_name = preg_replace("/[^a-zA-Z0-9.]/", "_", basename($_FILES['image']['name']));
-    $img_des = "image/" . $img_name;
-
-    // Move the uploaded file to the destination directory
-    if (!move_uploaded_file($_FILES['image']['tmp_name'], $img_des)) {
-        die("Failed to upload image.");
-    }
-
-    //------------------end---------------------------------- of image variable and its validation
-
-
-    $city = mysqli_real_escape_string($conn, $_POST['city']);
+    $acc_3 = mysqli_real_escape_string($conn, $_POST['acc_lev_3']);
     $state = mysqli_real_escape_string($conn, $_POST['state']);
     $country = mysqli_real_escape_string($conn, $_POST['country']);
     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
@@ -106,15 +65,9 @@ if (isset($_POST['submit'])) {
     //added code to insert data into branch table and redirect to branches table of specific company
     if (mysqli_query($conn, $sql)) {
 
-        // Step 2: Get the ID of the newly inserted company
-        $newCompanyId = mysqli_insert_id($conn);
-
-        $insertBranchSql = "INSERT INTO `branch` (`account_level_no`, `compID_FK`, `branch_name`, `ContactPersonName`, `ContactPersonPhone`, `ContactPersonResignation`, `City`, `State`, `Country`) VALUES ('$account_no', '$newCompanyId', '$comp_name <b>HQ</b>', '$foc', '$foc_phone', '$foc_role', '$city', '$state', '$country')";
-    }
-
-    if (mysqli_query($conn, $insertBranchSql)) {
-        header("Location: Branches.php?id=" . $newCompanyId);
+        header("Location: Companies.php");
         exit; // Stop further script execution
+        
     } else {
         echo "Error creating branch: " . mysqli_error($conn);
     }
@@ -399,120 +352,120 @@ if (isset($_POST['submit'])) {
 
 
     <?php
-  include "config/db.php";
+    include "config/db.php";
 
-  $role = $_SESSION['role'];
-  ?>
+    $role = $_SESSION['role'];
+    ?>
 
-  <!-- ======= Sidebar ======= -->
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-    <ul class="sidebar-nav" id="sidebar-nav">
+    <!-- ======= Sidebar ======= -->
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+        <ul class="sidebar-nav" id="sidebar-nav">
 
-      <!-- Dashboard Link (Visible to all users) -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="index.php">
-          <i class="ri-home-8-line"></i>
-          <span>Dashboard</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
+            <!-- Dashboard Link (Visible to all users) -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="index.php">
+                    <i class="ri-home-8-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
 
-      <?php if ($_SESSION['role'] == 'admin') { ?>
-        <!-- Admin-only Links -->
-        <li class="nav-item">
-          <a class="nav-link active" href="Companies.php">
-            <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Companies Nav -->
+            <?php if ($_SESSION['role'] == 'admin') { ?>
+                <!-- Admin-only Links -->
+                <li class="nav-item">
+                    <a class="nav-link active" href="Companies.php">
+                        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Companies Nav -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="box.php">
-            <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Boxes Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="showItems.php">
-            <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Items Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="order.php">
-            <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Work Orders Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="racks.php">
-            <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Racks Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="store.php">
-            <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Store Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
 
-      <?php } else { ?>
-        <!-- User-only Links -->
+            <?php } else { ?>
+                <!-- User-only Links -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="box.php">
-            <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Boxes Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="showItems.php">
-            <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Items Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="order.php">
-            <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Work Orders Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="racks.php">
-            <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Racks Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="store.php">
-            <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Store Nav -->
-      <?php } ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+            <?php } ?>
 
 
-      <li class="nav-heading">Pages</li>
+            <li class="nav-heading">Pages</li>
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.php">
-          <i class="bi bi-person"></i><span>Profile</span>
-        </a>
-      </li><!-- End Profile Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="users-profile.php">
+                    <i class="bi bi-person"></i><span>Profile</span>
+                </a>
+            </li><!-- End Profile Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.php">
-          <i class="bi bi-box-arrow-right"></i><span>Login</span>
-        </a>
-      </li><!-- End Login Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="pages-login.php">
+                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
+                </a>
+            </li><!-- End Login Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="logout.php">
-          <i class="bi bi-box-arrow-left"></i><span>Logout</span>
-        </a>
-      </li><!-- End Logout Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="logout.php">
+                    <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+                </a>
+            </li><!-- End Logout Nav -->
 
-    </ul>
-  </aside>
-  <!--------------- End sidebar ------------------>
+        </ul>
+    </aside>
+    <!--------------- End sidebar ------------------>
 
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
@@ -522,7 +475,7 @@ if (isset($_POST['submit'])) {
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Create Company</h2>
+        <h2>Create Account</h2>
     </div>
     <!-- End Header form -->
     <div class="container d-flex justify-content-center">
@@ -531,41 +484,49 @@ if (isset($_POST['submit'])) {
             <div class="card-body">
                 <br>
                 <!-- Multi Columns Form -->
-                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
-                <div class="col-md-6">
-                        <label for="comp_acc_level" class="form-label">Account No</label>
+                <form class="row g-3 needs-validation" action="" method="POST">
+                    <div class="col-md-4">
+                        <label for="comp_acc_level" class="form-label">Acc-Lev-1</label>
                         <input type="text" class="form-control" id="account_lev_no" name="acc_level_no">
                     </div>
+
+                    <div class="col-md-4">
+                        <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
+                        <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="Dept_ACC_LEVEL" class="form-label">Acc-Lev-3</label>
+                        <input type="text" class="form-control" id="acc_lev_3" name="acc_lev_3">
+                    </div>
+
+                    <div class="col-md-10">
+                        <label for="account_description" class="form-label">Account Description</label>
+                        <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="3" columns="40"></textarea>
+                    </div>
+            
                     
-                <div class="col-md-6">
-                        <label for="comp_name" class="form-label">Company Name</label>
-                        <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
+                    <div class="col-md-6">
+                        <label for="registration" class="form-label">Setup Date</label>
+                        <input type="date" class="form-control" id="registration" name="registration" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="expiry" class="form-label">Conract Exp_Date</label>
+                        <input type="date" class="form-control" id="expiry" name="expiry" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="image" class="form-label" style="font-size: 0.8rem;">Logo</label>
-                        <input type="file" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
-                        <!-- Error messages -->
-                        <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
-                        <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
-                        <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
+                        <label for="" class="form-label">Contact Person</label>
+                        <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
                     </div>
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="phone" name="phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
+                        <input type="text" class="form-control" id="" name="foc_phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
                     </div>
-                    <div class="col-md-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
 
-                        <div id="emailFeedback" class="invalid-feedback">
-                            <!-- Error message will be displayed here -->
-                        </div>
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label">Fax</label>
+                        <input type="text" class="form-control" id="" name="foc_phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
                     </div>
-                    <!-- <div class="col-md-6">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required minlength="8" maxlength="12" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                            title="It must be 8-16 characters, include at least one number, one uppercase and one lowercase letter">
-                    </div> -->
 
                     <div class="col-md-6">
                         <label for="country" class="form-label">Country</label>
@@ -593,36 +554,7 @@ if (isset($_POST['submit'])) {
                             <!-- Options will be dynamically populated based on selected state -->
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <label for="registration" class="form-label">Registration Date</label>
-                        <input type="date" class="form-control" id="registration" name="registration" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="expiry" class="form-label">Expiry Date</label>
-                        <input type="date" class="form-control" id="expiry" name="expiry" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="" class="form-label">Focal person</label>
-                        <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="phone" class="form-label"> FOC Phone</label>
-                        <input type="text" class="form-control" id="" name="foc_phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="" class="form-label">FOC Role</label>
-                        <select class="form-select" id="" name="foc_role" required>
-                            <option value="">Select Role</option>
-                            <option value="ceo">CEO</option>
-                            <option value="cfo">CFO</option>
-                            <option value="cto">CTO</option>
-                            <option value="hr">HR</option>
-                            <option value="product-manager">product manager</option>
-                            <option value="sales-manager">sales manager</option>
-                            <option value="IT-manager">IT manager</option>
-                            <!-- Add more countries as needed -->
-                        </select>
-                    </div>
+                    
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>

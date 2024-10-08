@@ -46,7 +46,7 @@ $company_data = $result->fetch_assoc();
 //fetch employee table
 $emp_sql = "Select * from employee where comp_FK_emp = $company_id";
 $result_emp = $conn->query($emp_sql);
-$emp_data = $result_emp->fetch_assoc();
+// $emp_data = $result_emp->fetch_assoc(); caused bug
 
 
 ?>
@@ -839,7 +839,7 @@ $emp_data = $result_emp->fetch_assoc();
           <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()" class="btn btn-primary mb-3">Add Employee</button>
           <h5 class="card-title emp-card">List of employees</h5>
           <?php
-          if ($result_emp->num_rows > 0) {
+          if ($result_emp->num_rows >= 0) {
           ?>
             <table class="table datatable emp_tb">
               <thead>
@@ -847,15 +847,10 @@ $emp_data = $result_emp->fetch_assoc();
                   <th scope="col">Name</th>
                   <th scope="col" class="email-col">Email</th>
                   <th scope="col">Phone</th>
-                  <!-- <th scope="col" >Branch</th> -->
-                  <!-- <th scope="col" style="width: 24%;">Company Name</th> -->
-                  <!-- <th scope="col">Gender</th> -->
-                  <!-- <th scope="col">Address</th> -->
                   <th scope="col">Role</th>
                   <!-- <th scope="col" >Received</th> -->
                   <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
                   <th scope="col">Auth_status</th>
-
                   <th scope="col">Action</th>
                 </tr>
               </thead>

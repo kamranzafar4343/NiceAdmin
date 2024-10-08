@@ -39,7 +39,7 @@ if (isset($_GET['id'])) {
     $rack_id = $conn->real_escape_string($_GET['id']);
 
     // SQL query to delete related records from the store table
-    $delete_store_sql = "DELETE FROM store WHERE rack_id = '$rack_id'";
+    $delete_store_sql = "DELETE FROM store WHERE rack_select = '$rack_id'";
     
     // Execute the delete statement for the store table
     if ($conn->query($delete_store_sql) === TRUE) {

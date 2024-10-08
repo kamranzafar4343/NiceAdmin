@@ -42,7 +42,7 @@ if (isset($_POST['submit'])) {
         die('Error: duplicate order no or box');
     } else {
         // exceed only if emp exist for that specific company and Authorized
-        $empCheckQuery = "SELECT * FROM `employee` WHERE `name` = '$req_name' AND branch_FK_emp = '$branch_FK_emp' AND auth_status='Authorized'";
+        $empCheckQuery = "SELECT * FROM `employee` Where branch_FK_emp = '$branch_FK_emp' AND auth_status='Authorized'";
 
         $result = (mysqli_query($conn, $empCheckQuery));
 
@@ -510,11 +510,15 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         </select>
                     </div>
 
+                    <!-- Select Requestor -->
                     <div class="col-md-6">
-                        <label class="form-label">requestor name</label>
-                        <input type="text" class="form-control" name="name" id="requestor" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
-                        <div id="requestorFeedback" class="valid-feedback"></div>
-                        <div id="requestorFeedback" class="invalid-feedback"></div>
+                        <label for="requestor">Select Requestor:</label>
+                        <select id="requestor" class="form-select" name="name" required>
+                            <option value="">Select a Requestor</option>
+                            <!-- The options will be populated via AJAX based on the selected branch -->
+                        </select>
+                        <!-- <div id="requestorFeedback" class="valid-feedback"></div>
+                        <div id="requestorFeedback" class="invalid-feedback"></div> -->
                     </div>
 
                     <!-- Select Box -->
@@ -658,13 +662,43 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 });
             });
         });
+
+// When branch is changed, fetch the employees
+            $('#branch').change(function() {
+                var branch_id = $(this).val();
+
+                // AJAX request to get employees for the selected branch
+                $.ajax({
+                    url: 'get_employee.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var employees = JSON.parse(response);
+                            // Clear existing branches
+                            $('#requestor').empty();
+                            $('#requestor').append('<option value="">Select Requestor</option>');
+                            // Add the new options from the response
+                            $.each(employees, function(index, employee) {
+                                $('#requestor').append('<option value="' + employee.emp_id + '">' + employee.name + '</option>');
+                            });
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
     </script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const companySelect = document.getElementById('company');
             const branchSelect = document.getElementById('branch');
             const boxSelect = document.getElementById('box');
+            const requestorSelect = document.getElementById('requestor');
 
             // Retrieve the previously selected company from localStorage
             const selectedCompany = localStorage.getItem('selectedCompany');
@@ -683,11 +717,18 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
             branchSelect.addEventListener('change', function() {
                 localStorage.setItem('selectedBranch', this.value);
                 loadBoxes(this.value); // Load boxes based on the selected branch
+                loadRequestor(this.value);
             });
 
             // Store the selected box in localStorage on change
             boxSelect.addEventListener('change', function() {
                 localStorage.setItem('selectedBox', this.value);
+            });
+
+            // Store the selected requestor in localStorage on change
+            requestorSelect.addEventListener('change', function() {
+                localStorage.setItem('selectedRequestor', this.value);
+                
             });
 
             // Function to load branches via AJAX
@@ -739,6 +780,34 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             const selectedBox = localStorage.getItem('selectedBox');
                             if (selectedBox) {
                                 boxSelect.value = selectedBox;
+                            }
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            }
+            
+            // Function to load employes of seleted branch via AJAX
+            function loadRequestor(branch_id) {
+                $.ajax({
+                    url: 'get_employee.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            const employees = JSON.parse(response);
+                            requestorSelect.innerHTML = '<option value="">Select Requestor</option>';
+                            employees.forEach(function(employee) {
+                                requestorSelect.innerHTML += `<option value="${employee.emp_id}">${employee.name}</option>`;
+                            });
+
+                            // Set previously selected box again, if available
+                            const selectedRequestor = localStorage.getItem('selectedRequestor');
+                            if (selectedRequestor) {
+                                requestorSelect.value = selectedRequestor;
                             }
                         } catch (e) {
                             console.error("Invalid JSON response", response);

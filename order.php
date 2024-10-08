@@ -515,7 +515,7 @@ $resultShowOrders = $conn->query($showOrders);
             // Loop through results
             while ($row = $resultShowOrders->fetch_assoc()) {
               echo '<tr>';
-              echo '<td>' .($row['order_no']). '</td>';
+              echo '<td>' . ($row['order_no']) . '</td>';
 
               // Get company id
               $comp_id = $row['company'];
@@ -559,8 +559,21 @@ $resultShowOrders = $conn->query($showOrders);
                 $Auth_status = $empRow['auth_status'];
               }
 
+
+
+
               echo '<td>' . ($row["item"]) . '</td>';
-              echo '<td> <span class="req_span">Name:  </span>' . ($row["name"]) . '<br>  <span class="req_span">Role:  </span>' . $Role . '</td>';
+
+              //get emp id to show name
+              $emp_id = $row['name'];
+              $emplySql = "Select * From employee where emp_id = '$emp_id'";
+              $emplyResult = $conn->query($emplySql);
+              if ($emplyResult->num_rows > 0) {
+                $emplyRow = $emplyResult->fetch_assoc();
+                $emply_name = $emplyRow['name'];
+              }
+
+              echo '<td> <span class="req_span">Name:  </span>' . $emply_name . '<br>  <span class="req_span">Role:  </span>' . $Role . '</td>';
               echo '<td>' . ($row["date"]) . '</td>';
           ?>
               <td>

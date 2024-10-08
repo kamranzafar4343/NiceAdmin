@@ -96,10 +96,11 @@ if (isset($_POST['submit'])) {
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
     $foc_role = mysqli_real_escape_string($conn, $_POST['foc_role']);
+    $account_no = mysqli_real_escape_string($conn, $_POST['acc_level_no']);
 
     // Insert the record into the database
-    $sql = "INSERT INTO `compani` (`comp_name`, `phone`, `email`, `image`, `city`, `state`, `country`, `registration`, `expiry`, `foc`, `foc_phone`, `foc_role`) 
-            VALUES ('$comp_name', '$phone', '$email', '$img_des', '$city', '$state', '$country', '$registration', '$expiry', '$foc', '$foc_phone', '$foc_role')";
+    $sql = "INSERT INTO `compani` (`account_no`, `comp_name`, `phone`, `email`, `image`, `city`, `state`, `country`, `registration`, `expiry`, `foc`, `foc_phone`, `foc_role`) 
+            VALUES ('$account_no','$comp_name', '$phone', '$email', '$img_des', '$city', '$state', '$country', '$registration', '$expiry', '$foc', '$foc_phone', '$foc_role')";
 
 
     //added code to insert data into branch table and redirect to branches table of specific company
@@ -108,7 +109,7 @@ if (isset($_POST['submit'])) {
         // Step 2: Get the ID of the newly inserted company
         $newCompanyId = mysqli_insert_id($conn);
 
-        $insertBranchSql = "INSERT INTO `branch` (`compID_FK`, `branch_name`, `ContactPersonName`, `ContactPersonPhone`, `ContactPersonResignation`, `City`, `State`, `Country`) VALUES ('$newCompanyId', '$comp_name <b>HQ</b>', '$foc', '$foc_phone', '$foc_role', '$city', '$state', '$country')";
+        $insertBranchSql = "INSERT INTO `branch` (`account_level_no`, `compID_FK`, `branch_name`, `ContactPersonName`, `ContactPersonPhone`, `ContactPersonResignation`, `City`, `State`, `Country`) VALUES ('$account_no', '$newCompanyId', '$comp_name <b>HQ</b>', '$foc', '$foc_phone', '$foc_role', '$city', '$state', '$country')";
     }
 
     if (mysqli_query($conn, $insertBranchSql)) {
@@ -531,7 +532,12 @@ if (isset($_POST['submit'])) {
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
-                    <div class="col-md-6">
+                <div class="col-md-6">
+                        <label for="comp_acc_level" class="form-label">Account No</label>
+                        <input type="text" class="form-control" id="account_lev_no" name="acc_level_no">
+                    </div>
+                    
+                <div class="col-md-6">
                         <label for="comp_name" class="form-label">Company Name</label>
                         <input type="text" class="form-control" id="comp_name" name="comp_name" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
                     </div>
@@ -561,7 +567,7 @@ if (isset($_POST['submit'])) {
                             title="It must be 8-16 characters, include at least one number, one uppercase and one lowercase letter">
                     </div> -->
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="country" class="form-label">Country</label>
                         <select class="form-select" id="country" name="country" required>
                             <option value="">Select Country</option>
@@ -573,14 +579,14 @@ if (isset($_POST['submit'])) {
                         </select>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="state" class="form-label">State</label>
                         <select class="form-select" id="state" name="state" required>
                             <option value="">Select State</option>
                             <!-- Options will be dynamically populated based on selected country -->
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="city" class="form-label">City</label>
                         <select class="form-select" id="city" name="city" required>
                             <option value="">Select City</option>

@@ -46,6 +46,7 @@ if ($companyResult->num_rows === 0) {
 }
 
 if (isset($_POST['submit'])) {
+  $acc_lev_no = mysqli_real_escape_string($conn, $_POST['account_level_no']);
   $branch_name = mysqli_real_escape_string($conn, $_POST['branch_name']);
   $contactPersonName = mysqli_real_escape_string($conn, $_POST['ContactPersonName']);
   $contactPersonPhone = mysqli_real_escape_string($conn, $_POST['ContactPersonPhone']);
@@ -54,8 +55,8 @@ if (isset($_POST['submit'])) {
   $state = mysqli_real_escape_string($conn, $_POST['State']);
   $country = mysqli_real_escape_string($conn, $_POST['Country']);
 
-  $sql = "INSERT INTO branch (compID_FK, branch_name, ContactPersonName, ContactPersonPhone, ContactPersonResignation, Country, State, City) 
-            VALUES ('$company_id', '$branch_name', '$contactPersonName', '$contactPersonPhone', '$contactPersonResignation', '$country', '$state', '$city')";
+  $sql = "INSERT INTO branch (account_level_no, compID_FK, branch_name, ContactPersonName, ContactPersonPhone, ContactPersonResignation, Country, State, City) 
+            VALUES ('$acc_lev_no', '$company_id', '$branch_name', '$contactPersonName', '$contactPersonPhone', '$contactPersonResignation', '$country', '$state', '$city')";
 
   if ($conn->query($sql) === TRUE) {
     header("Location: Branches.php?id=" . $company_id);
@@ -471,6 +472,11 @@ End Search Bar -->
             <input type="text" class="form-control" name="compID_FK" value="<?php echo htmlspecialchars($company_id); ?>" readonly>
           </div>
 
+          <div class="col-md-6">
+            <label class="form-label">Account level 2</label>
+            <input type="text" class="form-control" name="account_level_no" required>
+          </div>
+          
           <div class="col-md-6">
             <label class="form-label">Branch Name</label>
             <input type="text" class="form-control" name="branch_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>

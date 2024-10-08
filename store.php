@@ -45,11 +45,21 @@ $error = false;
 
 
 //select all columns of boxes 
-$sql = "SELECT * FROM store";
+// $sql = "SELECT * FROM store";
+// $result = $conn->query($sql);
+// $sql = "SELECT store.store_id, box.barcode AS select_barcode, store.select_rack, store.level1, store.level2, store.level3, store.alt_code, store.description, store.object_code, store.status, store.add_date, store.destroy_date 
+//         FROM store
+//         INNER JOIN box ON store.select_barcode = box.box_id"; // Assuming box_id is the primary key in the box table
+// $result = $conn->query($sql);
+// Close the connection
+// SQL query to fetch data from the store table and join with the box table to get the select_barcode
+$sql = "SELECT store.*, box.barcode AS barcode_select, racks.rack_location AS rack_select
+        FROM store
+        INNER JOIN box ON store.barcode_select = box.box_id
+        INNER JOIN racks ON store.rack_select = racks.id";
 $result = $conn->query($sql);
 
 
-// Close the connection
 $conn->close();
 ?>
 
@@ -570,79 +580,79 @@ $conn->close();
         </form>
     </div>
     <main id="main" class="main">
-    <div class="col-12">
-        <div class="cardBranch recent-sales overflow-auto">
-            <div class="card-body">
-                <h5 class="card-title">List of Boxes and Rack Details</h5>
+        <div class="col-12">
+            <div class="cardBranch recent-sales overflow-auto">
+                <div class="card-body">
+                    <h5 class="card-title">List of Boxes and Rack Details</h5>
 
-                <?php if ($result->num_rows > 0): ?>
-                    <table class="table datatable mt-4" style="table-layout: fixed;">
-                        <thead>
-                            <tr>
-                                <th scope="col" style="width: 5%;">#</th>
-                                <th scope="col" style="width: 15%;">Box Barcode</th>
-                                <th scope="col" style="width: 15%;">Location</th>
-                                <th scope="col" style="width: 10%;">Level 1</th>
-                                <th scope="col" style="width: 10%;">Level 2</th>
-                                <th scope="col" style="width: 10%;">Level 3</th>
-                                <th scope="col" style="width: 10%;">Alt Code</th>
-                                <th scope="col" style="width: 15%;">Description</th>
-                                <th scope="col" style="width: 10%;">Object Code</th>
-                                <th scope="col" style="width: 10%;">Status</th>
-                                <th scope="col" style="width: 15%;">Add Date</th>
-                                <th scope="col" style="width: 15%;">Destroy Date</th>
-                                
-                                <!-- Show "Actions" column only if the user is an admin -->
-                                <?php if ($_SESSION['role'] == 'admin'): ?>
-                                    <th scope="col" style="width: 15%;">Actions</th>
-                                <?php endif; ?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Counter variable for row numbers -->
-                            <?php $counter = 1; ?>
-                            
-                            <!-- Loop through the results and display each row -->
-                            <?php while ($row = $result->fetch_assoc()): ?>
+                    <?php if ($result->num_rows > 0): ?>
+                        <table class="table datatable mt-4" style="table-layout: fixed;">
+                            <thead>
                                 <tr>
-                                    <td><?= $counter++ ?></td>
-                                    <td><?= htmlspecialchars($row["select_barcode"]) ?></td>
-                                    <td><?= htmlspecialchars($row["select_rack"]) ?></td>
-                                    <td><?= htmlspecialchars($row["level1"]) ?></td>
-                                    <td><?= htmlspecialchars($row["level2"]) ?></td>
-                                    <td><?= htmlspecialchars($row["level3"]) ?></td>
-                                    <td><?= htmlspecialchars($row["alt_code"]) ?></td>
-                                    <td><?= htmlspecialchars($row["description"]) ?></td>
-                                    <td><?= htmlspecialchars($row["object_code"]) ?></td>
-                                    <td><?= htmlspecialchars($row["status"]) ?></td>
-                                    <td><?= htmlspecialchars($row["add_date"]) ?></td>
-                                    <td><?= htmlspecialchars($row["destroy_date"]) ?></td>
+                                    <th scope="col" style="width: 5%;">#</th>
+                                    <th scope="col" style="width: 15%;">Box Barcode</th>
+                                    <th scope="col" style="width: 15%;">Location</th>
+                                    <th scope="col" style="width: 10%;">Level 1</th>
+                                    <th scope="col" style="width: 10%;">Level 2</th>
+                                    <th scope="col" style="width: 10%;">Level 3</th>
+                                    <th scope="col" style="width: 10%;">Alt Code</th>
+                                    <th scope="col" style="width: 15%;">Description</th>
+                                    <th scope="col" style="width: 10%;">Object Code</th>
+                                    <th scope="col" style="width: 10%;">Status</th>
+                                    <th scope="col" style="width: 15%;">Add Date</th>
+                                    <th scope="col" style="width: 15%;">Destroy Date</th>
 
-                                    <!-- Show actions only if user is admin -->
+                                    <!-- Show "Actions" column only if the user is an admin -->
                                     <?php if ($_SESSION['role'] == 'admin'): ?>
-                                        <td>
-                                            <div class="action-buttons" style="display: flex; gap: 10px;">
-                                                <a type="button" class="btn btn-danger btn-floating" 
-                                                   style="width:25px; height:28px" 
-                                                   data-mdb-ripple-init 
-                                                   onclick="return confirm('Are you sure you want to delete this rack?');" 
-                                                   href="deleteStore.php?id=<?= $row['store_id'] ?>">
-                                                    <i class="fa-solid fa-trash" style="width: 20px;"></i>
-                                                </a>
-                                            </div>
-                                        </td>
+                                        <th scope="col" style="width: 15%;">Actions</th>
                                     <?php endif; ?>
                                 </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    </table>
-                <?php else: ?>
-                    <p>No box and rack data found.</p>
-                <?php endif; ?>
+                            </thead>
+                            <tbody>
+                                <!-- Counter variable for row numbers -->
+                                <?php $counter = 1; ?>
+
+                                <!-- Loop through the results and display each row -->
+                                <?php while ($row = $result->fetch_assoc()): ?>
+                                    <tr>
+                                        <td><?= $counter++ ?></td>
+                                        <td><?= htmlspecialchars($row["barcode_select"]) ?></td>
+                                        <td><?= htmlspecialchars($row["rack_select"]) ?></td>
+                                        <td><?= htmlspecialchars($row["level1"]) ?></td>
+                                        <td><?= htmlspecialchars($row["level2"]) ?></td>
+                                        <td><?= htmlspecialchars($row["level3"]) ?></td>
+                                        <td><?= htmlspecialchars($row["alt_code"]) ?></td>
+                                        <td><?= htmlspecialchars($row["description"]) ?></td>
+                                        <td><?= htmlspecialchars($row["object_code"]) ?></td>
+                                        <td><?= htmlspecialchars($row["status"]) ?></td>
+                                        <td><?= htmlspecialchars($row["add_date"]) ?></td>
+                                        <td><?= htmlspecialchars($row["destroy_date"]) ?></td>
+
+                                        <!-- Show actions only if user is admin -->
+                                        <?php if ($_SESSION['role'] == 'admin'): ?>
+                                            <td>
+                                                <div class="action-buttons" style="display: flex; gap: 10px;">
+                                                    <a type="button" class="btn btn-danger btn-floating"
+                                                        style="width:25px; height:28px"
+                                                        data-mdb-ripple-init
+                                                        onclick="return confirm('Are you sure you want to delete this rack?');"
+                                                        href="deleteStore.php?id=<?= $row['store_id'] ?>">
+                                                        <i class="fa-solid fa-trash" style="width: 20px;"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        <?php endif; ?>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        </table>
+                    <?php else: ?>
+                        <p>No box and rack data found.</p>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
 
 

@@ -207,7 +207,7 @@ $result = $conn->query($sql);
         <!-- Admin-only Links -->
         <li class="nav-item">
           <a class="nav-link active" href="Companies.php">
-            <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+            <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
           </a>
         </li><!-- End Companies Nav -->
 
@@ -303,7 +303,7 @@ $result = $conn->query($sql);
 
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
-  <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Company</button>
+  <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Account</button>
   <button id="fixedButton" type="button" onclick="window.location.href = 'emailTable.php';" class="btn btn-outline-info mail">
     <b><i class="ri-mail-line"></i></b>
   </button>
@@ -326,17 +326,16 @@ $result = $conn->query($sql);
             <table id="companies" class="">
               <thead>
                 <tr>
-                  <th scope="col" style="width:10%;">Acc-Lev-1</th>
-                  <th scope="col" style="width:10%;">Name</th>
-                  <th scope="col" style="width:12%;">Image</th>
-                  <th scope="col" style="width:14%;">Phone</th>
-                  <th scope="col" style="width:14%;">Email</th>
-                  <!-- <th scope="col">Password</th> -->
-                  <th scope="col" style="width:8%;">City</th>
-                  <th scope="col" style="width:9%;">Country</th>
-                  <th scope="col" style="width:10%;"> Reg. Date</th>
-                  <th scope="col" style="width:10%;">Expiry</th>
-                  <th scope="col" style="width:9%;">Actions</th>
+                  <th scope="col"  style="width:8%;">Level-1</th>
+                  <th scope="col"  style="width:8%;" >Level-2</th>
+                  <th scope="col"  style="width:8%;">Level-3</th>
+                  <th scope="col" >Description</th>
+                  <th scope="col" >Setup Date</th>
+                  <th scope="col" >Expiry Date</th>
+                  <th scope="col" >Contact Person</th>
+                  <th scope="col" >Phone</th>
+                  <th scope="col" style="width:15%;">Address</th>
+                  <th scope="col">Actions</th>
                 </tr>
               </thead>
 
@@ -344,26 +343,15 @@ $result = $conn->query($sql);
                 <?php
                 while ($row = $result->fetch_assoc()) {
                   echo "<tr>";
-                  echo "<td>" . $row['account_no'] . "</td>";
-                ?>
-
-                <?php
-             
-                ?>
-                  <td>
-                    <a class="text-primary fw-bold" href="CompanyInfo.php?id=<?php echo $row['comp_id']; ?>">
-                      <?php echo $row['comp_name']; ?>
-                    </a>
-                  </td>
-
-                  <?php
-                  echo "<td >" . "<img src='" . $row['image'] . "' alt='Profile Image' width='70' height=''>" . "</td> ";
-                  echo "<td >" . htmlspecialchars($row["phone"]) . "</td> ";
-                  echo "<td >" . htmlspecialchars($row["email"]) . "</td>";
-                  echo "<td >" . htmlspecialchars($row["city"]) . "</td>";
-                  echo "<td >" . htmlspecialchars($row["country"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["acc_lev_1"]) . "</td> ";
+                  echo "<td >" . htmlspecialchars($row["acc_lev_2"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["acc_lev_3"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["acc_desc"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
-                  echo "<td >" . htmlspecialchars($row["expiry"]) . "</td>";
+                  echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["foc"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["foc_phone"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["add_1"]) . "<br>". htmlspecialchars($row["add_2"]) ."<br>". htmlspecialchars($row["add_3"]) . "</td>";
                   ?>
                   <td>
                     <div style="display: flex; gap: 10px;">
@@ -440,6 +428,8 @@ $result = $conn->query($sql);
       });
     }
   </script>
+
+
 
   <!--datatable export buttons-->
   <script src="https://code.jquery.com/jquery-3.7.1.js"></script>

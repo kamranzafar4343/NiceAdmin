@@ -34,45 +34,31 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 }
 
 
-
 if (isset($_POST['submit'])) {
     $acc_1 = mysqli_real_escape_string($conn, $_POST['acc_level_no']);
     $acc_2 = mysqli_real_escape_string($conn, $_POST['acc_lev_2']);
-    
-    // Check if the email already exists in the database
-    $emailCheckQuery = "SELECT * FROM `compani` WHERE `email` = '$email'";
-    $emailCheckResult = $conn->query($emailCheckQuery);
-
-    if ($emailCheckResult->num_rows > 0) {
-        die("Error: The email '$email' already exists.");
-    }
-
     $acc_3 = mysqli_real_escape_string($conn, $_POST['acc_lev_3']);
-    $state = mysqli_real_escape_string($conn, $_POST['state']);
-    $country = mysqli_real_escape_string($conn, $_POST['country']);
+    $acc_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-    $foc_role = mysqli_real_escape_string($conn, $_POST['foc_role']);
-    $account_no = mysqli_real_escape_string($conn, $_POST['acc_level_no']);
+    $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
+    $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
 
     // Insert the record into the database
-    $sql = "INSERT INTO `compani` (`account_no`, `comp_name`, `phone`, `email`, `image`, `city`, `state`, `country`, `registration`, `expiry`, `foc`, `foc_phone`, `foc_role`) 
-            VALUES ('$account_no','$comp_name', '$phone', '$email', '$img_des', '$city', '$state', '$country', '$registration', '$expiry', '$foc', '$foc_phone', '$foc_role')";
+    $sql = "INSERT INTO `compani` (`acc_lev_1`, `acc_lev_2`, `acc_lev_3`, `acc_desc`, `registration`, `expiry`, `foc`, `foc_phone`, `add_1`, `add_2`, `add_3`) 
+            VALUES ('$acc_1','$acc_2', '$acc_3', '$acc_desc', '$registration', '$expiry', '$foc', '$foc_phone', '$address', '$address1', '$address2')";
 
+    $result = $conn->query($sql);
 
-    //added code to insert data into branch table and redirect to branches table of specific company
-    if (mysqli_query($conn, $sql)) {
-
+    if ($result === true) {
         header("Location: Companies.php");
-        exit; // Stop further script execution
-        
+        exit();
     } else {
-        echo "Error creating branch: " . mysqli_error($conn);
+        echo 'error';
     }
-
-    $conn->close();
 }
 ?>
 
@@ -487,12 +473,12 @@ if (isset($_POST['submit'])) {
                 <form class="row g-3 needs-validation" action="" method="POST">
                     <div class="col-md-4">
                         <label for="comp_acc_level" class="form-label">Acc-Lev-1</label>
-                        <input type="text" class="form-control" id="account_lev_no" name="acc_level_no">
+                        <input type="text" class="form-control" id="account_lev_no" name="acc_level_no" required>
                     </div>
 
                     <div class="col-md-4">
                         <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
-                        <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2">
+                        <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" required>
                     </div>
 
                     <div class="col-md-4">
@@ -500,61 +486,44 @@ if (isset($_POST['submit'])) {
                         <input type="text" class="form-control" id="acc_lev_3" name="acc_lev_3">
                     </div>
 
-                    <div class="col-md-10">
+                    <div class="col-md-6">
                         <label for="account_description" class="form-label">Account Description</label>
-                        <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="3" columns="40"></textarea>
+                        <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
                     </div>
-            
-                    
+
+
                     <div class="col-md-6">
                         <label for="registration" class="form-label">Setup Date</label>
                         <input type="date" class="form-control" id="registration" name="registration" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="expiry" class="form-label">Conract Exp_Date</label>
-                        <input type="date" class="form-control" id="expiry" name="expiry" required>
+                        <input type="date" class="form-control" id="expiry" name="expiry">
                     </div>
                     <div class="col-md-6">
                         <label for="" class="form-label">Contact Person</label>
-                        <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3">
+                        <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
                     </div>
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="" name="foc_phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
+                        <input type="text" class="form-control" id="" name="foc_phone" required>
                     </div>
 
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Fax</label>
-                        <input type="text" class="form-control" id="" name="foc_phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits">
+                        <input type="text" class="form-control" id="" name="foc_fax">
                     </div>
 
                     <div class="col-md-6">
-                        <label for="country" class="form-label">Country</label>
-                        <select class="form-select" id="country" name="country" required>
-                            <option value="">Select Country</option>
-                            <option value="Pakistan">Pakistan</option>
-                            <option value="USA">USA</option>
-                            <option value="Canada">Canada</option>
-                            <option value="UK">UK</option>
-                            <!-- Add more countries as needed -->
-                        </select>
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="" name="address" required>
+                        <br>
+                        <input type="text" class="form-control" id="" name="address1">
+                        <br>
+                        <input type="text" class="form-control" id="" name="address2">
+
                     </div>
 
-                    <div class="col-md-6">
-                        <label for="state" class="form-label">State</label>
-                        <select class="form-select" id="state" name="state" required>
-                            <option value="">Select State</option>
-                            <!-- Options will be dynamically populated based on selected country -->
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="city" class="form-label">City</label>
-                        <select class="form-select" id="city" name="city" required>
-                            <option value="">Select City</option>
-                            <!-- Options will be dynamically populated based on selected state -->
-                        </select>
-                    </div>
-                    
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>
@@ -719,6 +688,12 @@ if (isset($_POST['submit'])) {
             searchable: false,
             fixedHeight: true,
         })
+    </script>
+    <script>
+        //prevent resubmission on refresh
+        if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
     </script>
     <script src="assets/js/main.js"></script>
 </body>

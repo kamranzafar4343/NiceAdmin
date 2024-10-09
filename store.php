@@ -616,8 +616,9 @@ $conn->close();
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
                                         <td><?= $counter++ ?></td>
-                                        <td><?= htmlspecialchars($row["barcode_select"]) ?></td>
-                                        <td><?= htmlspecialchars($row["rack_select"]) ?></td>
+                                        <td><a href="storeinfo.php?barcode=<?= urlencode($row['barcode_select']) ?>"><strong><?= htmlspecialchars($row['barcode_select']) ?></strong></a></td>
+                                        <td><a href="storeinfo.php?rack=<?= urlencode($row['rack_select']) ?>"><strong><?= htmlspecialchars($row['rack_select']) ?></strong></a></td>
+
                                         <td><?= htmlspecialchars($row["level1"]) ?></td>
                                         <td><?= htmlspecialchars($row["level2"]) ?></td>
                                         <td><?= htmlspecialchars($row["level3"]) ?></td>

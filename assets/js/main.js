@@ -346,33 +346,33 @@ $(document).ready(function() {
 });
 
 //check that requestor is verified or not
-$(document).ready(function(){
-  $('#requestor').blur(function(){
-    var requester_name= $(this).val();
-    var branch_id = $('#branch').val();
+// $(document).ready(function(){
+//   $('#requestor').blur(function(){
+//     var requester_name= $(this).val();
+//     var branch_id = $('#branch').val();
 
-    $.ajax({
-      url: 'req_verification.php',
-      method: 'POST',
-      data: {
-        requestor_name: requester_name,
-        branch_id: branch_id
-      },
-success: function(response){
-  if (response ==='user exist and verified'){
-    $('#requestor').removeClass('is-invalid').addClass('is-valid');
-    $('#requestorFeedback').text('user is authorized');
-  }
-  else{
-    $('#requestor').removeClass('is-valid').addClass('is-invalid');
-    $('#requestorFeedback').text('user not authorized');
-  }
-}
-    }
-    )
-  }
-)
-});
+//     $.ajax({
+//       url: 'req_verification.php',
+//       method: 'POST',
+//       data: {
+//         requestor_name: requester_name,
+//         branch_id: branch_id
+//       },
+// success: function(response){
+//   if (response ==='user exist and verified'){
+//     $('#requestor').removeClass('is-invalid').addClass('is-valid');
+//     $('#requestorFeedback').text('user is authorized');
+//   }
+//   else{
+//     $('#requestor').removeClass('is-valid').addClass('is-invalid');
+//     $('#requestorFeedback').text('user not authorized');
+//   }
+// }
+//     }
+//     )
+//   }
+// )
+// });
 
 //box name ajax
 $(document).ready(function() {

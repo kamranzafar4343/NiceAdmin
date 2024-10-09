@@ -46,7 +46,7 @@ $company_data = $result->fetch_assoc();
 //fetch employee table
 $emp_sql = "Select * from employee where comp_FK_emp = $company_id";
 $result_emp = $conn->query($emp_sql);
-//$emp_data = $result_emp->fetch_assoc();
+$emp_data = $result_emp->fetch_assoc();
 
 
 ?>
@@ -330,9 +330,10 @@ $result_emp = $conn->query($emp_sql);
       display: flex;
     }
 
-    .datatable-table{
+    .datatable-table {
       margin-left: 347px !important;
     }
+
     .datatable-table>thead>tr>th {
       vertical-align: bottom;
       text-align: left;
@@ -362,7 +363,7 @@ $result_emp = $conn->query($emp_sql);
     .card-body {
       padding: 10px !important;
       padding-left: 0 !important;
-      padding-top: 0 !important;
+      padding-top: 29px !important;
       margin-left: 12px !important;
     }
 
@@ -388,21 +389,21 @@ $result_emp = $conn->query($emp_sql);
     }
 
     .datatable-input {
-    width: 840px !important;
-    height: 43px !important;
-    font-size: 0.8rem !important;
-    margin-left: 60px !important;
-    outline: none !important;
-    width: 179% !important;
-    /* max-width: 400px; */
-    padding: 17px 21px !important;
-    /* font-size: 17px; */
-    /* border: 1px solid #ccc; */
-    border-radius: 6px !important; 
-    /* transition: all 0.3s ease; */
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-    margin-bottom: 14px !important;
-}
+      width: 840px !important;
+      height: 43px !important;
+      font-size: 0.8rem !important;
+      margin-left: 60px !important;
+      outline: none !important;
+      width: 179% !important;
+      /* max-width: 400px; */
+      padding: 17px 21px !important;
+      /* font-size: 17px; */
+      /* border: 1px solid #ccc; */
+      border-radius: 6px !important;
+      /* transition: all 0.3s ease; */
+      /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+      margin-bottom: 14px !important;
+    }
 
     .datatable-search {
       margin-left: 485px !important;
@@ -594,8 +595,8 @@ $result_emp = $conn->query($emp_sql);
     .customImage {
       border: 1px solid white;
       position: relative;
-      top: 36%;
-      left: 25%;
+      top: -2%;
+      left: 20%;
 
       /* Change cursor to indicate clickability */
     }
@@ -621,6 +622,11 @@ $result_emp = $conn->query($emp_sql);
 
     .mt-5 {
       margin-top: 5rem !important;
+    }
+
+    /*emp buton styling*/
+    .emp_btn {
+      margin-left: 400px;
     }
   </style>
 
@@ -808,16 +814,13 @@ $result_emp = $conn->query($emp_sql);
     <div class="col-md-12 col-lg-12 mt-5">
       <div class="card card-custom bg-white border-white border-0">
 
-        <div class="card-custom-img"></div>
-        <div class="card-custom-avatar">
-          <form id="updateImageForm" action="update_image.php" method="POST" enctype="multipart/form-data">
-            <!-- Display the company image -->
-
-            <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" width="70px" alt="image" id="image-<?php echo $company_data['comp_id']; ?>">
-
-
-          </form>
+        <div class="d-flex flex-row bd-highlight mb-3">
+        
+        <div class="card-custom-avatar align-center mt-0">
+          <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" width="250px" alt="image" id="image-<?php echo $company_data['comp_id']; ?>">
         </div>
+
+        <div class="">
         <div class="card-body list-group">
           <?php if ($company_data !== null): ?>
             <h4 class="card-title-info"><?php echo $company_data['comp_name']; ?></h4>
@@ -828,18 +831,21 @@ $result_emp = $conn->query($emp_sql);
             <a href="Branches.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
             <!-- <a href="showItems.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-shopping-cart-2-line remix" style="font-size: 30px;"></i></a> -->
           </div>
-
         </div>
+        </div>
+        </div>
+        
+        
       </div>
     </div>
 
     <div class="col-md-10 col-lg-12 mt-4">
       <div class="cardBranch recent-sales overflow-auto">
         <div class="card-body" style="font-size: 0.8rem;">
-          <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()" class="btn btn-primary mb-3">Add Employee</button>
+          <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()" class="btn btn-primary emp_btn">Add Employee</button>
           <h5 class="card-title emp-card">List of employees</h5>
           <?php
-          if ($result_emp->num_rows > 0) {
+          if ($result_emp->num_rows >= 0) {
           ?>
             <table class="table datatable emp_tb">
               <thead>
@@ -847,15 +853,10 @@ $result_emp = $conn->query($emp_sql);
                   <th scope="col">Name</th>
                   <th scope="col" class="email-col">Email</th>
                   <th scope="col">Phone</th>
-                  <!-- <th scope="col" >Branch</th> -->
-                  <!-- <th scope="col" style="width: 24%;">Company Name</th> -->
-                  <!-- <th scope="col">Gender</th> -->
-                  <!-- <th scope="col">Address</th> -->
                   <th scope="col">Role</th>
                   <!-- <th scope="col" >Received</th> -->
                   <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
                   <th scope="col">Auth_status</th>
-
                   <th scope="col">Action</th>
                 </tr>
               </thead>

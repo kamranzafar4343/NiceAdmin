@@ -8,7 +8,7 @@ if (isset($_POST['box_name'])) {
     $nameCheck = "SELECT * FROM `box` WHERE `box_name` = '$box_name'";
     $nameCheckResult = $conn->query($nameCheck);
     
-    if ($result->num_rows > 0) {
+    if ($nameCheckResult->num_rows > 0) {
         echo 'exists';
     } else {
         echo 'not_exists';

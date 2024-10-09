@@ -484,7 +484,7 @@ if (isset($_GET['comp_id'])) {
 
 
     <!-- Button to add new box -->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add Box</button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add Container </button>
 
     <!-- Search bar and company filter -->
     <div class="row">

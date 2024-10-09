@@ -455,7 +455,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
     <!--form--------------------------------------form--------------------------------------->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Add a box</h2>
+        <h2>Add Container / Filefolder</h2>
     </div>
 
     <div class="container d-flex justify-content-center">
@@ -464,54 +464,61 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 <br>
                 <form class="row g-3 needs-validation" action="" method="POST" id="boxForm">
 
-                    <div class="col-md-6">
-                        <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="box_barcode" required>
-                        <div id="barcodeFeedback" class="invalid-feedback">
-                            <!-- Error message will be displayed here -->
-                        </div>
+                                       <!-- For the Level 1 field -->
+                                       <div class="col-md-4">
+                        <label for="level1">Account Level 1:</label>
+                        <input type="text" id="level1" class="form-control" name="level1" required>
                     </div>
 
+                    <!-- For the Level 2 field -->
+                    <div class="col-md-4">
+                        <label for="level2">Level 2:</label>
+                        <input type="text" id="level2" class="form-control" name="level2" required>
+                    </div>
+
+                    <!-- For the Level 3 field -->
+                    <div class="col-md-4">
+                        <label for="level3">Level 3:</label>
+                        <input type="text" id="level3" class="form-control" name="level3" required>
+                    </div>
+
+                    <!-- Select Barcode -->
                     <div class="col-md-6">
-                        <label for="company">Select Company:</label>
-                        <select id="company" class="form-select" name="company" required>
-                            <option value=""> Select a Company </option>
+                        <label for="barcode_select" class="form-label">Select Box Barcode</label>
+                        <select class="form-select" id="barcode_select" name="barcode_select" required>
+                            <option value="" disabled selected>Select a barcode</option>
                             <?php
-                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                            // Fetch barcodes from the box table
+                            $sql = "SELECT box_id, barcode FROM box";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<option value='" . $row['box_id'] . "'>" . $row['barcode'] . "</option>";
+                                }
                             }
                             ?>
                         </select>
                     </div>
-
+                    <!-- FOR the alternative code -->
                     <div class="col-md-6">
-                        <label for="branch">Select a Branch:</label>
-                        <select id="branch" class="form-select" name="branch" required>
-                            <option value="">Select a Branch</option>
+                        <label for="alt_code" class="form-label">Alt Code </label>
+                        <input type="text" class="form-control" id="alt_code" name="alt_code">
+                    </div>
+                    <!--  Description -->
+                    <div class="col-md-6">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" required>
+                    </div>
+                    <!-- Object Code -->
+                    <div class="col-md-6">
+                        <label for="object_code" class="form-label">Object Code</label>
+                        <select class="form-select" id="object_code" name="object_code" required>
+                            <option value="Container">Container</option>
+                            <option value="FileFolder">FileFolder</option>
                         </select>
                     </div>
-
-                    <div class="col-md-6">
-                        <label for="rec_date">Receive date</label>
-                        <input type="datetime-local" class="form-control" name="rec_date" id="rec_date" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="sender">Sender:</label>
-                        <input type="text" class="form-control" name="sender" id="sender" pattern="[a-zA-Z\s]+"
-                            title="Only alphabets and spaces are allowed" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="rec_via">Receive via:</label>
-                        <select id="rec_via" class="form-select" name="rec_via" required>
-                            <option value="">Select an option</option>
-                            <option value="Self">Self</option>
-                            <option value="Courier">Courier</option>
-                        </select>
-                    </div>
-
+                    <!-- for the status -->
                     <div class="col-md-6">
                         <label for="status">Status:</label>
                         <select id="status" class="form-select" name="status" required>

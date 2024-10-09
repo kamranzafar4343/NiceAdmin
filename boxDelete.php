@@ -50,7 +50,7 @@ if (isset($_GET['id'])) {
                 echo 'Cannot delete a box that has items stored in it.';
             } else {
                 // First, delete the related records from the `store` table
-                $delete_store_sql = "DELETE FROM `store` WHERE `box_id` = $box_id";
+                $delete_store_sql = "DELETE FROM `store` WHERE `barcode_select` = $box_id";
                 if ($conn->query($delete_store_sql) === TRUE) {
                     // Now, delete the box from the `box` table
                     $delete_box_sql = "DELETE FROM `box` WHERE `box_id` = $box_id";

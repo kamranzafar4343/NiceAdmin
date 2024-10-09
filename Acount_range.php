@@ -233,7 +233,7 @@ if ($resultData->num_rows > 0) {
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title> Add the Rack</title>
+    <title> define account ranges</title>
 
 
 </head>
@@ -440,13 +440,6 @@ if ($resultData->num_rows > 0) {
                         <label for="level2">Level 2:</label>
                         <input type="text" id="level2" class="form-control" name="level2" required>
                     </div>
-
-                    <!-- For the Level 3 field -->
-                    <div class="col-md-4">
-                        <label for="level3">Level 3:</label>
-                        <input type="text" id="level3" class="form-control" name="level3" required>
-                    </div>
-
                    
                     <!-- Object Code -->
                     <div class="col-md-4">
@@ -461,6 +454,7 @@ if ($resultData->num_rows > 0) {
                         <label for="begin_code">Begin Code:</label>
                         <input type="text" id="begin_code" class="form-control" name="begin_code" required>
                     </div>
+                    
                      <!-- For the Level 2 field -->
                      <div class="col-md-4">
                         <label for="end_code">End code:</label>

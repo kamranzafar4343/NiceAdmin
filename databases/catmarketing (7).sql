@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2024 at 07:42 AM
+-- Generation Time: Oct 09, 2024 at 11:18 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -44,6 +44,10 @@ INSERT INTO `barcode` (`comp_id`, `branch`, `receive_date`, `sender`, `receive_v
 (0, 0, '', '', '', ''),
 (0, 0, '', '', '', ''),
 (0, 0, '', '', '', ''),
+(0, 0, '', '', '', ''),
+(0, 0, '', '', '', ''),
+(0, 0, '', '', '', ''),
+(0, 0, '', '', '', ''),
 (0, 0, '', '', '', '');
 
 -- --------------------------------------------------------
@@ -64,30 +68,6 @@ CREATE TABLE `box` (
   `barcode` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `box`
---
-
-INSERT INTO `box` (`box_id`, `branchID_FK`, `companiID_FK`, `created_at`, `status`, `rec_date`, `sender`, `rec_via`, `barcode`) VALUES
-(58, 137, 92, '2024-09-19 05:42:09', 'Out', '2024-09-02T03:39', 'Ashraf', 'Self-Pickup', '7654321'),
-(59, 135, 90, '2024-09-19 05:53:49', 'In', '2024-09-11T10:53', 'Ashraf', 'Self-Pickup', '893214823943'),
-(60, 135, 90, '2024-09-19 06:28:27', 'In', '2024-10-04T11:28', 'Ashraf', 'Self pickup', 'DHL-023810'),
-(61, 135, 90, '2024-09-19 16:21:20', 'In', '2024-09-10T21:21', 'Shahroz', 'courier', '2734822'),
-(62, 135, 90, '2024-09-19 18:24:21', 'In', '2024-09-10T23:24', 'Azan kazmi', 'TCS', '3242342'),
-(63, 135, 90, '2024-09-20 06:45:29', 'In', '2024-09-18T11:45', 'Anayat', 'Self', '1212312'),
-(65, 135, 90, '2024-09-20 07:13:41', 'out', '2024-09-10T12:13', 'Kashif', 'Self', '0120000'),
-(67, 135, 90, '2024-09-20 07:27:54', 'In', '2024-09-12T12:19', 'Shahroz', 'Self', '3454352'),
-(71, 135, 90, '2024-09-20 10:51:55', 'In', '2024-09-09T12:40', 'Kashifjhkjh', 'Self', 'safdsad'),
-(72, 135, 90, '2024-09-20 10:53:40', 'In', '2024-09-09T12:40', 'Kashifjhkjh', 'Self', '32432146'),
-(73, 136, 91, '2024-09-20 11:11:19', 'In', '2024-09-09T12:40', 'Kashifjhkjh', 'Self', 'new'),
-(74, 136, 91, '2024-09-20 11:22:06', 'In', '2024-09-09T12:40', 'ajkwewae', 'Self', '8964002'),
-(77, 139, 93, '2024-09-24 12:44:14', 'In', '2024-09-09T12:40', 'sajawal', 'Self', '012000014338'),
-(78, 139, 93, '2024-09-24 12:44:29', 'In', '2024-09-09T12:40', 'sajawal', 'Self', '01200001433834'),
-(79, 139, 93, '2024-09-24 12:44:58', 'In', '2024-09-09T12:40', 'sajawal', 'Self', '01200001433834'),
-(80, 140, 94, '2024-09-24 12:45:27', 'In', '2024-09-09T12:40', 'sajawal', 'Self', '8964002758937'),
-(81, 137, 92, '2024-09-30 08:43:11', 'Out', '2024-09-18T13:42', 'Shahroz', 'Self', '3298743'),
-(82, 137, 92, '2024-09-30 09:15:14', 'In', '2024-09-18T13:42', 'Aslam', 'Self', '0909087');
-
 -- --------------------------------------------------------
 
 --
@@ -95,6 +75,7 @@ INSERT INTO `box` (`box_id`, `branchID_FK`, `companiID_FK`, `created_at`, `statu
 --
 
 CREATE TABLE `branch` (
+  `account_level_no` int(255) NOT NULL,
   `branch_id` int(100) NOT NULL,
   `compID_FK` int(255) NOT NULL,
   `branch_name` varchar(255) NOT NULL,
@@ -107,19 +88,6 @@ CREATE TABLE `branch` (
   `Status` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `branch`
---
-
-INSERT INTO `branch` (`branch_id`, `compID_FK`, `branch_name`, `ContactPersonName`, `ContactPersonResignation`, `ContactPersonPhone`, `City`, `State`, `Country`, `Status`) VALUES
-(136, 91, 'soneri bank <b>HQ</b>', 'null', 'null', '+902178432491', 'Lahore', 'Punjab', 'Pakistan', NULL),
-(137, 92, 'bank islami <b>HQ</b>', 'null', 'null', '+902137342432', 'Okara', 'Punjab', 'Pakistan', NULL),
-(138, 92, 'bank Islami Mall road', 'Azan Ahmad', 'Manager', '+3483294232', 'Lahore', 'Punjab', 'Pakistan', NULL),
-(139, 93, 'hbl bank <b>HQ</b>', 'null', 'null', '+0987654456', 'Lahore', 'Punjab', 'Pakistan', NULL),
-(140, 94, 'allied bank  <b>HQ</b>', 'Jabran Akram', 'product-manager', '+9082938435', 'Lahore', 'Punjab', 'Pakistan', NULL),
-(141, 95, 'addidas <b>HQ</b>', 'Jabran Akram', 'product-manager', '03184090843', 'Bahawalpur', 'Punjab', 'Pakistan', NULL),
-(142, 95, 'adidas mall road', 'abbasi', 'manager', '32094382094', 'Mansehra', 'KPK', 'Pakistan', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -127,33 +95,29 @@ INSERT INTO `branch` (`branch_id`, `compID_FK`, `branch_name`, `ContactPersonNam
 --
 
 CREATE TABLE `compani` (
+  `acc_lev_1` int(255) NOT NULL,
+  `acc_lev_2` int(255) NOT NULL,
+  `acc_lev_3` int(255) NOT NULL,
   `comp_id` int(255) NOT NULL,
-  `comp_name` varchar(40) NOT NULL,
-  `phone` text NOT NULL,
-  `email` text NOT NULL,
-  `password` text NOT NULL,
-  `image` varchar(130) NOT NULL,
-  `city` text NOT NULL,
-  `state` text NOT NULL,
-  `country` text NOT NULL,
+  `acc_desc` text NOT NULL,
+  `email` text DEFAULT NULL,
   `registration` date NOT NULL,
   `expiry` date NOT NULL,
   `foc` text NOT NULL,
   `foc_phone` text NOT NULL,
-  `foc_role` text NOT NULL
+  `add_1` text NOT NULL,
+  `add_2` text NOT NULL,
+  `add_3` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `compani`
 --
 
-INSERT INTO `compani` (`comp_id`, `comp_name`, `phone`, `email`, `password`, `image`, `city`, `state`, `country`, `registration`, `expiry`, `foc`, `foc_phone`, `foc_role`) VALUES
-(90, 'js bank', '+92212131787', 'jsbank@js.com', '$2y$10$yo7J94LIE7gLfret6ayMBuQSh6onX9xftuUoeGEI9Q5PBRoofA78y', 'image/js_bank.png', 'Lahore', 'Punjab', 'Pakistan', '2024-09-18', '2025-10-31', '', '', ''),
-(91, 'soneri bank', '+902178432491', 'soneri@gmail.com', '$2y$10$Ifqd4lYZNFir5UFsTahpdOaTlDty53QgKgtvoA7u83ZgaLag55Ity', 'image/soneri.png', 'Lahore', 'Punjab', 'Pakistan', '2024-09-18', '2027-07-20', '', '', ''),
-(92, 'bank islami', '+902137342432', 'bankislami@gmail.com', '$2y$10$k0lPnsb6BYiZdqhVScFRGOTTcc3cuxt45u/xJX6TPxn0LehGxaUNm', 'image/islami.jpeg', 'Okara', 'Punjab', 'Pakistan', '2024-09-19', '2025-09-19', '', '', ''),
-(93, 'hbl bank', '+0987654456', 'hbl@gmial.com', '$2y$10$Y.WxDvKSTvMyE1DFNDPdbe5oxvuHuw3UYr8xl.Lt2juo6rq3wVJPK', 'image/hbl.png', 'Lahore', 'Punjab', 'Pakistan', '2024-09-23', '2025-09-23', '', '', ''),
-(94, 'allied bank ', '+909872938742', 'abl@gmail.com', '', 'image/abl.png', 'Lahore', 'Punjab', 'Pakistan', '2024-09-24', '2026-10-08', 'Jabran Akram', '+9082938435', 'product-manager'),
-(95, 'addidas', '03184090843', 'kamranzafar4343@gmail.com', '', 'image/setting.png', 'Bahawalpur', 'Punjab', 'Pakistan', '2024-09-27', '2025-09-27', 'Jabran Akram', '03184090843', 'product-manager');
+INSERT INTO `compani` (`acc_lev_1`, `acc_lev_2`, `acc_lev_3`, `comp_id`, `acc_desc`, `email`, `registration`, `expiry`, `foc`, `foc_phone`, `add_1`, `add_2`, `add_3`) VALUES
+(6010, 6111, 0, 99, 'Operations Branch - 05130', NULL, '2024-10-09', '2025-10-09', 'Mr. Muhammad Rizwan', '041 - 262 1431', 'Regency Arcade', 'The Mall', 'Faislabad'),
+(1320, 1321, 0, 110, 'Supplies department - 098093', NULL, '2024-10-09', '2025-10-09', 'Anshuman', '099809802', '12 abqari plaza ', 'qartaba chowk, Lahore Kasur Road', 'Lahore'),
+(1320, 1321, 13210, 112, 'HR Department 1321 - 0', NULL, '2024-10-09', '2025-10-09', 'Muhammad Ashir', '03180909112', 'H#123, St. #12', 'Main Anakali Bazar', 'Lahore');
 
 -- --------------------------------------------------------
 
@@ -457,7 +421,8 @@ INSERT INTO `delivery_orders` (`delivery_order_no`, `delivery_order_id`, `compan
 (0, 25, 92, 137, 58, '', 'zaid haris', '2024-09-12T12:20'),
 (0, 26, 92, 137, 58, '3243242', 'Zaid haris', '2024-09-18T12:31'),
 (0, 27, 0, 0, 0, '', '', ''),
-(0, 28, 92, 137, 81, '', 'zaid haris', '2024-09-10T13:44');
+(0, 28, 92, 137, 81, '', 'zaid haris', '2024-09-10T13:44'),
+(0, 29, 0, 0, 0, '', '', '');
 
 -- --------------------------------------------------------
 
@@ -478,18 +443,6 @@ CREATE TABLE `employee` (
   `auth_status` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `employee`
---
-
-INSERT INTO `employee` (`emp_id`, `comp_FK_emp`, `branch_FK_emp`, `name`, `email`, `phone`, `gender`, `Address`, `Authority`, `auth_status`) VALUES
-(18, 91, 136, 'zaman watto', 'zaman@gmail.com', '+9213456723', 'female', 'Hujra Shah, Okara', 'IT-manager', 'Authorized'),
-(19, 91, 136, 'Ali sherali', 'alisherr@gmail.com', '+098877868332', 'male', 'Lahore, Punjab', 'product-manager', 'Authorized'),
-(25, 92, 137, 'Akhter naz', 'akhternaz@female.com', '+9231920904', 'male', 'Gulshan -e-ravi, Lhr', 'hr', 'Authorized'),
-(26, 91, 136, 'zaman watto', 'kamranzafar4343@gmail.com', '03184090843', 'male', 'Okara', 'ceo', 'Authorized'),
-(28, 91, 136, 'ali abbas', 'kamranzafar4343@gmail.com', '03184090843', '', 'Okara', 'cfo', 'Authorized'),
-(29, 92, 137, 'zaid haris', 'zaid@gmail.com', '+0908767868', 'male', '92 Jail Road, Lahore', 'hr', 'Authorized');
-
 -- --------------------------------------------------------
 
 --
@@ -506,13 +459,6 @@ CREATE TABLE `item` (
   `barcode` text NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `item`
---
-
-INSERT INTO `item` (`item_name`, `item_id`, `box_FK_item`, `branch_FK_item`, `comp_FK_item`, `status`, `barcode`, `timestamp`) VALUES
-('', 238, 58, 137, 92, '', '01200001', '2024-09-26 16:26:35');
 
 -- --------------------------------------------------------
 
@@ -531,15 +477,6 @@ CREATE TABLE `orders` (
   `date` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`order_no`, `order_id`, `company`, `branch`, `box`, `item`, `name`, `date`) VALUES
-(6904, 25, 92, 137, 58, '', 'zaid haris', '2024-09-11T12:44'),
-(8006909, 26, 92, 137, 58, '', 'zaid haris', '2024-09-18T12:46'),
-(5435345, 27, 92, 137, 81, '', 'zaid haris', '2024-09-10T13:44');
-
 -- --------------------------------------------------------
 
 --
@@ -548,33 +485,21 @@ INSERT INTO `orders` (`order_no`, `order_id`, `company`, `branch`, `box`, `item`
 
 CREATE TABLE `racks` (
   `id` int(11) NOT NULL,
-  `rack_code` varchar(50) DEFAULT NULL,
-  `level` varchar(10) DEFAULT NULL,
-  `horizontal` varchar(5) DEFAULT NULL,
-  `rack_number` varchar(5) DEFAULT NULL,
-  `column_identifier` varchar(5) DEFAULT NULL,
-  `position_number` varchar(5) DEFAULT NULL
+  `rack_location` varchar(255) NOT NULL,
+  `rack_description` varchar(255) NOT NULL,
+  `object_code` varchar(50) NOT NULL,
+  `capacity` int(11) NOT NULL DEFAULT 9,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `racks`
 --
 
-INSERT INTO `racks` (`id`, `rack_code`, `level`, `horizontal`, `rack_number`, `column_identifier`, `position_number`) VALUES
-(2, 'L', '05', 'H', '01', 'C', '08'),
-(3, 'L', '06', 'G', '02', 'D', '04'),
-(4, 'L', '07', 'G', '03', 'D', '05'),
-(5, 'L', '08', 'G', '04', 'D', '08'),
-(7, 'L', '02', 'H', '06', 'G', '02'),
-(8, 'M', '02', 'H', '08', 'G', '01'),
-(10, 'N', '02', 'H', '08', 'G', '02'),
-(11, 'N', '02', 'H', '07', 'G', '02'),
-(12, 'N', '02', 'H', '07', 'G', '03'),
-(14, 'N', '02', 'H', '07', 'G', '09'),
-(15, 'N', '02', 'H', '07', 'G', '07'),
-(16, 'L', '03', 'H', '07', 'G', '07'),
-(17, 'L', '03', 'H', '07', 'G', '04'),
-(18, 'A', '01', 'B', '01', 'C', '01');
+INSERT INTO `racks` (`id`, `rack_location`, `rack_description`, `object_code`, `capacity`, `created_at`) VALUES
+(1, 'L1-A-02-D-06', 'Old Hall ', 'Container', 9, '2024-10-07 01:23:54'),
+(2, 'L2-H-01-A-03', 'New hall', 'Container', 9, '2024-10-07 01:57:37'),
+(3, 'L2-H-01-A-05', 'New hall', 'FileFolder', 9, '2024-10-07 02:05:03');
 
 -- --------------------------------------------------------
 
@@ -586,17 +511,17 @@ CREATE TABLE `register` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `password` varchar(50) NOT NULL,
+  `role` enum('user','admin') NOT NULL DEFAULT 'admin'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `register`
 --
 
-INSERT INTO `register` (`id`, `name`, `email`, `password`) VALUES
-(3, 'abc', 'abc@gmail.com', 'abcdef'),
-(20, 'Kamran Zafar', 'uniqueuser843@gmail.com', 'godrinkacupoftea'),
-(21, 'unique user', 'uniqueuser843@gmail.com', 'godrinkacupoftea');
+INSERT INTO `register` (`id`, `name`, `email`, `password`, `role`) VALUES
+(3, 'ali', 'a@gmail.com', 'abcdef', 'user'),
+(21, 'unique user', 'uniqueuser843@gmail.com', 'godrinkacupoftea', 'admin');
 
 -- --------------------------------------------------------
 
@@ -617,6 +542,11 @@ INSERT INTO `search` (`Name`) VALUES
 ('zoya\r\n'),
 ('shamsa\r\n'),
 ('anaya\r\n'),
+('sania\r\n'),
+('kamran\r\n'),
+('zoya\r\n'),
+('shamsa\r\n'),
+('anaya\r\n'),
 ('sania\r\n');
 
 -- --------------------------------------------------------
@@ -627,26 +557,42 @@ INSERT INTO `search` (`Name`) VALUES
 
 CREATE TABLE `store` (
   `id` int(11) NOT NULL,
-  `box_id` int(11) NOT NULL,
-  `rack_id` int(11) NOT NULL
+  `level1` varchar(255) NOT NULL,
+  `level2` varchar(255) NOT NULL,
+  `level3` varchar(255) NOT NULL,
+  `barcode_select` int(11) NOT NULL,
+  `alt_code` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `rack_select` int(11) NOT NULL,
+  `object_code` enum('Container','FileFolder') NOT NULL,
+  `status` enum('In') NOT NULL,
+  `add_date` date NOT NULL,
+  `destroy_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `store`
 --
 
-INSERT INTO `store` (`id`, `box_id`, `rack_id`) VALUES
-(4, 55, 11),
-(11, 53, 10),
-(12, 59, 5),
-(13, 53, 2),
-(14, 53, 2),
-(15, 53, 2),
-(20, 53, 2),
-(24, 54, 3),
-(25, 53, 8),
-(26, 76, 18),
-(27, 71, 14);
+INSERT INTO `store` (`id`, `level1`, `level2`, `level3`, `barcode_select`, `alt_code`, `description`, `rack_select`, `object_code`, `status`, `add_date`, `destroy_date`) VALUES
+(1, '5001', '5011', '5111', 118, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(2, '5001', '5011', '5111', 58, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(3, '5001', '5011', '5111', 58, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(4, '5001', '5011', '5111', 58, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(7, '6001', '6011', '6111', 53, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(8, '6001', '6011', '6111', 53, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(10, '6001', '6011', '6111', 59, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(11, '6001', '6011', '6111', 62, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(13, '6001', '6011', '6111', 62, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(14, '6001', '6011', '6111', 112, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(15, '6001', '6011', '6111', 114, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(16, '6001', '6011', '6111', 101, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(17, '6001', '6011', '6111', 110, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(18, '6001', '6011', '6111', 84, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(19, '6001', '6011', '6111', 59, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(21, '6001', '6011', '6111', 53, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(24, '6001', '6011', '6111', 53, 'K-127865', 'for Mcb', 1, 'Container', 'In', '2024-10-07', '2034-10-07'),
+(25, '6001', '6011', '6111', 108, 'K-127865', 'for Mcb', 2, 'Container', 'In', '2024-10-08', '2034-10-08');
 
 --
 -- Indexes for dumped tables
@@ -665,14 +611,17 @@ ALTER TABLE `box`
 --
 ALTER TABLE `branch`
   ADD PRIMARY KEY (`branch_id`),
-  ADD KEY `comp_ID_FK` (`compID_FK`);
+  ADD KEY `comp_ID_FK` (`compID_FK`),
+  ADD KEY `account_level_no` (`account_level_no`);
 
 --
 -- Indexes for table `compani`
 --
 ALTER TABLE `compani`
   ADD PRIMARY KEY (`comp_id`),
-  ADD UNIQUE KEY `comp_name` (`comp_name`,`email`) USING HASH;
+  ADD UNIQUE KEY `comp_name` (`acc_desc`,`email`) USING HASH,
+  ADD KEY `email` (`email`(768)),
+  ADD KEY `email_2` (`email`(768));
 
 --
 -- Indexes for table `countries`
@@ -730,8 +679,8 @@ ALTER TABLE `register`
 --
 ALTER TABLE `store`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `box_id` (`box_id`),
-  ADD KEY `rack_id` (`rack_id`);
+  ADD KEY `barcode_select` (`barcode_select`),
+  ADD KEY `rack_select` (`rack_select`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -741,49 +690,49 @@ ALTER TABLE `store`
 -- AUTO_INCREMENT for table `box`
 --
 ALTER TABLE `box`
-  MODIFY `box_id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `box_id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `branch`
 --
 ALTER TABLE `branch`
-  MODIFY `branch_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
+  MODIFY `branch_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
 
 --
 -- AUTO_INCREMENT for table `compani`
 --
 ALTER TABLE `compani`
-  MODIFY `comp_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `comp_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `delivery_orders`
 --
 ALTER TABLE `delivery_orders`
-  MODIFY `delivery_order_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `delivery_order_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `emp_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `emp_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `item`
 --
 ALTER TABLE `item`
-  MODIFY `item_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=239;
+  MODIFY `item_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `order_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `racks`
 --
 ALTER TABLE `racks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `register`
@@ -795,7 +744,7 @@ ALTER TABLE `register`
 -- AUTO_INCREMENT for table `store`
 --
 ALTER TABLE `store`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables

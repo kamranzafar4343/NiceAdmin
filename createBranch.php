@@ -10,7 +10,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include the database connection
-include 'config/db.php'; 
+include 'config/db.php';
 
 // Get session email 
 $email = $_SESSION['email'];
@@ -26,7 +26,7 @@ if ($resultData->num_rows > 0) {
 }
 
 // Check if the user is an admin, otherwise redirect
-if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
+if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
   // If the user is not an Admin, redirect to index page
   header("Location: index.php");
   exit();
@@ -38,7 +38,7 @@ $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 
 // Validate company ID
-$companyQuery = "SELECT comp_id, comp_name FROM compani WHERE comp_id = $company_id";
+$companyQuery = "SELECT comp_id, acc_lev_1 FROM compani WHERE comp_id = $company_id";
 $companyResult = $conn->query($companyQuery);
 
 if ($companyResult->num_rows === 0) {
@@ -46,24 +46,30 @@ if ($companyResult->num_rows === 0) {
 }
 
 if (isset($_POST['submit'])) {
-  $acc_lev_no = mysqli_real_escape_string($conn, $_POST['account_level_no']);
-  $branch_name = mysqli_real_escape_string($conn, $_POST['branch_name']);
-  $contactPersonName = mysqli_real_escape_string($conn, $_POST['ContactPersonName']);
-  $contactPersonPhone = mysqli_real_escape_string($conn, $_POST['ContactPersonPhone']);
-  $contactPersonResignation = mysqli_real_escape_string($conn, $_POST['ContactPersonResignation']);
-  $city = mysqli_real_escape_string($conn, $_POST['City']);
-  $state = mysqli_real_escape_string($conn, $_POST['State']);
-  $country = mysqli_real_escape_string($conn, $_POST['Country']);
+  // Fetching values from the form using POST and ensuring security with real_escape_string
+  $company_id = mysqli_real_escape_string($conn, $_POST['comp_id_fk']);
+  $acc_lev_2 = mysqli_real_escape_string($conn, $_POST['acc_lev_2']);
+  $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
+  $registration = mysqli_real_escape_string($conn, $_POST['registration']);
+  $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
+  $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
+  $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
+  $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
+  $address = mysqli_real_escape_string($conn, $_POST['address']);
+  $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
+  $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
+  $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
-  $sql = "INSERT INTO branch (account_level_no, compID_FK, branch_name, ContactPersonName, ContactPersonPhone, ContactPersonResignation, Country, State, City) 
-            VALUES ('$acc_lev_no', '$company_id', '$branch_name', '$contactPersonName', '$contactPersonPhone', '$contactPersonResignation', '$country', '$state', '$city')";
+  // SQL query to insert the data into the database
+  $sql = "INSERT INTO branches (comp_id_fk, acc_lev_2, account_desc, registration_date, expiry_date, contact_person, contact_phone, contact_fax, address, address1, address2, pickup_address) 
+          VALUES ('$company_id', '$acc_lev_2', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$contact_fax', '$address', '$address1', '$address2', '$pickup_address')";
 
   if ($conn->query($sql) === TRUE) {
-    header("Location: Branches.php?id=" . $company_id);
-    exit; // Ensure script ends after redirect
-    echo "success";
+      // Redirecting after successful insertion
+      header("Location: Branches.php?id=" . $company_id);
+      exit;
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+      echo "Error: " . $sql . "<br>" . $conn->error;
   }
 
   $conn->close();
@@ -469,59 +475,60 @@ End Search Bar -->
           <!-- Company ID input (readonly) -->
           <div class="col-md-6">
             <label class="form-label">Company ID</label>
-            <input type="text" class="form-control" name="compID_FK" value="<?php echo htmlspecialchars($company_id); ?>" readonly>
+            <input type="text" class="form-control" name="comp_id_fk" value="<?php echo htmlspecialchars($company_id); ?>" readonly>
           </div>
 
           <div class="col-md-6">
-            <label class="form-label">Account level 2</label>
-            <input type="text" class="form-control" name="account_level_no" required>
+            <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
+            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" required>
           </div>
-          
+
+
           <div class="col-md-6">
-            <label class="form-label">Branch Name</label>
-            <input type="text" class="form-control" name="branch_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>
+            <label for="account_description" class="form-label">Account Description</label>
+            <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
+          </div>
+
+
+          <div class="col-md-6">
+            <label for="registration" class="form-label">Setup Date</label>
+            <input type="date" class="form-control" id="registration" name="registration" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="expiry" class="form-label">Conract Exp_Date</label>
+            <input type="date" class="form-control" id="expiry" name="expiry">
           </div>
           <div class="col-md-6">
-            <label class="form-label">Contact Person Name</label>
-            <input type="text" class="form-control" name="ContactPersonName" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>
+            <label for="" class="form-label">Contact Person</label>
+            <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
           </div>
           <div class="col-md-6">
-            <label class="form-label">Contact Person Phone</label>
-            <input type="text" class="form-control" name="ContactPersonPhone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Contact Person Resignation</label>
-            <input type="text" class="form-control" name="ContactPersonResignation" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="25" title="only letters ; at least 3" required>
-          </div>
-          <div class="col-md-6">
-            <label for="country" class="form-label">Country</label>
-            <select class="form-select" id="country" name="Country" required>
-              <option value="">Select Country</option>
-              <option value="Pakistan">Pakistan</option>
-              <option value="USA">USA</option>
-              <option value="Canada">Canada</option>
-              <option value="UK">UK</option>
-              <!-- Add more countries as needed -->
-            </select>
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="" name="foc_phone" required>
           </div>
 
           <div class="col-md-6">
-            <label for="state" class="form-label">State</label>
-            <select class="form-select" id="state" name="State" required>
-              <option value="">Select State</option>
-              <!-- Options will be dynamically populated based on selected country -->
-            </select>
+            <label for="phone" class="form-label">Fax</label>
+            <input type="text" class="form-control" id="" name="foc_fax">
           </div>
 
           <div class="col-md-6">
-            <label for="city" class="form-label">City</label>
-            <select class="form-select" id="city" name="City" required>
-              <option value="">Select City</option>
-              <!-- Options will be dynamically populated based on selected state -->
-            </select>
+            <label for="address" class="form-label">Address</label>
+            <input type="text" class="form-control" id="" name="address" required>
+            <br>
+            <input type="text" class="form-control" id="" name="address1">
+            <br>
+            <input type="text" class="form-control" id="" name="address2">
+
           </div>
-          <div class="col-12 d-flex justify-content-center">
-            <button type="submit" class="btn btn-outline-primary" name="submit" value="submit">Submit</button>
+          <div class="col-md-6">
+            <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
+            <input type="text" class="form-control" id="" name="pickup_address" required>
+          </div>
+
+          <div class="text-center mt-4 mb-2">
+            <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
+            <button type="reset" class="btn btn-outline-secondary ">Reset</button>
           </div>
         </form>
       </div>
@@ -538,68 +545,7 @@ End Search Bar -->
     <?php unset($_SESSION['data_inserted']); ?>
   <?php endif; ?>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const countryStateCityData = {
-        Pakistan: {
-          Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-          KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-          Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-          Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
-
-        },
-        USA: {
-          California: ["Los Angeles", "San Francisco", "San Diego"],
-          Texas: ["Houston", "Austin", "Dallas"]
-          // Add more states and cities
-        },
-        Canada: {
-          Ontario: ["Toronto", "Ottawa", "Hamilton"],
-          Quebec: ["Montreal", "Quebec City"]
-          // Add more provinces and cities
-        },
-      };
-
-      const countrySelect = document.getElementById('country');
-      const stateSelect = document.getElementById('state');
-      const citySelect = document.getElementById('city');
-
-      // Update states dropdown when a country is selected
-      countrySelect.addEventListener('change', function() {
-        const selectedCountry = countrySelect.value;
-        stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-        if (selectedCountry) {
-          const states = Object.keys(countryStateCityData[selectedCountry]);
-          states.forEach(function(state) {
-            const option = document.createElement('option');
-            option.value = state;
-            option.text = state;
-            stateSelect.add(option);
-          });
-        }
-      });
-
-      // Update cities dropdown when a state is selected
-      stateSelect.addEventListener('change', function() {
-        const selectedCountry = countrySelect.value;
-        const selectedState = stateSelect.value;
-        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-        if (selectedCountry && selectedState) {
-          const cities = countryStateCityData[selectedCountry][selectedState];
-          cities.forEach(function(city) {
-            const option = document.createElement('option');
-            option.value = city;
-            option.text = city;
-            citySelect.add(option);
-          });
-        }
-      });
-    });
-  </script>
-
+ 
 </body>
 
 </html>

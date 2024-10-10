@@ -327,8 +327,8 @@ $result = $conn->query($sql);
               <thead>
                 <tr>
                   <th scope="col"  style="width:8%;">Level-1</th>
-                  <th scope="col"  style="width:8%;" >Level-2</th>
-                  <th scope="col"  style="width:8%;">Level-3</th>
+                  <!-- <th scope="col"  style="width:8%;" >Level-2</th> -->
+                  <!-- <th scope="col"  style="width:8%;">Level-3</th> -->
                   <th scope="col" >Description</th>
                   <th scope="col" >Setup Date</th>
                   <th scope="col" >Expiry Date</th>
@@ -343,9 +343,17 @@ $result = $conn->query($sql);
                 <?php
                 while ($row = $result->fetch_assoc()) {
                   echo "<tr>";
-                  echo "<td >" . htmlspecialchars($row["acc_lev_1"]) . "</td> ";
-                  echo "<td >" . htmlspecialchars($row["acc_lev_2"]) . "</td>";
-                  echo "<td >" . htmlspecialchars($row["acc_lev_3"]) . "</td>";
+                  ?>
+                  
+                  <td>
+                  <a class="text-primary fw-bold" href="Branches.php?id=<?php echo $row['comp_id']; ?>">
+                    <?php echo $row['acc_lev_1']; ?>
+                  </a>
+                </td>
+                  <!-- echo "<td >" . htmlspecialchars($row["acc_lev_1"]) . "</td> "; -->
+                   <?php
+                  // echo "<td >" . htmlspecialchars($row["acc_lev_2"]) . "</td>";
+                  // echo "<td >" . htmlspecialchars($row["acc_lev_3"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["acc_desc"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";

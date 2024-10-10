@@ -65,11 +65,11 @@ if (isset($_POST['submit'])) {
           VALUES ('$company_id', '$acc_lev_2', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$contact_fax', '$address', '$address1', '$address2', '$pickup_address')";
 
   if ($conn->query($sql) === TRUE) {
-      // Redirecting after successful insertion
-      header("Location: Branches.php?id=" . $company_id);
-      exit;
+    // Redirecting after successful insertion
+    header("Location: Branches.php?id=" . $company_id);
+    exit;
   } else {
-      echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Error: " . $sql . "<br>" . $conn->error;
   }
 
   $conn->close();
@@ -477,6 +477,20 @@ End Search Bar -->
             <label class="form-label">Company ID</label>
             <input type="text" class="form-control" name="comp_id_fk" value="<?php echo htmlspecialchars($company_id); ?>" readonly>
           </div>
+          <?php
+          $getAccLev1 = "SELECT * FROM compani WHERE comp_id = '$company_id'";
+          $resultAccLev1 = mysqli_query($conn, $getAccLev1);
+          if ($resultAccLev1->num_rows > 0) {
+            $rowAccLev1 = $resultAccLev1->fetch_assoc();
+
+            $fetchAcc1 = $rowAccLev1['acc_lev_1'];
+          }
+
+          ?>
+          <div class="col-md-6">
+            <label class="form-label">Account Level 1</label>
+            <input type="text" class="form-control" name="" value="<?php echo htmlspecialchars($fetchAcc1); ?>" readonly>
+          </div>
 
           <div class="col-md-6">
             <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
@@ -545,7 +559,7 @@ End Search Bar -->
     <?php unset($_SESSION['data_inserted']); ?>
   <?php endif; ?>
 
- 
+
 </body>
 
 </html>

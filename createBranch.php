@@ -65,11 +65,11 @@ if (isset($_POST['submit'])) {
           VALUES ('$company_id', '$acc_lev_2', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$contact_fax', '$address', '$address1', '$address2', '$pickup_address')";
 
   if ($conn->query($sql) === TRUE) {
-    // Redirecting after successful insertion
     header("Location: Branches.php?id=" . $company_id);
-    exit;
+    exit; // Ensure script ends after redirect
+    echo "success";
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+      echo "Error: " . $sql . "<br>" . $conn->error;
   }
 
   $conn->close();
@@ -488,56 +488,56 @@ End Search Bar -->
 
           ?>
           <div class="col-md-6">
-            <label class="form-label">Account Level 1</label>
-            <input type="text" class="form-control" name="" value="<?php echo htmlspecialchars($fetchAcc1); ?>" readonly>
+            <label class="form-label">Account level 2</label>
+            <input type="text" class="form-control" name="account_level_no" required>
           </div>
-
+          
           <div class="col-md-6">
-            <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
-            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" required>
-          </div>
-
-
-          <div class="col-md-6">
-            <label for="account_description" class="form-label">Account Description</label>
-            <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
+            <label class="form-label">Branch Name</label>
+            <input type="text" class="form-control" name="branch_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>
           </div>
 
 
           <div class="col-md-6">
-            <label for="registration" class="form-label">Setup Date</label>
-            <input type="date" class="form-control" id="registration" name="registration" required>
+            <label class="form-label">Contact Person Name</label>
+            <input type="text" class="form-control" name="ContactPersonName" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>
           </div>
-          <div class="col-md-6 mb-3">
-            <label for="expiry" class="form-label">Conract Exp_Date</label>
-            <input type="date" class="form-control" id="expiry" name="expiry">
+
+
+          <div class="col-md-6">
+            <label class="form-label">Contact Person Phone</label>
+            <input type="text" class="form-control" name="ContactPersonPhone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" required>
           </div>
           <div class="col-md-6">
-            <label for="" class="form-label">Contact Person</label>
-            <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
-          </div>
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Phone</label>
-            <input type="text" class="form-control" id="" name="foc_phone" required>
+            <label class="form-label">Contact Person Resignation</label>
+            <input type="text" class="form-control" name="ContactPersonResignation" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="25" title="only letters ; at least 3" required>
           </div>
 
           <div class="col-md-6">
-            <label for="phone" class="form-label">Fax</label>
-            <input type="text" class="form-control" id="" name="foc_fax">
+            <label for="country" class="form-label">Country</label>
+            <select class="form-select" id="country" name="Country" required>
+              <option value="">Select Country</option>
+              <option value="Pakistan">Pakistan</option>
+              <option value="USA">USA</option>
+              <option value="Canada">Canada</option>
+              <option value="UK">UK</option>
+              <!-- Add more countries as needed -->
+            </select>
           </div>
 
           <div class="col-md-6">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="" name="address" required>
-            <br>
-            <input type="text" class="form-control" id="" name="address1">
-            <br>
-            <input type="text" class="form-control" id="" name="address2">
-
+            <label for="state" class="form-label">State</label>
+            <select class="form-select" id="state" name="State" required>
+              <option value="">Select State</option>
+              <!-- Options will be dynamically populated based on selected country -->
+            </select>
           </div>
           <div class="col-md-6">
-            <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
-            <input type="text" class="form-control" id="" name="pickup_address" required>
+            <label for="city" class="form-label">City</label>
+            <select class="form-select" id="city" name="City" required>
+              <option value="">Select City</option>
+              <!-- Options will be dynamically populated based on selected state -->
+            </select>
           </div>
 
           <div class="text-center mt-4 mb-2">
@@ -559,6 +559,67 @@ End Search Bar -->
     <?php unset($_SESSION['data_inserted']); ?>
   <?php endif; ?>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const countryStateCityData = {
+        Pakistan: {
+          Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
+          KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
+          Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
+          Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
+
+        },
+        USA: {
+          California: ["Los Angeles", "San Francisco", "San Diego"],
+          Texas: ["Houston", "Austin", "Dallas"]
+          // Add more states and cities
+        },
+        Canada: {
+          Ontario: ["Toronto", "Ottawa", "Hamilton"],
+          Quebec: ["Montreal", "Quebec City"]
+          // Add more provinces and cities
+        },
+      };
+
+      const countrySelect = document.getElementById('country');
+      const stateSelect = document.getElementById('state');
+      const citySelect = document.getElementById('city');
+
+      // Update states dropdown when a country is selected
+      countrySelect.addEventListener('change', function() {
+        const selectedCountry = countrySelect.value;
+        stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
+        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+        if (selectedCountry) {
+          const states = Object.keys(countryStateCityData[selectedCountry]);
+          states.forEach(function(state) {
+            const option = document.createElement('option');
+            option.value = state;
+            option.text = state;
+            stateSelect.add(option);
+          });
+        }
+      });
+
+      // Update cities dropdown when a state is selected
+      stateSelect.addEventListener('change', function() {
+        const selectedCountry = countrySelect.value;
+        const selectedState = stateSelect.value;
+        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+        if (selectedCountry && selectedState) {
+          const cities = countryStateCityData[selectedCountry][selectedState];
+          cities.forEach(function(city) {
+            const option = document.createElement('option');
+            option.value = city;
+            option.text = city;
+            citySelect.add(option);
+          });
+        }
+      });
+    });
+  </script>
 
 </body>
 

@@ -40,7 +40,7 @@ $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $sql = "SELECT * FROM branches WHERE comp_id_fk = $company_id";
 $result = $conn->query($sql);
 
-//2nd query to fetch the comp_name
+//2nd query to fetch the acc_lev_1 of the company
 $sql2 = "Select acc_lev_1 from compani where comp_id= $company_id";
 $result2 = $conn->query($sql2);
 
@@ -495,6 +495,7 @@ if ($result2->num_rows > 0) {
 
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
+
                     <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
 
                     <?php
@@ -503,7 +504,7 @@ if ($result2->num_rows > 0) {
                         <table class="table table-borderless datatable" style="table-layout: fixed;">
                             <thead>
                                 <tr>
-                                    <th scope="col">ID</th>
+                                    <!-- <th scope="col">ID</th> -->
                                     <th scope="col">Acc_lev_2</th>
                                     <th scope="col">Descruption</th>
                                     <th scope="col">Registration date</th>
@@ -524,8 +525,17 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                   echo "<td>" . ($row["branch_id"]) . "</td>";
-                                   echo "<td>" . ($row["acc_lev_2"]) . "</td>";
+                                //    echo "<td>" . ($row["branch_id"]) . "</td>";
+
+                                ?>
+                                <td>
+                                <a class="text-primary fw-bold" href="departments.php?id=<?php echo $row['branch_id']; ?>">
+                                  <?php echo $row['acc_lev_2']; ?>
+                                </a>
+                              </td>
+                                 <?php
+
+
                                    echo "<td>" . ($row["account_desc"]) . "</td>";
                                     echo "<td>" . ($row["registration_date"]) . "</td>";
                                     echo "<td>" . ($row["expiry_date"]) . "</td>";

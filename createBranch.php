@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
     exit; // Ensure script ends after redirect
     echo "success";
   } else {
-      echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Error: " . $sql . "<br>" . $conn->error;
   }
 
   $conn->close();
@@ -487,11 +487,17 @@ End Search Bar -->
           }
 
           ?>
+
+          <div class="col-md-6">
+            <label class="form-label">Account level 1</label>
+            <input type="text" class="form-control" name="" value="<?php echo htmlspecialchars($fetchAcc1); ?>" readonly>
+          </div>
+
           <div class="col-md-6">
             <label class="form-label">Account level 2</label>
             <input type="text" class="form-control" name="account_level_no" required>
           </div>
-          
+
           <div class="col-md-6">
             <label class="form-label">Branch Name</label>
             <input type="text" class="form-control" name="branch_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>

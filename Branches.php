@@ -37,18 +37,18 @@ if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Fetch branches of the company
-$sql = "SELECT * FROM branch WHERE compID_FK = $company_id";
+$sql = "SELECT * FROM branches WHERE comp_id_fk = $company_id";
 $result = $conn->query($sql);
 
 //2nd query to fetch the comp_name
-$sql2 = "Select comp_name from compani where comp_id= $company_id";
+$sql2 = "Select acc_lev_1 from compani where comp_id= $company_id";
 $result2 = $conn->query($sql2);
 
 $comp_name = "";
 
 if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
-    $comp_name = $row2['comp_name'];
+    $comp_name = $row2['acc_lev_1'];
 }
 
 ?>
@@ -503,14 +503,18 @@ if ($result2->num_rows > 0) {
                         <table class="table table-borderless datatable" style="table-layout: fixed;">
                             <thead>
                                 <tr>
-                                    <th scope="col">Acc- Lev- 2</th>
-                                    <th scope="col">Branch Name</th>
-                                    <th scope="col">FOC</th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Acc_lev_2</th>
+                                    <th scope="col">Descruption</th>
+                                    <th scope="col">Registration date</th>
+                                    <th scope="col">Contract Expire</th>
+                                    <th scope="col">Contact Person</th>
                                     <th scope="col">Phone</th>
-                                    <th scope="col">FOC Role</th>
-                                    <th scope="col">City</th>
-                                    <th scope="col">State</th>
-                                    <th scope="col">Country</th>
+                                    <th scope="col">Contact Fax</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Pick Up Address</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -520,14 +524,18 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                   echo "<td>" . ($row["account_level_no"]) . "</td>";
-                                   echo "<td>" . ($row["branch_name"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonName"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonPhone"]) . "</td>";
-                                    echo "<td>" . ($row["ContactPersonResignation"]) . "</td>";
-                                    echo "<td>" . ($row["City"]) . "</td>";
-                                    echo "<td>" . ($row["State"]) . "</td>";
-                                    echo "<td>" . ($row["Country"]) . "</td>";
+                                   echo "<td>" . ($row["branch_id"]) . "</td>";
+                                   echo "<td>" . ($row["acc_lev_2"]) . "</td>";
+                                   echo "<td>" . ($row["account_desc"]) . "</td>";
+                                    echo "<td>" . ($row["registration_date"]) . "</td>";
+                                    echo "<td>" . ($row["expiry_date"]) . "</td>";
+                                    echo "<td>" . ($row["contact_person"]) . "</td>";
+                                    echo "<td>" . ($row["contact_phone"]) . "</td>";
+                                    echo "<td>" . ($row["contact_fax"]) . "</td>";
+                                    echo "<td>" . ($row["address"]) . "</td>";
+                                    echo "<td>" . ($row["address1"]) . "</td>";
+                                    echo "<td>" . ($row["address2"]) . "</td>";
+                                    echo "<td>" . ($row["pickup_address"]) . "</td>";
                                 ?>
                                     <td>
                                         <div style="display: flex; gap: 10px;">

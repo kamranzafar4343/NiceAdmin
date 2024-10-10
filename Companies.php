@@ -304,9 +304,9 @@ $result = $conn->query($sql);
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
   <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Account</button>
-  <button id="fixedButton" type="button" onclick="window.location.href = 'emailTable.php';" class="btn btn-outline-info mail">
+  <!-- <button id="fixedButton" type="button" onclick="window.location.href = 'emailTable.php';" class="btn btn-outline-info mail">
     <b><i class="ri-mail-line"></i></b>
-  </button>
+  </button> -->
   <div class="container">
 
   </div>

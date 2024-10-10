@@ -429,18 +429,29 @@ if ($resultData->num_rows > 0) {
             <div class="card-body">
                 <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
 
-                    <!-- For the Level 1 field -->
-                    <div class="col-md-4">
-                        <label for="level1">Account Level 1:</label>
-                        <input type="text" id="level1" class="form-control" name="level1" required>
+                    <div class="col-md-6">
+                        <label for="lev1">Account level 1:</label>
+                        <select id="lev1" class="form-select" name="level1" required>
+                            <option value="">Select an account</option>
+                            <?php
+                            // Fetch the account levels from the database
+                            $result = $conn->query("SELECT comp_id, acc_lev_1, acc_desc FROM compani");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']}  _  {$row['acc_desc']}</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
 
-                    <!-- For the Level 2 field -->
-                    <div class="col-md-4">
-                        <label for="level2">Level 2:</label>
-                        <input type="text" id="level2" class="form-control" name="level2" required>
+                    <!-- Select lev 2 of selected account -->
+                    <div class="col-md-6">
+                        <label for="lev2">Select level 2:</label>
+                        <select id="lev2" class="form-select" name="level2" required>
+                            <option value="">Select level 2</option>
+                            <!-- The options will be populated via AJAX based on the selected account level 1 -->
+                        </select>
                     </div>
-                   
+
                     <!-- Object Code -->
                     <div class="col-md-4">
                         <label for="object_code" class="form-label">Object Code</label>
@@ -449,25 +460,25 @@ if ($resultData->num_rows > 0) {
                             <option value="FileFolder">FileFolder</option>
                         </select>
                     </div>
-                     <!-- For the Level 2 field -->
-                     <div class="col-md-4">
+                    <!-- For the Level 2 field -->
+                    <div class="col-md-4">
                         <label for="begin_code">Begin Code:</label>
                         <input type="text" id="begin_code" class="form-control" name="begin_code" required>
                     </div>
-                    
-                     <!-- For the Level 2 field -->
-                     <div class="col-md-4">
+
+                    <!-- For the Level 2 field -->
+                    <div class="col-md-4">
                         <label for="end_code">End code:</label>
                         <input type="text" id="end_code" class="form-control" name="end_code" required>
                     </div>
-                   
+
                     <!-- Form Buttons -->
                     <div class="text-center mt-4 mb-2">
                         <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>
                         <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary">Reset</button>
                     </div>
-                </form> 
+                </form>
             </div>
         </div>
     </div>
@@ -494,6 +505,88 @@ if ($resultData->num_rows > 0) {
         </div>
     </div>
 
+    <script>
+        $(document).ready(function() {
+
+            // When company is changed, fetch the account lev 2
+            $('#lev1').change(function() {
+                var company_id = $(this).val();
+
+                // AJAX request to get account lev 2
+                $.ajax({
+                    url: 'get_acc_lev_2.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            var acc_lev_2 = JSON.parse(response);
+                            // Clear existing branches
+                            $('#lev2').empty();
+                            $('#lev2').append('<option value="">Select</option>');
+                            // Add the new options from the response
+                            $.each(acc_lev_2, function(index, compani) {
+                                console.log(acc_lev_2);
+                                $('#lev2').append('<option value="' + compani.comp_id + '">' + compani.acc_lev_2 + '</option>');
+                            });
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const lev1Select = document.getElementById('lev1');
+            const lev2Select = document.getElementById('lev2');
+            //companySelect = lev1Select
+            //SelectedCompany = Selectedlev1
+
+            // Retrieve the previously selected company from localStorage
+            const selectedlev1 = localStorage.getItem('selectedlev1');
+            if (selectedlev1) {
+                lev1Select.value = selectedlev1;
+                loadlev2(selectedlev1); // Load branches based on the selected company
+            }
+
+            // Store the selected company in localStorage on change
+            lev1Select.addEventListener('change', function() {
+                localStorage.setItem('selectedlev1', this.value);
+                loadlev2(this.value); // Load branches based on the new selection
+            });
+        });
+
+    </script>
+
+    <script>
+        // Function to load branches via AJAX
+        function loadlev2(company_id) {
+                $.ajax({
+                    url: 'get_acc_lev_2.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            const acc_lev_2 = JSON.parse(response);
+                            lev2Select.innerHTML = '<option value="">Select a Branch</option>';
+                            acc_lev_2.forEach(function(compani) {
+                                lev2Select.innerHTML += `<option value="${compani.comp_id}">${compani.acc_lev_2}</option>`;
+                            });
+
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            }
+    </script>
+
     <!-- JavaScript to prevent form submission when duplicate detected -->
     <script>
         document.getElementById('rackForm').addEventListener('submit', function(event) {
@@ -503,59 +596,7 @@ if ($resultData->num_rows > 0) {
         });
     </script>
 
-    <!-- Backend PHP code to process the form -->
-    <?php
-    if (isset($_POST['submit'])) {
-        // Get form data safely
-        $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
-        $rack_select = $conn->real_escape_string($_POST['rack_select']);
 
-        // Check if box barcode already exists in the 'store' table
-        $check_barcode_query = "SELECT * FROM store WHERE box_id = '$barcode_select'";
-        $barcode_result = $conn->query($check_barcode_query);
-
-        // Check if rack already has 9 boxes stored
-        $check_rack_box_count_query = "SELECT COUNT(*) AS box_count FROM store WHERE rack_id = '$rack_select'";
-        $rack_box_count_result = $conn->query($check_rack_box_count_query);
-        $rack_box_count = $rack_box_count_result->fetch_assoc()['box_count'];
-
-        // Handle duplicate barcode case
-        if ($barcode_result->num_rows > 0) {
-            echo "<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
-            duplicateErrorModal.show();
-            document.querySelector('#duplicateErrorModal .modal-body').textContent = 'Duplicate box barcode detected. Please choose a different barcode.';
-        });
-        </script>";
-        }
-        // Handle full rack case (9 boxes)
-        else if ($rack_box_count >= 9) {
-            echo "<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var duplicateErrorModal = new bootstrap.Modal(document.getElementById('duplicateErrorModal'));
-            duplicateErrorModal.show();
-            document.querySelector('#duplicateErrorModal .modal-body').textContent = 'This rack already has 9 boxes. Please choose a different rack.';
-        });
-        </script>";
-        }
-        // If no errors, insert the box and rack into the 'store' table
-        else {
-            $insert_query = "INSERT INTO store (box_id, rack_id) VALUES ('$barcode_select', '$rack_select')";
-
-            if ($conn->query($insert_query) === TRUE) {
-                // Redirect after successful submission
-                echo "<script>window.location.href = 'store.php';</script>";
-            } else {
-                // Debug error
-                echo "Error: " . $conn->error;
-            }
-        }
-
-        // Close database connection
-        $conn->close();
-    }
-    ?>
 </body>
 
 </html>

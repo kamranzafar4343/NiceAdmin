@@ -8,7 +8,7 @@
 $HOSTNAME = 'localhost';
 $USERNAME = 'root';
 $PASSWORD = '';
-$DATABASE = 'catmarketing';
+$DATABASE = 'my';
 
 
 $conn = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $DATABASE);

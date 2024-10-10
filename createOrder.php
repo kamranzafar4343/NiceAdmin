@@ -638,7 +638,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 });
             });
 
-            // When company is changed, fetch the box
+            // When branch is changed, fetch the box
             $('#branch').change(function() {
                 var branch_id = $(this).val();
 
@@ -695,7 +695,6 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
             });
         });
     </script>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

@@ -461,11 +461,6 @@ if (isset($_GET['comp_id'])) {
                     </a>
                 </li><!-- End Boxes Nav -->
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="showItems.php">
-                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Items Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="order.php">
@@ -495,12 +490,6 @@ if (isset($_GET['comp_id'])) {
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="showItems.php">
-                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Items Nav -->
-
-                <li class="nav-item">
                     <a class="nav-link collapsed" href="order.php">
                         <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
@@ -521,12 +510,6 @@ if (isset($_GET['comp_id'])) {
 
 
             <li class="nav-heading">Pages</li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i><span>Profile</span>
-                </a>
-            </li><!-- End Profile Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">

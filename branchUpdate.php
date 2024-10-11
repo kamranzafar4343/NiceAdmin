@@ -11,7 +11,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include the database connection
-include 'config/db.php'; 
+include 'config/db.php';
 
 // Get session email 
 $email = $_SESSION['email'];
@@ -27,74 +27,81 @@ if ($resultData->num_rows > 0) {
 }
 
 // Check if the user is an admin, otherwise redirect
-if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
+if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
   // If the user is not an Admin, redirect to index page
   header("Location: index.php");
   exit();
 }
 
-// show branch previous data
-if (isset($_GET['id'])) {
-  $branch_id = $_GET['id'];
-  $sql = "SELECT * FROM `branches` WHERE `branch_id`= '$branch_id'";
-  $result = $conn->query($sql);
-  $row = mysqli_fetch_array($result);
-  $company_id = $row['acc_lev_2'];
-  $account_desc = $row['account_desc'];
-  $registration_date = $row['registration_date'];
-  $expiry_date = $row['expiry_date'];
-  $contact_person = $row['contact_person'];
-  $contact_fax = $row['contact_fax'];
-  $address = $row['address'];
-  $address1 = $row['address1'];
-  $address2 = $row['address2'];
-  $pickup_address = $row['pickup_address'];
-}
-
+// Show branch previous data
 if (isset($_GET['id'])) {
   $branch_id = intval($_GET['id']);
-  $sql = "SELECT `comp_id_fk` FROM `branches` WHERE `branch_id` = $branch_id";
+
+  // Sql Query featch the branch data 
+  $sql = "SELECT * FROM `branches` WHERE `branch_id` = '$branch_id'";
   $result = $conn->query($sql);
 
   if ($result && $result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $company_id = $row['comp_id_fk'];
+    $acc_lev_2 = $row['acc_lev_2'];
+    $account_desc = $row['account_desc'];
+    $registration_date = $row['registration_date'];
+    $expiry_date = $row['expiry_date'];
+    $contact_person = $row['contact_person'];
+    $contact_phone = $row['contact_phone'];
+    $contact_fax = $row['contact_fax'];
+    $address = $row['address'];
+    $address1 = $row['address1'];
+    $address2 = $row['address2'];
+    $pickup_address = $row['pickup_address'];
   } else {
-    echo "Error: No company found for this branch.";
+    echo "Branch not found!";
+    exit;
   }
 }
 
-//update the record
+// Update the record
 if (isset($_POST['update'])) {
-  // $company_id = mysqli_real_escape_string($conn, $_POST['comp_id_fk']);
+  // Retrieve and sanitize form data
   $acc_lev_2 = mysqli_real_escape_string($conn, $_POST['acc_lev_2']);
   $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
-  $registration = mysqli_real_escape_string($conn, $_POST['registration_date']);
-  $expiry = mysqli_real_escape_string($conn, $_POST['expiry_date']);
-  $contact_person = mysqli_real_escape_string($conn, $_POST['contact_person']);
+  $registration_date = mysqli_real_escape_string($conn, $_POST['registration']);
+  $expiry_date = mysqli_real_escape_string($conn, $_POST['expiry']);
+  $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
   $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
   $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
   $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
-  $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
+  $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']);
 
+  // SQL query to update the record
+  $sql = "UPDATE `branches` SET 
+                `acc_lev_2` = '$acc_lev_2',
+                `account_desc` = '$account_desc',
+                `registration_date` = '$registration_date',
+                `expiry_date` = '$expiry_date',
+                `contact_person` = '$contact_person',
+                `contact_phone` = '$contact_phone',
+                `contact_fax` = '$contact_fax',
+                `address` = '$address',
+                `address1` = '$address1',
+                `address2` = '$address2',
+                `pickup_address` = '$pickup_address' 
+            WHERE `branch_id` = '$branch_id'";
 
-  $sql = "UPDATE `branches` SET `acc_lev_2`='$branch_name', `account_desc`='$contactPerson', `registration`='$resignation', `expiry`='$phone', `City`='$city', `State`='$state', `Country`='$country' WHERE `branch_id`='$branch_id'";
-
+  // Execute the query and check for errors
   if (mysqli_query($conn, $sql)) {
-    header("Location: Branches.php?id=" . $company_id);
+    header("Location: Branches.php?id=" . $branch_id);
     exit;
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Error updating record: " . mysqli_error($conn);
   }
-
-
 
   $conn->close();
 }
-
 ?>
+
 
 
 <!DOCTYPE html>
@@ -617,12 +624,7 @@ End Search Bar -->
           <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
         </a>
 
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
+
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
           <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
@@ -691,57 +693,68 @@ End Search Bar -->
   <!-- End Header form -->
 
   <section class="container d-flex justify-content-center my-4">
-    <div class="card custom-card2  shadow-lg" style="border: none; box-shadow:none; border:none;">
+    <div class="card custom-card2 shadow-lg" style="border: none; box-shadow:none; border:none;">
       <div class="card-body">
-        <!-- <h5 class="card-title">Update Company Information</h5> -->
         <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
-        <div class="col-md-6">
+
+          <!-- Acc-Lev-2 -->
+          <div class="col-md-6">
             <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
-            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" required>
+            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" value="<?php echo isset($acc_lev_2) ? $acc_lev_2 : ''; ?>" required>
           </div>
 
-
+          <!-- Account Description -->
           <div class="col-md-6">
             <label for="account_description" class="form-label">Account Description</label>
-            <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
+            <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"><?php echo isset($account_desc) ? $account_desc : ''; ?></textarea>
           </div>
 
-
+          <!-- Setup Date -->
           <div class="col-md-6">
             <label for="registration" class="form-label">Setup Date</label>
-            <input type="date" class="form-control" id="registration" name="registration" required>
+            <input type="date" class="form-control" id="registration" name="registration" value="<?php echo isset($registration_date) ? $registration_date : ''; ?>" required>
           </div>
+
+          <!-- Expiry Date -->
           <div class="col-md-6 mb-3">
-            <label for="expiry" class="form-label">Conract Exp_Date</label>
-            <input type="date" class="form-control" id="expiry" name="expiry">
+            <label for="expiry" class="form-label">Contract Expiration Date</label>
+            <input type="date" class="form-control" id="expiry" name="expiry" value="<?php echo isset($expiry_date) ? $expiry_date : ''; ?>">
           </div>
+
+          <!-- Contact Person -->
           <div class="col-md-6">
             <label for="" class="form-label">Contact Person</label>
-            <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
+            <input type="text" class="form-control" id="" name="foc" value="<?php echo isset($contact_person) ? $contact_person : ''; ?>" required pattern="[A-Za-z\s\.]+" minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
           </div>
+
+          <!-- Contact Phone -->
           <div class="col-md-6">
             <label for="phone" class="form-label">Phone</label>
-            <input type="text" class="form-control" id="" name="foc_phone" required>
+            <input type="text" class="form-control" id="" name="foc_phone" value="<?php echo isset($contact_phone) ? $contact_phone : ''; ?>" required>
           </div>
 
+          <!-- Fax -->
           <div class="col-md-6">
-            <label for="phone" class="form-label">Fax</label>
-            <input type="text" class="form-control" id="" name="foc_fax">
+            <label for="fax" class="form-label">Fax</label>
+            <input type="text" class="form-control" id="" name="foc_fax" value="<?php echo isset($contact_fax) ? $contact_fax : ''; ?>">
           </div>
-
+          <!-- Pickup/Delivery Address -->
+          <div class="col-md-6">
+            <label for="pickup_address" class="form-label">Pickup/Delivery Address</label>
+            <input type="text" class="form-control" id="" name="pickup_address" value="<?php echo isset($pickup_address) ? $pickup_address : ''; ?>" required>
+          </div>
+          <!-- Address -->
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="" name="address" required>
+            <input type="text" class="form-control" id="" name="address" value="<?php echo isset($address) ? $address : ''; ?>" required>
             <br>
-            <input type="text" class="form-control" id="" name="address1">
+            <input type="text" class="form-control" id="" name="address1" value="<?php echo isset($address1) ? $address1 : ''; ?>">
             <br>
-            <input type="text" class="form-control" id="" name="address2">
+            <input type="text" class="form-control" id="" name="address2" value="<?php echo isset($address2) ? $address2 : ''; ?>">
+          </div>
 
-          </div>
-          <div class="col-md-6">
-            <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
-            <input type="text" class="form-control" id="" name="pickup_address" required>
-          </div>
+
+          <!-- Submit Button -->
           <div class="col-12 text-center">
             <button type="submit" class="btn btn-outline-primary mt-3" name="update" value="update">Update</button>
           </div>
@@ -749,6 +762,7 @@ End Search Bar -->
       </div>
     </div>
   </section>
+
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->

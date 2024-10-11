@@ -29,7 +29,7 @@ $row = mysqli_fetch_assoc($result);
 $companyCount = $row['count'];
 
 //get no of branches for branch card
-$queryBranches = "SELECT COUNT(*) AS branch_count FROM branch";
+$queryBranches = "SELECT COUNT(*) AS branch_count FROM branches";
 $resultBranches = mysqli_query($conn, $queryBranches);
 $rowBranches = mysqli_fetch_assoc($resultBranches);
 $branchCount = $rowBranches['branch_count'];

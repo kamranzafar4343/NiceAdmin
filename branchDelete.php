@@ -36,15 +36,15 @@ if (isset($_GET['id'])) {
     $branch_id = intval($_GET['id']); // Ensure branch ID is an integer
 
     // Fetch the company ID associated with the branch from the compID_FK column
-    $sql = "SELECT `compID_FK` FROM `branch` WHERE `branch_id` = $branch_id";
+    $sql = "SELECT `comp_id_fk` FROM `branches` WHERE `branch_id` = $branch_id";
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $company_id = $row['compID_FK'];
+        $company_id = $row['comp_id_fk'];
 
         // Now, perform the delete operation
-        $delete_sql = "DELETE FROM `branch` WHERE `branch_id` = $branch_id";
+        $delete_sql = "DELETE FROM `branches` WHERE `branch_id` = $branch_id";
         if ($conn->query($delete_sql) === TRUE) {
             // Redirect to the company's branches page after successful deletion
             header("Location: Branches.php?id=" . $company_id);

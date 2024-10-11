@@ -10,7 +10,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include the database connection
-include 'config/db.php'; 
+include 'config/db.php';
 
 // Get session email 
 $email = $_SESSION['email'];
@@ -26,12 +26,83 @@ if ($resultData->num_rows > 0) {
 }
 
 // Check if the user is an admin, otherwise redirect
-if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
+if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
   // If the user is not an Admin, redirect to index page
   header("Location: index.php");
   exit();
 }
+if (isset($_GET['id'])) {
+  $comp_id = intval($_GET['id']);  // Get the company ID from URL
+
+  // SQL query to fetch company data
+  $sql = "SELECT * FROM `compani` WHERE `comp_id` = '$comp_id'";
+  $result = $conn->query($sql);
+
+  // Check if the company exists
+  if ($result && $result->num_rows > 0) {
+    // Fetch company data into variables
+    $row = $result->fetch_assoc();
+    $acc_lev_1 = $row['acc_lev_1'];
+    $account_desc = $row['acc_desc'];
+    $registration_date = $row['registration'];
+    $expiry_date = $row['expiry'];
+    $contact_person = $row['foc'];
+    $contact_phone = $row['foc_phone'];
+    $address = $row['add_1'];
+    $address1 = $row['add_2'];
+    $address2 = $row['add_3'];
+  } else {
+    // If no company found, display an error message
+    echo "Company not found!";
+    exit;
+  }
+}
+
+// Check if the form is submitted (update the record)
+if (isset($_POST['update'])) {
+  // Sanitize and retrieve form data
+  $acc_lev_1 = mysqli_real_escape_string($conn, $_POST['acc_level_no']);
+  $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
+  $registration_date = mysqli_real_escape_string($conn, $_POST['registration']);
+  $expiry_date = mysqli_real_escape_string($conn, $_POST['expiry']);
+  $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
+  $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
+  $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
+  $address = mysqli_real_escape_string($conn, $_POST['address']);
+  $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
+  $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
+
+  // SQL query to update the company record
+  $sql = "UPDATE `compani` SET 
+            `acc_lev_1` = '$acc_lev_1',
+            `acc_desc` = '$account_desc',
+            `registration` = '$registration_date',
+            `expiry` = '$expiry_date',
+            `foc` = '$contact_person',
+            `foc_phone` = '$contact_phone',
+            -- `foc_fax` = '$contact_fax',
+            `add_1` = '$address',
+            `add_2` = '$address1',
+            `add_3` = '$address2'
+          WHERE `comp_id` = '$comp_id'";
+
+  // Execute the query and check for success or error
+  if (mysqli_query($conn, $sql)) {
+    // Redirect to the Companies.php page after successful update
+    header("Location: Companies.php?id=" . $comp_id);
+    exit;
+  } else {
+    // Display an error message if the update fails
+    echo "Error updating record: " . mysqli_error($conn);
+  }
+
+  // Close the database connection
+  $conn->close();
+}
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -268,59 +339,6 @@ if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
 </head>
 
 <body>
-  <?php
-  include "config/db.php";
-
-  //get company id for updating the specific company
-  if (isset($_GET['id'])) {
-    $user_id = $_GET['id'];
-    $sql = "SELECT * FROM `compani` WHERE `comp_id`='$user_id'";
-    $result = $conn->query($sql);
-    $row = mysqli_fetch_array($result);
-    $comp_name = $row['comp_name'];
-    $phone = $row['phone'];
-    $email = $row['email'];
-    $password = $row['password'];
-    $city = $row['city'];
-    $state = $row['state'];
-    $country = $row['country'];
-    $registration = $row['registration'];
-    $expiry = $row['expiry'];
-  }
-
-  //update the record
-  if (isset($_POST['update'])) {
-    $user_id = $_POST['comp_id'];
-
-    $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
-    $phone =  mysqli_real_escape_string($conn, $_POST['phone']);
-    $email =  mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-    $city = mysqli_real_escape_string($conn, $_POST['city']);
-    $state = mysqli_real_escape_string($conn, $_POST['state']);
-    $country = mysqli_real_escape_string($conn, $_POST['country']);
-    $registration = mysqli_real_escape_string($conn, $_POST['registration']);
-    $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
-
-    $sql = "UPDATE `compani` SET `comp_name`='$comp_name', `phone`='$phone', `email`='$email', `password`='$hashedPassword', `city`='$city', `state`='$state', `country`='$country', `registration`='$registration', `expiry`='$expiry'  WHERE `comp_id`='$user_id'";
-
-    if (mysqli_query($conn, $sql)) {
-      $_SESSION['data_inserted'] = true;
-    } else {
-      $_SESSION['data_inserted'] = false;
-
-      echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-
-    // header("location:update.php");
-    // exit();
-
-    $conn->close();
-  }
-
-  ?>
 
   <!doctype html>
   <html lang="en">
@@ -630,12 +648,6 @@ End Search Bar -->
         </li><!-- End Boxes Nav -->
 
         <li class="nav-item">
-          <a class="nav-link collapsed" href="showItems.php">
-            <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Items Nav -->
-
-        <li class="nav-item">
           <a class="nav-link collapsed" href="order.php">
             <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
           </a>
@@ -663,12 +675,6 @@ End Search Bar -->
         </li><!-- End Boxes Nav -->
 
         <li class="nav-item">
-          <a class="nav-link collapsed" href="showItems.php">
-            <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Items Nav -->
-
-        <li class="nav-item">
           <a class="nav-link collapsed" href="order.php">
             <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
           </a>
@@ -689,12 +695,6 @@ End Search Bar -->
 
 
       <li class="nav-heading">Pages</li>
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.php">
-          <i class="bi bi-person"></i><span>Profile</span>
-        </a>
-      </li><!-- End Profile Nav -->
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-login.php">
@@ -723,70 +723,55 @@ End Search Bar -->
   </div>
   <!-- End Header form -->
 
-  <section class="container d-flex justify-content-center my-4">
-    <div class="card custom-card2  shadow-lg" style="border: none; box-shadow:none; border:none;">
+  <div class="container d-flex justify-content-center">
+    <div class="card custom-card shadow-lg mt-3">
+      <!-- <h5 class="card-title ml-4">Create Company </h5> -->
       <div class="card-body">
-        <form id="updateImageForm" action="update_image.php" method="POST" enctype="multipart/form-data">
-          <!-- Display the company image -->
-          <div class="image-circle">
-            <img src="<?php echo $row['image']; ?>" width="70px" alt="image" id="image-<?php echo $row['comp_id']; ?>" style="cursor:pointer;">
-            <input type="file" id="file-<?php echo $row['comp_id']; ?>" style="display:none;" onchange="uploadImage(<?php echo $row['comp_id']; ?>)" />
-          </div>
-        </form>
-        <!-- <h5 class="card-title">Update Company Information</h5> -->
-        <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
+        <br>
+        <!-- Multi Columns Form -->
+        <form class="row g-3 needs-validation" action="" method="POST">
           <div class="col-md-6">
-            <label class="form-label">Company name</label>
-            <input type="text" class="form-control" name="comp_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $comp_name; ?>" required>
-            <input type="hidden" name="comp_id" value="<?php echo $user_id; ?>">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Phone</label>
-            <input type="text" class="form-control" name="phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" value="<?php echo $phone; ?>" required pattern="\d{10,15}">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" value="<?php echo $email; ?>" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Password</label>
-            <input type="password" class="form-control" name="password" required minlength="8" maxlength="12" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-              title="It must be 8-16 characters, include at least one number, one uppercase and one lowercase letter" value="<?php echo $password; ?>" required minlength="6">
-          </div>
-          <div class="col-md-6">
-            <label for="country" class="form-label">Country</label>
-            <select class="form-select" id="country" name="country" value="<?php echo $country; ?>" required>
-              <option value="">Select Country</option>
-              <option value="Pakistan">Pakistan</option>
-              <option value="USA">USA</option>
-              <option value="Canada">Canada</option>
-              <option value="UK">UK</option>
-              <!-- Add more countries as needed -->
-            </select>
+            <label for="comp_acc_level" class="form-label">Acc-Lev-1</label>
+            <input type="text" class="form-control" id="account_lev_no" name="acc_level_no" value="<?php echo $acc_lev_1; ?>" required>
           </div>
 
           <div class="col-md-6">
-            <label for="state" class="form-label">State</label>
-            <select class="form-select" id="state" name="state" value="<?php echo $state; ?>" required>
-              <option value="">Select State</option>
-              <!-- Options will be dynamically populated based on selected country -->
-            </select>
+            <label for="account_description" class="form-label">Account Description</label>
+            <textarea class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"><?php echo $account_desc; ?></textarea>
           </div>
 
           <div class="col-md-6">
-            <label for="city" class="form-label">City</label>
-            <select class="form-select" id="city" name="city" value="<?php echo $city; ?>" required>
-              <option value="">Select City</option>
-              <!-- Options will be dynamically populated based on selected state -->
-            </select>
+            <label for="registration" class="form-label">Setup Date</label>
+            <input type="date" class="form-control" id="registration" name="registration" value="<?php echo $registration_date; ?>" required>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Registration date</label>
-            <input type="date" class="form-control" name="registration" value="<?php echo $registration; ?>" required>
+
+          <div class="col-md-6 mb-3">
+            <label for="expiry" class="form-label">Contract Expiration Date</label>
+            <input type="date" class="form-control" id="expiry" name="expiry" value="<?php echo $expiry_date; ?>">
           </div>
+
           <div class="col-md-6">
-            <label class="form-label">Expiry date</label>
-            <input type="date" class="form-control" name="expiry" value="<?php echo $expiry; ?>" required>
+            <label for="foc" class="form-label">Contact Person</label>
+            <input type="text" class="form-control" id="foc" name="foc" value="<?php echo $contact_person; ?>" required pattern="[A-Za-z\s\.]+" minlength="3" maxlength="38" title="only letters allowed; at least 3">
+          </div>
+
+          <div class="col-md-6">
+            <label for="foc_phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="foc_phone" name="foc_phone" value="<?php echo $contact_phone; ?>" required>
+          </div>
+
+          <!-- <div class="col-md-6">
+            <label for="foc_fax" class="form-label">Fax</label>
+            <input type="text" class="form-control" id="foc_fax" name="foc_fax" value="<?php echo $contact_fax; ?>">
+          </div> -->
+
+          <div class="col-md-6">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" class="form-control" id="address" name="address" value="<?php echo $address; ?>" required>
+            <br>
+            <input type="text" class="form-control" id="address1" name="address1" value="<?php echo $address1; ?>">
+            <br>
+            <input type="text" class="form-control" id="address2" name="address2" value="<?php echo $address2; ?>">
           </div>
           <div class="col-12 text-center">
             <button type="submit" class="btn btn-outline-primary mt-3" name="update" value="update">Update</button>
@@ -794,137 +779,137 @@ End Search Bar -->
         </form>
       </div>
     </div>
-  </section>
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    </section>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="assets/vendor/echarts/echarts.min.js"></script>
-  <script src="assets/vendor/quill/quill.js"></script>
-  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script>
-    const dataTable = new simpleDatatables.DataTable("#myTable2", {
-      searchable: false,
-      fixedHeight: true,
-    })
-  </script>
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script>
+      const dataTable = new simpleDatatables.DataTable("#myTable2", {
+        searchable: false,
+        fixedHeight: true,
+      })
+    </script>
 
-  <script src="js/jquery-3.3.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js">
-  </script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js">
+    </script>
 
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
 
-  <!-- Bootstrap JS (Optional) -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
-  <script>
-    <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
-      alert('Company Updated successfully! Click OK to see the Companies List');
-      window.location.href = 'Companies.php';
-      <?php unset($_SESSION['data_inserted']); // Clear the session variable 
-      ?>
-    <?php elseif (isset($_SESSION['data_inserted']) && !$_SESSION['data_inserted']): ?>
-      alert('Failed to enter new data.');
-      <?php unset($_SESSION['data_inserted']); ?>
-    <?php endif; ?>
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
+    <script>
+      <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
+        alert('Company Updated successfully! Click OK to see the Companies List');
+        window.location.href = 'Companies.php';
+        <?php unset($_SESSION['data_inserted']); // Clear the session variable 
+        ?>
+      <?php elseif (isset($_SESSION['data_inserted']) && !$_SESSION['data_inserted']): ?>
+        alert('Failed to enter new data.');
+        <?php unset($_SESSION['data_inserted']); ?>
+      <?php endif; ?>
 
-    //for the country, state, city dropdown
-    document.addEventListener('DOMContentLoaded', function() {
-      const countryStateCityData = {
-        Pakistan: {
-          Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-          KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-          Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-          Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
+      //for the country, state, city dropdown
+      document.addEventListener('DOMContentLoaded', function() {
+        const countryStateCityData = {
+          Pakistan: {
+            Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
+            KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
+            Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
+            Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
 
-        },
-        USA: {
-          California: ["Los Angeles", "San Francisco", "San Diego"],
-          Texas: ["Houston", "Austin", "Dallas"]
-          // Add more states and cities
-        },
-        Canada: {
-          Ontario: ["Toronto", "Ottawa", "Hamilton"],
-          Quebec: ["Montreal", "Quebec City"]
-          // Add more provinces and cities
-        },
-      };
+          },
+          USA: {
+            California: ["Los Angeles", "San Francisco", "San Diego"],
+            Texas: ["Houston", "Austin", "Dallas"]
+            // Add more states and cities
+          },
+          Canada: {
+            Ontario: ["Toronto", "Ottawa", "Hamilton"],
+            Quebec: ["Montreal", "Quebec City"]
+            // Add more provinces and cities
+          },
+        };
 
-      const countrySelect = document.getElementById('country');
-      const stateSelect = document.getElementById('state');
-      const citySelect = document.getElementById('city');
+        const countrySelect = document.getElementById('country');
+        const stateSelect = document.getElementById('state');
+        const citySelect = document.getElementById('city');
 
-      // Update states dropdown when a country is selected
-      countrySelect.addEventListener('change', function() {
-        const selectedCountry = countrySelect.value;
-        stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+        // Update states dropdown when a country is selected
+        countrySelect.addEventListener('change', function() {
+          const selectedCountry = countrySelect.value;
+          stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
+          citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
 
-        if (selectedCountry) {
-          const states = Object.keys(countryStateCityData[selectedCountry]);
-          states.forEach(function(state) {
-            const option = document.createElement('option');
-            option.value = state;
-            option.text = state;
-            stateSelect.add(option);
-          });
-        }
+          if (selectedCountry) {
+            const states = Object.keys(countryStateCityData[selectedCountry]);
+            states.forEach(function(state) {
+              const option = document.createElement('option');
+              option.value = state;
+              option.text = state;
+              stateSelect.add(option);
+            });
+          }
+        });
+
+        // Update cities dropdown when a state is selected
+        stateSelect.addEventListener('change', function() {
+          const selectedCountry = countrySelect.value;
+          const selectedState = stateSelect.value;
+          citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
+
+          if (selectedCountry && selectedState) {
+            const cities = countryStateCityData[selectedCountry][selectedState];
+            cities.forEach(function(city) {
+              const option = document.createElement('option');
+              option.value = city;
+              option.text = city;
+              citySelect.add(option);
+            });
+          }
+        });
       });
 
-      // Update cities dropdown when a state is selected
-      stateSelect.addEventListener('change', function() {
-        const selectedCountry = countrySelect.value;
-        const selectedState = stateSelect.value;
-        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-        if (selectedCountry && selectedState) {
-          const cities = countryStateCityData[selectedCountry][selectedState];
-          cities.forEach(function(city) {
-            const option = document.createElement('option');
-            option.value = city;
-            option.text = city;
-            citySelect.add(option);
-          });
-        }
+      //click on the picture to update with ajax
+      $(document).on('click', 'img', function() {
+        $(this).next('input[type="file"]').click();
       });
-    });
 
-    //click on the picture to update with ajax
-    $(document).on('click', 'img', function() {
-      $(this).next('input[type="file"]').click();
-    });
+      function uploadImage(comp_id) {
+        var fileInput = document.getElementById('file-' + comp_id);
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append('image', file);
+        formData.append('comp_id', comp_id);
 
-    function uploadImage(comp_id) {
-      var fileInput = document.getElementById('file-' + comp_id);
-      var file = fileInput.files[0];
-      var formData = new FormData();
-      formData.append('image', file);
-      formData.append('comp_id', comp_id);
-
-      $.ajax({
-        url: 'update_image.php',
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-          // Update the image source with the new image path
-          $('#image-' + comp_id).attr('src', response);
-        },
-        error: function() {
-          alert('Image upload failed. Please try again.');
-        }
-      });
-    }
-  </script>
+        $.ajax({
+          url: 'update_image.php',
+          type: 'POST',
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function(response) {
+            // Update the image source with the new image path
+            $('#image-' + comp_id).attr('src', response);
+          },
+          error: function() {
+            alert('Image upload failed. Please try again.');
+          }
+        });
+      }
+    </script>
 
 </body>
 

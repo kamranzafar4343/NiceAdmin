@@ -369,12 +369,6 @@ if (isset($_POST['submit'])) {
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="showItems.php">
-                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Items Nav -->
-
-                <li class="nav-item">
                     <a class="nav-link collapsed" href="order.php">
                         <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
@@ -402,12 +396,6 @@ if (isset($_POST['submit'])) {
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="showItems.php">
-                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Items Nav -->
-
-                <li class="nav-item">
                     <a class="nav-link collapsed" href="order.php">
                         <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
@@ -428,12 +416,6 @@ if (isset($_POST['submit'])) {
 
 
             <li class="nav-heading">Pages</li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i><span>Profile</span>
-                </a>
-            </li><!-- End Profile Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
@@ -469,7 +451,7 @@ if (isset($_POST['submit'])) {
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="comp_acc_level" class="form-label">Acc-Lev-1</label>
                         <input type="text" class="form-control" id="account_lev_no" name="acc_level_no" required>
                     </div>

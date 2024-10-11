@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
   $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-  $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
+  $contact_fax = mysqli_real_escape_string($conn, $_POST['contact_fax']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
   $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
   $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
@@ -384,12 +384,6 @@ End Search Bar -->
     <li class="nav-item">
       <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
         <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-      </a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
       </a>
     </li>
     <li class="nav-item">

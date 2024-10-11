@@ -434,11 +434,6 @@ if ($result2->num_rows > 0) {
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
@@ -456,13 +451,6 @@ if ($result2->num_rows > 0) {
 
             <li class="nav-heading">Pages</li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-            <!-- End Profile Page Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">

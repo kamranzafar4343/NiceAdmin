@@ -36,7 +36,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 // Show branch previous data
 if (isset($_GET['id'])) {
   $branch_id = intval($_GET['id']);
-  
+
   // Sql Query featch the branch data 
   $sql = "SELECT * FROM `branches` WHERE `branch_id` = '$branch_id'";
   $result = $conn->query($sql);
@@ -624,12 +624,7 @@ End Search Bar -->
           <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
         </a>
 
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-          <i class="ri-building-4-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
+
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
           <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>

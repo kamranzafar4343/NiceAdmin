@@ -474,7 +474,7 @@ if ($result2->num_rows > 0) {
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add department</button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createDepartments.php?id=<?php echo $branch_id; ?>'" class="btn btn-primary mb-3">Add department</button>
     <!-- 
   <h1>Companies List</h1> -->
     <main id="main" class="main">
@@ -514,15 +514,15 @@ if ($result2->num_rows > 0) {
                                     echo "<tr>";
                                     //    echo "<td>" . ($row["branch_id"]) . "</td>";
                                     echo "<td>" . ($row["acc_lev_3"]) . "</td>";
-                                    echo "<td>" . ($row["account_desc"]) . "</td>";
-                                    echo "<td>" . ($row["registration_date"]) . "</td>";
-                                    echo "<td>" . ($row["expiry_date"]) . "</td>";
-                                    echo "<td>" . ($row["contact_person"]) . "</td>";
-                                    echo "<td>" . ($row["contact_phone"]) . "</td>";
+                                    echo "<td>" . ($row["acc_desc"]) . "</td>";
+                                    echo "<td>" . ($row["registration"]) . "</td>";
+                                    echo "<td>" . ($row["expiry"]) . "</td>";
+                                    echo "<td>" . ($row["foc"]) . "</td>";
+                                    echo "<td>" . ($row["foc_phone"]) . "</td>";
                                     echo "<td>" . ($row["contact_fax"]) . "</td>";
-                                    echo "<td>" . ($row["address"]) . "</td>";
-                                    echo "<td>" . ($row["address1"]) . "</td>";
-                                    echo "<td>" . ($row["address2"]) . "</td>";
+                                    echo "<td>" . ($row["add_1"]) . "</td>";
+                                    echo "<td>" . ($row["add_2"]) . "</td>";
+                                    echo "<td>" . ($row["add_3"]) . "</td>";
                                     echo "<td>" . ($row["pickup_address"]) . "</td>";
                                 ?>
                                     <td>

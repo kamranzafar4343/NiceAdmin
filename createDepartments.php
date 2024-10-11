@@ -32,23 +32,22 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
   exit();
 }
 
-// Retrieve company ID from URL
-$company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+// Retrieve branch ID from URL
+$branch_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 
+// gives error if someone tries to access the page without a branch_id
+$branchQuery = "SELECT branch_id, acc_lev_2 FROM branches WHERE branch_id = $branch_id";
+$branchResult = $conn->query($branchQuery);
 
-// Validate company ID
-$companyQuery = "SELECT comp_id, acc_lev_1 FROM compani WHERE comp_id = $company_id";
-$companyResult = $conn->query($companyQuery);
-
-if ($companyResult->num_rows === 0) {
-  die("Error: Company ID does not exist.");
+if ($branchResult->num_rows === 0) {
+  die("Error: Branch ID does not exist.");
 }
 
 if (isset($_POST['submit'])) {
   // Fetching values from the form using POST and ensuring security with real_escape_string
-  $company_id = mysqli_real_escape_string($conn, $_POST['comp_id_fk']);
-  $acc_lev_2 = mysqli_real_escape_string($conn, $_POST['acc_lev_2']);
+  $branch_id = mysqli_real_escape_string($conn, $_POST['branch_id_fk']);
+  $acc_lev_3 = mysqli_real_escape_string($conn, $_POST['acc_lev_3']);
   $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
   $registration = mysqli_real_escape_string($conn, $_POST['registration']);
   $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
@@ -61,12 +60,12 @@ if (isset($_POST['submit'])) {
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
   // SQL query to insert the data into the database
-  $sql = "INSERT INTO branches (comp_id_fk, acc_lev_2, account_desc, registration_date, expiry_date, contact_person, contact_phone, contact_fax, address, address1, address2, pickup_address) 
-          VALUES ('$company_id', '$acc_lev_2', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$contact_fax', '$address', '$address1', '$address2', '$pickup_address')";
+  $sql = "INSERT INTO departments (branch_id_fk, acc_lev_3, acc_desc, registration, expiry, foc, foc_phone, contact_fax, add_1, add_2, add_3, pickup_address) 
+          VALUES ('$branch_id', '$acc_lev_3', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$contact_fax', '$address', '$address1', '$address2', '$pickup_address')";
 
   if ($conn->query($sql) === TRUE) {
       // Redirecting after successful insertion
-      header("Location: Branches.php?id=" . $company_id);
+      header("Location: Departments.php?id=" . $branch_id);
       exit;
   } else {
       echo "Error: " . $sql . "<br>" . $conn->error;
@@ -462,7 +461,7 @@ End Search Bar -->
 
   <div class="headerimg text-center">
     <img src="image/create.png" alt="network-logo" width="50" height="50">
-    <h2>Create Branch</h2>
+    <h2>Create Department</h2>
   </div>
   <!-- End Header form -->
   <div class="container d-flex justify-content-center">
@@ -472,20 +471,33 @@ End Search Bar -->
         <br>
         <!-- Multi Columns Form -->
         <form class="row g-3 p-3" action="#" method="POST">
-          <!-- Company ID input (readonly) -->
+          
+          <!-- Branch ID input (readonly) -->
           <div class="col-md-6">
-            <label class="form-label">Company ID</label>
-            <input type="text" class="form-control" name="comp_id_fk" value="<?php echo htmlspecialchars($company_id); ?>" readonly>
+            <label class="form-label">Branch ID</label>
+            <input type="text" class="form-control" name="branch_id_fk" value="<?php echo htmlspecialchars($branch_id); ?>" readonly>
+          </div>
+
+        <!-- fetching acc lev 2 from branch table (readonly) -->
+          <?php
+          $getAccLev2 = "SELECT * FROM branches WHERE branch_id = '$branch_id'";
+          $resultAccLev2 = mysqli_query($conn, $getAccLev2);
+          if ($resultAccLev2->num_rows > 0) {
+            $rowAccLev2 = $resultAccLev2->fetch_assoc();
+
+            $fetchAcc2 = $rowAccLev2['acc_lev_2'];
+          }
+
+          ?>
+
+          <div class="col-md-6">
+            <label class="form-label">Account level 2</label>
+            <input type="text" class="form-control" name="" value="<?php echo htmlspecialchars($fetchAcc2); ?>" readonly>
           </div>
 
           <div class="col-md-6">
-            <label class="form-label">Account Level 1</label>
-            <input type="text" class="form-control" name="" value="<?php echo htmlspecialchars($company_id); ?>" readonly>
-          </div>
-
-          <div class="col-md-6">
-            <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
-            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" required>
+            <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-3</label>
+            <input type="text" class="form-control" id="acc_lev_3" name="acc_lev_3" required>
           </div>
 
 

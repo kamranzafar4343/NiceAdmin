@@ -35,8 +35,6 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 // Retrieve company ID from URL
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-
-
 // Validate company ID
 $companyQuery = "SELECT comp_id, acc_lev_1 FROM compani WHERE comp_id = $company_id";
 $companyResult = $conn->query($companyQuery);
@@ -82,7 +80,7 @@ if (isset($_POST['submit'])) {
 
 <head>
   <meta charset="UTF-8">
-  <title>Update Company</title>
+  <title>create branch</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 

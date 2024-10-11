@@ -37,12 +37,13 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 if (isset($_GET['id'])) {
   $branch_id = intval($_GET['id']);
 
-  // Sql Query featch the branch data 
+  // Sql Query fetch the branch data
   $sql = "SELECT * FROM `branches` WHERE `branch_id` = '$branch_id'";
   $result = $conn->query($sql);
 
   if ($result && $result->num_rows > 0) {
     $row = $result->fetch_assoc();
+    $company_id = $row['comp_id_fk'];
     $acc_lev_2 = $row['acc_lev_2'];
     $account_desc = $row['account_desc'];
     $registration_date = $row['registration_date'];
@@ -92,7 +93,7 @@ if (isset($_POST['update'])) {
 
   // Execute the query and check for errors
   if (mysqli_query($conn, $sql)) {
-    header("Location: Branches.php?id=" . $branch_id);
+    header("Location: Branches.php?id=" . $company_id);
     exit;
   } else {
     echo "Error updating record: " . mysqli_error($conn);

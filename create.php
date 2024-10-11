@@ -46,6 +46,16 @@ if (isset($_POST['submit'])) {
     $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
     $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
 
+
+    //check account level no is already exist or not
+        $accCheckQuery = "SELECT * FROM `compani` WHERE `acc_lev_1` = '$acc_1'";
+        $accCheckResult = $conn->query($accCheckQuery);
+    
+        if ($accCheckResult->num_rows > 0) {
+            die("Error: The account level no. '$acc_1' already exists.");
+        }
+    
+
     // Insert the record into the database
     $sql = "INSERT INTO `compani` (`acc_lev_1`, `acc_desc`, `registration`, `expiry`, `foc`, `foc_phone`, `contact_fax`, `add_1`, `add_2`, `add_3`) 
             VALUES ('$acc_1', '$acc_desc', '$registration', '$expiry', '$foc', '$foc_phone', '$contact_fax', '$address', '$address1', '$address2')";

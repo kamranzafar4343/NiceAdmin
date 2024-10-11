@@ -40,16 +40,17 @@ $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $sql = "SELECT * FROM branches WHERE comp_id_fk = $company_id";
 $result = $conn->query($sql);
 
-//2nd query to fetch the acc_lev_1 of the company
-$sql2 = "Select acc_lev_1 from compani where comp_id= $company_id";
+//2nd query to fetch the info of the company
+$sql2 = "Select * from compani where comp_id= $company_id";
 $result2 = $conn->query($sql2);
 
-
 $Acc_lev_1 = "";
+$acc_desc = "";
 
 if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
     $Acc_lev_1 = $row2['acc_lev_1'];
+    $acc_desc = $row2['acc_desc'];
 }
 
 ?>
@@ -483,7 +484,7 @@ if ($result2->num_rows > 0) {
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
 
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $Acc_lev_1; ?></h2>
+                    <h2 class="card-title fw-bold text-uppercase"><?php echo $Acc_lev_1 . " - " . $acc_desc; ?></h2>
 
                     <?php
                     if ($result->num_rows > 0) {
@@ -499,8 +500,6 @@ if ($result2->num_rows > 0) {
                                     <th scope="col">Contact Person</th>
                                     <th scope="col">Phone</th>
                                     <th scope="col">Contact Fax</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Address</th>
                                     <th scope="col">Address</th>
                                     <th scope="col">Pick Up Address</th>
                                     <th scope="col">Actions</th>
@@ -529,9 +528,7 @@ if ($result2->num_rows > 0) {
                                     echo "<td>" . ($row["contact_person"]) . "</td>";
                                     echo "<td>" . ($row["contact_phone"]) . "</td>";
                                     echo "<td>" . ($row["contact_fax"]) . "</td>";
-                                    echo "<td>" . ($row["address"]) . "</td>";
-                                    echo "<td>" . ($row["address1"]) . "</td>";
-                                    echo "<td>" . ($row["address2"]) . "</td>";
+                                    echo "<td>" . ($row["address"]) . "<br>" . ($row["address1"]) ."<br>" . ($row["address2"]) . "</td>";
                                     echo "<td>" . ($row["pickup_address"]) . "</td>";
                                 ?>
                                     <td>

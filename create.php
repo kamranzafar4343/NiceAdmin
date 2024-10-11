@@ -41,13 +41,14 @@ if (isset($_POST['submit'])) {
     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
+    $contact_fax=mysqli_real_escape_string($conn, $_POST['foc_fax']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
     $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
     $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
 
     // Insert the record into the database
-    $sql = "INSERT INTO `compani` (`acc_lev_1`, `acc_desc`, `registration`, `expiry`, `foc`, `foc_phone`, `add_1`, `add_2`, `add_3`) 
-            VALUES ('$acc_1', '$acc_desc', '$registration', '$expiry', '$foc', '$foc_phone', '$address', '$address1', '$address2')";
+    $sql = "INSERT INTO `compani` (`acc_lev_1`, `acc_desc`, `registration`, `expiry`, `foc`, `foc_phone`, `contact_fax`, `add_1`, `add_2`, `add_3`) 
+            VALUES ('$acc_1', '$acc_desc', '$registration', '$expiry', '$foc', '$foc_phone', '$contact_fax', '$address', '$address1', '$address2')";
 
     $result = $conn->query($sql);
 

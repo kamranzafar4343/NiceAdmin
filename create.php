@@ -469,7 +469,7 @@ if (isset($_POST['submit'])) {
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="comp_acc_level" class="form-label">Acc-Lev-1</label>
                         <input type="text" class="form-control" id="account_lev_no" name="acc_level_no" required>
                     </div>

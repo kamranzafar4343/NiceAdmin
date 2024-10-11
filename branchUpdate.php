@@ -36,26 +36,29 @@ if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
 // show branch previous data
 if (isset($_GET['id'])) {
   $branch_id = $_GET['id'];
-  $sql = "SELECT * FROM `branch` WHERE `branch_id`= '$branch_id'";
+  $sql = "SELECT * FROM `branches` WHERE `branch_id`= '$branch_id'";
   $result = $conn->query($sql);
   $row = mysqli_fetch_array($result);
-  $branch_name = $row['branch_name'];
-  $contactPerson = $row['ContactPersonName'];
-  $resignation = $row['ContactPersonResignation'];
-  $phone = $row['ContactPersonPhone'];
-  $city = $row['City'];
-  $state = $row['State'];
-  $country = $row['Country'];
+  $company_id = $row['acc_lev_2'];
+  $account_desc = $row['account_desc'];
+  $registration_date = $row['registration_date'];
+  $expiry_date = $row['expiry_date'];
+  $contact_person = $row['contact_person'];
+  $contact_fax = $row['contact_fax'];
+  $address = $row['address'];
+  $address1 = $row['address1'];
+  $address2 = $row['address2'];
+  $pickup_address = $row['pickup_address'];
 }
 
 if (isset($_GET['id'])) {
   $branch_id = intval($_GET['id']);
-  $sql = "SELECT `compID_FK` FROM `branch` WHERE `branch_id` = $branch_id";
+  $sql = "SELECT `comp_id_fk` FROM `branches` WHERE `branch_id` = $branch_id";
   $result = $conn->query($sql);
 
   if ($result && $result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $company_id = $row['compID_FK'];
+    $company_id = $row['comp_id_fk'];
   } else {
     echo "Error: No company found for this branch.";
   }
@@ -63,15 +66,21 @@ if (isset($_GET['id'])) {
 
 //update the record
 if (isset($_POST['update'])) {
-  $branch_name = mysqli_real_escape_string($conn, $_POST['branch_name']);
-  $contactPerson =  mysqli_real_escape_string($conn, $_POST['ContactPersonName']);
-  $resignation = mysqli_real_escape_string($conn, $_POST['ContactPersonResignation']);
-  $phone = mysqli_real_escape_string($conn, $_POST['ContactPersonPhone']);
-  $city = mysqli_real_escape_string($conn, $_POST['City']);
-  $state = mysqli_real_escape_string($conn, $_POST['State']);
-  $country = mysqli_real_escape_string($conn, $_POST['Country']);
+  // $company_id = mysqli_real_escape_string($conn, $_POST['comp_id_fk']);
+  $acc_lev_2 = mysqli_real_escape_string($conn, $_POST['acc_lev_2']);
+  $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
+  $registration = mysqli_real_escape_string($conn, $_POST['registration_date']);
+  $expiry = mysqli_real_escape_string($conn, $_POST['expiry_date']);
+  $contact_person = mysqli_real_escape_string($conn, $_POST['contact_person']);
+  $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
+  $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
+  $address = mysqli_real_escape_string($conn, $_POST['address']);
+  $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
+  $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
+  $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
-  $sql = "UPDATE `branch` SET `branch_name`='$branch_name', `ContactPersonName`='$contactPerson', `ContactPersonResignation`='$resignation', `ContactPersonPhone`='$phone', `City`='$city', `State`='$state', `Country`='$country' WHERE `branch_id`='$branch_id'";
+
+  $sql = "UPDATE `branches` SET `acc_lev_2`='$branch_name', `account_desc`='$contactPerson', `registration`='$resignation', `expiry`='$phone', `City`='$city', `State`='$state', `Country`='$country' WHERE `branch_id`='$branch_id'";
 
   if (mysqli_query($conn, $sql)) {
     header("Location: Branches.php?id=" . $company_id);
@@ -686,51 +695,52 @@ End Search Bar -->
       <div class="card-body">
         <!-- <h5 class="card-title">Update Company Information</h5> -->
         <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
-          <div class="col-md-6">
-            <label class="form-label">Branch name</label>
-            <input type="text" class="form-control" name="branch_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $branch_name; ?>" required>
+        <div class="col-md-6">
+            <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
+            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" required>
+          </div>
 
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Contact Person Name</label>
-            <input type="text" class="form-control" name="ContactPersonName" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $contactPerson; ?>" required>
 
-          </div>
           <div class="col-md-6">
-            <label class="form-label">Phone</label>
-            <input type="text" class="form-control" name="ContactPersonPhone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" value="<?php echo $phone; ?>" required pattern="\d{10,15}">
+            <label for="account_description" class="form-label">Account Description</label>
+            <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Contact Person Resignation</label>
-            <input type="text" class="form-control" name="ContactPersonResignation" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $resignation; ?>" required>
 
+
+          <div class="col-md-6">
+            <label for="registration" class="form-label">Setup Date</label>
+            <input type="date" class="form-control" id="registration" name="registration" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="expiry" class="form-label">Conract Exp_Date</label>
+            <input type="date" class="form-control" id="expiry" name="expiry">
           </div>
           <div class="col-md-6">
-            <label for="country" class="form-label">Country</label>
-            <select class="form-select" id="country" name="Country" value="<?php echo $country; ?>" required>
-              <option value="">Select Country</option>
-              <option value="Pakistan" <?php if ($country == 'Pakistan') { ?> selected="selected" <?php } ?>>Pakistan</option>
-              <option value="USA" <?php if ($country == 'USA') { ?> selected="selected" <?php } ?>>USA</option>
-              <option value="Canada" <?php if ($country == 'Canada') { ?> selected="selected" <?php } ?>>Canada</option>
-              <option value="UK" <?php if ($country == 'UK') { ?> selected="selected" <?php } ?>>UK</option>
-              <!-- Add more countries as needed -->
-            </select>
+            <label for="" class="form-label">Contact Person</label>
+            <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
+          </div>
+          <div class="col-md-6">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="" name="foc_phone" required>
           </div>
 
           <div class="col-md-6">
-            <label for="state" class="form-label">State</label>
-            <select class="form-select" id="state" name="State" value="<?php echo $state; ?>" required>
-              <option value="">Select State</option>
-              <!-- Options will be dynamically populated based on selected country -->
-            </select>
+            <label for="phone" class="form-label">Fax</label>
+            <input type="text" class="form-control" id="" name="foc_fax">
           </div>
 
           <div class="col-md-6">
-            <label for="city" class="form-label">City</label>
-            <select class="form-select" id="city" name="City" value="<?php echo $city; ?>" required>
-              <option value="">Select City</option>
-              <!-- Options will be dynamically populated based on selected state -->
-            </select>
+            <label for="address" class="form-label">Address</label>
+            <input type="text" class="form-control" id="" name="address" required>
+            <br>
+            <input type="text" class="form-control" id="" name="address1">
+            <br>
+            <input type="text" class="form-control" id="" name="address2">
+
+          </div>
+          <div class="col-md-6">
+            <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
+            <input type="text" class="form-control" id="" name="pickup_address" required>
           </div>
           <div class="col-12 text-center">
             <button type="submit" class="btn btn-outline-primary mt-3" name="update" value="update">Update</button>

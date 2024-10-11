@@ -44,11 +44,12 @@ $result = $conn->query($sql);
 $sql2 = "Select acc_lev_1 from compani where comp_id= $company_id";
 $result2 = $conn->query($sql2);
 
-$comp_name = "";
+
+$Acc_lev_1 = "";
 
 if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
-    $comp_name = $row2['acc_lev_1'];
+    $Acc_lev_1 = $row2['acc_lev_1'];
 }
 
 ?>
@@ -432,12 +433,6 @@ if ($result2->num_rows > 0) {
                     <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
@@ -455,14 +450,6 @@ if ($result2->num_rows > 0) {
             </li>
 
             <li class="nav-heading">Pages</li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-            <!-- End Profile Page Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
@@ -496,7 +483,7 @@ if ($result2->num_rows > 0) {
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
 
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
+                    <h2 class="card-title fw-bold text-uppercase"><?php echo $Acc_lev_1; ?></h2>
 
                     <?php
                     if ($result->num_rows > 0) {

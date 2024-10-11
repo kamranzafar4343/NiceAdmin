@@ -506,7 +506,7 @@ if ($result2->num_rows > 0) {
                                 <tr>
                                     <!-- <th scope="col">ID</th> -->
                                     <th scope="col">Acc_lev_2</th>
-                                    <th scope="col">Descruption</th>
+                                    <th scope="col">Description</th>
                                     <th scope="col">Registration date</th>
                                     <th scope="col">Contract Expire</th>
                                     <th scope="col">Contact Person</th>

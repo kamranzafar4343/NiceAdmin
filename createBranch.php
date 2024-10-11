@@ -495,56 +495,52 @@ End Search Bar -->
 
           <div class="col-md-6">
             <label class="form-label">Account level 2</label>
-            <input type="text" class="form-control" name="account_level_no" required>
+            <input type="text" class="form-control" name="acc_lev_2" required>
           </div>
 
           <div class="col-md-6">
-            <label class="form-label">Branch Name</label>
-            <input type="text" class="form-control" name="branch_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>
-          </div>
-
-
-          <div class="col-md-6">
-            <label class="form-label">Contact Person Name</label>
-            <input type="text" class="form-control" name="ContactPersonName" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="28" title="Only letters allowed; at least 3" required>
+            <label for="account_description" class="form-label">Account Description</label>
+            <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
           </div>
 
 
           <div class="col-md-6">
-            <label class="form-label">Contact Person Phone</label>
-            <input type="text" class="form-control" name="ContactPersonPhone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" required>
+            <label for="registration" class="form-label">Setup Date</label>
+            <input type="date" class="form-control" id="registration" name="registration" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="expiry" class="form-label">Conract Exp_Date</label>
+            <input type="date" class="form-control" id="expiry" name="expiry">
           </div>
           <div class="col-md-6">
-            <label class="form-label">Contact Person Resignation</label>
-            <input type="text" class="form-control" name="ContactPersonResignation" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="25" title="only letters ; at least 3" required>
+            <label for="" class="form-label">Contact Person</label>
+            <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
+          </div>
+          <div class="col-md-6">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="" name="foc_phone" required>
           </div>
 
           <div class="col-md-6">
-            <label for="country" class="form-label">Country</label>
-            <select class="form-select" id="country" name="Country" required>
-              <option value="">Select Country</option>
-              <option value="Pakistan">Pakistan</option>
-              <option value="USA">USA</option>
-              <option value="Canada">Canada</option>
-              <option value="UK">UK</option>
-              <!-- Add more countries as needed -->
-            </select>
+            <label for="phone" class="form-label">Fax</label>
+            <input type="text" class="form-control" id="" name="foc_fax">
           </div>
 
           <div class="col-md-6">
-            <label for="state" class="form-label">State</label>
-            <select class="form-select" id="state" name="State" required>
-              <option value="">Select State</option>
-              <!-- Options will be dynamically populated based on selected country -->
-            </select>
+            <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
+            <input type="text" class="form-control" id="" name="pickup_address" required>
           </div>
+
           <div class="col-md-6">
-            <label for="city" class="form-label">City</label>
-            <select class="form-select" id="city" name="City" required>
-              <option value="">Select City</option>
-              <!-- Options will be dynamically populated based on selected state -->
-            </select>
+            <label for="address" class="form-label">Address</label>
+            <input type="text" class="form-control" id="" name="address" required>
+            <br>
+            <input type="text" class="form-control" id="" name="address1">
+            <br>
+            <input type="text" class="form-control" id="" name="address2">
+
           </div>
+          
 
           <div class="text-center mt-4 mb-2">
             <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>

@@ -525,16 +525,12 @@ if ($result2->num_rows > 0) {
                                     echo "<td>" . ($row["add_3"]) . "</td>";
                                     echo "<td>" . ($row["pickup_address"]) . "</td>";
                                 ?>
-                                    <td>
-                                        <div style="display: flex; gap: 10px;">
+                                     <td>
+                                     <div style="display: flex; gap: 10px;">
+                                     <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="updatedepart.php?id=<?php echo $row['dept_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
-                                            <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
-                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                     <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="deletedepart.php?id=<?php echo $row['dept_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
 
-                                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                                onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-
-                                        </div>
                                     </td>
                                     </tr>
                                 <?php

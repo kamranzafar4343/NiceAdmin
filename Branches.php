@@ -44,11 +44,12 @@ $result = $conn->query($sql);
 $sql2 = "Select acc_lev_1 from compani where comp_id= $company_id";
 $result2 = $conn->query($sql2);
 
-$comp_name = "";
+
+$Acc_lev_1 = "";
 
 if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
-    $comp_name = $row2['acc_lev_1'];
+    $Acc_lev_1 = $row2['acc_lev_1'];
 }
 
 ?>
@@ -496,7 +497,7 @@ if ($result2->num_rows > 0) {
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
 
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
+                    <h2 class="card-title fw-bold text-uppercase"><?php echo $Acc_lev_1; ?></h2>
 
                     <?php
                     if ($result->num_rows > 0) {

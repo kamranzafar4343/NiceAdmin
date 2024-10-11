@@ -88,7 +88,7 @@ if (isset($_POST['update'])) {
 
   // Execute the query and check for success or error
   if (mysqli_query($conn, $sql)) {
-    // Redirect to the Branches.php page after successful update
+    // Redirect to the Companies.php page after successful update
     header("Location: Companies.php?id=" . $comp_id);
     exit;
   } else {

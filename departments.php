@@ -5,13 +5,13 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-  // If not logged in, redirect to login page
-  header("Location: pages-login.php");
-  exit();
+    // If not logged in, redirect to login page
+    header("Location: pages-login.php");
+    exit();
 }
 
 // Include the database connection
-include 'config/db.php'; 
+include 'config/db.php';
 
 // Get session email 
 $email = $_SESSION['email'];
@@ -20,35 +20,35 @@ $email = $_SESSION['email'];
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
-  $row2 = $resultData->fetch_assoc();
-  $adminName = $row2['name'];
-  $adminEmail = $row2['email'];
-  $userRole = $row2['role']; // Assuming you have a 'role' column in the 'register' table
+    $row2 = $resultData->fetch_assoc();
+    $adminName = $row2['name'];
+    $adminEmail = $row2['email'];
+    $userRole = $row2['role']; // Assuming you have a 'role' column in the 'register' table
 }
 
 // Check if the user is an admin, otherwise redirect
-if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
-  // If the user is not an Admin, redirect to index page
-  header("Location: index.php");
-  exit();
+if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
+    // If the user is not an Admin, redirect to index page
+    header("Location: index.php");
+    exit();
 }
 
-// Get company ID from query string
-$company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+// Get branch ID from query string
+$branch_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Fetch branches of the company
-$sql = "SELECT * FROM branches WHERE comp_id_fk = $company_id";
+//Fetch departments of a branch
+$sql = "SELECT * FROM departments WHERE branch_id_fk = $branch_id";
 $result = $conn->query($sql);
 
-//2nd query to fetch the acc_lev_1 of the company
-$sql2 = "Select acc_lev_1 from compani where comp_id= $company_id";
+//get account level 2
+$sql2 = "Select acc_lev_2 from branches where branch_id= $branch_id";
 $result2 = $conn->query($sql2);
 
-$comp_name = "";
+$acc_lev2 = "";
 
 if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
-    $comp_name = $row2['acc_lev_1'];
+    $acc_lev2 = $row2['acc_lev_2'];
 }
 
 ?>
@@ -362,7 +362,7 @@ if ($result2->num_rows > 0) {
             </form>
         </div><!-- End Search Bar -->
 
-        <h3>List of Branches</h3>
+        <h3>List of Departments</h3>
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
@@ -486,7 +486,7 @@ if ($result2->num_rows > 0) {
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add department</button>
     <!-- 
   <h1>Companies List</h1> -->
     <main id="main" class="main">
@@ -495,8 +495,7 @@ if ($result2->num_rows > 0) {
 
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
+                    <h2 class="card-title fw-bold text-uppercase"><?php echo $acc_lev2; ?></h2>
 
                     <?php
                     if ($result->num_rows > 0) {
@@ -505,7 +504,7 @@ if ($result2->num_rows > 0) {
                             <thead>
                                 <tr>
                                     <!-- <th scope="col">ID</th> -->
-                                    <th scope="col">Acc_lev_2</th>
+                                    <th scope="col">Acc_lev_3</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Registration date</th>
                                     <th scope="col">Contract Expire</th>
@@ -525,18 +524,9 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                //    echo "<td>" . ($row["branch_id"]) . "</td>";
-
-                                ?>
-                                <td>
-                                <a class="text-primary fw-bold" href="departments.php?id=<?php echo $row['branch_id']; ?>">
-                                  <?php echo $row['acc_lev_2']; ?>
-                                </a>
-                              </td>
-                                 <?php
-
-
-                                   echo "<td>" . ($row["account_desc"]) . "</td>";
+                                    //    echo "<td>" . ($row["branch_id"]) . "</td>";
+                                    echo "<td>" . ($row["acc_lev_3"]) . "</td>";
+                                    echo "<td>" . ($row["account_desc"]) . "</td>";
                                     echo "<td>" . ($row["registration_date"]) . "</td>";
                                     echo "<td>" . ($row["expiry_date"]) . "</td>";
                                     echo "<td>" . ($row["contact_person"]) . "</td>";
@@ -592,7 +582,7 @@ if ($result2->num_rows > 0) {
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
 
-    <!-- Template Main JS File --> 
+    <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
     <script>

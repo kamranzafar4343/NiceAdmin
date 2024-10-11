@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 09, 2024 at 11:18 AM
+-- Generation Time: Oct 11, 2024 at 07:41 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -71,22 +71,34 @@ CREATE TABLE `box` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `branch`
+-- Table structure for table `branches`
 --
 
-CREATE TABLE `branch` (
-  `account_level_no` int(255) NOT NULL,
-  `branch_id` int(100) NOT NULL,
-  `compID_FK` int(255) NOT NULL,
-  `branch_name` varchar(255) NOT NULL,
-  `ContactPersonName` varchar(100) DEFAULT NULL,
-  `ContactPersonResignation` varchar(50) DEFAULT NULL,
-  `ContactPersonPhone` text DEFAULT NULL,
-  `City` varchar(100) DEFAULT NULL,
-  `State` text DEFAULT NULL,
-  `Country` varchar(100) DEFAULT NULL,
-  `Status` text DEFAULT NULL
+CREATE TABLE `branches` (
+  `branch_id` int(255) NOT NULL,
+  `acc_lev_2` varchar(50) NOT NULL,
+  `comp_id_fk` int(11) DEFAULT NULL,
+  `account_desc` varchar(255) DEFAULT NULL,
+  `registration_date` date DEFAULT NULL,
+  `expiry_date` date DEFAULT NULL,
+  `contact_person` varchar(50) DEFAULT NULL,
+  `contact_phone` varchar(20) DEFAULT NULL,
+  `contact_fax` varchar(20) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `address1` varchar(255) DEFAULT NULL,
+  `address2` varchar(255) DEFAULT NULL,
+  `pickup_address` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `branches`
+--
+
+INSERT INTO `branches` (`branch_id`, `acc_lev_2`, `comp_id_fk`, `account_desc`, `registration_date`, `expiry_date`, `contact_person`, `contact_phone`, `contact_fax`, `address`, `address1`, `address2`, `pickup_address`) VALUES
+(1, '6012', 110, 'for the MCB', '2024-10-10', '2024-10-26', 'Azmat ali', '03184090098', '0412845671', 'Punjab Pakistan', 'Punjab Pakistan', 'Punjab Pakistan', 'Mall road Lahore,Pakistan'),
+(2, '6013', 113, 'for mcb', '2024-10-16', '2024-10-12', 'hashmat', '897909786', '786986878', 'Mall road Lahore', 'Punjab Pakistan', 'Punjab Pakistan', 'lahore Punjab Pakistan'),
+(3, '6014', 110, 'For MCB Hall Road', '2024-10-10', '2024-10-31', 'hashmat', '897909786', '0412845671', ' road Lahore', 'Punjab Pakistan', 'Punjab Pakistan', 'lahore Punjab Pakistan'),
+(4, '', 114, '', '0000-00-00', '0000-00-00', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -96,8 +108,6 @@ CREATE TABLE `branch` (
 
 CREATE TABLE `compani` (
   `acc_lev_1` int(255) NOT NULL,
-  `acc_lev_2` int(255) NOT NULL,
-  `acc_lev_3` int(255) NOT NULL,
   `comp_id` int(255) NOT NULL,
   `acc_desc` text NOT NULL,
   `email` text DEFAULT NULL,
@@ -114,10 +124,12 @@ CREATE TABLE `compani` (
 -- Dumping data for table `compani`
 --
 
-INSERT INTO `compani` (`acc_lev_1`, `acc_lev_2`, `acc_lev_3`, `comp_id`, `acc_desc`, `email`, `registration`, `expiry`, `foc`, `foc_phone`, `add_1`, `add_2`, `add_3`) VALUES
-(6010, 6111, 0, 99, 'Operations Branch - 05130', NULL, '2024-10-09', '2025-10-09', 'Mr. Muhammad Rizwan', '041 - 262 1431', 'Regency Arcade', 'The Mall', 'Faislabad'),
-(1320, 1321, 0, 110, 'Supplies department - 098093', NULL, '2024-10-09', '2025-10-09', 'Anshuman', '099809802', '12 abqari plaza ', 'qartaba chowk, Lahore Kasur Road', 'Lahore'),
-(1320, 1321, 13210, 112, 'HR Department 1321 - 0', NULL, '2024-10-09', '2025-10-09', 'Muhammad Ashir', '03180909112', 'H#123, St. #12', 'Main Anakali Bazar', 'Lahore');
+INSERT INTO `compani` (`acc_lev_1`, `comp_id`, `acc_desc`, `email`, `registration`, `expiry`, `foc`, `foc_phone`, `add_1`, `add_2`, `add_3`) VALUES
+(6010, 99, 'Operations Branch - 05130', NULL, '2024-10-09', '2025-10-09', 'Mr. Muhammad Rizwan', '041 - 262 1431', 'Regency Arcade', 'The Mall', 'Faislabad'),
+(1320, 110, 'Supplies department / ', NULL, '2024-10-09', '2025-10-09', 'Anshuman', '099809802', '12 abqari plaza ', 'qartaba chowk, Lahore Kasur Road', 'Lahore'),
+(1320, 112, 'HR Department 1321 - 0', NULL, '2024-10-09', '2025-10-09', 'Muhammad Ashir', '03180909112', 'H#123, St. #12', 'Main Anakali Bazar', 'Lahore'),
+(2102, 113, 'Khushali bank', NULL, '2024-10-10', '2025-10-30', 'qamar', '031878984343', '20 Ansari Road', 'Model Town', 'Lahore'),
+(900, 114, 'china bank', NULL, '2024-10-11', '2025-10-11', 'aslam', '012312312312', '29 queen road', 'jinnah town', 'Lahore');
 
 -- --------------------------------------------------------
 
@@ -427,6 +439,52 @@ INSERT INTO `delivery_orders` (`delivery_order_no`, `delivery_order_id`, `compan
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `departments`
+--
+
+CREATE TABLE `departments` (
+  `acc_lev_3` int(255) NOT NULL,
+  `dept_id` int(255) NOT NULL,
+  `branch_id_fk` int(255) NOT NULL,
+  `acc_desc` text NOT NULL,
+  `registration` date NOT NULL,
+  `expiry` date NOT NULL,
+  `foc` text NOT NULL,
+  `foc_phone` text NOT NULL,
+  `add_1` text NOT NULL,
+  `add_2` text NOT NULL,
+  `add_3` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dept`
+--
+
+CREATE TABLE `dept` (
+  `acc_lev_3` int(255) NOT NULL,
+  `dept_id` int(255) NOT NULL,
+  `acc_desc` text NOT NULL,
+  `registration` date NOT NULL,
+  `expiry` date NOT NULL,
+  `foc` text NOT NULL,
+  `foc_phone` text NOT NULL,
+  `add_1` text NOT NULL,
+  `add_2` text NOT NULL,
+  `add_3` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dept`
+--
+
+INSERT INTO `dept` (`acc_lev_3`, `dept_id`, `acc_desc`, `registration`, `expiry`, `foc`, `foc_phone`, `add_1`, `add_2`, `add_3`) VALUES
+(6011, 99, 'Operations Branch - 05130', '2024-10-09', '2025-10-09', 'Mr. Muhammad Rizwan', '041 - 262 1431', 'Regency Arcade', 'The Mall', 'Faislabad');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `employee`
 --
 
@@ -607,12 +665,11 @@ ALTER TABLE `box`
   ADD KEY `company FK` (`companiID_FK`);
 
 --
--- Indexes for table `branch`
+-- Indexes for table `branches`
 --
-ALTER TABLE `branch`
+ALTER TABLE `branches`
   ADD PRIMARY KEY (`branch_id`),
-  ADD KEY `comp_ID_FK` (`compID_FK`),
-  ADD KEY `account_level_no` (`account_level_no`);
+  ADD KEY `acc_lev_2` (`acc_lev_2`);
 
 --
 -- Indexes for table `compani`
@@ -634,6 +691,19 @@ ALTER TABLE `countries`
 --
 ALTER TABLE `delivery_orders`
   ADD PRIMARY KEY (`delivery_order_id`);
+
+--
+-- Indexes for table `departments`
+--
+ALTER TABLE `departments`
+  ADD KEY `branch_id_fk` (`branch_id_fk`);
+
+--
+-- Indexes for table `dept`
+--
+ALTER TABLE `dept`
+  ADD PRIMARY KEY (`dept_id`),
+  ADD UNIQUE KEY `acc_lev_3` (`acc_lev_3`);
 
 --
 -- Indexes for table `employee`
@@ -693,16 +763,16 @@ ALTER TABLE `box`
   MODIFY `box_id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
--- AUTO_INCREMENT for table `branch`
+-- AUTO_INCREMENT for table `branches`
 --
-ALTER TABLE `branch`
-  MODIFY `branch_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+ALTER TABLE `branches`
+  MODIFY `branch_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `compani`
 --
 ALTER TABLE `compani`
-  MODIFY `comp_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `comp_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 
 --
 -- AUTO_INCREMENT for table `delivery_orders`
@@ -757,10 +827,10 @@ ALTER TABLE `box`
   ADD CONSTRAINT `company FK` FOREIGN KEY (`companiID_FK`) REFERENCES `compani` (`comp_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `branch`
+-- Constraints for table `departments`
 --
-ALTER TABLE `branch`
-  ADD CONSTRAINT `branch_ibfk_1` FOREIGN KEY (`compID_FK`) REFERENCES `compani` (`comp_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `departments`
+  ADD CONSTRAINT `departments_ibfk_1` FOREIGN KEY (`branch_id_fk`) REFERENCES `branches` (`branch_id`);
 
 --
 -- Constraints for table `employee`

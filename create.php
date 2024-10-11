@@ -36,8 +36,6 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 
 if (isset($_POST['submit'])) {
     $acc_1 = mysqli_real_escape_string($conn, $_POST['acc_level_no']);
-    $acc_2 = mysqli_real_escape_string($conn, $_POST['acc_lev_2']);
-    $acc_3 = mysqli_real_escape_string($conn, $_POST['acc_lev_3']);
     $acc_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
@@ -48,8 +46,8 @@ if (isset($_POST['submit'])) {
     $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
 
     // Insert the record into the database
-    $sql = "INSERT INTO `compani` (`acc_lev_1`, `acc_lev_2`, `acc_lev_3`, `acc_desc`, `registration`, `expiry`, `foc`, `foc_phone`, `add_1`, `add_2`, `add_3`) 
-            VALUES ('$acc_1','$acc_2', '$acc_3', '$acc_desc', '$registration', '$expiry', '$foc', '$foc_phone', '$address', '$address1', '$address2')";
+    $sql = "INSERT INTO `compani` (`acc_lev_1`, `acc_desc`, `registration`, `expiry`, `foc`, `foc_phone`, `add_1`, `add_2`, `add_3`) 
+            VALUES ('$acc_1', '$acc_desc', '$registration', '$expiry', '$foc', '$foc_phone', '$address', '$address1', '$address2')";
 
     $result = $conn->query($sql);
 
@@ -474,16 +472,6 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-4">
                         <label for="comp_acc_level" class="form-label">Acc-Lev-1</label>
                         <input type="text" class="form-control" id="account_lev_no" name="acc_level_no" required>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
-                        <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" required>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="Dept_ACC_LEVEL" class="form-label">Acc-Lev-3</label>
-                        <input type="text" class="form-control" id="acc_lev_3" name="acc_lev_3">
                     </div>
 
                     <div class="col-md-6">

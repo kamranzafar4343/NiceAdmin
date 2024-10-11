@@ -65,11 +65,11 @@ if (isset($_POST['submit'])) {
           VALUES ('$company_id', '$acc_lev_2', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$contact_fax', '$address', '$address1', '$address2', '$pickup_address')";
 
   if ($conn->query($sql) === TRUE) {
-    header("Location: Branches.php?id=" . $company_id);
-    exit; // Ensure script ends after redirect
-    echo "success";
+      // Redirecting after successful insertion
+      header("Location: Branches.php?id=" . $company_id);
+      exit;
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+      echo "Error: " . $sql . "<br>" . $conn->error;
   }
 
   $conn->close();
@@ -477,26 +477,17 @@ End Search Bar -->
             <label class="form-label">Company ID</label>
             <input type="text" class="form-control" name="comp_id_fk" value="<?php echo htmlspecialchars($company_id); ?>" readonly>
           </div>
-          <?php
-          $getAccLev1 = "SELECT * FROM compani WHERE comp_id = '$company_id'";
-          $resultAccLev1 = mysqli_query($conn, $getAccLev1);
-          if ($resultAccLev1->num_rows > 0) {
-            $rowAccLev1 = $resultAccLev1->fetch_assoc();
-
-            $fetchAcc1 = $rowAccLev1['acc_lev_1'];
-          }
-
-          ?>
 
           <div class="col-md-6">
-            <label class="form-label">Account level 1</label>
-            <input type="text" class="form-control" name="" value="<?php echo htmlspecialchars($fetchAcc1); ?>" readonly>
+            <label class="form-label">Account Level 1</label>
+            <input type="text" class="form-control" name="" value="<?php echo htmlspecialchars($company_id); ?>" readonly>
           </div>
 
           <div class="col-md-6">
-            <label class="form-label">Account level 2</label>
-            <input type="text" class="form-control" name="acc_lev_2" required>
+            <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
+            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" required>
           </div>
+
 
           <div class="col-md-6">
             <label for="account_description" class="form-label">Account Description</label>
@@ -527,11 +518,6 @@ End Search Bar -->
           </div>
 
           <div class="col-md-6">
-            <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
-            <input type="text" class="form-control" id="" name="pickup_address" required>
-          </div>
-
-          <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
             <input type="text" class="form-control" id="" name="address" required>
             <br>
@@ -540,7 +526,10 @@ End Search Bar -->
             <input type="text" class="form-control" id="" name="address2">
 
           </div>
-          
+          <div class="col-md-6">
+            <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
+            <input type="text" class="form-control" id="" name="pickup_address" required>
+          </div>
 
           <div class="text-center mt-4 mb-2">
             <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
@@ -561,68 +550,7 @@ End Search Bar -->
     <?php unset($_SESSION['data_inserted']); ?>
   <?php endif; ?>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const countryStateCityData = {
-        Pakistan: {
-          Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-          KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-          Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-          Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
-
-        },
-        USA: {
-          California: ["Los Angeles", "San Francisco", "San Diego"],
-          Texas: ["Houston", "Austin", "Dallas"]
-          // Add more states and cities
-        },
-        Canada: {
-          Ontario: ["Toronto", "Ottawa", "Hamilton"],
-          Quebec: ["Montreal", "Quebec City"]
-          // Add more provinces and cities
-        },
-      };
-
-      const countrySelect = document.getElementById('country');
-      const stateSelect = document.getElementById('state');
-      const citySelect = document.getElementById('city');
-
-      // Update states dropdown when a country is selected
-      countrySelect.addEventListener('change', function() {
-        const selectedCountry = countrySelect.value;
-        stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-        if (selectedCountry) {
-          const states = Object.keys(countryStateCityData[selectedCountry]);
-          states.forEach(function(state) {
-            const option = document.createElement('option');
-            option.value = state;
-            option.text = state;
-            stateSelect.add(option);
-          });
-        }
-      });
-
-      // Update cities dropdown when a state is selected
-      stateSelect.addEventListener('change', function() {
-        const selectedCountry = countrySelect.value;
-        const selectedState = stateSelect.value;
-        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-        if (selectedCountry && selectedState) {
-          const cities = countryStateCityData[selectedCountry][selectedState];
-          cities.forEach(function(city) {
-            const option = document.createElement('option');
-            option.value = city;
-            option.text = city;
-            citySelect.add(option);
-          });
-        }
-      });
-    });
-  </script>
-
+ 
 </body>
 
 </html>

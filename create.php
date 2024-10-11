@@ -465,6 +465,9 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-6">
                         <label for="comp_acc_level" class="form-label">Acc-Lev-1</label>
                         <input type="text" class="form-control" id="account_lev_no" name="acc_level_no" required>
+                        <div id="accFeedback" class="invalid-feedback">
+                            <!-- Error message will be displayed here -->
+                        </div>
                     </div>
 
                     <div class="col-md-6">
@@ -538,131 +541,6 @@ if (isset($_POST['submit'])) {
 
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const countryStateCityData = {
-                Pakistan: {
-                    Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-                    KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-                    Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-                    Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
-
-                },
-                USA: {
-                    California: ["Los Angeles", "San Francisco", "San Diego"],
-                    Texas: ["Houston", "Austin", "Dallas"]
-                    // Add more states and cities
-                },
-                Canada: {
-                    Ontario: ["Toronto", "Ottawa", "Hamilton"],
-                    Quebec: ["Montreal", "Quebec City"]
-                    // Add more provinces and cities
-                },
-            };
-
-            const countrySelect = document.getElementById('country');
-            const stateSelect = document.getElementById('state');
-            const citySelect = document.getElementById('city');
-
-            // Update states dropdown when a country is selected
-            countrySelect.addEventListener('change', function() {
-                const selectedCountry = countrySelect.value;
-                stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-                citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-                if (selectedCountry) {
-                    const states = Object.keys(countryStateCityData[selectedCountry]);
-                    states.forEach(function(state) {
-                        const option = document.createElement('option');
-                        option.value = state;
-                        option.text = state;
-                        stateSelect.add(option);
-                    });
-                }
-            });
-
-            // Update cities dropdown when a state is selected
-            stateSelect.addEventListener('change', function() {
-                const selectedCountry = countrySelect.value;
-                const selectedState = stateSelect.value;
-                citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-                if (selectedCountry && selectedState) {
-                    const cities = countryStateCityData[selectedCountry][selectedState];
-                    cities.forEach(function(city) {
-                        const option = document.createElement('option');
-                        option.value = city;
-                        option.text = city;
-                        citySelect.add(option);
-                    });
-                }
-            });
-        });
-    </script>
-    <script>
-        document.getElementById('image').addEventListener('change', function() {
-            const file = this.files[0];
-            const imageError = document.getElementById('image-error');
-            const sizeError = document.getElementById('size-error');
-            const dimensionError = document.getElementById('dimension-error');
-
-            // Reset error messages
-            imageError.style.display = 'none';
-            sizeError.style.display = 'none';
-            dimensionError.style.display = 'none';
-
-            if (file) {
-                const reader = new FileReader();
-
-                // Validate file size (2 MB limit)
-                const maxSize = 2 * 1024 * 1024; // 2MB
-                if (file.size > maxSize) {
-                    sizeError.style.display = 'block';
-                    this.value = ''; // Clear the file input
-                    return;
-                }
-
-                // Validate file header (magic number)
-                reader.onload = function(e) {
-                    const header = new Uint8Array(e.target.result).subarray(0, 4);
-                    let valid = false;
-
-                    const jpg = header[0] === 0xFF && header[1] === 0xD8 && header[2] === 0xFF;
-                    const png = header[0] === 0x89 && header[1] === 0x50 && header[2] === 0x4E && header[3] === 0x47;
-
-                    if (jpg || png) {
-                        valid = true;
-                    }
-
-                    if (!valid) {
-                        imageError.style.display = 'block';
-                        document.getElementById('image').value = ''; // Clear the file input
-                        return;
-                    } else {
-                        imageError.style.display = 'none';
-
-                        // Validate image dimensions
-                        const img = new Image();
-                        img.src = URL.createObjectURL(file);
-
-                        img.onload = function() {
-                            const maxWidth = 1024; // Example standard width
-                            const maxHeight = 768; // Example standard height
-
-                            if (img.width > maxWidth || img.height > maxHeight) {
-                                dimensionError.style.display = 'block';
-                                document.getElementById('image').value = ''; // Clear the file input
-                            } else {
-                                dimensionError.style.display = 'none';
-                            }
-                        };
-                    }
-                };
-
-                reader.readAsArrayBuffer(file);
-            }
-        });
-    </script>
     <!-- Validation Script of the header and the size of the image -->
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {

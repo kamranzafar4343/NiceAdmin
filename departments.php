@@ -512,8 +512,6 @@ if ($result2->num_rows > 0) {
                                     <th scope="col">Phone</th>
                                     <th scope="col">Contact Fax</th>
                                     <th scope="col">Address</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Address</th>
                                     <th scope="col">Pick Up Address</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -532,9 +530,7 @@ if ($result2->num_rows > 0) {
                                     echo "<td>" . ($row["foc"]) . "</td>";
                                     echo "<td>" . ($row["foc_phone"]) . "</td>";
                                     echo "<td>" . ($row["contact_fax"]) . "</td>";
-                                    echo "<td>" . ($row["add_1"]) . "</td>";
-                                    echo "<td>" . ($row["add_2"]) . "</td>";
-                                    echo "<td>" . ($row["add_3"]) . "</td>";
+                                    echo "<td>" . ($row["add_1"]) . "<br>". ($row["add_2"]) . "<br>". ($row["add_3"]). "</td>";
                                     echo "<td>" . ($row["pickup_address"]) . "</td>";
                                 ?>
                                     <td>

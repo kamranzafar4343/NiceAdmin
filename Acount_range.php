@@ -19,7 +19,28 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
+include 'config/db.php'; // Ensure the database connection is included
+
+if (isset($_POST['submit'])) {
+    // Get the form data
+    $level1 = $conn->real_escape_string($_POST['level1']);
+    $level2 = $conn->real_escape_string($_POST['level2']);
+    $object_code = $conn->real_escape_string($_POST['object_code']);
+    $begin_code = $conn->real_escape_string($_POST['begin_code']);
+    $end_code = $conn->real_escape_string($_POST['end_code']);
+
+    // Insert the data into the acc_range table
+    $sql = "INSERT INTO acc_range (level1, level2, object_code, begin_code, end_code) 
+            VALUES ('$level1', '$level2', '$object_code', '$begin_code', '$end_code')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "<script>alert('Data successfully inserted!'); window.location.href='success_page.php';</script>";
+    } else {
+        echo "<script>alert('Error: " . $conn->error . "');</script>";
+    }
+}
 ?>
+
 
 
 

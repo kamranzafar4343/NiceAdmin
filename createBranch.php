@@ -58,6 +58,8 @@ if (isset($_POST['submit'])) {
   $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
+  // $checkDupAcc = 
+
   // SQL query to insert the data into the database
   $sql = "INSERT INTO branches (comp_id_fk, acc_lev_2, account_desc, registration_date, expiry_date, contact_person, contact_phone, contact_fax, address, address1, address2, pickup_address) 
           VALUES ('$company_id', '$acc_lev_2', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$contact_fax', '$address', '$address1', '$address2', '$pickup_address')";

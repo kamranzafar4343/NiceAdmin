@@ -34,7 +34,7 @@ if (isset($_POST['submit'])) {
             VALUES ('$level1', '$level2', '$object_code', '$begin_code', '$end_code')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "<script>alert('Data successfully inserted!'); window.location.href='success_page.php';</script>";
+         echo "<script>window.location.href = 'account.php';</script>";
     } else {
         echo "<script>alert('Error: " . $conn->error . "');</script>";
     }
@@ -343,16 +343,16 @@ if (isset($_POST['submit'])) {
                 </li><!-- End Companies Nav -->
 
                 <li class="nav-item">
+                    <a class="nav-link ative" href="account.php">
+                        <i class="ri-archive-stack-fill"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="showItems.php">
-                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Items Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="order.php">
@@ -367,7 +367,7 @@ if (isset($_POST['submit'])) {
                 </li><!-- End Racks Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="store.php">
+                    <a class="nav-link collapsed" href="store.php">
                         <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Store Nav -->

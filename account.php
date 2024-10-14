@@ -41,7 +41,7 @@ $result = $conn->query($sql);
 
 
 
-$conn->close();
+// $conn->close();
 ?>
 
 
@@ -578,12 +578,32 @@ $conn->close();
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
                                         <td><?= $counter++ ?></td>
+                                        <?php
+                                        $comp_id = $row['level1'];
+                                        $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
+                                        $result3 = $conn->query($sql3);
+                                        if ($result3->num_rows > 0) {
+                                            $row3 = $result3->fetch_assoc();
+                                            $acc_lev_1 = $row3['acc_lev_1'];
+                                        }
+                                        // Show specific company name
+                                        echo '<td>' . $acc_lev_1 . '</td>';
+                                        ?>
+                                         <?php
+                                        $branch_id = $row['level2'];
+                                        $sql3 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
+                                        $result3 = $conn->query($sql3);
+                                        if ($result3->num_rows > 0) {
+                                            $row3 = $result3->fetch_assoc();
+                                            $acc_lev_2 = $row3['acc_lev_2'];
+                                        }
+                                        // Show specific company name
+                                        echo '<td>' . $acc_lev_2 . '</td>';
+                                        ?>
 
+                                       
 
-
-                                        <td><?= htmlspecialchars($row["level1"]) ?></td>
-
-                                        <td><?= htmlspecialchars($row["level2"]) ?></td>
+                            
                                         <td><?= htmlspecialchars($row["object_code"]) ?></td>
                                         <td><?= htmlspecialchars($row["begin_code"]) ?></td>
                                         <td><?= htmlspecialchars($row["end_code"]) ?></td>

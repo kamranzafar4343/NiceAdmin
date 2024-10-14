@@ -468,7 +468,8 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-6">
                         <label for="lev2">Account level 2:</label>
                         <select id="lev2" class="form-select" name="level2" required>
-                            <option value="">Select level 2</option>
+                            <option value=""></option>
+                        <!--option will b populated dynamically by ajax-->
                         </select>
                     </div>
 

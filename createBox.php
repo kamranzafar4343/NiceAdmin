@@ -448,31 +448,37 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
                     <!-- For the Level 1 field -->
                     <div class="col-md-4">
-                        <label for="level1">Account Level 1:</label>
-                        <input type="text" id="level1" class="form-control" name="level1" required>
+                        <label for="lev1">Account level 1:</label>
+                        <select id="lev1" class="form-select" name="level1" required>
+                            <option value="">Select a Level</option>
+                            <?php
+                            // Fetch the account levels from the database
+                            $result = $conn->query("SELECT comp_id, acc_lev_1, acc_desc FROM compani");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']} {$row['acc_desc']}</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
                     <!-- For the Level 2 field -->
                     <div class="col-md-4">
                         <label for="level2">Level 2:</label>
                         <input type="text" id="level2" class="form-control" name="level2" required>
+                        <option value="" ></option>
                     </div>
                     <!-- For the Level 3 field -->
                     <div class="col-md-4">
                         <label for="level3">Level 3:</label>
                         <input type="text" id="level3" class="form-control" name="level3" required>
+                        <option value=""></option>
                     </div>
+                    
                     <!-- Object Code -->
                     <div class="col-md-6">
-
-                        <label for="barcode_select" class="form-label">Select Box Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
-                
-
                         <label for="object_code" class="form-label">Object Code</label>
                         <select class="form-select" id="object_code" name="object_code" required>
                             <option value="Container">Container</option>
                             <option value="FileFolder">FileFolder</option>
-
                         </select>
                     </div>
                     <!-- Select Barcode -->

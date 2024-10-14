@@ -325,14 +325,7 @@ $result = $conn->query($sql);
                   <th scope="col">Expiry Date</th>
                   <th scope="col">Contact Person</th>
                   <th scope="col">Phone</th>
-
-                  <th scope="col" >Description</th>
-                  <th scope="col" >Setup Date</th>
-                  <th scope="col" >Expiry Date</th>
-                  <th scope="col" >Contact Person</th>
-                  <th scope="col" >Phone</th>
-                  <th scope="col" >Fax</th>
-
+                  <th scope="col">Fax</th>
                   <th scope="col" style="width:15%;">Address</th>
                   <th scope="col">Actions</th>
                 </tr>
@@ -349,19 +342,16 @@ $result = $conn->query($sql);
                       <?php echo $row['acc_lev_1']; ?>
                     </a>
                   </td>
-                  <!-- echo "<td >" . htmlspecialchars($row["acc_lev_1"]) . "</td> "; -->
+                
                   <?php
-                  // echo "<td >" . htmlspecialchars($row["acc_lev_2"]) . "</td>";
-                  // echo "<td >" . htmlspecialchars($row["acc_lev_3"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["acc_desc"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["foc"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["foc_phone"]) . "</td>";
-                  echo "<td >" . htmlspecialchars($row["add_1"]) . "<br>" . htmlspecialchars($row["add_2"]) . "<br>" . htmlspecialchars($row["add_3"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["contact_fax"]) . "</td>";
-                  echo "<td >" . htmlspecialchars($row["add_1"]) . "<br>". htmlspecialchars($row["add_2"]) ."<br>". htmlspecialchars($row["add_3"]) . "</td>";
-
+                  echo "<td >" . htmlspecialchars($row["add_1"]) . "<br>" . htmlspecialchars($row["add_2"]) . "<br>" . htmlspecialchars($row["add_3"]) . "</td>";
+                  
                   ?>
                   <td>
                     <div style="display: flex; gap: 10px;">

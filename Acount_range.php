@@ -19,28 +19,7 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
-include 'config/db.php'; // Ensure the database connection is included
-
-if (isset($_POST['submit'])) {
-    // Get the form data
-    $level1 = $conn->real_escape_string($_POST['level1']);
-    $level2 = $conn->real_escape_string($_POST['level2']);
-    $object_code = $conn->real_escape_string($_POST['object_code']);
-    $begin_code = $conn->real_escape_string($_POST['begin_code']);
-    $end_code = $conn->real_escape_string($_POST['end_code']);
-
-    // Insert the data into the acc_range table
-    $sql = "INSERT INTO acc_range (level1, level2, object_code, begin_code, end_code) 
-            VALUES ('$level1', '$level2', '$object_code', '$begin_code', '$end_code')";
-
-    if ($conn->query($sql) === TRUE) {
-         echo "<script>window.location.href = 'account.php';</script>";
-    } else {
-        echo "<script>alert('Error: " . $conn->error . "');</script>";
-    }
-}
 ?>
-
 
 
 
@@ -343,16 +322,16 @@ if (isset($_POST['submit'])) {
                 </li><!-- End Companies Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link ative" href="account.php">
-                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
-                <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="order.php">
@@ -367,7 +346,7 @@ if (isset($_POST['submit'])) {
                 </li><!-- End Racks Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="store.php">
+                    <a class="nav-link active" href="store.php">
                         <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Store Nav -->
@@ -453,7 +432,7 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-6">
                         <label for="lev1">Account level 1:</label>
                         <select id="lev1" class="form-select" name="level1" required>
-                            <option value="">Select a Level</option>
+                            <option value="">Select an account</option>
                             <?php
                             // Fetch the account levels from the database
                             $result = $conn->query("SELECT comp_id, acc_lev_1, acc_desc FROM compani");
@@ -466,9 +445,10 @@ if (isset($_POST['submit'])) {
 
                     <!-- Select lev 2 of selected account -->
                     <div class="col-md-6">
-                        <label for="lev2">Account level 2:</label>
+                        <label for="lev2">Select level 2:</label>
                         <select id="lev2" class="form-select" name="level2" required>
                             <option value="">Select level 2</option>
+                            <!-- The options will be populated via AJAX based on the selected account level 1 -->
                         </select>
                     </div>
 
@@ -525,45 +505,86 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <!-- Updated JavaScript with proper lev2Select selection -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            // When company is changed, fetch the account lev 2
+            $('#lev1').change(function() {
+                var company_id = $(this).val();
+
+                // AJAX request to get account lev 2
+                $.ajax({
+                    url: 'get_acc_lev_2.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            var acc_lev_2 = JSON.parse(response);
+                            // Clear existing branches
+                            $('#lev2').empty();
+                            $('#lev2').append('<option value="">Select</option>');
+                            // Add the new options from the response
+                            $.each(acc_lev_2, function(index, compani) {
+                                console.log(acc_lev_2);
+                                $('#lev2').append('<option value="' + compani.comp_id + '">' + compani.acc_lev_2 + '</option>');
+                            });
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const lev1Select = document.getElementById('lev1');
+            const lev2Select = document.getElementById('lev2');
+            //companySelect = lev1Select
+            //SelectedCompany = Selectedlev1
+
+            // Retrieve the previously selected company from localStorage
+            const selectedlev1 = localStorage.getItem('selectedlev1');
+            if (selectedlev1) {
+                lev1Select.value = selectedlev1;
+                loadlev2(selectedlev1); // Load branches based on the selected company
+            }
+
+            // Store the selected company in localStorage on change
+            lev1Select.addEventListener('change', function() {
+                localStorage.setItem('selectedlev1', this.value);
+                loadlev2(this.value); // Load branches based on the new selection
+            });
+        });
+
+    </script>
+
     <script>
         // Function to load branches via AJAX
         function loadlev2(company_id) {
-            $.ajax({
-                url: 'get_acc_lev_2.php',
-                type: 'POST',
-                data: {
-                    company_id: company_id
-                },
-                success: function(response) {
-                    try {
-                        const acc_lev_2 = JSON.parse(response);
-                        const lev2Select = document.getElementById('lev2');
-                        lev2Select.innerHTML = '<option value="">Select a Branch</option>';
-                        acc_lev_2.forEach(function(branch) {
-                            lev2Select.innerHTML += `<option value="${branch.branch_id}">${branch.acc_lev_2}</option>`;
-                        });
+                $.ajax({
+                    url: 'get_acc_lev_2.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            const acc_lev_2 = JSON.parse(response);
+                            lev2Select.innerHTML = '<option value="">Select a Branch</option>';
+                            acc_lev_2.forEach(function(compani) {
+                                lev2Select.innerHTML += `<option value="${compani.comp_id}">${compani.acc_lev_2}</option>`;
+                            });
 
-                    } catch (e) {
-                        console.error("Invalid JSON response", response);
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX error:", status, error);
-                }
-            });
-        }
-
-        // Event listener for Account Level 1 change
-        document.getElementById('lev1').addEventListener('change', function() {
-            const company_id = this.value;
-            if (company_id) {
-                loadlev2(company_id); // Load Level 2 data based on selected Level 1
-            } else {
-                document.getElementById('lev2').innerHTML = '<option value="">Select level 2</option>';
+                });
             }
-        });
     </script>
 
     <!-- JavaScript to prevent form submission when duplicate detected -->

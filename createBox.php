@@ -29,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rec_date = mysqli_real_escape_string($conn, $_POST['rec_date']);
     $sender = mysqli_real_escape_string($conn, $_POST['sender']);
     $rec_via = mysqli_real_escape_string($conn, $_POST['rec_via']);
-
+    $status = mysqli_real_escape_string($conn, $_POST['status']);
 
     // Insert data into box table
     $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via, status) 
-            VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via', 'In')";
+            VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via', '$status')";
 
     if ($conn->query($sql) === TRUE) {
         header("location: createBox.php");
@@ -463,16 +463,10 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     </div>
                     <!-- Object Code -->
                     <div class="col-md-6">
-
-                        <label for="barcode_select" class="form-label">Select Box Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
-                
-
                         <label for="object_code" class="form-label">Object Code</label>
                         <select class="form-select" id="object_code" name="object_code" required>
                             <option value="Container">Container</option>
                             <option value="FileFolder">FileFolder</option>
-
                         </select>
                     </div>
                     <!-- Select Barcode -->
@@ -490,16 +484,6 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control" id="description" name="description" required>
                     </div>
-
-                    <!-- Object Code -->
-                    <div class="col-md-6">
-                        <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" required>
-                            <option value="Container">Container</option>
-                            <option value="FileFolder">FileFolder</option>
-                        </select>
-                    </div>
-
                     <!-- for the status -->
                     <div class="col-md-6">
                         <label for="status">Status:</label>
@@ -508,7 +492,6 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                             <option value="In" selected>In</option>
                         </select>
                     </div>
-
                     <div class="text-center mt-4 mb-2">
                         <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'Box.php';">Cancel</button>
                         <button type="submit" class="btn btn-outline-primary mr-1" id="submitBtn">Submit</button>

@@ -2,22 +2,21 @@
 include 'config/db.php';
 
 if (isset($_POST['company_id'])) {
-    // Escape the company_id to prevent SQL injection
-    $company_id = $conn->real_escape_string($_POST['company_id']);
-
-    // Prepare and execute the query to fetch acc_lev_2 from branches where comp_id_fk matches the selected company_id
-    $query = "SELECT branch_id, acc_lev_2 FROM branches WHERE comp_id_fk = '$company_id'";
-    $result = $conn->query($query);
-
-    // Initialize an array to store the results
-    $acc_lev_2_data = [];
-
-    // Fetch data and store it in the array
+    $company_id = $_POST['company_id'];
+    
+    // Simple SQL query to get branches for the selected company
+    $result = $conn->query("SELECT comp_id, acc_lev_2 FROM compani WHERE comp_id = '$company_id'");
+    
+    //store data into array
+    $acc_lev_2 = array();
     while ($row = $result->fetch_assoc()) {
-        $acc_lev_2_data[] = $row;
+        $acc_lev_2[] = $row;
     }
+    
 
-    // Return the results in JSON format
-    echo json_encode($acc_lev_2_data);
+    // Return branches as JSON
+    echo json_encode($acc_lev_2);
+    
+    $conn->close();
 }
 ?>

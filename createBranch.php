@@ -460,10 +460,10 @@ End Search Bar -->
         <!-- Multi Columns Form -->
         <form class="row g-3 p-3" action="#" method="POST">
           <!-- Company ID input (readonly) -->
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <label class="form-label">Company ID</label>
             <input type="text" class="form-control" name="comp_id_fk" value="<?php echo htmlspecialchars($company_id); ?>" readonly>
-          </div>
+          </div> -->
           <?php
           $getAccLev1 = "SELECT * FROM compani WHERE comp_id = '$company_id'";
           $resultAccLev1 = mysqli_query($conn, $getAccLev1);

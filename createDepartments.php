@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
   $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-  $contact_fax = mysqli_real_escape_string($conn, $_POST['contact_fax']);
+  $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
   $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
   $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
@@ -81,7 +81,7 @@ if (isset($_POST['submit'])) {
 
 <head>
   <meta charset="UTF-8">
-  <title>Update Company</title>
+  <title>Create departments</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 
@@ -524,6 +524,11 @@ End Search Bar -->
           </div>
 
           <div class="col-md-6">
+            <label for="pickup_address" class="form-label">Pickup/Delivery Address </label>
+            <input type="text" class="form-control" id="" name="pickup_address" required>
+          </div>
+
+          <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
             <input type="text" class="form-control" id="" name="address" required>
             <br>
@@ -531,10 +536,6 @@ End Search Bar -->
             <br>
             <input type="text" class="form-control" id="" name="address2">
 
-          </div>
-          <div class="col-md-6">
-            <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
-            <input type="text" class="form-control" id="" name="pickup_address" required>
           </div>
 
           <div class="text-center mt-4 mb-2">
@@ -546,17 +547,26 @@ End Search Bar -->
     </div>
   </div>
 
-  <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
-    alert('Company Registered successfully!');
-    window.location.href = 'Companies.php';
-    <?php unset($_SESSION['data_inserted']); // Clear the session variable 
-    ?>
-  <?php elseif (isset($_SESSION['data_inserted']) && !$_SESSION['data_inserted']): ?>
-    alert('Failed to enter new data.');
-    <?php unset($_SESSION['data_inserted']); ?>
-  <?php endif; ?>
+     <!-- Vendor JS Files -->
+     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js">
+    </script>
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
+    <!-- Template Main JS File -->
 
- 
+  <script src="assets/js/main.js"></script>
 </body>
 
 </html>

@@ -319,6 +319,7 @@ $result = $conn->query($sql);
                   <th scope="col" >Expiry Date</th>
                   <th scope="col" >Contact Person</th>
                   <th scope="col" >Phone</th>
+                  <th scope="col" >Fax</th>
                   <th scope="col" style="width:15%;">Address</th>
                   <th scope="col">Actions</th>
                 </tr>
@@ -344,6 +345,7 @@ $result = $conn->query($sql);
                   echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["foc"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["foc_phone"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["contact_fax"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["add_1"]) . "<br>". htmlspecialchars($row["add_2"]) ."<br>". htmlspecialchars($row["add_3"]) . "</td>";
                   ?>
                   <td>

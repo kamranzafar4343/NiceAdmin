@@ -70,7 +70,7 @@ if (isset($_POST['update'])) {
   $expiry_date = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-  $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
+  $contact_fax = mysqli_real_escape_string($conn, $_POST['contact_fax']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
   $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
   $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
@@ -110,7 +110,7 @@ if (isset($_POST['update'])) {
 
 <head>
   <meta charset="UTF-8">
-  <title>Update branch</title>
+  <title>Update Department</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 
@@ -683,7 +683,7 @@ End Search Bar -->
   <!-- Start Header form -->
   <div class="headerimg text-center">
     <img src="image/update.png.png" alt="network-logo" width="50" height="50" />
-    <h2>Update departments Information</h2>
+    <h2>Update department Information</h2>
   </div>
   <!-- End Header form -->
 

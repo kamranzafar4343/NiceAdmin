@@ -272,7 +272,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>add box</title>
+    <title>Add container/file-folder</title>
 
 
 </head>
@@ -341,95 +341,95 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
 
     <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-    <ul class="sidebar-nav" id="sidebar-nav">
+    <aside id="sidebar" class="sidebar">
+        <ul class="sidebar-nav" id="sidebar-nav">
 
-        <!-- Dashboard Link (Visible to all users) -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="index.php">
-                <i class="ri-home-8-line"></i>
-                <span>Dashboard</span>
-            </a>
-        </li><!-- End Dashboard Nav -->
+            <!-- Dashboard Link (Visible to all users) -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="index.php">
+                    <i class="ri-home-8-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
 
-        <?php if ($_SESSION['role'] == 'admin') { ?>
-        <!-- Admin-only Links -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="Companies.php">
-                <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-            </a>
-        </li><!-- End Companies Nav -->
+            <?php if ($_SESSION['role'] == 'admin') { ?>
+                <!-- Admin-only Links -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="Companies.php">
+                        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Companies Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link active" href="box.php">
-                <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-            </a>
-        </li><!-- End Boxes Nav -->
+                <li class="nav-item">
+                    <a class="nav-link active" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="order.php">
-                <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-            </a>
-        </li><!-- End Work Orders Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="racks.php">
-                <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-            </a>
-        </li><!-- End Racks Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="store.php">
-                <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-            </a>
-        </li><!-- End Store Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
 
-        <?php } else { ?>
-        <!-- User-only Links -->
-         
-        <li class="nav-item">
-            <a class="nav-link active" href="box.php">
-                <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-            </a>
-        </li><!-- End Boxes Nav -->
+            <?php } else { ?>
+                <!-- User-only Links -->
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="order.php">
-                <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-            </a>
-        </li><!-- End Work Orders Nav -->
+                <li class="nav-item">
+                    <a class="nav-link active" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="racks.php">
-                <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-            </a>
-        </li><!-- End Racks Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="store.php">
-                <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-            </a>
-        </li><!-- End Store Nav -->
-        <?php } ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+            <?php } ?>
 
 
-        <li class="nav-heading">Pages</li>
+            <li class="nav-heading">Pages</li>
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-login.php">
-                <i class="bi bi-box-arrow-right"></i><span>Login</span>
-            </a>
-        </li><!-- End Login Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="pages-login.php">
+                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
+                </a>
+            </li><!-- End Login Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="logout.php">
-                <i class="bi bi-box-arrow-left"></i><span>Logout</span>
-            </a>
-        </li><!-- End Logout Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="logout.php">
+                    <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+                </a>
+            </li><!-- End Logout Nav -->
 
-    </ul>
-</aside>
-<!--------------- End sidebar ------------------>
+        </ul>
+    </aside>
+    <!--------------- End sidebar ------------------>
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
@@ -446,34 +446,43 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 <br>
                 <form class="row g-3 needs-validation" action="" method="POST" id="boxForm">
 
-                                       <!-- For the Level 1 field -->
-                                       <div class="col-md-4">
+                    <!-- For the Level 1 field -->
+                    <div class="col-md-4">
                         <label for="level1">Account Level 1:</label>
                         <input type="text" id="level1" class="form-control" name="level1" required>
                     </div>
-
                     <!-- For the Level 2 field -->
                     <div class="col-md-4">
                         <label for="level2">Level 2:</label>
                         <input type="text" id="level2" class="form-control" name="level2" required>
                     </div>
-
                     <!-- For the Level 3 field -->
                     <div class="col-md-4">
                         <label for="level3">Level 3:</label>
                         <input type="text" id="level3" class="form-control" name="level3" required>
                     </div>
-
-                    <!-- Select Barcode -->
+                    <!-- Object Code -->
                     <div class="col-md-6">
+
                         <label for="barcode_select" class="form-label">Select Box Barcode</label>
                         <input type="text" class="form-control" id="barcode_select" name="barcode_select">
                 
+
+                        <label for="object_code" class="form-label">Object Code</label>
+                        <select class="form-select" id="object_code" name="object_code" required>
+                            <option value="Container">Container</option>
+                            <option value="FileFolder">FileFolder</option>
+
                         </select>
+                    </div>
+                    <!-- Select Barcode -->
+                    <div class="col-md-6">
+                        <label for="barcode_select" class="form-label">Enter Barcode</label>
+                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
                     </div>
                     <!-- FOR the alternative code -->
                     <div class="col-md-6">
-                        <label for="alt_code" class="form-label">Alt Code </label>
+                        <label for="alt_code" class="form-label">Alt Code</label>
                         <input type="text" class="form-control" id="alt_code" name="alt_code">
                     </div>
                     <!--  Description -->
@@ -481,12 +490,22 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control" id="description" name="description" required>
                     </div>
+
                     <!-- Object Code -->
                     <div class="col-md-6">
                         <label for="object_code" class="form-label">Object Code</label>
                         <select class="form-select" id="object_code" name="object_code" required>
                             <option value="Container">Container</option>
                             <option value="FileFolder">FileFolder</option>
+                        </select>
+                    </div>
+
+                    <!-- for the status -->
+                    <div class="col-md-6">
+                        <label for="status">Status:</label>
+                        <select id="status" class="form-select" name="status" required>
+                            <option value="">Select Status</option>
+                            <option value="In" selected>In</option>
                         </select>
                     </div>
 

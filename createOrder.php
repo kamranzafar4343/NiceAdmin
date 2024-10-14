@@ -26,7 +26,7 @@ $error = false;
 
 if (isset($_POST['submit'])) {
     $company_FK_emp = mysqli_real_escape_string($conn, $_POST['comp_FK_emp']);
-    $box_FK_emp = mysqli_real_escape_string($conn, $_POST['box_FK_emp']);
+    $dept_FK_emp = mysqli_real_escape_string($conn, $_POST['dept_FK_emp']);
     $branch_FK_emp = mysqli_real_escape_string($conn, $_POST['branch_FK_emp']);
     $barcode = mysqli_real_escape_string($conn, $_POST['item_barcode']);
     $req_name = mysqli_real_escape_string($conn, $_POST['name']);
@@ -42,13 +42,13 @@ if (isset($_POST['submit'])) {
         die('Error: duplicate order no or box');
     } else {
         // exceed only if emp exist for that specific company and Authorized
-        $empCheckQuery = "SELECT * FROM `employee` Where branch_FK_emp = '$branch_FK_emp' AND auth_status='Authorized'";
+        $empCheckQuery = "SELECT * FROM `employee` Where branch_FK_emp = '$branch_FK_emp' AND auth_status = 'Authorized'";
 
         $result = (mysqli_query($conn, $empCheckQuery));
 
         if (mysqli_num_rows($result) > 0) {
-            $sql = "INSERT INTO orders (company, branch, box, item, name, date, order_no) 
-     VALUES ('$company_FK_emp', '$branch_FK_emp' , '$box_FK_emp', '$barcode', '$req_name', '$req_date', '$order_no')";
+            $sql = "INSERT INTO orders (company, branch, item, name, date, order_no) 
+     VALUES ('$company_FK_emp', '$branch_FK_emp' , '$barcode', '$req_name', '$req_date', '$order_no')";
 
             if ($conn->query($sql) === TRUE) {
                 header("Location: order.php");
@@ -61,9 +61,6 @@ if (isset($_POST['submit'])) {
         }
     }
 }
-
-
-
 
 
 $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
@@ -472,14 +469,14 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
                     <!-- Select Company -->
                     <div class="col-md-6">
-                        <label for="company">Select Company:</label>
+                        <label for="company">Select Acc Lev 1:</label>
                         <select id="company" class="form-select" name="comp_FK_emp" required>
                             <option value="">Select a Company</option>
                             <?php
                             // Fetch the companies from the database
-                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                            $result = $conn->query("SELECT * FROM compani");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']}." - ". {$row['acc_desc']} </option>";
                             }
                             ?>
                         </select>
@@ -508,7 +505,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     <!-- Select Box -->
                     <div class="col-md-6">
                         <label for="box">Box Barcode:</label>
-                        <select id="box" class="form-select" name="box_FK_emp" required>
+                        <select id="box" class="form-select" name="" required>
                             <option value="">Select a Box</option>
                             <!-- The options will be populated via AJAX based on the selected branch -->
                         </select>

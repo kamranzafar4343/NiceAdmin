@@ -458,7 +458,7 @@ if (isset($_POST['submit'])) {
                             // Fetch the account levels from the database
                             $result = $conn->query("SELECT comp_id, acc_lev_1, acc_desc FROM compani");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']}  _  {$row['acc_desc']}</option>";
+                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']} {$row['acc_desc']}</option>";
                             }
                             ?>
                         </select>

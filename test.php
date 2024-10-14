@@ -13,47 +13,28 @@ if (!isset($_SESSION['email'])) {
 // Include the database connection
 include 'config/db.php';
 
-// Get session email 
+// Get user email from session
 $email = $_SESSION['email'];
 
-// Get user name, email, and role from the register table
+// Get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
     $row2 = $resultData->fetch_assoc();
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
-    $userRole = $row2['role']; // Assuming you have a 'role' column in the 'register' table
 }
+$error = false;
 
-// Check if the user is an admin, otherwise redirect
-if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
-    // If the user is not an Admin, redirect to index page
-    header("Location: index.php");
-    exit();
-}
-
-// Get branch ID from query string
-$branch_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-//Fetch departments of a branch
-$sql = "SELECT * FROM departments WHERE branch_id_fk = $branch_id";
+// SQL query to get company details
+$sql = "SELECT * FROM acc_range";
 $result = $conn->query($sql);
 
-//get info from branches table
-$sql2 = "Select * from branches where branch_id= $branch_id";
-$result2 = $conn->query($sql2);
 
-$acc_lev2 = "";
-$acc_desc = "";
 
-if ($result2->num_rows > 0) {
-    $row2 = $result2->fetch_assoc();
-    $acc_lev2 = $row2['acc_lev_2'];
-    $acc_desc = $row2['account_desc'];
-}
-
+$conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +43,7 @@ if ($result2->num_rows > 0) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Departments</title>
+    <title>Store</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -107,12 +88,60 @@ if ($result2->num_rows > 0) {
     <style>
         /* Custom CSS to decrease font size of the table */
 
+        /* Basic styling for search bar */
+        input.btn.btn-success {
+            margin-left: 7px;
+            height: 41px;
+            padding: 2%;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            text-align: center;
+            justify-items: center;
+
+        }
+
+        .search-container {
+            margin: 50px;
+            margin-left: 320px;
+            margin-bottom: 3px !important;
+        }
+
+        #main {
+
+            margin-top: 0 !important;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 0.9rem;
+            width: 363px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
         .pagetitle {
             display: flex;
             width: 989px;
             flex-direction: column;
 
         }
+
+        .barcode {
+            height: 55px;
+            width: 250px;
+            position: relative;
+            left: -38px;
+        }
+
+        /* 
+        #main {
+            margin-top: 20px !important;
+            padding: 20px 30px;
+            transition: all 0.3s;
+        } */
 
         .row {
             margin-left: 52px;
@@ -163,6 +192,10 @@ if ($result2->num_rows > 0) {
             margin-left: 12px;
             margin-top: 12px;
             /* table-layout: fixed; */
+        }
+
+        .card-body {
+            padding: 0 20px 20px 60px !important;
         }
 
 
@@ -220,10 +253,9 @@ if ($result2->num_rows > 0) {
         }
 
         .datatable-top {
-            width: 1048px;
+            width: 942px;
 
         }
-
 
         /* Card */
         .cardBranch {
@@ -233,7 +265,7 @@ if ($result2->num_rows > 0) {
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
-            margin-top: 30px;
+
         }
 
         .company-name:active {
@@ -259,12 +291,6 @@ if ($result2->num_rows > 0) {
             padding-right: 34px;
             padding-left: 40px;
             margin-left: 20px;
-
-            /* table-layout: fixed; */
-
-            /* overflow: hidden; */
-            /* text-overflow: ellipsis; */
-            /* white-space: nowrap; */
         }
 
         tbody,
@@ -318,17 +344,11 @@ if ($result2->num_rows > 0) {
             margin-left: 50px;
         }
 
-        .datatable-top {
-            width: 844px;
+        .drpdwn {
+            margin-left: 268px;
+            max-width: 424px;
+            margin-top: 28px;
         }
-
-        .datatable-bottom {
-            width: 122%;
-        }
-
-        /* .custom-header-col-name{
-        margin-right: 1000px;
-    } */
     </style>
 
     <!-- Template Main CSS File -->
@@ -363,8 +383,6 @@ if ($result2->num_rows > 0) {
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
         </div><!-- End Search Bar -->
-
-        <h3>List of Departments</h3>
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
@@ -410,10 +428,11 @@ if ($result2->num_rows > 0) {
     </header><!-- End Header -->
 
     <!-- ======= Sidebar ======= -->
+    <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="sidebar">
-
         <ul class="sidebar-nav" id="sidebar-nav">
 
+            <!-- Dashboard Link (Visible to all users) -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="index.php">
                     <i class="ri-home-8-line"></i>
@@ -421,133 +440,177 @@ if ($result2->num_rows > 0) {
                 </a>
             </li><!-- End Dashboard Nav -->
 
+            <?php if ($_SESSION['role'] == 'admin') { ?>
+                <!-- Admin-only Links -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="Companies.php">
+                        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Companies Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-                    <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li><!-- End Tables Nav -->
+                <li class="nav-item">
+                    <a class="nav-link ative" href="account.php">
+                        <i class="ri-archive-stack-fill"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End of range  -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
 
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
-                    <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
-                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
-                    <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+
+            <?php } else { ?>
+                <!-- User-only Links -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+            <?php } ?>
+
 
             <li class="nav-heading">Pages</li>
 
-
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
+                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
                 </a>
-            </li><!-- End Login Page Nav -->
-
+            </li><!-- End Login Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-contact.php">
-                    <i class="bi bi-envelope"></i>
-                    <span>Contact</span>
+                <a class="nav-link collapsed" href="logout.php">
+                    <i class="bi bi-box-arrow-left"></i><span>Logout</span>
                 </a>
-            </li><!-- End Contact Page Nav -->
+            </li><!-- End Logout Nav -->
 
         </ul>
-
     </aside>
+    <!--------------- End sidebar ------------------>
 
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
+
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createDepartments.php?id=<?php echo $branch_id; ?>'" class="btn btn-primary mb-3">Add department</button>
-    <!-- 
-  <h1>Companies List</h1> -->
+    <!-- Button to add new box -->
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'Acount_range.php';" class="btn btn-primary mb-3">Add Account Range</button>
+
+    <!-- Search bar for racks -->
+    <div class="search-container">
+        <form id="searchForm" action="" method="GET">
+            <input type="text" id="searchInput" name="query" placeholder="Search by name..." autofocus>
+            <input type="submit" value="Search" class="btn btn-success btn-success">
+        </form>
+    </div>
     <main id="main" class="main">
-
         <div class="col-12">
-
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $acc_lev2. " - " . $acc_desc; ?></h2>
+                    <h5 class="card-title">List of Account Ranges</h5>
 
-                    <?php
-                    if ($result->num_rows > 0) {
-                    ?>
-                        <table class="table table-borderless datatable" style="table-layout: fixed;">
+                    <?php if ($result->num_rows > 0): ?>
+                        <table class="table datatable mt-4" style="table-layout: fixed;">
                             <thead>
                                 <tr>
-                                    <!-- <th scope="col">ID</th> -->
-                                    <th scope="col">Acc_lev_3</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Registration date</th>
-                                    <th scope="col">Contract Expire</th>
-                                    <th scope="col">Contact Person</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Contact Fax</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Pick Up Address</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col" style="width: 5%;">#</th>
+                                    <th scope="col" style="width: 15%;">Account Level 1</th>
+                                    <th scope="col" style="width: 15%;">Account Level 2</th>
+                                    <th scope="col" style="width: 10%;">Object Code</th>
+                                    <th scope="col" style="width: 15%;">Begin Code</th>
+                                    <th scope="col" style="width: 15%;">End Code</th>
+                                    <!-- Show "Actions" column only if the user is an admin -->
+                                    <?php if ($_SESSION['role'] == 'admin'): ?>
+                                        <th scope="col" style="width: 10%;">Actions</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
-                            <tbody style="table-layout: fixed;">
+                            <tbody>
+                                <!-- Counter variable for row numbers -->
+                                <?php $counter = 1; ?>
 
-                                <?php
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<tr>";
-                                    //    echo "<td>" . ($row["branch_id"]) . "</td>";
-                                    echo "<td>" . ($row["acc_lev_3"]) . "</td>";
-                                    echo "<td>" . ($row["acc_desc"]) . "</td>";
-                                    echo "<td>" . ($row["registration"]) . "</td>";
-                                    echo "<td>" . ($row["expiry"]) . "</td>";
-                                    echo "<td>" . ($row["foc"]) . "</td>";
-                                    echo "<td>" . ($row["foc_phone"]) . "</td>";
-                                    echo "<td>" . ($row["contact_fax"]) . "</td>";
-                                    echo "<td>" . ($row["add_1"]) . "<br>". ($row["add_2"]) . "<br>". ($row["add_3"]). "</td>";
-                                    echo "<td>" . ($row["pickup_address"]) . "</td>";
-                                ?>
-                                     <td>
-                                     <div style="display: flex; gap: 10px;">
-                                     <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="updatedepart.php?id=<?php echo $row['dept_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                <!-- Loop through the results and display each row -->
+                                <?php while ($row = $result->fetch_assoc()): ?>
+                                    <tr>
+                                        <td><?= $counter++ ?></td>
+                                        <td><?= htmlspecialchars($row["level1"]) ?></td>
+                                        <td><?= htmlspecialchars($row["level2"]) ?></td>
+                                        <td><?= htmlspecialchars($row["object_code"]) ?></td>
+                                        <td><?= htmlspecialchars($row["begin_code"]) ?></td>
+                                        <td><?= htmlspecialchars($row["end_code"]) ?></td>
 
-                                     <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="deletedepart.php?id=<?php echo $row['dept_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                        <!-- Show actions only if user is admin -->
+                                        <?php if ($_SESSION['role'] == 'admin'): ?>
+                                            <td>
+                                                <div style="display: flex; gap: 10px;">
+                                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
-                                    </td>
+                                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+
+                                                </div>
+                                            </td>
+                                        <?php endif; ?>
                                     </tr>
-                                <?php
-                                }
-                                ?>
-
+                                <?php endwhile; ?>
                             </tbody>
                         </table>
-                    <?php
-                    }
-                    ?>
+                    <?php else: ?>
+                        <p>No account data found.</p>
+                    <?php endif; ?>
 
                 </div>
-
             </div>
         </div>
+    </main>
 
 
-    </main><!-- End #main -->
+
+
+
+
+
+    <script>
+        function filterCompany(comp_id) {
+            window.location.href = "box.php?comp_id=" + comp_id;
+        }
+    </script>
+
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
@@ -568,64 +631,14 @@ if ($result2->num_rows > 0) {
     <script src="assets/js/main.js"></script>
 
     <script>
-        //click on the picture to update with ajax
-        $(document).on('click', 'img', function() {
-            $(this).next('input[type="file"]').click();
+        // event listener for search bar 
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default form submission
+                document.getElementById("searchForm").submit(); // Manually submit the form
+            }
         });
-
-        function uploadImage(comp_id) {
-            var fileInput = document.getElementById('file-' + comp_id);
-            var file = fileInput.files[0];
-            var formData = new FormData();
-            formData.append('image', file);
-            formData.append('comp_id', comp_id);
-
-            $.ajax({
-                url: 'update_image.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    // Update the image source with the new image path
-                    $('#image-' + comp_id).attr('src', response);
-                },
-                error: function() {
-                    alert('Image upload failed. Please try again.');
-                }
-            });
-        }
-        import {
-            Ripple,
-            initMDB
-        } from "mdb-ui-kit";
-
-        initMDB({
-            Ripple
-        });
-
-        // function confirmDelete() {
-        //     // Display a confirmation dialog
-        //     var confirmation = confirm("Are you sure you want to delete this record?");
-
-        //     if (confirmation) {
-        //         // User clicked OK, proceed with deletion
-        //         deleteRecord();
-        //     } else {
-        //         // User clicked Cancel, do nothing
-        //         console.log("Record deletion canceled.");
-        //     }
-        // }
-
-        // function deleteRecord() {
-        //     // Your deletion logic here
-        //     console.log("Record deleted.");
-        //     // Example: You might want to make an AJAX request to delete the record from the server
-        //     // fetch('/delete-record', { method: 'POST' }).then(response => response.json()).then(data => console.log(data));
-        // }
     </script>
-
-
 </body>
 
 </html>

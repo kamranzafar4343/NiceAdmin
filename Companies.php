@@ -10,7 +10,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include the database connection
-include 'config/db.php'; 
+include 'config/db.php';
 
 // Get session email 
 $email = $_SESSION['email'];
@@ -26,7 +26,7 @@ if ($resultData->num_rows > 0) {
 }
 
 // Check if the user is an admin, otherwise redirect
-if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
+if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
   // If the user is not an Admin, redirect to index page
   header("Location: index.php");
   exit();
@@ -210,6 +210,11 @@ $result = $conn->query($sql);
             <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
           </a>
         </li><!-- End Companies Nav -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="account.php">
+            <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Account Range Nav -->
 
         <li class="nav-item">
           <a class="nav-link collapsed" href="box.php">
@@ -245,7 +250,7 @@ $result = $conn->query($sql);
           </a>
         </li><!-- End Boxes Nav -->
 
- 
+
 
         <li class="nav-item">
           <a class="nav-link collapsed" href="order.php">
@@ -311,15 +316,23 @@ $result = $conn->query($sql);
             <table id="companies" class="">
               <thead>
                 <tr>
-                  <th scope="col"  style="width:8%;">Level-1</th>
+                  <th scope="col" style="width:8%;">Level-1</th>
                   <!-- <th scope="col"  style="width:8%;" >Level-2</th> -->
                   <!-- <th scope="col"  style="width:8%;">Level-3</th> -->
+
+                  <th scope="col">Description</th>
+                  <th scope="col">Setup Date</th>
+                  <th scope="col">Expiry Date</th>
+                  <th scope="col">Contact Person</th>
+                  <th scope="col">Phone</th>
+
                   <th scope="col" >Description</th>
                   <th scope="col" >Setup Date</th>
                   <th scope="col" >Expiry Date</th>
                   <th scope="col" >Contact Person</th>
                   <th scope="col" >Phone</th>
                   <th scope="col" >Fax</th>
+
                   <th scope="col" style="width:15%;">Address</th>
                   <th scope="col">Actions</th>
                 </tr>
@@ -329,15 +342,15 @@ $result = $conn->query($sql);
                 <?php
                 while ($row = $result->fetch_assoc()) {
                   echo "<tr>";
-                  ?>
-                  
+                ?>
+
                   <td>
-                  <a class="text-primary fw-bold" href="Branches.php?id=<?php echo $row['comp_id']; ?>">
-                    <?php echo $row['acc_lev_1']; ?>
-                  </a>
-                </td>
+                    <a class="text-primary fw-bold" href="Branches.php?id=<?php echo $row['comp_id']; ?>">
+                      <?php echo $row['acc_lev_1']; ?>
+                    </a>
+                  </td>
                   <!-- echo "<td >" . htmlspecialchars($row["acc_lev_1"]) . "</td> "; -->
-                   <?php
+                  <?php
                   // echo "<td >" . htmlspecialchars($row["acc_lev_2"]) . "</td>";
                   // echo "<td >" . htmlspecialchars($row["acc_lev_3"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["acc_desc"]) . "</td>";
@@ -345,8 +358,10 @@ $result = $conn->query($sql);
                   echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["foc"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["foc_phone"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["add_1"]) . "<br>" . htmlspecialchars($row["add_2"]) . "<br>" . htmlspecialchars($row["add_3"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["contact_fax"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["add_1"]) . "<br>". htmlspecialchars($row["add_2"]) ."<br>". htmlspecialchars($row["add_3"]) . "</td>";
+
                   ?>
                   <td>
                     <div style="display: flex; gap: 10px;">

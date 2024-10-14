@@ -59,6 +59,14 @@ if (isset($_POST['submit'])) {
   $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
+    //check account level no is already exist or not
+    $accCheckQuery = "SELECT * FROM `department` WHERE `acc_lev_3` = '$acc_lev_3'";
+    $accCheckResult = $conn->query($accCheckQuery);
+  
+    if ($accCheckResult->num_rows > 0) {
+      die("Error: The account level no. '$acc_lev_3' already exists.");
+    }
+
   // SQL query to insert the data into the database
   $sql = "INSERT INTO departments (branch_id_fk, acc_lev_3, acc_desc, registration, expiry, foc, foc_phone, contact_fax, add_1, add_2, add_3, pickup_address) 
           VALUES ('$branch_id', '$acc_lev_3', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$contact_fax', '$address', '$address1', '$address2', '$pickup_address')";

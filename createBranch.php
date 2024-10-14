@@ -58,7 +58,13 @@ if (isset($_POST['submit'])) {
   $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
-  // $checkDupAcc = 
+  //check account level no is already exist or not
+  $accCheckQuery = "SELECT * FROM `branch` WHERE `acc_lev_2` = '$acc_lev_2'";
+  $accCheckResult = $conn->query($accCheckQuery);
+
+  if ($accCheckResult->num_rows > 0) {
+    die("Error: The account level no. '$acc_lev_2' already exists.");
+  }
 
   // SQL query to insert the data into the database
   $sql = "INSERT INTO branches (comp_id_fk, acc_lev_2, account_desc, registration_date, expiry_date, contact_person, contact_phone, contact_fax, address, address1, address2, pickup_address) 
@@ -527,7 +533,7 @@ End Search Bar -->
             <input type="text" class="form-control" id="" name="address2">
 
           </div>
-          
+
 
           <div class="text-center mt-4 mb-2">
             <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>

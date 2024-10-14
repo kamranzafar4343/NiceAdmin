@@ -271,7 +271,6 @@ $result = $conn->query($sql);
             margin-bottom: 30px;
             border: none;
             border-radius: 5px;
-            compani-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
 
@@ -289,7 +288,6 @@ $result = $conn->query($sql);
 
             padding: 0;
 
-            compani-sizing: border-compani;
         }
 
         .custom2 {

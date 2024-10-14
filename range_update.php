@@ -7,59 +7,81 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-include 'config/db.php';
+include "config/db.php"; // Include database connection
 
 $email = $_SESSION['email'];
 
-// Get user name and email from the register table
-$getAdminData = "SELECT * FROM register WHERE email = '" . mysqli_real_escape_string($conn, $email) . "'";
+// Get user data from the register table
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
-
 if ($resultData->num_rows > 0) {
     $row2 = $resultData->fetch_assoc();
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
+include 'config/db.php'; // Ensure the database connection is included
 
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $company_id = mysqli_real_escape_string($conn, $_POST['company']);
-    $branch_id = mysqli_real_escape_string($conn, $_POST['branch']);
-    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
-    $rec_date = mysqli_real_escape_string($conn, $_POST['rec_date']);
-    $sender = mysqli_real_escape_string($conn, $_POST['sender']);
-    $rec_via = mysqli_real_escape_string($conn, $_POST['rec_via']);
+if (isset($_GET['id'])) {
+    $range_id = intval($_GET['id']);  // Get the company ID from URL
 
+    // SQL query to fetch company data
+    $sql = "SELECT * FROM `acc_range` WHERE `range_id` = '$range_id'";
+    $result = $conn->query($sql);
 
-    // Insert data into box table
-    $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via, status) 
-            VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via', 'In')";
-
-    if ($conn->query($sql) === TRUE) {
-        header("location: createBox.php");
+    // Check if the company exists
+    if ($result && $result->num_rows > 0) {
+        // Fetch company data into variables
+        $row = $result->fetch_assoc();
+        $range_id = $row['range_id'];
+        $acc_lev_1 = $row['level1'];
+        $acc_lev_2 = $row['level2'];
+        $object_code = $row['object_code'];
+        $begin_code = $row['begin_code'];
+        $end_code = $row['end_code'];
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        // If no company found, display an error message
+        echo "Account not found!";
+        exit;
+    }
+}
+
+// Check if the form is submitted (update the record)
+if (isset($_POST['update'])) {
+    // Sanitize and retrieve form data
+    $level1 = $conn->real_escape_string($_POST['level1']);
+    $level2 = $conn->real_escape_string($_POST['level2']);
+    $object_code = $conn->real_escape_string($_POST['object_code']);
+    $begin_code = $conn->real_escape_string($_POST['begin_code']);
+    $end_code = $conn->real_escape_string($_POST['end_code']);
+
+    // SQL query to update the company record
+    $sql = "UPDATE `acc_range` SET 
+              `level1` = '$level1',
+              `level2` = '$level2',
+              `object_code` = '$object_code',
+              `begin_code` = '$begin_code',
+              `end_code` = '$end_code'
+            WHERE `range_id` = '$range_id'";
+
+    // Execute the query and check for success or error
+    if (mysqli_query($conn, $sql)) {
+        // Redirect to the Companies.php page after successful update
+        header("Location: account.php?id=" . $range_id);
+        exit;
+    } else {
+        // Display an error message if the update fails
+        echo "Error updating record: " . mysqli_error($conn);
     }
 
+    // Close the database connection
     $conn->close();
 }
-
-// Handle AJAX request to check if barcode already exists
-if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
-    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
-    $query = "SELECT * FROM `box` WHERE `barcode`='$barcode'";
-    $result = mysqli_query($conn, $query);
-
-    // If the barcode exists, return JSON response
-    if ($result->num_rows > 0) {
-        echo json_encode(['exists' => true]);
-    } else {
-        echo json_encode(['exists' => false]);
-    }
-    exit(); // Prevent further execution of the script
-}
-
 ?>
+
+
+
+
+
 
 <!doctype html>
 <html lang="en">
@@ -87,7 +109,10 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -134,11 +159,6 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
             font-family: monospace;
         }
 
-        .mt-5 {
-            margin-top: 7rem !important;
-            margin-left: -1rem;
-        }
-
         .company-name {
             font-size: 1rem;
         }
@@ -171,6 +191,12 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
             margin-left: 19px;
         }
 
+
+        /*styles for form*/
+        .card-body {
+            padding: 0 20px 20px 20px;
+            font-size: 0.8rem;
+        }
 
         .form-control[type=file]:not(:disabled):not([readonly]) {
             cursor: pointer;
@@ -261,18 +287,12 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
             border: none;
         }
-
-        /*styles for form*/
-        .card-body {
-            padding: 0 20px 20px 20px;
-            font-size: 0.8rem;
-        }
     </style>
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Add container/file-folder</title>
+    <title> define account ranges</title>
 
 
 </head>
@@ -339,7 +359,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
     </header><!-- End Header -->
 
-
+    <!-- ======= Sidebar ======= -->
     <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="sidebar">
         <ul class="sidebar-nav" id="sidebar-nav">
@@ -361,10 +381,16 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 </li><!-- End Companies Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="box.php">
+                    <a class="nav-link ative" href="account.php">
+                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
+
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="order.php">
@@ -388,10 +414,16 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 <!-- User-only Links -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="box.php">
+                    <a class="nav-link collapsed" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="order.php">
@@ -406,7 +438,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 </li><!-- End Racks Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="store.php">
+                    <a class="nav-link active" href="store.php">
                         <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Store Nav -->
@@ -414,6 +446,12 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
 
             <li class="nav-heading">Pages</li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="users-profile.php">
+                    <i class="bi bi-person"></i><span>Profile</span>
+                </a>
+            </li><!-- End Profile Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
@@ -431,104 +469,94 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
     </aside>
     <!--------------- End sidebar ------------------>
 
+
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
 
     <!--form--------------------------------------form--------------------------------------->
-    <div class="headerimg text-center">
-        <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Add Container / Filefolder</h2>
-    </div>
 
+    <!-- Start Header Form -->
+    <div class="headerimg text-center">
+        <i class="bi bi-shop" style="font-size: 50px; color: #333;"></i>
+        <h2>Update Account Range</h2>
+    </div>
+    <!-- End Header Form -->
+
+    <!-- Start Form Container -->
     <div class="container d-flex justify-content-center">
         <div class="card custom-card shadow-lg mt-3">
             <div class="card-body">
-                <br>
-                <form class="row g-3 needs-validation" action="" method="POST" id="boxForm">
+                <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
 
-                    <!-- For the Level 1 field -->
-                    <div class="col-md-4">
-                        <label for="level1">Account Level 1:</label>
-                        <input type="text" id="level1" class="form-control" name="level1" required>
+
+                    <div class="col-md-6">
+                        <label for="acc_range_level" class="form-label">Acc-Lev-1</label>
+                        <input type="text" class="form-control" id="lev1" name="level1" value="<?php echo $acc_lev_1; ?>" required>
                     </div>
+                    <div class="col-md-6">
+                        <label for="acc_range_leve2" class="form-label">Acc-Lev-1</label>
+                        <input type="text" class="form-control" id="lev2" name="level2" value="<?php echo $acc_lev_2; ?>" required>
+                    </div>
+                    <!-- Object Code Dropdown -->
+                    <div class="col-md-4">
+                        <label for="object_code" class="form-label">Object Code</label>
+                        <select class="form-select" id="object_code" name="object_code" required>
+                            <option value="Container" <?php echo ($object_code == 'Container') ? 'selected' : ''; ?>>Container</option>
+                            <option value="FileFolder" <?php echo ($object_code == 'FileFolder') ? 'selected' : ''; ?>>FileFolder</option>
+                        </select>
+                    </div>
+
+                    <!-- Object Code -->
+                    <!-- <div class="col-md-4">
+                        <label for="object_code" class="form-label">Object Code</label>
+                        <select class="form-select" id="object_code" name="object_code" required>
+                            <option value="Container">Container</option>
+                            <option value="FileFolder">FileFolder</option>
+                        </select>
+                    </div> -->
                     <!-- For the Level 2 field -->
+                    <!-- <div class="col-md-4">
+                        <label for="begin_code">Begin Code:</label>
+                        <input type="text" id="begin_code" class="form-control" name="begin_code" required>
+                    </div> -->
                     <div class="col-md-4">
-                        <label for="level2">Level 2:</label>
-                        <input type="text" id="level2" class="form-control" name="level2" required>
+                        <label for="begin_code" class="form-label">Begin Code</label>
+                        <input type="text" class="form-control" id="begin_code" name="begin_code" value="<?php echo $begin_code; ?>" required>
                     </div>
-                    <!-- For the Level 3 field -->
                     <div class="col-md-4">
-                        <label for="level3">Level 3:</label>
-                        <input type="text" id="level3" class="form-control" name="level3" required>
-                    </div>
-                    <!-- Object Code -->
-                    <div class="col-md-6">
-
-                        <label for="barcode_select" class="form-label">Select Box Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
-                
-
-                        <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" required>
-                            <option value="Container">Container</option>
-                            <option value="FileFolder">FileFolder</option>
-
-                        </select>
-                    </div>
-                    <!-- Select Barcode -->
-                    <div class="col-md-6">
-                        <label for="barcode_select" class="form-label">Enter Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
-                    </div>
-                    <!-- FOR the alternative code -->
-                    <div class="col-md-6">
-                        <label for="alt_code" class="form-label">Alt Code</label>
-                        <input type="text" class="form-control" id="alt_code" name="alt_code">
-                    </div>
-                    <!--  Description -->
-                    <div class="col-md-6">
-                        <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
+                        <label for="end_code" class="form-label">End Code</label>
+                        <input type="text" class="form-control" id="end_code" name="end_code" value="<?php echo $end_code; ?>" required>
                     </div>
 
-                    <!-- Object Code -->
-                    <div class="col-md-6">
-                        <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" required>
-                            <option value="Container">Container</option>
-                            <option value="FileFolder">FileFolder</option>
-                        </select>
-                    </div>
+                    <!-- For the Level 2 field
+                    <div class="col-md-4">
+                        <label for="end_code">End code:</label>
+                        <input type="text" id="end_code" class="form-control" name="end_code" required>
+                    </div> -->
 
-                    <!-- for the status -->
-                    <div class="col-md-6">
-                        <label for="status">Status:</label>
-                        <select id="status" class="form-select" name="status" required>
-                            <option value="">Select Status</option>
-                            <option value="In" selected>In</option>
-                        </select>
-                    </div>
-
-                    <div class="text-center mt-4 mb-2">
-                        <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'Box.php';">Cancel</button>
-                        <button type="submit" class="btn btn-outline-primary mr-1" id="submitBtn">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary" onclick="localStorage.clear()">Reset</button>
+                    <!-- Form Buttons -->
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-outline-primary mt-3" name="update" value="update">Update</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <!-- End Form Container -->
 
-    <!-- Modal for Duplicate Barcode -->
-    <div class="modal fade" id="duplicateBarcodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Include Bootstrap JS (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Modal for duplicate entry error -->
+    <div class="modal fade" id="duplicateErrorModal" tabindex="-1" aria-labelledby="duplicateErrorModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Duplicate Barcode</h5>
+                    <h5 class="modal-title" id="duplicateErrorModalLabel">Error</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    The barcode you entered already exists. Please use a different barcode.
+                    Duplicate entry detected. Please ensure all fields are unique.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -536,210 +564,58 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
             </div>
         </div>
     </div>
+
+    <!-- Updated JavaScript with proper lev2Select selection -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        document.getElementById('box_barcode').addEventListener('input', function() {
-            let barcode = this.value;
+        // Function to load branches via AJAX
+        function loadlev2(company_id) {
+            $.ajax({
+                url: 'get_acc_lev_2.php',
+                type: 'POST',
+                data: {
+                    company_id: company_id
+                },
+                success: function(response) {
+                    try {
+                        const acc_lev_2 = JSON.parse(response);
+                        const lev2Select = document.getElementById('lev2');
+                        lev2Select.innerHTML = '<option value="">Select a Branch</option>';
+                        acc_lev_2.forEach(function(branch) {
+                            lev2Select.innerHTML += `<option value="${branch.branch_id}">${branch.acc_lev_2}</option>`;
+                        });
 
-            if (barcode.length === 7) {
-                let xhr = new XMLHttpRequest();
-                xhr.open('POST', 'createBox.php', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let response = JSON.parse(xhr.responseText);
-                        if (response.exists) {
-                            // Show modal popup if barcode exists
-                            let duplicateModal = new bootstrap.Modal(document.getElementById('duplicateBarcodeModal'));
-                            duplicateModal.show();
-                            document.getElementById('submitBtn').disabled = true; // Disable submit button
-                        } else {
-                            document.getElementById('submitBtn').disabled = false; // Enable submit button
-                        }
+                    } catch (e) {
+                        console.error("Invalid JSON response", response);
                     }
-                };
-                xhr.send('checkBarcode=true&barcode=' + barcode);
-            } else {
-                document.getElementById('submitBtn').disabled = false; // Enable submit button for other lengths
-            }
-        });
-    </script>
-
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-    <script>
-        $(document).ready(function() {
-            // When company is changed, fetch the branches
-            $('#company').change(function() {
-                var company_id = $(this).val();
-
-                // AJAX request to get branches for the selected company
-                $.ajax({
-                    url: 'get_branches.php',
-                    type: 'POST',
-                    data: {
-                        company_id: company_id
-                    },
-                    success: function(response) {
-                        try {
-                            var branches = JSON.parse(response);
-                            // Clear existing branches
-                            $('#branch').empty();
-                            $('#branch').append('<option value="">Select a Branch</option>');
-                            // Add the new options from the response
-                            $.each(branches, function(index, branch) {
-                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
-                            });
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const companySelect = document.getElementById('company');
-            const branchSelect = document.getElementById('branch');
-            const boxSelect = document.getElementById('box');
-
-            // Retrieve the previously selected company from localStorage
-            const selectedCompany = localStorage.getItem('selectedCompany');
-            if (selectedCompany) {
-                companySelect.value = selectedCompany;
-                loadBranches(selectedCompany); // Load branches based on the selected company
-            }
-
-            // Store the selected company in localStorage on change
-            companySelect.addEventListener('change', function() {
-                localStorage.setItem('selectedCompany', this.value);
-                loadBranches(this.value); // Load branches based on the new selection
-            });
-
-            // Retrieve the previously selected branch from localStorage
-            const selectedBranch = localStorage.getItem('selectedBranch');
-            if (selectedBranch) {
-                branchSelect.value = selectedBranch;
-            }
-
-            // Store the selected branch in localStorage on change
-            branchSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBranch', this.value);
-                loadBoxes(this.value); // Load boxes based on the selected branch
-            });
-
-            // Retrieve the previously selected box from localStorage
-            const selectedBox = localStorage.getItem('selectedBox');
-            if (selectedBox) {
-                boxSelect.value = selectedBox;
-            }
-
-            // Store the selected box in localStorage on change
-            boxSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBox', this.value);
-            });
-
-
-            // Function to load branches via AJAX
-            function loadBranches(company_id) {
-                $.ajax({
-                    url: 'get_branches.php',
-                    type: 'POST',
-                    data: {
-                        company_id: company_id
-                    },
-                    success: function(response) {
-                        try {
-                            const branches = JSON.parse(response);
-                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
-                            branches.forEach(function(branch) {
-                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
-                            });
-
-                            // Set previously selected branch again, if available
-                            const selectedBranch = localStorage.getItem('selectedBranch');
-                            if (selectedBranch) {
-                                branchSelect.value = selectedBranch;
-                            }
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            }
-
-        });
-
-        //another function gets previous values of the sender, rec_via, rec_date
-        $(document).ready(function() {
-            // Utility function to safely set the value of an input field
-            function setInputValue(id, value) {
-                var element = document.getElementById(id);
-                if (element) {
-                    element.value = value;
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX error:", status, error);
                 }
-            }
-
-            // Retrieve the previously submitted form data from localStorage
-            const recDate = localStorage.getItem('rec_date');
-            const sender = localStorage.getItem('sender');
-            const recVia = localStorage.getItem('rec_via');
-
-            // Safely set the values if they exist in localStorage
-            if (recDate) {
-                setInputValue('rec_date', recDate);
-            }
-
-            if (sender) {
-                setInputValue('sender', sender);
-            }
-
-            if (recVia) {
-                setInputValue('rec_via', recVia);
-            }
-
-            // Store the values in localStorage when the user changes input
-            $('#rec_date').on('input', function() {
-                localStorage.setItem('rec_date', $(this).val());
             });
+        }
 
-            $('#sender').on('input', function() {
-                localStorage.setItem('sender', $(this).val());
-            });
-
-            $('#rec_via').on('change', function() {
-                localStorage.setItem('rec_via', $(this).val());
-            });
+        // Event listener for Account Level 1 change
+        document.getElementById('lev1').addEventListener('change', function() {
+            const company_id = this.value;
+            if (company_id) {
+                loadlev2(company_id); // Load Level 2 data based on selected Level 1
+            } else {
+                document.getElementById('lev2').innerHTML = '<option value="">Select level 2</option>';
+            }
         });
     </script>
 
-    <!--corrected jquery version-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js">
+    <!-- JavaScript to prevent form submission when duplicate detected -->
+    <script>
+        document.getElementById('rackForm').addEventListener('submit', function(event) {
+            if (document.querySelector('#duplicateErrorModal').classList.contains('show')) {
+                event.preventDefault();
+            }
+        });
     </script>
-    <!-- Bootstrap JS (Optional)
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
- -->
 
-    <!-- <script>
-            const dataTable = new simpleDatatables.DataTable("#myTable2", {
-                searchable: false,
-                fixedHeight: true,
-            })
-        </script> -->
-    <script src="assets/js/main.js"></script>
+
 </body>
 
 </html>

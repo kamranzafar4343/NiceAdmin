@@ -29,6 +29,15 @@ $error = false;
 // SQL query to get company details
 $sql = "SELECT * FROM acc_range";
 $result = $conn->query($sql);
+// if($result === true){
+//     $row3= $result->fetch_assoc();
+//     $comp_id = $row['comp_id'];
+
+// $sql = "SELECT acc_range.*, compani.acc_lev_1 AS Level1, branches.acc_lev_2 AS level2
+//         FROM acc_range
+//          JOIN compani ON acc_range.level1= compani.acc_lev_1
+//         JOIN branches ON acc_range.level2 = branches.acc_lev_2";
+// $result = $conn->query($sql);
 
 
 
@@ -43,7 +52,7 @@ $conn->close();
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Store</title>
+    <title>Account Range</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -262,7 +271,7 @@ $conn->close();
             margin-bottom: 30px;
             border: none;
             border-radius: 5px;
-            box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+            compani-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
 
@@ -280,7 +289,7 @@ $conn->close();
 
             padding: 0;
 
-            box-sizing: border-box;
+            compani-sizing: border-compani;
         }
 
         .custom2 {
@@ -414,7 +423,7 @@ $conn->close();
                 </li>
                 <li>
                     <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                        <i class="bi bi-box-arrow-right"></i>
+                        <i class="bi bi-compani-arrow-right"></i>
                         <span>Sign Out</span>
                     </a>
                 </li>
@@ -454,7 +463,7 @@ $conn->close();
                     </a>
                 </li><!-- End of range  -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="box.php">
+                    <a class="nav-link collapsed" href="compani.php">
                         <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
@@ -467,8 +476,8 @@ $conn->close();
                 </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="racks.php">
-                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link collapsed" href="branches.php">
+                        <i class="bi bi-compani"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Racks Nav -->
 
@@ -482,7 +491,7 @@ $conn->close();
                 <!-- User-only Links -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="box.php">
+                    <a class="nav-link collapsed" href="compani.php">
                         <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
@@ -494,8 +503,8 @@ $conn->close();
                 </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="racks.php">
-                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link collapsed" href="branches.php">
+                        <i class="bi bi-compani"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Racks Nav -->
 
@@ -511,13 +520,13 @@ $conn->close();
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
+                    <i class="bi bi-compani-arrow-right"></i><span>Login</span>
                 </a>
             </li><!-- End Login Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="logout.php">
-                    <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+                    <i class="bi bi-compani-arrow-left"></i><span>Logout</span>
                 </a>
             </li><!-- End Logout Nav -->
 
@@ -529,10 +538,10 @@ $conn->close();
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!--new table design-->
-    <!-- Button to add new box -->
+    <!-- Button to add new compani -->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'Acount_range.php';" class="btn btn-primary mb-3">Add Account Range</button>
 
-    <!-- Search bar for racks -->
+    <!-- Search bar for branches -->
     <div class="search-container">
         <form id="searchForm" action="" method="GET">
             <input type="text" id="searchInput" name="query" placeholder="Search by name..." autofocus>
@@ -569,7 +578,11 @@ $conn->close();
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
                                         <td><?= $counter++ ?></td>
+
+
+
                                         <td><?= htmlspecialchars($row["level1"]) ?></td>
+
                                         <td><?= htmlspecialchars($row["level2"]) ?></td>
                                         <td><?= htmlspecialchars($row["object_code"]) ?></td>
                                         <td><?= htmlspecialchars($row["begin_code"]) ?></td>
@@ -579,9 +592,9 @@ $conn->close();
                                         <?php if ($_SESSION['role'] == 'admin'): ?>
                                             <td>
                                                 <div style="display: flex; gap: 10px;">
-                                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="range_update.php?id=<?php echo $row['range_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
-                                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="deleterange.php?id=<?php echo $row['range_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
 
                                                 </div>
                                             </td>
@@ -607,7 +620,7 @@ $conn->close();
 
     <script>
         function filterCompany(comp_id) {
-            window.location.href = "box.php?comp_id=" + comp_id;
+            window.location.href = "compani.php?comp_id=" + comp_id;
         }
     </script>
 

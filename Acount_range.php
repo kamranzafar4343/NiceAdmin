@@ -446,9 +446,9 @@ if (isset($_POST['submit'])) {
 
     <!-- Start Form Container -->
     <div class="container d-flex justify-content-center">
-        <div class="card custom-card shadow-lg mt-3">
+        <div class="card custom-card shadow-lg mt-3"style="max-width: 800px;"> <!-- Reduce the width -->
             <div class="card-body">
-                <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
+                <form class="row g-3 needs-validation" action="" method="POST" id="rangeForm">
 
                     <div class="col-md-6">
                         <label for="lev1">Account level 1:</label>

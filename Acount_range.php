@@ -491,7 +491,7 @@ if (isset($_POST['submit'])) {
                         <label for="end_code">End code:</label>
                         <input type="text" id="end_code" class="form-control" name="end_code" required>
                     </div>
-
+                    
                     <!-- Form Buttons -->
                     <div class="text-center mt-4 mb-2">
                         <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'racks.php';">Cancel</button>

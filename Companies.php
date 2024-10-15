@@ -342,7 +342,6 @@ $result = $conn->query($sql);
                       <?php echo $row['acc_lev_1']; ?>
                     </a>
                   </td>
-                
                   <?php
                   echo "<td >" . htmlspecialchars($row["acc_desc"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
@@ -351,7 +350,6 @@ $result = $conn->query($sql);
                   echo "<td >" . htmlspecialchars($row["foc_phone"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["contact_fax"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["add_1"]) . "<br>" . htmlspecialchars($row["add_2"]) . "<br>" . htmlspecialchars($row["add_3"]) . "</td>";
-                  
                   ?>
                   <td>
                     <div style="display: flex; gap: 10px;">

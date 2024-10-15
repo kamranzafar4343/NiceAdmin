@@ -25,16 +25,14 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-//select all columns of boxes 
-$sql = "SELECT * FROM box";
-$result = $conn->query($sql);
 
 
-if (isset($_GET['comp_id'])) {
-    $comp_id = $_GET['comp_id'];
-    $sql = "SELECT * FROM box WHERE companiID_FK = '$comp_id'";
-    $result = $conn->query($sql);
-}
+
+// if (isset($_GET['comp_id'])) {
+//     $comp_id = $_GET['comp_id'];
+//     $sql = "SELECT * FROM box WHERE companiID_FK = '$comp_id'";
+//     $result = $conn->query($sql);
+// }
 ?>
 
 <!DOCTYPE html>
@@ -467,92 +465,79 @@ if (isset($_GET['comp_id'])) {
     <!-- Button to add new box -->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add Container </button>
 
-    <!-- Search bar and company filter -->
-    <div class="row">
-        <div class="col-md-6 drpdwn">
-            <label for="company">Select Company:</label>
-            <select id="company" class="form-select" name="comp_FK_item" required onchange="filterCompany(this.value)">
-                <option value="">Select a Company</option>
-                <?php
-                // Fetch the companies from the database
-                $result = $conn->query("SELECT comp_id, comp_name FROM compani");
-                while ($row = $result->fetch_assoc()) {
-                    echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
-                }
-                ?>
-            </select>
-        </div>
-    </div>
-    </div>
-
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title">List of Boxes</h5>
+                    <h5 class="card-title">List of containers/filefolders</h5>
 
                     <?php
-                    if (isset($_GET['comp_id'])) {
-                        $comp_id = $_GET['comp_id'];
-                        $sql = "SELECT * FROM box WHERE companiID_FK = '$comp_id'";
-                    } else {
                         // Default query
                         $sql = "SELECT * FROM box";
-                    }
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 8%;">Box ID</th>
-                            <th scope="col" style="width: 14%;">Barcode</th>
-                            <th scope="col" style="width: 14%;">Company</th>
-                            <th scope="col" style="width: 14%;">Branch</th>
-                            <th scope="col" style="width: 14%;">Created at</th>
-                            <th scope="col" style="width: 10%;">Status</th>';
-
+                            <th scope="col" style="width: 10%;">Account</th>
+                            <th scope="col" style="width: 13%;">Account Info</th>
+                            <th scope="col" style="width: 10%;">Object code</th>
+                            <th scope="col" style="width: 10%;">Barcode No.</th>
+                            <th scope="col" style="width: 10%;">Alt code</th>
+                            <th scope="col" style="width: 12%;">Box description</th>
+                            <th scope="col" style="width: 10%;">Status</th>
+                            <th scope="col" style="width: 10%;">Creation time</th>';
                         // Show "Action" column only for admins
                         if ($_SESSION['role'] == 'admin') {
                             echo '<th scope="col" style="width: 10%;">Action</th>';
                         }
-
                         echo '</tr>
                     </thead>
                     <tbody style="table-layout: fixed;">';
 
-                        // Counter variable
-                        $counter = 1;
-
                         while ($row = $result->fetch_assoc()) {
                             echo '<tr>';
-                            echo '<td>' . ($row["box_id"]) . '</td>';
-                            echo '<td><a class="text-primary fw-bold" href="boxInfo.php?id=' . $row['box_id'] . '">' . $row['barcode'] . '</a></td>';
-
                             // Get specific company id
-                            $comp_id = $row['companiID_FK'];
+                            $comp_id = $row['level1'];
                             $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
                             $result3 = $conn->query($sql3);
                             if ($result3->num_rows > 0) {
                                 $row3 = $result3->fetch_assoc();
-                                $comp_name = $row3['comp_name'];
+                                $acc_lev1 = $row3['acc_lev_1'];
+                                $acc_desc1 = $row3['acc_desc'];
                             }
-                            // Show specific company name
-                            echo '<td>' . $comp_name . '</td>';
+                         
 
                             // Get specific branch id
-                            $branch_id = $row['branchID_FK'];
-                            $sql7 = "SELECT * FROM branch WHERE branch_id= '$branch_id'";
+                            $branch_id = $row['level2'];
+                            $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
                             $result7 = $conn->query($sql7);
                             if ($result7->num_rows > 0) {
                                 $row7 = $result7->fetch_assoc();
-                                $branch_name = $row7['branch_name'];
+                                $acc_lev2 = $row7['acc_lev_2'];
+                                $acc_desc2 = $row7['account_desc'];
                             }
-                            // Show specific branch name
-                            echo '<td>' . $branch_name . '</td>';
+                            
+                            // Get specific dept id
+                            $dept_id = $row['level3'];
+                            $sql9 = "SELECT * FROM departments WHERE dept_id= '$dept_id'";
+                            $result9 = $conn->query($sql9);
+                            if ($result9->num_rows > 0) {
+                                $row9 = $result9->fetch_assoc();
+                                $acc_lev3 = $row9['acc_lev_3'];
+                                $acc_desc3 = $row9['acc_desc'];
+                            }
 
-                            echo '<td>' . ($row["created_at"]) . '</td>';
+                            // Show account
+                            echo '<td>' . $acc_lev1 ." / ". $acc_lev2 . " / ". $acc_lev3 . '</td>';
+                            echo '<td>' . $acc_desc1 ." / ". $acc_desc2 . " / ". $acc_desc3 . '</td>';
+
+                            echo '<td>' . ($row["object"]) . '</td>';
+                            echo '<td>' . ($row["barcode"]) . '</td>';
+                            echo '<td>' . ($row["alt_code"]) . '</td>';
+                            echo '<td>' . ($row["box_desc"]) . '</td>';
 
                             echo '<td><i class="';
                             if ($row["status"] == 'In') {
@@ -562,8 +547,10 @@ if (isset($_GET['comp_id'])) {
                             } elseif ($row["status"] == 'Ready for Destroy') {
                                 echo 'fas fa-exclamation-triangle text-warning';
                             }
-                            echo '"></i> ' . $row["status"] . '</td>';
 
+                            echo '"></i> ' . $row["status"] . '</td>';
+                            echo '<td>' . ($row["created_at"]) . '</td>';
+                            
                             // Show action buttons only for admins
                             if ($_SESSION['role'] == 'admin') {
                                 echo '<td>
@@ -575,7 +562,6 @@ if (isset($_GET['comp_id'])) {
                             }
 
                             echo '</tr>';
-                            $counter++;
                         }
 
                         echo '</tbody></table>';

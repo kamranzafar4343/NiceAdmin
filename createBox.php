@@ -31,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
 
-
     // Insert data into box table
     $sql = "INSERT INTO box (level1, level2, level3, object, barcode, alt_code, box_desc, status) 
             VALUES ('$level_1', '$level2', '$level3', '$object_code', '$barcode', '$alt_code', '$description', 'In')";
@@ -499,15 +498,6 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <div class="col-md-6">
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control" id="description" name="description" required>
-                    </div>
-
-                    <!-- for the status -->
-                    <div class="col-md-6">
-                        <label for="status">Status:</label>
-                        <select id="status" class="form-select" name="status">
-                            <option value="">Select Status</option>
-                            <option value="In" selected>In</option>
-                        </select>
                     </div>
 
                     <div class="text-center mt-4 mb-2">

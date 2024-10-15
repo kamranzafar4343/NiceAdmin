@@ -458,7 +458,7 @@ if (isset($_POST['submit'])) {
                             // Fetch the account levels from the database
                             $result = $conn->query("SELECT comp_id, acc_lev_1, acc_desc FROM compani");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']} {$row['acc_desc']}</option>";
+                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']} - {$row['acc_desc']}</option>";
                             }
                             ?>
                         </select>
@@ -543,7 +543,7 @@ if (isset($_POST['submit'])) {
                         const lev2Select = document.getElementById('lev2');
                         lev2Select.innerHTML = '<option value="">Select a Branch</option>';
                         acc_lev_2.forEach(function(branch) {
-                            lev2Select.innerHTML += `<option value="${branch.branch_id}">${branch.acc_lev_2}</option>`;
+                            lev2Select.innerHTML += `<option value="${branch.branch_id}">${branch.acc_lev_2} - ${branch.account_desc}</option>`;
                         });
 
                     } catch (e) {

@@ -450,12 +450,12 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <div class="col-md-4">
                         <label for="lev1">Account level 1:</label>
                         <select id="lev1" class="form-select" name="level1" required>
-                            <option value="">Select a Level</option>
+                            <option value="">Select a company</option>
                             <?php
                             // Fetch the account levels from the database
                             $result = $conn->query("SELECT comp_id, acc_lev_1, acc_desc FROM compani");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']} {$row['acc_desc']}</option>";
+                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']} - {$row['acc_desc']}</option>";
                             }
                             ?>
                         </select>
@@ -463,16 +463,19 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!-- For the Level 2 field -->
                     <div class="col-md-4">
                         <label for="level2">Level 2:</label>
-                        <input type="text" id="level2" class="form-control" name="level2" required>
-                        <option value="" ></option>
+                        <select id="level2" class="form-select" name="level2">
+                            <option value="">Select a branch</option>
+                        </select>
                     </div>
+
                     <!-- For the Level 3 field -->
                     <div class="col-md-4">
                         <label for="level3">Level 3:</label>
-                        <input type="text" id="level3" class="form-control" name="level3" required>
-                        <option value=""></option>
+                        <select id="level3" class="form-select" name="level3">
+                            <option value="">Select a department</option>
+                        </select>
                     </div>
-                    
+
                     <!-- Object Code -->
                     <div class="col-md-6">
                         <label for="object_code" class="form-label">Object Code</label>
@@ -484,7 +487,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!-- Select Barcode -->
                     <div class="col-md-6">
                         <label for="barcode_select" class="form-label">Enter Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
+                        <input type="text" class="form-control" id="barcode_select" name="barcode_select" required>
                     </div>
                     <!-- FOR the alternative code -->
                     <div class="col-md-6">
@@ -495,15 +498,6 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <div class="col-md-6">
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control" id="description" name="description" required>
-                    </div>
-
-                    <!-- Object Code -->
-                    <div class="col-md-6">
-                        <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" required>
-                            <option value="Container">Container</option>
-                            <option value="FileFolder">FileFolder</option>
-                        </select>
                     </div>
 
                     <!-- for the status -->
@@ -575,7 +569,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
     <script>
         $(document).ready(function() {
             // When company is changed, fetch the branches
-            $('#company').change(function() {
+            $('#lev1').change(function() {
                 var company_id = $(this).val();
 
                 // AJAX request to get branches for the selected company
@@ -587,13 +581,13 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     },
                     success: function(response) {
                         try {
-                            var branches = JSON.parse(response);
+                            var branches = JSON.parse(response); //return the json response as an array
                             // Clear existing branches
-                            $('#branch').empty();
-                            $('#branch').append('<option value="">Select a Branch</option>');
+                            $('#level2').empty();
+                            $('#level2').append('<option value="">Select a Branch</option>');
                             // Add the new options from the response
                             $.each(branches, function(index, branch) {
-                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                                $('#level2').append('<option value="' + branch.branch_id + '">' + branch.acc_lev_2 + ' - ' + branch.account_desc + '</option>');
                             });
                         } catch (e) {
                             console.error("Invalid JSON response", response);
@@ -601,122 +595,37 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     }
                 });
             });
-        });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const companySelect = document.getElementById('company');
-            const branchSelect = document.getElementById('branch');
-            const boxSelect = document.getElementById('box');
+            // When branch is changed, fetch the departments
+            $('#level2').change(function() {
+                var branch_id = $(this).val();
 
-            // Retrieve the previously selected company from localStorage
-            const selectedCompany = localStorage.getItem('selectedCompany');
-            if (selectedCompany) {
-                companySelect.value = selectedCompany;
-                loadBranches(selectedCompany); // Load branches based on the selected company
-            }
-
-            // Store the selected company in localStorage on change
-            companySelect.addEventListener('change', function() {
-                localStorage.setItem('selectedCompany', this.value);
-                loadBranches(this.value); // Load branches based on the new selection
-            });
-
-            // Retrieve the previously selected branch from localStorage
-            const selectedBranch = localStorage.getItem('selectedBranch');
-            if (selectedBranch) {
-                branchSelect.value = selectedBranch;
-            }
-
-            // Store the selected branch in localStorage on change
-            branchSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBranch', this.value);
-                loadBoxes(this.value); // Load boxes based on the selected branch
-            });
-
-            // Retrieve the previously selected box from localStorage
-            const selectedBox = localStorage.getItem('selectedBox');
-            if (selectedBox) {
-                boxSelect.value = selectedBox;
-            }
-
-            // Store the selected box in localStorage on change
-            boxSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBox', this.value);
-            });
-
-
-            // Function to load branches via AJAX
-            function loadBranches(company_id) {
+                // AJAX request to get dept's for the selected branch
                 $.ajax({
-                    url: 'get_branches.php',
+                    url: 'get_departments.php',
                     type: 'POST',
                     data: {
-                        company_id: company_id
+                        branch_id: branch_id
                     },
                     success: function(response) {
                         try {
-                            const branches = JSON.parse(response);
-                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
-                            branches.forEach(function(branch) {
-                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
+                            var departments = JSON.parse(response); //return the json response as an array
+                            // Clear existing dept's
+                            $('#level3').empty();
+                            $('#level3').append('<option value="">Select a Department</option>');
+                            // Add the new options from the response
+                            $.each(departments, function(index, department) {
+                                $('#level3').append('<option value="' + department.dept_id + '">' + department.acc_lev_3 + ' - ' + department.acc_desc + '</option>');
                             });
-
-                            // Set previously selected branch again, if available
-                            const selectedBranch = localStorage.getItem('selectedBranch');
-                            if (selectedBranch) {
-                                branchSelect.value = selectedBranch;
-                            }
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
                     }
                 });
-            }
-
-        });
-
-        //another function gets previous values of the sender, rec_via, rec_date
-        $(document).ready(function() {
-            // Utility function to safely set the value of an input field
-            function setInputValue(id, value) {
-                var element = document.getElementById(id);
-                if (element) {
-                    element.value = value;
-                }
-            }
-
-            // Retrieve the previously submitted form data from localStorage
-            const recDate = localStorage.getItem('rec_date');
-            const sender = localStorage.getItem('sender');
-            const recVia = localStorage.getItem('rec_via');
-
-            // Safely set the values if they exist in localStorage
-            if (recDate) {
-                setInputValue('rec_date', recDate);
-            }
-
-            if (sender) {
-                setInputValue('sender', sender);
-            }
-
-            if (recVia) {
-                setInputValue('rec_via', recVia);
-            }
-
-            // Store the values in localStorage when the user changes input
-            $('#rec_date').on('input', function() {
-                localStorage.setItem('rec_date', $(this).val());
-            });
-
-            $('#sender').on('input', function() {
-                localStorage.setItem('sender', $(this).val());
-            });
-
-            $('#rec_via').on('change', function() {
-                localStorage.setItem('rec_via', $(this).val());
             });
         });
-    </script>
+
+        </script>
 
     <!--corrected jquery version-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

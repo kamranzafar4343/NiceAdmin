@@ -6,7 +6,7 @@ if (isset($_POST['company_id'])) {
     $company_id = $conn->real_escape_string($_POST['company_id']);
 
     // Prepare and execute the query to fetch acc_lev_2 from branches where comp_id_fk matches the selected company_id
-    $query = "SELECT branch_id, acc_lev_2 FROM branches WHERE comp_id_fk = '$company_id'";
+    $query = "SELECT branch_id, acc_lev_2, account_desc FROM branches WHERE comp_id_fk = '$company_id'";
     $result = $conn->query($query);
 
     // Initialize an array to store the results

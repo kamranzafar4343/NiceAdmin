@@ -472,7 +472,6 @@ if (isset($_POST['submit'])) {
                         <!--option will b populated dynamically by ajax-->
                         </select>
                     </div>
-
                     <!-- Object Code -->
                     <div class="col-md-4">
                         <label for="object_code" class="form-label">Object Code</label>

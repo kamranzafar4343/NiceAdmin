@@ -23,17 +23,18 @@ if ($resultData->num_rows > 0) {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $company_id = mysqli_real_escape_string($conn, $_POST['company']);
-    $branch_id = mysqli_real_escape_string($conn, $_POST['branch']);
-    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
-    $rec_date = mysqli_real_escape_string($conn, $_POST['rec_date']);
-    $sender = mysqli_real_escape_string($conn, $_POST['sender']);
-    $rec_via = mysqli_real_escape_string($conn, $_POST['rec_via']);
+    $level_1 = mysqli_real_escape_string($conn, $_POST['level1']);
+    $level2 = mysqli_real_escape_string($conn, $_POST['level2']);
+    $level3 = mysqli_real_escape_string($conn, $_POST['level3']);
+    $object_code = mysqli_real_escape_string($conn, $_POST['object_code']);
+    $barcode = mysqli_real_escape_string($conn, $_POST['barcode_select']);
+    $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
 
 
     // Insert data into box table
-    $sql = "INSERT INTO box (companiID_FK, branchID_FK, barcode, rec_date, sender, rec_via, status) 
-            VALUES ('$company_id', '$branch_id', '$barcode', '$rec_date', '$sender', '$rec_via', 'In')";
+    $sql = "INSERT INTO box (level1, level2, level3, object, barcode, alt_code, box_desc, status) 
+            VALUES ('$level_1', '$level2', '$level3', '$object_code', '$barcode', '$alt_code', '$description', 'In')";
 
     if ($conn->query($sql) === TRUE) {
         header("location: createBox.php");
@@ -46,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Handle AJAX request to check if barcode already exists
 if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
-    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
+    $barcode = mysqli_real_escape_string($conn, $_POST['barcode_select']);
     $query = "SELECT * FROM `box` WHERE `barcode`='$barcode'";
     $result = mysqli_query($conn, $query);
 
@@ -503,7 +504,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!-- for the status -->
                     <div class="col-md-6">
                         <label for="status">Status:</label>
-                        <select id="status" class="form-select" name="status" required>
+                        <select id="status" class="form-select" name="status">
                             <option value="">Select Status</option>
                             <option value="In" selected>In</option>
                         </select>

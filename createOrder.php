@@ -80,6 +80,13 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <link href="assets/img/favicon.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS (with Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
@@ -286,7 +293,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Add Order</title>
+    <title>Add Delivery Order</title>
 
 
 </head>
@@ -382,11 +389,37 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                </li><!-- End Work Orders Nav -->
-
+                    <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link active" href="order.php">
+                                <i class="bi bi-circle"></i><span>Delivery Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="access_orderr.php">
+                                <i class="bi bi-circle"></i><span>Acess Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-editors.html">
+                                <i class="bi bi-circle"></i><span>Destroy Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-validation.html">
+                                <i class="bi bi-circle"></i><span>Other Services Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-validation.html">
+                                <i class="bi bi-circle"></i><span>Permanent Out Workorder</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -409,10 +442,37 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                </li><!-- End Work Orders Nav -->
+                    <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link active" href="order.php">
+                                <i class="bi bi-circle"></i><span>Delivery Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="access_orderr.php">
+                                <i class="bi bi-circle"></i><span>Acess Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-editors.html">
+                                <i class="bi bi-circle"></i><span>Destroy Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-validation.html">
+                                <i class="bi bi-circle"></i><span>Other Services Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-validation.html">
+                                <i class="bi bi-circle"></i><span>Permanent Out Workorder</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
@@ -452,7 +512,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Create an Order</h2>
+        <h2>Delivery Workorder</h2>
     </div>
     <!-- End Header form -->
 
@@ -461,65 +521,130 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
             <div class="card-body">
                 <form class="row g-3 needs-validation" action="" method="POST">
 
+                    <!-- Select Company -->
+                    <div class="col-md-4">
+                        <label for="lev1">Account level 1:</label>
+                        <select id="lev1" class="form-select" name="level1" required>
+                            <option value="">Account Level 1</option>
+                        </select>
 
-                    <div class="col-md-6">
+                    </div>
+
+                    <!-- Select lev 2 of selected account -->
+                    <div class="col-md-4">
+                        <label for="lev2">Account level 2:</label>
+                        <select id="lev2" class="form-select" name="level2" required>
+                            <option value="">Select level 2</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="lev3">Account level 3:</label>
+                        <select id="lev3" class="form-select" name="level3" required>
+                            <option value="">Select level 3</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4">
                         <label class="form-label">order no.</label>
                         <input type="text" class="form-control" name="order_no" id="order_no" required>
                     </div>
-
-                    <!-- Select Company -->
-                    <div class="col-md-6">
-                        <label for="company">Select Acc Lev 1:</label>
-                        <select id="company" class="form-select" name="comp_FK_emp" required>
-                            <option value="">Select a Company</option>
-                            <?php
-                            // Fetch the companies from the database
-                            $result = $conn->query("SELECT * FROM compani");
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']}." - ". {$row['acc_desc']} </option>";
-                            }
-                            ?>
-                        </select>
+                    <div class="col-md-4">
+                        <label for="creater" class="form-label">Creater</label>
+                        <input type="text" class="form-control" id="creater" name="creater" value="<?php echo ($_SESSION['role'] == 'admin') ? 'admin' : 'user'; ?>" readonly>
                     </div>
 
-                    <!-- Select Branch -->
+                    <!-- for the status -->
+
+                    <div class="col-md-4">
+
+                        <label for="status" class="form-label">Status</label>
+                        <br>
+                        <!-- <input type="radio" id="print" name="status" value="print">
+                        <label for="print">Print</label> -->
+                        <input type="checkbox" name="Print" id="Print">
+                        <label for="Print"> Print</label>
+                    </div>
+
+                    <!-- for the services Purirty -->
+
                     <div class="col-md-6">
-                        <label for="branch">Select a Branch:</label>
-                        <select id="branch" class="form-select" name="branch_FK_emp" required>
-                            <option value="">Select a Branch</option>
-                            <!-- The options will be populated via AJAX based on the selected company -->
+                        <label for="purirty" class="form-label">Services Purirty</label>
+                        <select class="form-select" id="purirty" name="purirty" required>
+                            <option value="Urgent">Urgent</option>
+                            <option value="Regular">Regular</option>
+                            <!-- <option value="FileFolder">FileBOX</option>
+                            <option value="FileFolder">Barcode</option> -->
                         </select>
+                    </div>
+                    <!-- Required BY -->
+                    <div class="col-md-6">
+                        <label class="form-label">Required By</label>
+                        <input type="datetime-local" class="form-control" name="date" required>
+                    </div>
+
+                    <!-- For the FOC -->
+                    <div class="col-md-4">
+                        <label for="" class="form-label">Contact Person</label>
+                        <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
+                    </div>
+                    <!-- For the FOC phone -->
+                    <div class="col-md-4">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="" name="foc_phone" required>
+                    </div>
+                    <!-- for the Pickup and delivery Addrss -->
+                    <div class="col-md-4">
+                        <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
+                        <input type="text" class="form-control" id="" name="pickup_address" required>
+                    </div>
+                    <!-- Object Code -->
+                    <div class="col-md-4">
+                        <label for="object_code" class="form-label">Object Code</label>
+                        <select class="form-select" id="object_code" name="object_code" required>
+                            <!-- <option value="Container">select object code</option> -->
+                            <!-- <option value="FileFolder">Barcode</option> -->
+                            <option value="Container">Container</option>
+                            <option value="FileFolder">FileFolder</option>
+                        </select>
+                    </div>
+                    <!-- Select Barcode -->
+                    <div class="col-md-4">
+                        <label for="barcode_select" class="form-label">Enter Barcode</label>
+                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
+                    </div>
+                    <!-- FOR the alternative code -->
+                    <div class="col-md-4">
+                        <label for="alt_code" class="form-label">Alt Code</label>
+                        <input type="text" class="form-control" id="alt_code" name="alt_code">
                     </div>
 
                     <!-- Select Requestor -->
-                    <div class="col-md-6">
-                        <label for="requestor">Select Requestor:</label>
-                        <select id="requestor" class="form-select" name="name" required>
-                            <option value="">Select a Requestor</option>
-                            <!-- The options will be populated via AJAX based on the selected branch -->
-                        </select>
-                        <!-- <div id="requestorFeedback" class="valid-feedback"></div>
-                        <div id="requestorFeedback" class="invalid-feedback"></div> -->
+                    <div class="col-md-4">
+                        <label for="requestor" class="form-label">Requestor Name</label>
+                        <input type="text" class="form-control" id="requestor" name="requestor" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
                     </div>
-
-                    <!-- Select Box -->
-                    <div class="col-md-6">
-                        <label for="box">Box Barcode:</label>
-                        <select id="box" class="form-select" name="" required>
-                            <option value="">Select a Box</option>
-                            <!-- The options will be populated via AJAX based on the selected branch -->
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label">Item Barcode(optional):</label>
-                        <input type="text" class="form-control" name="item_barcode" id="item_barcode">
+                    <!--  Comments -->
+                    <div class="col-md-4">
+                        <label for="designation" class="form-label">Desigination</label>
+                        <input type="text" class="form-control" id="designation" name="designation" required>
                     </div>
 
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label">request date</label>
                         <input type="datetime-local" class="form-control" name="date" required>
+                    </div>
+                    <!--  Comments -->
+                    <div class="col-md-4">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" required>
+                    </div>
+                    <div>
+
+                    </div>
+                    <div>
+                        <input type="checkbox" name="checkbox" id="checkbox">
+                        <label for="term"> Permanent Out</label>
                     </div>
 
                     <div class="text-center mt-4 mb-2">
@@ -582,6 +707,9 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
     <!-- Template Main JS File -->
+    <!-- Updated JavaScript with proper lev2Select selection -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 
 
     <script>

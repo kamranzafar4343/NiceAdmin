@@ -19,27 +19,42 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
-include 'config/db.php'; // Ensure the database connection is included
-
 if (isset($_GET['id'])) {
-    $range_id = intval($_GET['id']);  // Get the company ID from URL
+    $range_id = intval($_GET['id']);  // Get the range ID from URL
 
-    // SQL query to fetch company data
+    // SQL query to fetch range data
     $sql = "SELECT * FROM `acc_range` WHERE `range_id` = '$range_id'";
     $result = $conn->query($sql);
 
-    // Check if the company exists
+    // Check if the range exists
     if ($result && $result->num_rows > 0) {
-        // Fetch company data into variables
+        // Fetch range data into variables
         $row = $result->fetch_assoc();
         $range_id = $row['range_id'];
-        $acc_lev_1 = $row['level1'];
-        $acc_lev_2 = $row['level2'];
+        $acc_lev_1_id = $row['level1'];  
+        $acc_lev_2_id = $row['level2'];
         $object_code = $row['object_code'];
         $begin_code = $row['begin_code'];
         $end_code = $row['end_code'];
+        
+        // Fetch the company name based on comp_id from the 'compani' table
+        $sql1 = "SELECT `acc_lev_1` FROM `compani` WHERE `comp_id` = '$acc_lev_1_id'";
+        $result1 = $conn->query($sql1);
+        if ($result1 && $result1->num_rows > 0) {
+            $acc_lev_1_name = $result1->fetch_assoc()['acc_lev_1'];
+        } else {
+            echo "Error: Level 1 not found.";
+            exit;
+        }
+
+        // Fetch the branch name for level2 from the 'branches' table
+        $sql2 = "SELECT `acc_lev_2` FROM `branches` WHERE `branch_id` = '$acc_lev_2_id'";
+        $result2 = $conn->query($sql2);
+        if ($result2 && $result2->num_rows > 0) {
+            $acc_lev_2_name = $result2->fetch_assoc()['acc_lev_2'];
+        }
     } else {
-        // If no company found, display an error message
+        // If no range found, display an error message
         echo "Account not found!";
         exit;
     }
@@ -48,29 +63,49 @@ if (isset($_GET['id'])) {
 // Check if the form is submitted (update the record)
 if (isset($_POST['update'])) {
     // Sanitize and retrieve form data
-    $level1 = $conn->real_escape_string($_POST['level1']);
-    $level2 = $conn->real_escape_string($_POST['level2']);
+    $level1_name = $conn->real_escape_string($_POST['level1']); 
+    $level2_name = $conn->real_escape_string($_POST['level2']); 
     $object_code = $conn->real_escape_string($_POST['object_code']);
     $begin_code = $conn->real_escape_string($_POST['begin_code']);
     $end_code = $conn->real_escape_string($_POST['end_code']);
 
-    // SQL query to update the company record
+    // Fetch the correct comp_id for level1 from the company name
+    $sql1 = "SELECT `comp_id` FROM `compani` WHERE `acc_lev_1` = '$level1_name'";
+    $result1 = $conn->query($sql1);
+    if ($result1 && $result1->num_rows > 0) {
+        $level1_id = $result1->fetch_assoc()['comp_id'];
+    } else {
+        echo "Error: Invalid Level 1 (Company Name).";
+        exit;
+    }
+
+    // Fetch the correct branch_id for level2 from the branch name
+    $sql2 = "SELECT `branch_id` FROM `branches` WHERE `acc_lev_2` = '$level2_name'";
+    $result2 = $conn->query($sql2);
+    if ($result2 && $result2->num_rows > 0) {
+        $level2_id = $result2->fetch_assoc()['branch_id'];
+    } else {
+        echo "Error: Invalid Level 2 (Branch Name).";
+        exit;
+    }
+
+    // SQL query to update the account range record with valid IDs
     $sql = "UPDATE `acc_range` SET 
-              `level1` = '$level1',
-              `level2` = '$level2',
+              `level1` = '$level1_id',  
+              `level2` = '$level2_id', 
               `object_code` = '$object_code',
               `begin_code` = '$begin_code',
               `end_code` = '$end_code'
             WHERE `range_id` = '$range_id'";
 
     // Execute the query and check for success or error
-    if (mysqli_query($conn, $sql)) {
-        // Redirect to the Companies.php page after successful update
+    if ($conn->query($sql)) {
+        // Redirect to the account.php page after successful update
         header("Location: account.php?id=" . $range_id);
         exit;
     } else {
         // Display an error message if the update fails
-        echo "Error updating record: " . mysqli_error($conn);
+        echo "Error updating record: " . $conn->error;
     }
 
     // Close the database connection
@@ -484,19 +519,22 @@ if (isset($_POST['update'])) {
 
     <!-- Start Form Container -->
     <div class="container d-flex justify-content-center">
-        <div class="card custom-card shadow-lg mt-3">
+        <div class="card custom-card shadow-lg mt-3" style="max-width: 800px;"> <!-- Reduce the width -->
             <div class="card-body">
                 <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
 
-
+                    <!-- Acc Level 1 -->
                     <div class="col-md-6">
                         <label for="acc_range_level" class="form-label">Acc-Lev-1</label>
-                        <input type="text" class="form-control" id="lev1" name="level1" value="<?php echo $acc_lev_1; ?>" required>
+                        <input type="text" class="form-control" id="lev1" name="level1" value="<?php echo $acc_lev_1_name; ?>" required>
                     </div>
+
+                    <!-- Acc Level 2 -->
                     <div class="col-md-6">
-                        <label for="acc_range_leve2" class="form-label">Acc-Lev-1</label>
-                        <input type="text" class="form-control" id="lev2" name="level2" value="<?php echo $acc_lev_2; ?>" required>
+                        <label for="acc_range_level2" class="form-label">Acc-Lev-2</label>
+                        <input type="text" class="form-control" id="lev2" name="level2" value="<?php echo $acc_lev_2_name; ?>" required>
                     </div>
+
                     <!-- Object Code Dropdown -->
                     <div class="col-md-4">
                         <label for="object_code" class="form-label">Object Code</label>
@@ -506,33 +544,17 @@ if (isset($_POST['update'])) {
                         </select>
                     </div>
 
-                    <!-- Object Code -->
-                    <!-- <div class="col-md-4">
-                        <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" required>
-                            <option value="Container">Container</option>
-                            <option value="FileFolder">FileFolder</option>
-                        </select>
-                    </div> -->
-                    <!-- For the Level 2 field -->
-                    <!-- <div class="col-md-4">
-                        <label for="begin_code">Begin Code:</label>
-                        <input type="text" id="begin_code" class="form-control" name="begin_code" required>
-                    </div> -->
+                    <!-- Begin Code -->
                     <div class="col-md-4">
                         <label for="begin_code" class="form-label">Begin Code</label>
                         <input type="text" class="form-control" id="begin_code" name="begin_code" value="<?php echo $begin_code; ?>" required>
                     </div>
+
+                    <!-- End Code -->
                     <div class="col-md-4">
                         <label for="end_code" class="form-label">End Code</label>
                         <input type="text" class="form-control" id="end_code" name="end_code" value="<?php echo $end_code; ?>" required>
                     </div>
-
-                    <!-- For the Level 2 field
-                    <div class="col-md-4">
-                        <label for="end_code">End code:</label>
-                        <input type="text" id="end_code" class="form-control" name="end_code" required>
-                    </div> -->
 
                     <!-- Form Buttons -->
                     <div class="col-12 text-center">

@@ -475,10 +475,10 @@ End Search Bar -->
         <form class="row g-3 p-3" action="#" method="POST">
           
           <!-- Branch ID input (readonly) -->
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <label class="form-label">Branch ID</label>
             <input type="text" class="form-control" name="branch_id_fk" value="<?php echo htmlspecialchars($branch_id); ?>" readonly>
-          </div>
+          </div> -->
 
         <!-- fetching acc lev 2 from branch table (readonly) -->
           <?php

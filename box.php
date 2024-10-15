@@ -170,7 +170,7 @@ if ($resultData->num_rows > 0) {
         #fixedButtonBranch {
             position: relative;
             top: 110px;
-            left: 1187px;
+            left: 1157px;
         }
 
         .row {
@@ -192,7 +192,7 @@ if ($resultData->num_rows > 0) {
         }
 
         .card-body {
-            padding: 0 20px 20px 60px !important;
+            padding: 20px 20px 20px 60px !important;
         }
 
 
@@ -262,6 +262,7 @@ if ($resultData->num_rows > 0) {
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
+            margin-top: 88px;
 
         }
 
@@ -460,6 +461,7 @@ if ($resultData->num_rows > 0) {
         </ul>
     </aside>
     <!--------------- End sidebar ------------------>
+
 
 
     <!-- Button to add new box -->

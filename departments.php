@@ -62,10 +62,13 @@ if ($result2->num_rows > 0) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Departments</title>
+    <title>Branches</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
+
+    <!-- Include the necessary DataTables CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
@@ -78,6 +81,7 @@ if ($result2->num_rows > 0) {
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
@@ -364,7 +368,7 @@ if ($result2->num_rows > 0) {
             </form>
         </div><!-- End Search Bar -->
 
-        <h3>List of Departments</h3>
+        <h3>List of Departemnts</h3>
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
@@ -434,7 +438,6 @@ if ($result2->num_rows > 0) {
                     <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
-
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
@@ -452,7 +455,6 @@ if ($result2->num_rows > 0) {
             </li>
 
             <li class="nav-heading">Pages</li>
-
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
@@ -476,21 +478,18 @@ if ($result2->num_rows > 0) {
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createDepartments.php?id=<?php echo $branch_id; ?>'" class="btn btn-primary mb-3">Add department</button>
-    <!-- 
-  <h1>Companies List</h1> -->
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
+
     <main id="main" class="main">
-
         <div class="col-12">
-
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $acc_lev2. " - " . $acc_desc; ?></h2>
+                    <h2 class="card-title fw-bold text-uppercase"><?php echo $acc_lev2 . " - " . $acc_desc; ?></h2>
 
                     <?php
                     if ($result->num_rows > 0) {
                     ?>
-                        <table class="table table-borderless datatable" style="table-layout: fixed;">
+                        <table id="branchTable" class="table table-borderless datatable" style="width:100%">
                             <thead>
                                 <tr>
                                     <!-- <th scope="col">ID</th> -->
@@ -506,8 +505,7 @@ if ($result2->num_rows > 0) {
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody style="table-layout: fixed;">
-
+                            <tbody>
                                 <?php
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
@@ -520,14 +518,14 @@ if ($result2->num_rows > 0) {
                                     echo "<td>" . ($row["foc"]) . "</td>";
                                     echo "<td>" . ($row["foc_phone"]) . "</td>";
                                     echo "<td>" . ($row["contact_fax"]) . "</td>";
-                                    echo "<td>" . ($row["add_1"]) . "<br>". ($row["add_2"]) . "<br>". ($row["add_3"]). "</td>";
+                                    echo "<td>" . ($row["add_1"]) . "<br>" . ($row["add_2"]) . "<br>" . ($row["add_3"]) . "</td>";
                                     echo "<td>" . ($row["pickup_address"]) . "</td>";
                                 ?>
-                                     <td>
-                                     <div style="display: flex; gap: 10px;">
-                                     <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="updatedepart.php?id=<?php echo $row['dept_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                    <td>
+                                        <div style="display: flex; gap: 10px;">
+                                            <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="updatedepart.php?id=<?php echo $row['dept_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
-                                     <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="deletedepart.php?id=<?php echo $row['dept_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="deletedepart.php?id=<?php echo $row['dept_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
 
                                     </td>
                                     </tr>
@@ -540,92 +538,40 @@ if ($result2->num_rows > 0) {
                     <?php
                     }
                     ?>
-
                 </div>
-
             </div>
         </div>
-
-
     </main><!-- End #main -->
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
-
-    <!-- Template Main JS File -->
-    <script src="assets/js/main.js"></script>
+    <!-- Existing scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
     <script>
-        //click on the picture to update with ajax
-        $(document).on('click', 'img', function() {
-            $(this).next('input[type="file"]').click();
-        });
-
-        function uploadImage(comp_id) {
-            var fileInput = document.getElementById('file-' + comp_id);
-            var file = fileInput.files[0];
-            var formData = new FormData();
-            formData.append('image', file);
-            formData.append('comp_id', comp_id);
-
-            $.ajax({
-                url: 'update_image.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    // Update the image source with the new image path
-                    $('#image-' + comp_id).attr('src', response);
-                },
-                error: function() {
-                    alert('Image upload failed. Please try again.');
+        $(document).ready(function() {
+            $('#branchTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthChange": true,
+                "pageLength": 10,
+                "language": {
+                    "search": "Search:",
+                    "lengthMenu": "Show _MENU_ entries",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Next",
+                        "previous": "Previous"
+                    }
                 }
             });
-        }
-        import {
-            Ripple,
-            initMDB
-        } from "mdb-ui-kit";
-
-        initMDB({
-            Ripple
         });
 
-        // function confirmDelete() {
-        //     // Display a confirmation dialog
-        //     var confirmation = confirm("Are you sure you want to delete this record?");
-
-        //     if (confirmation) {
-        //         // User clicked OK, proceed with deletion
-        //         deleteRecord();
-        //     } else {
-        //         // User clicked Cancel, do nothing
-        //         console.log("Record deletion canceled.");
-        //     }
-        // }
-
-        // function deleteRecord() {
-        //     // Your deletion logic here
-        //     console.log("Record deleted.");
-        //     // Example: You might want to make an AJAX request to delete the record from the server
-        //     // fetch('/delete-record', { method: 'POST' }).then(response => response.json()).then(data => console.log(data));
-        // }
+        // Existing JavaScript functions
     </script>
-
-
 </body>
 
 </html>

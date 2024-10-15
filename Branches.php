@@ -5,13 +5,13 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-  // If not logged in, redirect to login page
-  header("Location: pages-login.php");
-  exit();
+    // If not logged in, redirect to login page
+    header("Location: pages-login.php");
+    exit();
 }
 
 // Include the database connection
-include 'config/db.php'; 
+include 'config/db.php';
 
 // Get session email 
 $email = $_SESSION['email'];
@@ -20,17 +20,17 @@ $email = $_SESSION['email'];
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
-  $row2 = $resultData->fetch_assoc();
-  $adminName = $row2['name'];
-  $adminEmail = $row2['email'];
-  $userRole = $row2['role']; // Assuming you have a 'role' column in the 'register' table
+    $row2 = $resultData->fetch_assoc();
+    $adminName = $row2['name'];
+    $adminEmail = $row2['email'];
+    $userRole = $row2['role']; // Assuming you have a 'role' column in the 'register' table
 }
 
 // Check if the user is an admin, otherwise redirect
-if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
-  // If the user is not an Admin, redirect to index page
-  header("Location: index.php");
-  exit();
+if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
+    // If the user is not an Admin, redirect to index page
+    header("Location: index.php");
+    exit();
 }
 
 // Get company ID from query string
@@ -67,6 +67,9 @@ if ($result2->num_rows > 0) {
     <meta content="" name="keywords">
 
 
+    <!-- Include the necessary DataTables CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
@@ -78,6 +81,10 @@ if ($result2->num_rows > 0) {
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
@@ -326,6 +333,17 @@ if ($result2->num_rows > 0) {
             width: 122%;
         }
 
+        .dataTables_filter {
+            display: block !important;
+            visibility: visible !important;
+        }
+
+        .dataTables_filter input {
+            display: inline-block !important;
+            width: auto !important;
+        }
+
+
         /* .custom-header-col-name{
         margin-right: 1000px;
     } */
@@ -475,24 +493,19 @@ if ($result2->num_rows > 0) {
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
     <!--new table design-->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
-    <!-- 
-  <h1>Companies List</h1> -->
+
     <main id="main" class="main">
-
         <div class="col-12">
-
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-
                     <h2 class="card-title fw-bold text-uppercase"><?php echo $Acc_lev_1 . " - " . $acc_desc; ?></h2>
 
                     <?php
                     if ($result->num_rows > 0) {
                     ?>
-                        <table class="table table-borderless datatable" style="table-layout: fixed;">
+                        <table id="branchTable" class="table table-borderless datatable" style="width:100%">
                             <thead>
                                 <tr>
-                                    <!-- <th scope="col">ID</th> -->
                                     <th scope="col">Acc_lev_2</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Registration date</th>
@@ -505,32 +518,31 @@ if ($result2->num_rows > 0) {
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody style="table-layout: fixed;">
-
+                            <tbody>
                                 <?php
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                //    echo "<td>" . ($row["branch_id"]) . "</td>";
+                                    //    echo "<td>" . ($row["branch_id"]) . "</td>";
 
                                 ?>
-                                <td>
-                                <a class="text-primary fw-bold" href="departments.php?id=<?php echo $row['branch_id']; ?>">
-                                  <?php echo $row['acc_lev_2']; ?>
-                                </a>
-                              </td>
-                                 <?php
+                                    <td>
+                                        <a class="text-primary fw-bold" href="departments.php?id=<?php echo $row['branch_id']; ?>">
+                                            <?php echo $row['acc_lev_2']; ?>
+                                        </a>
+                                    </td>
+                                    <?php
 
 
-                                   echo "<td>" . ($row["account_desc"]) . "</td>";
+                                    echo "<td>" . ($row["account_desc"]) . "</td>";
                                     echo "<td>" . ($row["registration_date"]) . "</td>";
                                     echo "<td>" . ($row["expiry_date"]) . "</td>";
                                     echo "<td>" . ($row["contact_person"]) . "</td>";
                                     echo "<td>" . ($row["contact_phone"]) . "</td>";
                                     echo "<td>" . ($row["contact_fax"]) . "</td>";
-                                    echo "<td>" . ($row["address"]) . "<br>" . ($row["address1"]) ."<br>" . ($row["address2"]) . "</td>";
+                                    echo "<td>" . ($row["address"]) . "<br>" . ($row["address1"]) . "<br>" . ($row["address2"]) . "</td>";
                                     echo "<td>" . ($row["pickup_address"]) . "</td>";
-                                ?>
+                                    ?>
                                     <td>
                                         <div style="display: flex; gap: 10px;">
 
@@ -552,92 +564,39 @@ if ($result2->num_rows > 0) {
                     <?php
                     }
                     ?>
-
                 </div>
-
             </div>
         </div>
-
-
     </main><!-- End #main -->
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
-
-    <!-- Template Main JS File --> 
-    <script src="assets/js/main.js"></script>
+    <!-- Existing scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
     <script>
-        //click on the picture to update with ajax
-        $(document).on('click', 'img', function() {
-            $(this).next('input[type="file"]').click();
-        });
-
-        function uploadImage(comp_id) {
-            var fileInput = document.getElementById('file-' + comp_id);
-            var file = fileInput.files[0];
-            var formData = new FormData();
-            formData.append('image', file);
-            formData.append('comp_id', comp_id);
-
-            $.ajax({
-                url: 'update_image.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    // Update the image source with the new image path
-                    $('#image-' + comp_id).attr('src', response);
-                },
-                error: function() {
-                    alert('Image upload failed. Please try again.');
+        $(document).ready(function() {
+            $('#branchTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthChange": true,
+                "pageLength": 10,
+                "dom": '<"top"f>rt<"bottom"lip><"clear">',
+                "language": {
+                    "search": "Search:",
+                    "lengthMenu": "Show _MENU_ entries",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Next",
+                        "previous": "Previous"
+                    }
                 }
             });
-        }
-        import {
-            Ripple,
-            initMDB
-        } from "mdb-ui-kit";
-
-        initMDB({
-            Ripple
         });
-
-        // function confirmDelete() {
-        //     // Display a confirmation dialog
-        //     var confirmation = confirm("Are you sure you want to delete this record?");
-
-        //     if (confirmation) {
-        //         // User clicked OK, proceed with deletion
-        //         deleteRecord();
-        //     } else {
-        //         // User clicked Cancel, do nothing
-        //         console.log("Record deletion canceled.");
-        //     }
-        // }
-
-        // function deleteRecord() {
-        //     // Your deletion logic here
-        //     console.log("Record deleted.");
-        //     // Example: You might want to make an AJAX request to delete the record from the server
-        //     // fetch('/delete-record', { method: 'POST' }).then(response => response.json()).then(data => console.log(data));
-        // }
     </script>
-
-
 </body>
 
 </html>

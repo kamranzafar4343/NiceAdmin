@@ -39,20 +39,14 @@ if (isset($_GET['id'])) {
 
         // Check if the user is an admin
         if ($userRole == 'admin') {
-                // First, delete the related records from the `store` table
-                $delete_store_sql = "DELETE FROM `store` WHERE `barcode_select` = $box_id";
-                if ($conn->query($delete_store_sql) === TRUE) {
-                    // Now, delete the box from the `box` table
-                    $delete_box_sql = "DELETE FROM `box` WHERE `box_id` = $box_id";
-                    if ($conn->query($delete_box_sql) === TRUE) {
-                        // Redirect to the branch box page after successful deletion
-                        header("Location: box.php?id=" . $branch_id);
-                        exit;
-                    } else {
-                        echo "Error deleting box: " . $conn->error;
-                    }
+            // Now, delete the box from the `box` table
+            $delete_box_sql = "DELETE FROM `box` WHERE `box_id` = $box_id";
+            if ($conn->query($delete_box_sql) === TRUE) {
+                // Redirect to the branch box page after successful deletion
+                header("Location: box.php?id=" . $branch_id);
+                exit;
             }
-        }else {
+        } else {
             // If the user is not an admin, show a pop-up
             echo "<script>alert('Only admins can delete a box.'); window.location.href='box.php?id=" . $branch_id . "';</script>";
         }

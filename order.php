@@ -427,7 +427,7 @@ $resultShowOrders = $conn->query($showOrders);
                             </a>
                         </li>
                         <li>
-                            <a href="forms-editors.html">
+                            <a href="destroy_order.php">
                                 <i class="bi bi-circle"></i><span>Destroy Workorder</span>
                             </a>
                         </li>
@@ -481,7 +481,7 @@ $resultShowOrders = $conn->query($showOrders);
                             </a>
                         </li>
                         <li>
-                            <a href="forms-editors.html">
+                            <a href="destroy_order.php">
                                 <i class="bi bi-circle"></i><span>Destroy Workorder</span>
                             </a>
                         </li>

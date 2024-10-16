@@ -404,7 +404,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             </a>
                         </li>
                         <li>
-                            <a href="forms-editors.html">
+                            <a href="destroy_order.php">
                                 <i class="bi bi-circle"></i><span>Destroy Workorder</span>
                             </a>
                         </li>
@@ -457,7 +457,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             </a>
                         </li>
                         <li>
-                            <a href="forms-editors.html">
+                            <a href="destroy_order.php">
                                 <i class="bi bi-circle"></i><span>Destroy Workorder</span>
                             </a>
                         </li>

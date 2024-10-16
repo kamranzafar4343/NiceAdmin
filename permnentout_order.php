@@ -32,7 +32,7 @@ $resultShowOrders = $conn->query($showOrders);
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Delievry Orders</title>
+    <title>Permnent Out Orders</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -410,18 +410,19 @@ $resultShowOrders = $conn->query($showOrders);
             <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
           </a>
         </li>End Work Orders Nav -->
-        <li class="nav-item">
+
+                <li class="nav-item">
                     <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                         <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
                     <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a class="nav-link active" href="order.php">
+                            <a class="nav-link collapsed" href="order.php">
                                 <i class="bi bi-circle"></i><span>Delivery Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="access_order.php">
+                        <a class="nav-link collapsed" href="access_order.php">
                                 <i class="bi bi-circle"></i><span>Acess Workorder</span>
                             </a>
                         </li>
@@ -431,17 +432,18 @@ $resultShowOrders = $conn->query($showOrders);
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="supplies_order.php" >
+                            <a class="nav-link collapse" href="supplies_order.php">
                                 <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="permnentout_order.php">
+                            <a class="nav-link active" href="permnentout_order.php">
                                 <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
                             </a>
                         </li>
                     </ul>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -469,12 +471,12 @@ $resultShowOrders = $conn->query($showOrders);
                     </a>
                     <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a class="nav-link active" href="order.php">
+                            <a class="nav-link collapsed" href="order.php">
                                 <i class="bi bi-circle"></i><span>Delivery Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="access_order.php">
+                        <a class="nav-link collapsed" href="access_order.php">
                                 <i class="bi bi-circle"></i><span>Acess Workorder</span>
                             </a>
                         </li>
@@ -484,17 +486,19 @@ $resultShowOrders = $conn->query($showOrders);
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="supplies_order.php">
-                                <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
+                            <a  class="nav-link collapse" href="supplies_order.php" >
+                                <i class="bi bi-circle"></i><span>Suppliies Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="permnentout_order.php">
-                                <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
+                            <a class="nav-link active" href="permnentout_order.php">
+                                <i class="bi bi-circle"></i><span>Permanent Out Workorder</span>
                             </a>
                         </li>
                     </ul>
                 </li>
+
+
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -528,13 +532,13 @@ $resultShowOrders = $conn->query($showOrders);
     <!--------------- End sidebar ------------------>
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
     <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-3 add">Delivery Order</button>
+    <button id="" type="button" onclick="window.location.href = 'create_permout_order.php';" class="btn btn-primary mb-3 add">Permout Order</button>
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title">List of Delievry Orders</h5>
+                    <h5 class="card-title">List of Permnent Out Orders</h5>
                     <?php
                     // Check if there are any results
                     if ($resultShowOrders->num_rows > 0) {

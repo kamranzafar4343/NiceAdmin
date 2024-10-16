@@ -399,22 +399,22 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link active" href="access_orderr.php">
+                            <a class="nav-link active" href="access_order.php">
                                 <i class="bi bi-circle"></i><span>Acess Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a href="destroy_order.php">
+                            <a  class="nav-link collapse" href="destroy_order.php">
                                 <i class="bi bi-circle"></i><span>Destroy Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a href="forms-validation.html">
-                                <i class="bi bi-circle"></i><span>Other Services Workorder</span>
+                            <a  class="nav-link collapse" href="supplies_order.php >
+                                <i class="bi bi-circle"></i><span>Suppliies Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a href="forms-validation.html">
+                            <a class="nav-link collapse" href="permnentout_order.php>
                                 <i class="bi bi-circle"></i><span>Permanent Out Workorder</span>
                             </a>
                         </li>
@@ -452,22 +452,22 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link active" href="access_orderr.php">
+                            <a class="nav-link active" href="access_order.php">
                                 <i class="bi bi-circle"></i><span>Acess Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a href="destroy_order.php">
+                            <a  class="nav-link collapse" href="destroy_order.php">
                                 <i class="bi bi-circle"></i><span>Destroy Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a href="forms-validation.html">
-                                <i class="bi bi-circle"></i><span>Other Services Workorder</span>
+                            <a  class="nav-link collapse" href="supplies_order.php >
+                                <i class="bi bi-circle"></i><span>Suppliies Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a href="forms-validation.html">
+                            <a class="nav-link collapse" href="permnentout_order.php>
                                 <i class="bi bi-circle"></i><span>Permanent Out Workorder</span>
                             </a>
                         </li>

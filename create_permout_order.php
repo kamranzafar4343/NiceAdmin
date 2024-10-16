@@ -293,7 +293,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Add Delivery Order</title>
+    <title>Add Permnent Out Order</title>
 
 
 </head>
@@ -394,7 +394,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     </a>
                     <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a class="nav-link active" href="order.php">
+                            <a class="nav-link collapse" href="order.php">
                                 <i class="bi bi-circle"></i><span>Delivery Workorder</span>
                             </a>
                         </li>
@@ -414,7 +414,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="permnentout_order.php">
+                            <a class="nav-link active" href="permnentout_order.php">
                                 <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
                             </a>
                         </li>
@@ -447,7 +447,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     </a>
                     <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a class="nav-link active" href="order.php">
+                            <a class="nav-link collapse" href="order.php">
                                 <i class="bi bi-circle"></i><span>Delivery Workorder</span>
                             </a>
                         </li>
@@ -467,7 +467,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="permnentout_order.php">
+                            <a class="nav-link active" href="permnentout_order.php">
                                 <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
                             </a>
                         </li>
@@ -512,7 +512,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Delivery Workorder</h2>
+        <h2>Permanent Out Workorder</h2>
     </div>
     <!-- End Header form -->
 

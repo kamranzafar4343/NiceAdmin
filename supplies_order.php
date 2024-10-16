@@ -1,6 +1,5 @@
 <?php
-
-// Start the session
+// session_start(); // Start the session
 session_start();
 
 // Check if the user is logged in
@@ -9,14 +8,10 @@ if (!isset($_SESSION['email'])) {
     header("Location: pages-login.php");
     exit();
 }
-
-// Include the database connection
 include 'config/db.php';
 
-// Get user email from session
 $email = $_SESSION['email'];
-
-// Get user name and email from register table
+//get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
@@ -24,17 +19,11 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
-$error = false;
 
-// SQL query to get company details
-$sql = "SELECT * FROM acc_range";
-$result = $conn->query($sql);
+$showOrders = "Select * FROM orders";
+$resultShowOrders = $conn->query($showOrders);
 
-
-
-$conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,12 +32,17 @@ $conn->close();
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Store</title>
+    <title>Supplies Orders</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
-
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS (with Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <!-- Favicons -->
     <link href="assets/img/favicon.png" rel="icon">
@@ -76,7 +70,13 @@ $conn->close();
 
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Datatable css for export buttons -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css">
+
     <link rel="stylesheet" href="fonts/icomoon/style.css">
+
 
     <link rel="stylesheet" href="css/owl.carousel.min.css">
 
@@ -87,6 +87,14 @@ $conn->close();
     <link rel="stylesheet" href="css/style.css">
     <style>
         /* Custom CSS to decrease font size of the table */
+
+        .add {
+            /* cursor: pointer; */
+            width: 144px;
+            margin-left: 1144px;
+            margin-top: 89px;
+            margin-bottom: 103px;
+        }
 
         /* Basic styling for search bar */
         input.btn.btn-success {
@@ -283,71 +291,12 @@ $conn->close();
             box-sizing: border-box;
         }
 
-        .custom2 {
-            font-size: 0.8rem;
-            border-radius: 7px;
-            padding-top: 14px;
-            padding-bottom: 14px;
-            padding-right: 34px;
-            padding-left: 40px;
-            margin-left: 20px;
+        .req_span {
+            font-size: 10px;
         }
 
-        tbody,
-        td,
-        tr {
-            word-wrap: break-word;
-            max-width: 200px;
-        }
-
-        .datatable-table>tbody>tr>td,
-        .datatable-table>tbody>tr>th,
-        .datatable-table>tfoot>tr>td,
-        .datatable-table>tfoot>tr>th,
-        .datatable-table>thead>tr>td,
-        .datatable-table>thead>tr>th {
-            vertical-align: top;
-            padding: 8px 2px;
-        }
-
-        .image-circle {
-            display: flex;
-            justify-content: center;
-            /* Horizontally center */
-            align-items: center;
-            text-align: center;
-        }
-
-
-        .navbar-image {
-            width: 50px;
-            height: 50px;
-            margin-right: 7px;
-        }
-
-        .headerbox {
-
-            display: flex;
-        }
-
-        .datatable-table>thead>tr>th {
-            vertical-align: bottom;
-            text-align: left;
-            border-bottom: 0px solid #d9d9d9;
-        }
-
-        .pagetitleinside button {
-            width: 150px;
-        }
-
-        .datatable-pagination {
-            margin-left: 50px;
-        }
-
-        .drpdwn {
-            margin-left: 268px;
-            max-width: 424px;
-            margin-top: 28px;
+        .req_auth_span {
+            font-size: 10px;
         }
     </style>
 
@@ -369,9 +318,11 @@ $conn->close();
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
+
             <img class="navbar-image" src="assets/img/logo3.png" alt="">
 
             <a href="index.php" class="logo d-flex align-items-center">
+
                 <span class="d-none d-lg-block">FingerLog</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -388,8 +339,8 @@ $conn->close();
             <ul class="d-flex align-items-center">
 
                 <li class="nav-item d-block d-lg-none">
-                    <a class="nav-link nav-icon search-bar-toggle " href="#">
-                        <i class="bi bi-search"></i>
+
+                    <i class="bi bi-search"></i>
                     </a>
                 </li><!-- End Search Icon-->
 
@@ -449,22 +400,49 @@ $conn->close();
                 </li><!-- End Companies Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link ative" href="account.php">
-                        <i class="ri-archive-stack-fill"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End of range  -->
-                <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
+                <!-- <li class="nav-item">
+          <a class="nav-link active" href="order.php">
+            <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li>End Work Orders Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                </li><!-- End Work Orders Nav -->
+                    <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link collapsed" href="order.php">
+                                <i class="bi bi-circle"></i><span>Delivery Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                        <a class="nav-link collapsed" href="access_order.php">
+                                <i class="bi bi-circle"></i><span>Acess Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link collapse" href="destroy_order.php">
+                                <i class="bi bi-circle"></i><span>Destroy Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link active" href="supplies_order.php">
+                                <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link collapse" href="permnentout_order.php">
+                                <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
@@ -488,10 +466,38 @@ $conn->close();
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                </li><!-- End Work Orders Nav -->
+                    <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link collapsed" href="order.php">
+                                <i class="bi bi-circle"></i><span>Delivery Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                        <a class="nav-link collapsed" href="access_order.php">
+                                <i class="bi bi-circle"></i><span>Acess Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link collapse" href="destroy_order.php">
+                                <i class="bi bi-circle"></i><span>Destroy Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a  class="nav-link active" href="supplies_order.php" >
+                                <i class="bi bi-circle"></i><span>Suppliies Workorder</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link collapse" href="permnentout_order.php">
+                                <i class="bi bi-circle"></i><span>Permanent Out Workorder</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
@@ -500,7 +506,7 @@ $conn->close();
                 </li><!-- End Racks Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="store.php">
+                    <a class="nav-link collapsed" href="store.php">
                         <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Store Nav -->
@@ -524,121 +530,145 @@ $conn->close();
         </ul>
     </aside>
     <!--------------- End sidebar ------------------>
-
-
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
-
-    <!--new table design-->
-    <!-- Button to add new box -->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'Acount_range.php';" class="btn btn-primary mb-3">Add Account Range</button>
-
-    <!-- Search bar for racks -->
-    <div class="search-container">
-        <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Search by name..." autofocus>
-            <input type="submit" value="Search" class="btn btn-success btn-success">
-        </form>
-    </div>
+    <!-- Add the buttton for the work order -->
+    <button id="" type="button" onclick="window.location.href = 'create_supplie_order.php';" class="btn btn-primary mb-3 add">Supplies Order</button>
+    <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title">List of Account Ranges</h5>
+                    <h5 class="card-title">List of Supplies Orders</h5>
+                    <?php
+                    // Check if there are any results
+                    if ($resultShowOrders->num_rows > 0) {
+                        // Display table
+                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 10%;">order no</th>
+                            <th scope="col" style="width: 10%;">Company</th>
+                            <th scope="col" style="width: 15%;">Branch</th>
+                             <th scope="col" style="width: 10%;">Box</th>
+                            <th scope="col" style="width: 10%;">Item</th>
+                            <th scope="col" style="width: 17%;">requestor</th>                        
+                            <th scope="col" style="width: 15%;">request date</th>
+                            <th scope="col" style="width: 15%;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody style="table-layout: fixed;">';
 
-                    <?php if ($result->num_rows > 0): ?>
-                        <table class="table datatable mt-4" style="table-layout: fixed;">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="width: 5%;">#</th>
-                                    <th scope="col" style="width: 15%;">Account Level 1</th>
-                                    <th scope="col" style="width: 15%;">Account Level 2</th>
-                                    <th scope="col" style="width: 10%;">Object Code</th>
-                                    <th scope="col" style="width: 15%;">Begin Code</th>
-                                    <th scope="col" style="width: 15%;">End Code</th>
-                                    <!-- Show "Actions" column only if the user is an admin -->
-                                    <?php if ($_SESSION['role'] == 'admin'): ?>
-                                        <th scope="col" style="width: 10%;">Actions</th>
-                                    <?php endif; ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Counter variable for row numbers -->
-                                <?php $counter = 1; ?>
+                        // Counter variable
+                        $counter = 1;
 
-                                <!-- Loop through the results and display each row -->
-                                <?php while ($row = $result->fetch_assoc()): ?>
-                                    <tr>
-                                        <td><?= $counter++ ?></td>
-                                        <td><?= htmlspecialchars($row["level1"]) ?></td>
-                                        <td><?= htmlspecialchars($row["level2"]) ?></td>
-                                        <td><?= htmlspecialchars($row["object_code"]) ?></td>
-                                        <td><?= htmlspecialchars($row["begin_code"]) ?></td>
-                                        <td><?= htmlspecialchars($row["end_code"]) ?></td>
+                        // Loop through results
+                        while ($row = $resultShowOrders->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>' . ($row['order_no']) . '</td>';
 
-                                        <!-- Show actions only if user is admin -->
-                                        <?php if ($_SESSION['role'] == 'admin'): ?>
-                                            <td>
-                                                <div style="display: flex; gap: 10px;">
-                                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                            // Get company id
+                            $comp_id = $row['company'];
+                            $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
+                            $result3 = $conn->query($sql3);
+                            if ($result3->num_rows > 0) {
+                                $row3 = $result3->fetch_assoc();
+                                $comp_name = $row3['comp_name'];
+                            }
+                            //Show result
+                            echo '<td>' . $comp_name . '</td>';
 
-                                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                            //get brnch id
+                            $branch_id = $row['branch'];
+                            $branchSql = "Select * From branch where branch_id = '$branch_id'";
+                            $branchResult = $conn->query($branchSql);
+                            if ($branchResult->num_rows > 0) {
+                                $branchRow = $branchResult->fetch_assoc();
+                                $brnach_name = $branchRow['branch_name'];
+                            }
+                            //show result
+                            echo '<td>' . $brnach_name . '<td>';
 
-                                                </div>
-                                            </td>
-                                        <?php endif; ?>
-                                    </tr>
-                                <?php endwhile; ?>
-                            </tbody>
-                        </table>
-                    <?php else: ?>
-                        <p>No account data found.</p>
-                    <?php endif; ?>
+                            //get box id
+                            $box_id = $row['box'];
+                            $boxSQL = "Select * From box where box_id = '$box_id'";
+                            $boxSQLresult = $conn->query($boxSQL);
+                            if ($boxSQLresult->num_rows > 0) {
+                                $boxRow = $boxSQLresult->fetch_assoc();
+                                $box_barc = $boxRow['barcode'];
+                            }
+                            //Show result
+                            echo  $box_barc;
 
+
+                            $empSQL = "Select * From employee where branch_FK_emp = '$branch_id'";
+                            $empSQLresult = $conn->query($empSQL);
+                            if ($empSQLresult->num_rows > 0) {
+                                $empRow = $empSQLresult->fetch_assoc();
+                                $Role = $empRow['Authority'];
+                                $Auth_status = $empRow['auth_status'];
+                            }
+
+
+
+
+                            echo '<td>' . ($row["item"]) . '</td>';
+
+                            //get emp id to show name
+                            $emp_id = $row['name'];
+                            $emplySql = "Select * From employee where emp_id = '$emp_id'";
+                            $emplyResult = $conn->query($emplySql);
+                            if ($emplyResult->num_rows > 0) {
+                                $emplyRow = $emplyResult->fetch_assoc();
+                                $emply_name = $emplyRow['name'];
+                            }
+
+                            echo '<td> <span class="req_span">Name:  </span>' . $emply_name . '<br>  <span class="req_span">Role:  </span>' . $Role . '</td>';
+                            echo '<td>' . ($row["date"]) . '</td>';
+                    ?>
+                            <td>
+                                <div style="display: flex; gap: 10px;">
+
+                                    <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
+
+                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="OrderUpdate.php?id=<?php echo $row['branch']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+
+                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                                        onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=<?php echo $row['branch']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                    <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a>
+
+                                    <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
+                    onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=<?php echo $row['id']; ?>">Access</a> -->
+
+
+                                </div>
+                            </td>
+                    <?php
+                            echo '</tr>';
+                        }
+                        echo '</tbody></table>';
+                    } else {
+                        // Display message if no results
+                        echo '<p>No items found.</p>';
+                    }
+                    ?>
                 </div>
             </div>
+
         </div>
     </main>
 
-
-
-
-
-
-
-    <script>
-        function filterCompany(comp_id) {
-            window.location.href = "box.php?comp_id=" + comp_id;
-        }
-    </script>
-
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
-
-    <!-- Template Main JS File -->
-    <script src="assets/js/main.js"></script>
-
-    <script>
-        // event listener for search bar 
-        document.getElementById("searchInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault(); // Prevent default form submission
-                document.getElementById("searchForm").submit(); // Manually submit the form
-            }
-        });
-    </script>
+    <!--datatable export buttons-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
 </body>
 
 </html>

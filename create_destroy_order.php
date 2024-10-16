@@ -293,7 +293,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Add Delivery Order</title>
+    <title>Destroy WorkOrder</title>
 
 
 </head>
@@ -393,116 +393,115 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
                     <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a class="nav-link active" href="order.php">
-                                <i class="bi bi-circle"></i><span>Delivery Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="access_order.php">
-                                <i class="bi bi-circle"></i><span>Acess Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="destroy_order.php">
-                                <i class="bi bi-circle"></i><span>Destroy Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="supplies_order.php">
-                                <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="permnentout_order.php">
-                                <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
-                            </a>
-                        </li>
-                    </ul>
+                        <a class="nav-link collapsed" href="order.php">
+                            <i class="bi bi-circle"></i><span>Delivery Workorder</span>
+                        </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="racks.php">
-                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                <li>
+                    <a class="nav-link collapsed" href="access_order.php">
+                        <i class="bi bi-circle"></i><span>Acess Workorder</span>
                     </a>
-                </li><!-- End Racks Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="store.php">
-                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Store Nav -->
-
-            <?php } else { ?>
-                <!-- User-only Links -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a class="nav-link active" href="order.php">
-                                <i class="bi bi-circle"></i><span>Delivery Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="access_order.php">
-                                <i class="bi bi-circle"></i><span>Acess Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="destroy_order.php">
-                                <i class="bi bi-circle"></i><span>Destroy Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="supplies_order.php" >
-                                <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="permnentout_order.php">
-                                <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="racks.php">
-                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                <li>
+                    <a class="nav-link active" href="destroy_order.php">
+                        <i class="bi bi-circle"></i><span>Destroy Workorder</span>
                     </a>
-                </li><!-- End Racks Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="store.php">
-                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                </li>
+                <li>
+                    <a class="nav-link collapse" href="supplies_order.php">
+                                <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
                     </a>
-                </li><!-- End Store Nav -->
-            <?php } ?>
-
-
-            <li class="nav-heading">Pages</li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
-                </a>
-            </li><!-- End Login Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="logout.php">
-                    <i class="bi bi-box-arrow-left"></i><span>Logout</span>
-                </a>
-            </li><!-- End Logout Nav -->
-
+                </li>
+                <li>
+                    <a class="nav-link collapse" href="permnentout_order.php">
+                                <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
+                    </a>
+                </li>
         </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="racks.php">
+                <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Racks Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="store.php">
+                <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Store Nav -->
+
+    <?php } else { ?>
+        <!-- User-only Links -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="box.php">
+                <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Boxes Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="bi bi-circle"></i><span>Delivery Workorder</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link collased" href="access_orderr.php">
+                        <i class="bi bi-circle"></i><span>Acess Workorder</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="destroy_order.php">
+                        <i class="bi bi-circle"></i><span>Destroy Workorder</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link collapse" href="supplies_order.php">
+                                <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link collapse" href="permnentout_order.php">
+                                <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="racks.php">
+                <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Racks Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="store.php">
+                <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+            </a>
+        </li><!-- End Store Nav -->
+    <?php } ?>
+
+
+    <li class="nav-heading">Pages</li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-login.php">
+            <i class="bi bi-box-arrow-right"></i><span>Login</span>
+        </a>
+    </li><!-- End Login Nav -->
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="logout.php">
+            <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+        </a>
+    </li><!-- End Logout Nav -->
+
+    </ul>
     </aside>
     <!--------------- End sidebar ------------------>
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
@@ -512,7 +511,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Delivery Workorder</h2>
+        <h2>Destroy Workorder</h2>
     </div>
     <!-- End Header form -->
 

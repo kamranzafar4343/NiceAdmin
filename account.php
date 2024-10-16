@@ -461,7 +461,7 @@ $result = $conn->query($sql);
                     </a>
                 </li><!-- End of range  -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="compani.php">
+                    <a class="nav-link collapsed" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
@@ -489,7 +489,7 @@ $result = $conn->query($sql);
                 <!-- User-only Links -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="compani.php">
+                    <a class="nav-link collapsed" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->

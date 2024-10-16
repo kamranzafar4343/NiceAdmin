@@ -431,12 +431,12 @@ $resultShowOrders = $conn->query($showOrders);
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="supplies_order.php >
+                            <a class="nav-link collapse" href="supplies_order.php" >
                                 <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="permnentout_order.php>
+                            <a class="nav-link collapse" href="permnentout_order.php">
                                 <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
                             </a>
                         </li>
@@ -484,12 +484,12 @@ $resultShowOrders = $conn->query($showOrders);
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="supplies_order.php >
+                            <a class="nav-link collapse" href="supplies_order.php">
                                 <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="permnentout_order.php>
+                            <a class="nav-link collapse" href="permnentout_order.php">
                                 <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
                             </a>
                         </li>

@@ -485,20 +485,7 @@ if (isset($_POST['submit'])) {
                     <!-- Select Barcode -->
                     <div class="col-md-6">
                         <label for="barcode_select" class="form-label">Select Box Barcode</label>
-                        <select class="form-select" id="barcode_select" name="barcode_select" required>
-                            <option value="" disabled selected>Select a barcode</option>
-                            <?php
-                            // Fetch barcodes from the box table
-                            $sql = "SELECT box_id, barcode FROM box";
-                            $result = $conn->query($sql);
-
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<option value='" . $row['box_id'] . "'>" . $row['barcode'] . "</option>";
-                                }
-                            }
-                            ?>
-                        </select>
+                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
                     </div>
                     <!-- FOR the alternative code -->
                     <div class="col-md-6">

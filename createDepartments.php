@@ -46,7 +46,6 @@ if ($branchResult->num_rows === 0) {
 
 if (isset($_POST['submit'])) {
   // Fetching values from the form using POST and ensuring security with real_escape_string
-  $branch_id = mysqli_real_escape_string($conn, $_POST['branch_id_fk']);
   $acc_lev_3 = mysqli_real_escape_string($conn, $_POST['acc_lev_3']);
   $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
   $registration = mysqli_real_escape_string($conn, $_POST['registration']);
@@ -60,7 +59,7 @@ if (isset($_POST['submit'])) {
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
     //check account level no is already exist or not
-    $accCheckQuery = "SELECT * FROM `department` WHERE `acc_lev_3` = '$acc_lev_3'";
+    $accCheckQuery = "SELECT * FROM `departments` WHERE `acc_lev_3` = '$acc_lev_3'";
     $accCheckResult = $conn->query($accCheckQuery);
   
     if ($accCheckResult->num_rows > 0) {

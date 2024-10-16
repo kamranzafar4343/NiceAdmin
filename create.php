@@ -501,11 +501,6 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-6">
                         <label for="address" class="form-label">Address</label>
                         <input type="text" class="form-control" id="" name="address" required>
-                        <br>
-                        <input type="text" class="form-control" id="" name="address1">
-                        <br>
-                        <input type="text" class="form-control" id="" name="address2">
-
                     </div>
 
                     <div class="text-center mt-4 mb-2">

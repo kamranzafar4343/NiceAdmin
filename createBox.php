@@ -479,7 +479,8 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!-- Object Code -->
                     <div class="col-md-6">
                         <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" required>
+                        <select class="form-select" id="object_code" name="object_code" onchange="updateBarcodeInput()" required>
+                            <option value="">Select object type</option>
                             <option value="Container">Container</option>
                             <option value="FileFolder">FileFolder</option>
                         </select>
@@ -487,7 +488,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!-- Select Barcode -->
                     <div class="col-md-6">
                         <label for="barcode_select" class="form-label">Enter Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" name="barcode_select" required>
+                        <input type="text" class="form-control" id="barcode_select" maxlength="8" placeholder="Enter Barcode" name="barcode_select" required>
                     </div>
                     <!-- FOR the alternative code -->
                     <div class="col-md-6">
@@ -527,6 +528,26 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
             </div>
         </div>
     </div>
+
+    <!--Function to update the barcode input field on selection of the object type-->
+    <script>
+        function updateBarcodeInput() {
+            const object_type = document.getElementById('object_code');
+            const barcode_input = document.getElementById('barcode_select');
+
+            if (object_type.value === 'Container') {
+                barcode_input.maxLength = 7;
+                barcode_input.placeholder = "Enter 7 digit Container Barcode";
+        }
+        else{
+            barcode_input.maxLength = 8;
+            barcode_input.placeholder = "Enter 8 digit Filefolder Barcode";
+        }
+        //clear input on type change
+        barcode_input.value = "";
+    }
+    </script>
+
     <script>
         document.getElementById('box_barcode').addEventListener('input', function() {
             let barcode = this.value;
@@ -615,8 +636,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 });
             });
         });
-
-        </script>
+    </script>
 
     <!--corrected jquery version-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

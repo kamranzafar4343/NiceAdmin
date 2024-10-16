@@ -483,12 +483,12 @@ if ($resultData->num_rows > 0) {
                         echo '<table class="table datatable mt-4" style="table-layout: fixed;">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 10%;">Account</th>
+                            <th scope="col" style="width: 13%;">Account</th>
                             <th scope="col" style="width: 13%;">Account Info</th>
-                            <th scope="col" style="width: 10%;">Object code</th>
+                            <th scope="col" style="width: 14%;">Object code</th>
                             <th scope="col" style="width: 10%;">Barcode No.</th>
                             <th scope="col" style="width: 10%;">Alt code</th>
-                            <th scope="col" style="width: 12%;">Box description</th>
+                            <th scope="col" style="width: 12%;">description</th>
                             <th scope="col" style="width: 10%;">Status</th>
                             <th scope="col" style="width: 10%;">Creation time</th>';
                         // Show "Action" column only for admins
@@ -557,7 +557,8 @@ if ($resultData->num_rows > 0) {
                             if ($_SESSION['role'] == 'admin') {
                                 echo '<td>
                                 <div style="display: flex; gap: 10px;">
-                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                                    
+                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
                                         onclick="return confirm(\'Are you sure you want to delete this record?\');" href="boxDelete.php?id=' . $row['box_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                                 </div>
                             </td>';

@@ -45,7 +45,6 @@ if ($companyResult->num_rows === 0) {
 
 if (isset($_POST['submit'])) {
   // Fetching values from the form using POST and ensuring security with real_escape_string
-  $company_id = mysqli_real_escape_string($conn, $_POST['comp_id_fk']);
   $acc_lev_2 = mysqli_real_escape_string($conn, $_POST['acc_lev_2']);
   $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
   $registration = mysqli_real_escape_string($conn, $_POST['registration']);
@@ -59,7 +58,7 @@ if (isset($_POST['submit'])) {
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
   //check account level no is already exist or not
-  $accCheckQuery = "SELECT * FROM `branch` WHERE `acc_lev_2` = '$acc_lev_2'";
+  $accCheckQuery = "SELECT * FROM `branches` WHERE `acc_lev_2` = '$acc_lev_2'";
   $accCheckResult = $conn->query($accCheckQuery);
 
   if ($accCheckResult->num_rows > 0) {
@@ -527,10 +526,6 @@ End Search Bar -->
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
             <input type="text" class="form-control" id="" name="address" required>
-            <br>
-            <input type="text" class="form-control" id="" name="address1">
-            <br>
-            <input type="text" class="form-control" id="" name="address2">
 
           </div>
 

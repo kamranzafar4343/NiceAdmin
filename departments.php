@@ -37,7 +37,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 $branch_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 //Fetch departments of a branch
-$sql = "SELECT * FROM departments WHERE branch_id_fk = $branch_id";
+$sql = "SELECT * FROM `departments` WHERE `branch_id_fk` = $branch_id";
 $result = $conn->query($sql);
 
 //get info from branches table
@@ -478,7 +478,7 @@ if ($result2->num_rows > 0) {
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
     <!--new table design-->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createDepartments.php?id=<?php echo $branch_id; ?>'" class="btn btn-primary mb-3">Add Department</button>
 
     <main id="main" class="main">
         <div class="col-12">

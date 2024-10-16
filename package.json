@@ -1,11 +1,12 @@
 {
   "dependencies": {
+    "@jarstone/dselect": "^1.0.4",
     "bootstrap": "^5.3.3"
   },
   "devDependencies": {
     "prettier": "^3.3.3"
   },
-"scripts": {
-  "prettier": "prettier --write ."
-}
+  "scripts": {
+    "prettier": "prettier --write ."
+  }
 }

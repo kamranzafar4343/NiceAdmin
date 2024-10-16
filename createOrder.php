@@ -144,11 +144,24 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
+    <script src="https://code.jquery.com/jquery/3.7.1/jquery.min.js"></script>
     <!--choosen-js css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+        <!--choosen js-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+ 
 
     <style>
+        /* form text sizing */
+        .form-select {
+            font-size: 0.8rem;
+        }
+
+        .form-control {
+            font-size: 0.8rem;
+        }
+
+
         /* Custom CSS to decrease font size of the table */
         .custom {
             font-size: 0.9rem;
@@ -462,7 +475,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="supplies_order.php" >
+                            <a class="nav-link collapse" href="supplies_order.php">
                                 <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
                             </a>
                         </li>
@@ -518,16 +531,33 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
     <div class="container d-flex justify-content-center">
         <div class="card custom-card shadow-lg mt-3">
-            <div class="card-body">
+            <div class="card-body mt-3">
                 <form class="row g-3 needs-validation" action="" method="POST">
+
+                    <div class="col-md-4">
+                        <label class="form-label">order no.</label>
+                        <input type="text" class="form-control" name="order_no" id="order_no" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="creater" class="form-label">Creator</label>
+                        <input type="text" class="form-control" id="creater" name="creater" value="<?php echo ($_SESSION['role'] == 'admin') ? 'admin' : 'user'; ?>" readonly>
+                    </div>
+
+                    <hr style="color: white;">
 
                     <!-- Select Company -->
                     <div class="col-md-4">
                         <label for="lev1">Account level 1:</label>
                         <select id="lev1" class="form-select" name="level1" required>
-                            <option value="">Account Level 1</option>
+                            <option value="">Select Account lev 1</option>
+                            <?php
+                            // Fetch the account levels from the database
+                            $result = $conn->query("SELECT comp_id, acc_lev_1, acc_desc FROM compani");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']} - {$row['acc_desc']}</option>";
+                            }
+                            ?>
                         </select>
-
                     </div>
 
                     <!-- Select lev 2 of selected account -->
@@ -544,31 +574,18 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         </select>
                     </div>
 
-                    <div class="col-md-4">
-                        <label class="form-label">order no.</label>
-                        <input type="text" class="form-control" name="order_no" id="order_no" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="creater" class="form-label">Creater</label>
-                        <input type="text" class="form-control" id="creater" name="creater" value="<?php echo ($_SESSION['role'] == 'admin') ? 'admin' : 'user'; ?>" readonly>
-                    </div>
-
                     <!-- for the status -->
-
-                    <div class="col-md-4">
-
+                    <!-- <div class="col-md-4">
                         <label for="status" class="form-label">Status</label>
                         <br>
-                        <!-- <input type="radio" id="print" name="status" value="print">
-                        <label for="print">Print</label> -->
                         <input type="checkbox" name="Print" id="Print">
                         <label for="Print"> Print</label>
-                    </div>
+                    </div> -->
 
                     <!-- for the services Purirty -->
 
-                    <div class="col-md-6">
-                        <label for="purirty" class="form-label">Services Purirty</label>
+                    <div class="col-md-3">
+                        <label for="purirty" class="form-label">Service Priority</label>
                         <select class="form-select" id="purirty" name="purirty" required>
                             <option value="Urgent">Urgent</option>
                             <option value="Regular">Regular</option>
@@ -577,28 +594,32 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         </select>
                     </div>
                     <!-- Required BY -->
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <label class="form-label">Required By</label>
                         <input type="datetime-local" class="form-control" name="date" required>
                     </div>
 
+                    <hr style="color: white;">
+
                     <!-- For the FOC -->
-                    <div class="col-md-4">
-                        <label for="" class="form-label">Contact Person</label>
+                    <div class="col-md-3">
+                        <label for="" class="form-label">Contact Person Name</label>
                         <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
                     </div>
                     <!-- For the FOC phone -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="phone" class="form-label">Phone</label>
                         <input type="text" class="form-control" id="" name="foc_phone" required>
                     </div>
                     <!-- for the Pickup and delivery Addrss -->
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
                         <input type="text" class="form-control" id="" name="pickup_address" required>
                     </div>
+
+                    <hr style="color: white;">
                     <!-- Object Code -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="object_code" class="form-label">Object Code</label>
                         <select class="form-select" id="object_code" name="object_code" required>
                             <!-- <option value="Container">select object code</option> -->
@@ -625,17 +646,17 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     </div>
                     <!--  Comments -->
                     <div class="col-md-4">
-                        <label for="designation" class="form-label">Desigination</label>
+                        <label for="designation" class="form-label">Contact Person Role</label>
                         <input type="text" class="form-control" id="designation" name="designation" required>
                     </div>
 
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">request date</label>
                         <input type="datetime-local" class="form-control" name="date" required>
                     </div>
                     <!--  Comments -->
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control" id="description" name="description" required>
                     </div>
@@ -714,9 +735,8 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
     <script>
         $(document).ready(function() {
-
             // When company is changed, fetch the branches
-            $('#company').change(function() {
+            $('#lev1').change(function() {
                 var company_id = $(this).val();
 
                 // AJAX request to get branches for the selected company
@@ -728,13 +748,13 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     },
                     success: function(response) {
                         try {
-                            var branches = JSON.parse(response);
+                            var branches = JSON.parse(response); //return the json response as an array
                             // Clear existing branches
-                            $('#branch').empty();
-                            $('#branch').append('<option value="">Select a Branch</option>');
+                            $('#lev2').empty();
+                            $('#lev2').append('<option value="">Select Account Level 2</option>');
                             // Add the new options from the response
                             $.each(branches, function(index, branch) {
-                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                                $('#lev2').append('<option value="' + branch.branch_id + '">' + branch.acc_lev_2 + ' - ' + branch.account_desc + '</option>');
                             });
                         } catch (e) {
                             console.error("Invalid JSON response", response);
@@ -743,200 +763,46 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 });
             });
 
-            // When branch is changed, fetch the box
-            $('#branch').change(function() {
+            // When branch is changed, fetch the departments
+            $('#lev2').change(function() {
                 var branch_id = $(this).val();
 
-                // AJAX request to get box for the selected company
+                // AJAX request to get dept's for the selected branch
                 $.ajax({
-                    url: 'get_boxes.php',
+                    url: 'get_departments.php',
                     type: 'POST',
                     data: {
                         branch_id: branch_id
                     },
                     success: function(response) {
                         try {
-                            var boxes = JSON.parse(response);
-                            // Clear existing branches
-                            $('#box').empty();
-                            $('#box').append('<option value="">Select a Box</option>');
+                            var departments = JSON.parse(response); //return the json response as an array
+                            // Clear existing dept's
+                            $('#lev3').empty();
+                            $('#lev3').append('<option value="">Select Account level 3</option>');
                             // Add the new options from the response
-                            $.each(boxes, function(index, box) {
-                                $('#box').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
+                            $.each(departments, function(index, department) {
+                                $('#lev3').append('<option value="' + department.dept_id + '">' + department.acc_lev_3 + ' - ' + department.acc_desc + '</option>');
                             });
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
                     }
                 });
-            });
-        });
-
-        // When branch is changed, fetch the employees
-        $('#branch').change(function() {
-            var branch_id = $(this).val();
-
-            // AJAX request to get employees for the selected branch
-            $.ajax({
-                url: 'get_employee.php',
-                type: 'POST',
-                data: {
-                    branch_id: branch_id
-                },
-                success: function(response) {
-                    try {
-                        var employees = JSON.parse(response);
-                        // Clear existing branches
-                        $('#requestor').empty();
-                        $('#requestor').append('<option value="">Select Requestor</option>');
-                        // Add the new options from the response
-                        $.each(employees, function(index, employee) {
-                            $('#requestor').append('<option value="' + employee.emp_id + '">' + employee.name + '</option>');
-                        });
-                    } catch (e) {
-                        console.error("Invalid JSON response", response);
-                    }
-                }
             });
         });
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const companySelect = document.getElementById('company');
-            const branchSelect = document.getElementById('branch');
-            const boxSelect = document.getElementById('box');
-            const requestorSelect = document.getElementById('requestor');
-
-            // Retrieve the previously selected company from localStorage
-            const selectedCompany = localStorage.getItem('selectedCompany');
-            if (selectedCompany) {
-                companySelect.value = selectedCompany;
-                loadBranches(selectedCompany); // Load branches based on the selected company
-            }
-
-            // Store the selected company in localStorage on change
-            companySelect.addEventListener('change', function() {
-                localStorage.setItem('selectedCompany', this.value);
-                loadBranches(this.value); // Load branches based on the new selection
-            });
-
-            // Store the selected branch in localStorage on change
-            branchSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBranch', this.value);
-                loadBoxes(this.value); // Load boxes based on the selected branch
-                loadRequestor(this.value);
-            });
-
-            // Store the selected box in localStorage on change
-            boxSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBox', this.value);
-            });
-
-            // Store the selected requestor in localStorage on change
-            requestorSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedRequestor', this.value);
-
-            });
-
-            // Function to load branches via AJAX
-            function loadBranches(company_id) {
-                $.ajax({
-                    url: 'get_branches.php',
-                    type: 'POST',
-                    data: {
-                        company_id: company_id
-                    },
-                    success: function(response) {
-                        try {
-                            const branches = JSON.parse(response);
-                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
-                            branches.forEach(function(branch) {
-                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
-                            });
-
-                            // Set previously selected branch again, if available
-                            const selectedBranch = localStorage.getItem('selectedBranch');
-                            if (selectedBranch) {
-                                branchSelect.value = selectedBranch;
-                                loadBoxes(selectedBranch); // Load boxes based on the selected branch
-                            }
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            }
-
-            // Function to load boxes via AJAX
-            function loadBoxes(branch_id) {
-                $.ajax({
-                    url: 'get_boxes.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            const boxes = JSON.parse(response);
-                            boxSelect.innerHTML = '<option value="">Select a Box</option>';
-                            boxes.forEach(function(box) {
-                                boxSelect.innerHTML += `<option value="${box.box_id}">${box.barcode}</option>`;
-                            });
-
-                            // Set previously selected box again, if available
-                            const selectedBox = localStorage.getItem('selectedBox');
-                            if (selectedBox) {
-                                boxSelect.value = selectedBox;
-                            }
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            }
-
-            // Function to load employes of seleted branch via AJAX
-            function loadRequestor(branch_id) {
-                $.ajax({
-                    url: 'get_employee.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            const employees = JSON.parse(response);
-                            requestorSelect.innerHTML = '<option value="">Select Requestor</option>';
-                            employees.forEach(function(employee) {
-                                requestorSelect.innerHTML += `<option value="${employee.emp_id}">${employee.name}</option>`;
-                            });
-
-                            // Set previously selected box again, if available
-                            const selectedRequestor = localStorage.getItem('selectedRequestor');
-                            if (selectedRequestor) {
-                                requestorSelect.value = selectedRequestor;
-                            }
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            }
-
-        });
+        jQuery('#lev2').chosen();
+        jQuery('#lev3').chosen();
     </script>
-    <script>
-        const dataTable = new simpleDatatables.DataTable("#myTable2", {
-            searchable: false,
-            fixedHeight: true,
-        })
-    </script>
+
     <script src="assets/js/main.js"></script>
 
-    <!--datatable export buttons-->
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
+    <!--datatable export buttons-->
     <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.dataTables.js"></script>

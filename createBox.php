@@ -89,6 +89,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="library/dselect.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
@@ -125,6 +126,12 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
     <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery/3.7.1/jquery.min.js"></script>
+    <!-- dselect -->
+    <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
+    <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+
 
     <style>
         /* Custom CSS to decrease font size of the table */
@@ -463,7 +470,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!-- For the Level 2 field -->
                     <div class="col-md-4">
                         <label for="level2">Level 2:</label>
-                        <select id="level2" class="form-select" name="level2">
+                        <select id="level2" class="form-select" name="level2" data-live-search="true">
                             <option value="">Select a branch</option>
                         </select>
                     </div>
@@ -471,7 +478,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!-- For the Level 3 field -->
                     <div class="col-md-4">
                         <label for="level3">Level 3:</label>
-                        <select id="level3" class="form-select" name="level3">
+                        <select id="level3" class="form-select" name="level3" data-live-search="true">
                             <option value="">Select a department</option>
                         </select>
                     </div>
@@ -538,14 +545,13 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
             if (object_type.value === 'Container') {
                 barcode_input.maxLength = 7;
                 barcode_input.placeholder = "Enter 7 digit Container Barcode";
+            } else {
+                barcode_input.maxLength = 8;
+                barcode_input.placeholder = "Enter 8 digit Filefolder Barcode";
+            }
+            //clear input on type change
+            barcode_input.value = "";
         }
-        else{
-            barcode_input.maxLength = 8;
-            barcode_input.placeholder = "Enter 8 digit Filefolder Barcode";
-        }
-        //clear input on type change
-        barcode_input.value = "";
-    }
     </script>
 
     <script>
@@ -580,6 +586,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
     <script>
         $(document).ready(function() {
+
             // When company is changed, fetch the branches
             $('#lev1').change(function() {
                 var company_id = $(this).val();
@@ -601,6 +608,8 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                             $.each(branches, function(index, branch) {
                                 $('#level2').append('<option value="' + branch.branch_id + '">' + branch.acc_lev_2 + ' - ' + branch.account_desc + '</option>');
                             });
+
+
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
@@ -629,6 +638,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                             $.each(departments, function(index, department) {
                                 $('#level3').append('<option value="' + department.dept_id + '">' + department.acc_lev_3 + ' - ' + department.acc_desc + '</option>');
                             });
+
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
@@ -637,9 +647,18 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
             });
         });
     </script>
-
+    <script>
+        const config = {
+            search: true, // Toggle search feature. Default: false
+            creatable: false, // Creatable selection. Default: false
+            clearable: false, // Clearable selection. Default: false
+            maxHeight: '360px', // Max height for showing scrollbar. Default: 360px
+            size: '', // Can be "sm" or "lg". Default ''
+        }
+        dselect(document.querySelector('#lev1'), config)
+    </script>
     <!--corrected jquery version-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
@@ -659,12 +678,12 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
  -->
 
-    <!-- <script>
-            const dataTable = new simpleDatatables.DataTable("#myTable2", {
-                searchable: false,
-                fixedHeight: true,
-            })
-        </script> -->
+    <script>
+        const dataTable = new simpleDatatables.DataTable("#myTable2", {
+            searchable: true,
+            fixedHeight: true,
+        })
+    </script>
     <script src="assets/js/main.js"></script>
 </body>
 

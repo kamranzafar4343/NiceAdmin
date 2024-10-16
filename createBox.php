@@ -587,6 +587,19 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
     <script>
         $(document).ready(function() {
 
+            const config = {
+                search: true, // Enable search feature
+                creatable: false, // Disable creatable selection
+                clearable: false, // Disable clearable selection
+                maxHeight: '360px', // Max height for showing scrollbar
+                size: 'sm', // Size of the select, can be 'sm' or 'lg'
+            };
+
+            // Initialize dselect for the initial dropdowns
+            dselect(document.querySelector('#lev1'), config);
+            dselect(document.querySelector('#level2'), config);
+            dselect(document.querySelector('#level3'), config);
+
             // When company is changed, fetch the branches
             $('#lev1').change(function() {
                 var company_id = $(this).val();
@@ -608,7 +621,8 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                             $.each(branches, function(index, branch) {
                                 $('#level2').append('<option value="' + branch.branch_id + '">' + branch.acc_lev_2 + ' - ' + branch.account_desc + '</option>');
                             });
-
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#level2'), config);
 
                         } catch (e) {
                             console.error("Invalid JSON response", response);
@@ -634,11 +648,13 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                             // Clear existing dept's
                             $('#level3').empty();
                             $('#level3').append('<option value="">Select a Department</option>');
+
                             // Add the new options from the response
                             $.each(departments, function(index, department) {
                                 $('#level3').append('<option value="' + department.dept_id + '">' + department.acc_lev_3 + ' - ' + department.acc_desc + '</option>');
                             });
-
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#level3'), config);
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
@@ -646,16 +662,6 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 });
             });
         });
-    </script>
-    <script>
-        const config = {
-            search: true, // Toggle search feature. Default: false
-            creatable: false, // Creatable selection. Default: false
-            clearable: false, // Clearable selection. Default: false
-            maxHeight: '360px', // Max height for showing scrollbar. Default: 360px
-            size: '', // Can be "sm" or "lg". Default ''
-        }
-        dselect(document.querySelector('#lev1'), config)
     </script>
     <!--corrected jquery version-->
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>

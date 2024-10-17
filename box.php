@@ -480,7 +480,7 @@ if ($resultData->num_rows > 0) {
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
-                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                        echo '<table class="table datatable mt-4">
                     <thead>
                         <tr>
                             <th scope="col" style="width: 13%;">Account</th>

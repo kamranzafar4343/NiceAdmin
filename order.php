@@ -410,7 +410,7 @@ $resultShowOrders = $conn->query($showOrders);
             <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
           </a>
         </li>End Work Orders Nav -->
-        <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                         <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
@@ -431,7 +431,7 @@ $resultShowOrders = $conn->query($showOrders);
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link collapse" href="supplies_order.php" >
+                            <a class="nav-link collapse" href="supplies_order.php">
                                 <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
                             </a>
                         </li>
@@ -534,25 +534,34 @@ $resultShowOrders = $conn->query($showOrders);
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title">List of Delievry Orders</h5>
+                    <h5 class="card-title">List of Delivery Orders</h5>
                     <?php
                     // Check if there are any results
                     if ($resultShowOrders->num_rows > 0) {
                         // Display table
-                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                        echo '<table class="table datatable mt-4">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 10%;">order no</th>
-                            <th scope="col" style="width: 10%;">Company</th>
-                            <th scope="col" style="width: 15%;">Branch</th>
-                             <th scope="col" style="width: 10%;">Box</th>
-                            <th scope="col" style="width: 10%;">Item</th>
-                            <th scope="col" style="width: 17%;">requestor</th>                        
-                            <th scope="col" style="width: 15%;">request date</th>
-                            <th scope="col" style="width: 15%;">Actions</th>
+                            <th scope="col" style="width: 17%;">Account Description</th>
+                        <th scope="col" style="width: 10%;">Workorder no</th>
+                            <th scope="col" style="width: 10%;">Account Code</th>
+                            <th scope="col" style="width: 7%;">Priority</th>
+                             <th scope="col" style="width: 10%;">Required By</th>
+                        
+                             <th scope="col" style="width: 10%;">Contact Person</th>
+                            <th scope="col" style="width: 10%;">Phone</th>                        
+                            <th scope="col" style="width: 14%;">Pickup/Delivery Address</th>
+                            <th scope="col" style="width: 7%;">Object Code</th>
+                             <th scope="col" style="width: 9%;">Barcode</th>
+                             <th scope="col" style="width: 9%;">Alt code</th>
+                             <th scope="col" style="width: 10%;">Requestor Name</th>
+                             <th scope="col" style="width: 7%;">Role</th>
+                             <th scope="col" style="width: 10%;">Date</th>
+                             <th scope="col" style="width: 18%;">Description</th>
+                             
                         </tr>
                     </thead>
-                    <tbody style="table-layout: fixed;">';
+                    <tbody>';
 
                         // Counter variable
                         $counter = 1;
@@ -562,83 +571,76 @@ $resultShowOrders = $conn->query($showOrders);
                             echo '<tr>';
                             echo '<td>' . ($row['order_no']) . '</td>';
 
-                            // Get company id
-                            $comp_id = $row['company'];
+                            // Get specific company id
+                            $comp_id = $row['level1'];
                             $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
                             $result3 = $conn->query($sql3);
                             if ($result3->num_rows > 0) {
                                 $row3 = $result3->fetch_assoc();
-                                $comp_name = $row3['comp_name'];
-                            }
-                            //Show result
-                            echo '<td>' . $comp_name . '</td>';
-
-                            //get brnch id
-                            $branch_id = $row['branch'];
-                            $branchSql = "Select * From branch where branch_id = '$branch_id'";
-                            $branchResult = $conn->query($branchSql);
-                            if ($branchResult->num_rows > 0) {
-                                $branchRow = $branchResult->fetch_assoc();
-                                $brnach_name = $branchRow['branch_name'];
-                            }
-                            //show result
-                            echo '<td>' . $brnach_name . '<td>';
-
-                            //get box id
-                            $box_id = $row['box'];
-                            $boxSQL = "Select * From box where box_id = '$box_id'";
-                            $boxSQLresult = $conn->query($boxSQL);
-                            if ($boxSQLresult->num_rows > 0) {
-                                $boxRow = $boxSQLresult->fetch_assoc();
-                                $box_barc = $boxRow['barcode'];
-                            }
-                            //Show result
-                            echo  $box_barc;
-
-
-                            $empSQL = "Select * From employee where branch_FK_emp = '$branch_id'";
-                            $empSQLresult = $conn->query($empSQL);
-                            if ($empSQLresult->num_rows > 0) {
-                                $empRow = $empSQLresult->fetch_assoc();
-                                $Role = $empRow['Authority'];
-                                $Auth_status = $empRow['auth_status'];
+                                $acc_lev1 = $row3['acc_lev_1'];
+                                $acc_desc1 = $row3['acc_desc'];
                             }
 
 
-
-
-                            echo '<td>' . ($row["item"]) . '</td>';
-
-                            //get emp id to show name
-                            $emp_id = $row['name'];
-                            $emplySql = "Select * From employee where emp_id = '$emp_id'";
-                            $emplyResult = $conn->query($emplySql);
-                            if ($emplyResult->num_rows > 0) {
-                                $emplyRow = $emplyResult->fetch_assoc();
-                                $emply_name = $emplyRow['name'];
+                            //in case if no branch selected 
+                            if ($row['level2'] == "0") {
+                                $acc_lev2 = "null";
+                                $acc_desc2 = "null";
+                            } else {
+                                // Get specific branch
+                                $branch_id = $row['level2'];
+                                $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
+                                $result7 = $conn->query($sql7);
+                                if ($result7->num_rows > 0) {
+                                    $row7 = $result7->fetch_assoc();
+                                    $acc_lev2 = $row7['acc_lev_2'];
+                                    $acc_desc2 = $row7['account_desc'];
+                                }
                             }
 
-                            echo '<td> <span class="req_span">Name:  </span>' . $emply_name . '<br>  <span class="req_span">Role:  </span>' . $Role . '</td>';
+                            //in case if no dept selected
+                            if ($row['level3'] == "0") {
+                                $acc_lev3 = "null";
+                                $acc_desc3 = "null";
+                            } else {
+                                // Get specific dept id
+                                $dept_id = $row['level3'];
+                                $sql9 = "SELECT * FROM departments WHERE dept_id= '$dept_id'";
+                                $result9 = $conn->query($sql9);
+                                if ($result9->num_rows > 0) {
+                                    $row9 = $result9->fetch_assoc();
+                                    $acc_lev3 = $row9['acc_lev_3'];
+                                    $acc_desc3 = $row9['acc_desc'];
+                                }
+                            }
+                            // Show account
+                            echo '<td>' . $acc_lev1 . (" / " . $acc_lev2) . (" / " . $acc_lev3) . '</td>';
+                            echo '<td>' . $acc_desc1 . " / " . $acc_desc2 . " / " . $acc_desc3 . '</td>';
+
+
+                            echo '<td>';
+                            if ($row["priority"] == 'Regular') {
+                                // Display a green badge for "Regular"
+                                echo '<span class="badge badge-pill badge-success">' . $row["priority"] . '</span>';
+                            } elseif ($row["priority"] == 'Urgent') {
+                                // Display a red icon for "Urgent"
+                                echo '<span class="badge badge-pill badge-danger">' . $row["priority"] . '</span>';
+                            }
+                            echo '</td>';
+
                             echo '<td>' . ($row["date"]) . '</td>';
-                    ?>
-                            <td>
-                                <div style="display: flex; gap: 10px;">
-
-                                    <!-- <a type="button" class="btn btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch']; ?>"><i style="width: 20px;" class="ri-shopping-cart-2-line"></i></a> -->
-
-                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="OrderUpdate.php?id=<?php echo $row['branch']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-
-                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                        onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=<?php echo $row['branch']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                    <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a>
-
-                                    <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
-                    onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=<?php echo $row['id']; ?>">Access</a> -->
+                            echo '<td>' . ($row["foc"]) . '</td>';
+                            echo '<td>' . ($row["foc_phone"]) . '</td>';
+                            echo '<td>' . ($row["pickup_address"]) . '</td>';
+                            echo '<td>' . ($row["object_code"]) . '</td>';
+                            echo '<td>' . ($row["barcode"]) . '</td>';
+                            echo '<td>' . ($row["alt"]) . '</td>';
+                            echo '<td>' . ($row["requestor"]) . '</td>';
+                            echo '<td>' . ($row["role"]) . '</td>';
+                            echo '<td>' . ($row["req_date"]) . '</td>';
+                            echo '<td>' . ($row["description"]) . '</td>';
 
 
-                                </div>
-                            </td>
-                    <?php
                             echo '</tr>';
                         }
                         echo '</tbody></table>';
@@ -665,6 +667,24 @@ $resultShowOrders = $conn->query($showOrders);
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+
 </body>
 
 </html>

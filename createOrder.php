@@ -38,9 +38,9 @@ if (isset($_POST['submit'])) {
     $object_code = mysqli_real_escape_string($conn, $_POST['object_code']);
     $barcode_sel = mysqli_real_escape_string($conn, $_POST['barcode_select']);
     $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
-    $requestor = mysqli_real_escape_string($conn, $_POST['selector']);
-    $role = mysqli_real_escape_string($conn, $_POST['requestor']);
-    $req_date = mysqli_real_escape_string($conn, $_POST['designation']);
+    $requestor = mysqli_real_escape_string($conn, $_POST['requestor']);
+    $role = mysqli_real_escape_string($conn, $_POST['designation']);
+    $req_date = mysqli_real_escape_string($conn, $_POST['req_date']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
 
 
@@ -561,13 +561,13 @@ if (isset($_POST['submit'])) {
                     <!-- Select lev 2 of selected account -->
                     <div class="col-md-4">
                         <label for="lev2">Account level 2:</label>
-                        <select id="lev2" class="form-select" name="level2" required>
+                        <select id="lev2" class="form-select" name="level2" >
                             <option value="">Select level 2</option>
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label for="lev3">Account level 3:</label>
-                        <select id="lev3" class="form-select" name="level3" required>
+                        <select id="lev3" class="form-select" name="level3" >
                             <option value="">Select level 3</option>
                         </select>
                     </div>

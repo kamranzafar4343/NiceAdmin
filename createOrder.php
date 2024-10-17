@@ -25,45 +25,43 @@ if ($resultData->num_rows > 0) {
 $error = false;
 
 if (isset($_POST['submit'])) {
-    $company_FK_emp = mysqli_real_escape_string($conn, $_POST['comp_FK_emp']);
-    $dept_FK_emp = mysqli_real_escape_string($conn, $_POST['dept_FK_emp']);
-    $branch_FK_emp = mysqli_real_escape_string($conn, $_POST['branch_FK_emp']);
-    $barcode = mysqli_real_escape_string($conn, $_POST['item_barcode']);
-    $req_name = mysqli_real_escape_string($conn, $_POST['name']);
-    $req_date = mysqli_real_escape_string($conn, $_POST['date']);
     $order_no = mysqli_real_escape_string($conn, $_POST['order_no']);
+    $creator = mysqli_real_escape_string($conn, $_POST['creater']);
+    $level1 = mysqli_real_escape_string($conn, $_POST['level1']);
+    $level2 = mysqli_real_escape_string($conn, $_POST['level2']);
+    $level3 = mysqli_real_escape_string($conn, $_POST['level3']);
+    $priority = mysqli_real_escape_string($conn, $_POST['purirty']);
+    $date = mysqli_real_escape_string($conn, $_POST['date']);
+    $foc = mysqli_real_escape_string($conn, $_POST['foc']);
+    $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
+    $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']);
+    $object_code = mysqli_real_escape_string($conn, $_POST['object_code']);
+    $barcode_sel = mysqli_real_escape_string($conn, $_POST['barcode_select']);
+    $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
+    $requestor = mysqli_real_escape_string($conn, $_POST['selector']);
+    $role = mysqli_real_escape_string($conn, $_POST['requestor']);
+    $req_date = mysqli_real_escape_string($conn, $_POST['designation']);
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
 
 
     //check that no duplicate order_no exist
-    $checkOrder = "SELECT * FROM orders Where `order_no` = '$order_no' OR `box` ='$box_FK_emp'";
+    $checkOrder = "SELECT * FROM orders Where `order_no` = '$order_no' OR `barcode` ='$barcode_sel'";
     $result_dup_order = mysqli_query($conn, $checkOrder);
 
     if (mysqli_num_rows($result_dup_order) > 0) {
-        die('Error: duplicate order no or box');
+        die('Error: duplicate order no or barcode');
     } else {
-        // exceed only if emp exist for that specific company and Authorized
-        $empCheckQuery = "SELECT * FROM `employee` Where branch_FK_emp = '$branch_FK_emp' AND auth_status = 'Authorized'";
+        $sql = "INSERT INTO orders (order_no, creator, level1, level2, level3, priority, date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
+     VALUES ('$order_no', '$creator', '$level1', '$level2', '$level3', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description')";
 
-        $result = (mysqli_query($conn, $empCheckQuery));
-
-        if (mysqli_num_rows($result) > 0) {
-            $sql = "INSERT INTO orders (company, branch, item, name, date, order_no) 
-     VALUES ('$company_FK_emp', '$branch_FK_emp' , '$barcode', '$req_name', '$req_date', '$order_no')";
-
-            if ($conn->query($sql) === TRUE) {
-                header("Location: order.php");
-                exit();
-            } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
-            }
+        if ($conn->query($sql) === TRUE) {
+            header("Location: order.php");
+            exit();
         } else {
-            echo 'emp not authorized';
+            echo "Error: " . $sql . "<br>" . $conn->error;
         }
     }
 }
-
-
-$selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
 ?>
 
@@ -147,9 +145,9 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <script src="https://code.jquery.com/jquery/3.7.1/jquery.min.js"></script>
     <!--choosen-js css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
-        <!--choosen js-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
- 
+    <!--choosen js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+
 
     <style>
         /* form text sizing */
@@ -653,7 +651,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
                     <div class="col-md-3">
                         <label class="form-label">request date</label>
-                        <input type="datetime-local" class="form-control" name="date" required>
+                        <input type="datetime-local" class="form-control" name="req_date" required>
                     </div>
                     <!--  Comments -->
                     <div class="col-md-5">

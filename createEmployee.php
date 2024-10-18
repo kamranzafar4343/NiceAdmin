@@ -319,22 +319,23 @@ End Search Bar -->
     </li><!-- End Dashboard Nav -->
     <li class="nav-item">
       <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
       </a>
     </li>
 
+
+    <li class="nav-item">
+                    <a class="nav-link collapsed" href="account.php">
+                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
 
     <li class="nav-item">
       <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
       </a>
     </li>
 
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-      </a>
-    </li>
     <li class="nav-item">
       <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
         <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>

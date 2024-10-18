@@ -24,13 +24,13 @@ if ($resultData->num_rows > 0) {
 
 $result = [];
 $box_data = null;
-// Get company ID from query string
-$box_id = $_GET['id'];
+// Get order ID from query string
+$order_id = $_GET['id'];
 
 // Fetch company details
-$sql = "SELECT * FROM box WHERE box_id = $box_id";
+$sql = "SELECT * FROM orders WHERE order_id = $order_id";
 $result = $conn->query($sql);
-$box_data = $result->fetch_assoc();
+$order_data = $result->fetch_assoc();
 
 ?>
 
@@ -372,16 +372,22 @@ $box_data = $result->fetch_assoc();
             </li><!-- End Tables Nav -->
 
             <li class="nav-item">
+                    <a class="nav-link collapsed" href="account.php">
+                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+
+            <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
                     <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>
 
             <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
-          <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+                    <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
 
             <li class="nav-heading">Pages</li>
 
@@ -436,47 +442,47 @@ $box_data = $result->fetch_assoc();
         </div>
 
         <!-- Main content container -->
-        <div class="d-flex flex-wrap">
+        <div class="">
 
             <!-- Card container -->
-            <div class="col-md-6 col-lg-4 pb-3">
-                <div class="card card-custom bg-white border-white border-0">
+<div class="col-md-12 col-lg-12 pb-3">
+    <div class="card card-custom bg-white border-white border-0">
+        <div class="card-body list-group mt-3">
+            <h4 class="card-title-info"><b>Work Order</b></h4>
 
-                    <div class="card-body list-group mt-3">
-
-                        <h4 class="card-title-info"><b>Box Info</b></h4>
-
-                        <ul class="list-group list-group-horizontal d-flex justify-content-between">
-                            <li class="list-group-item" style="color:grey;  width: 35%;">Created_at</li>
-                            <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $box_data['created_at']; ?></li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal-sm d-flex justify-content-between">
-                            <li class="list-group-item" style="color:grey; width: 39%;">Received_at</li>
-                            <li class="list-group-item text-end" style="text-align: right; width: 55%;"><?php echo $box_data['rec_date']; ?></li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal-md d-flex justify-content-between">
-                            <!--change name to contact person or focal person-->
-                            <li class="list-group-item" style="color:grey; width:50%">Sender</li>
-                            <li class="list-group-item" style="text-align: right;width: 55%;"><?php echo $box_data['sender']; ?></li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
-                            <li class="list-group-item" style="color:grey; width: 39%;">Received Via</li>
-                            <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $box_data['rec_via']; ?></li>
-                        </ul>
-
-                        <ul class="list-group list-group-horizontal-lg d-flex justify-content-between mt-2">
-                            <li class="list-group-item" style="color:grey; width: 10%;"></li>
-                            <li class="list-group-item" style="text-align: right; width: 90%;">
-                                <?php
-                                echo '<img class="barcode" alt="' . ($box_data["barcode"]) . '" src="barcode.php?text=' . urlencode($box_data["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>';
-                                ?>
-                            </li>
-                        </ul>
-                        <h4 class="card-title-info"><b><?php echo $box_data['barcode']; ?></b></h4>
-
-                    </div>
+            <div class="row">
+                <!-- First Column -->
+                <div class="col-6">
+                    <ul class="list-group">
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['order_no']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['creator']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['priority']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['date']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['foc']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['foc_phone']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['pickup_address']); ?></li>
+                    </ul>
+                </div>
+                
+                <!-- Second Column -->
+                <div class="col-6">
+                    <ul class="list-group">
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['object_code']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['barcode']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['alt']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['requestor']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['role']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['req_date']); ?></li>
+                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['description']); ?></li>
+                    </ul>
                 </div>
             </div>
+
+            <!-- Print Button -->
+            <button class="btn btn-primary mt-3" onclick="window.print()">Print</button>
+        </div>
+    </div>
+</div>
 
         </div>
         </div>

@@ -148,6 +148,9 @@ if (isset($_POST['submit'])) {
     <!--choosen js-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
 
+    <!-- dselect -->
+    <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
+    <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
 
     <style>
         /* form text sizing */
@@ -389,13 +392,19 @@ if (isset($_POST['submit'])) {
                 <!-- Admin-only Links -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="Companies.php">
-                        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Companies Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="account.php">
+                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
@@ -561,26 +570,16 @@ if (isset($_POST['submit'])) {
                     <!-- Select lev 2 of selected account -->
                     <div class="col-md-4">
                         <label for="lev2">Account level 2:</label>
-                        <select id="lev2" class="form-select" name="level2" >
+                        <select id="lev2" class="form-select" name="level2">
                             <option value="">Select level 2</option>
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label for="lev3">Account level 3:</label>
-                        <select id="lev3" class="form-select" name="level3" >
+                        <select id="lev3" class="form-select" name="level3">
                             <option value="">Select level 3</option>
                         </select>
                     </div>
-
-                    <!-- for the status -->
-                    <!-- <div class="col-md-4">
-                        <label for="status" class="form-label">Status</label>
-                        <br>
-                        <input type="checkbox" name="Print" id="Print">
-                        <label for="Print"> Print</label>
-                    </div> -->
-
-                    <!-- for the services Purirty -->
 
                     <div class="col-md-3">
                         <label for="purirty" class="form-label">Service Priority</label>
@@ -619,17 +618,18 @@ if (isset($_POST['submit'])) {
                     <!-- Object Code -->
                     <div class="col-md-3">
                         <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" required>
-                            <!-- <option value="Container">select object code</option> -->
-                            <!-- <option value="FileFolder">Barcode</option> -->
+                        <select class="form-select" id="object_code" name="object_code" onchange="updateBarcodeInput()" required>
+                            <option value="">Select object code</option>
                             <option value="Container">Container</option>
                             <option value="FileFolder">FileFolder</option>
                         </select>
                     </div>
                     <!-- Select Barcode -->
                     <div class="col-md-4">
-                        <label for="barcode_select" class="form-label">Enter Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
+                        <label for="barcode_select">Select Barcode:</label>
+                        <select id="barcode_select" class="form-select" name="barcode_select">
+                            <option value="">Select a Barcode</option>
+                        </select>
                     </div>
                     <!-- FOR the alternative code -->
                     <div class="col-md-4">
@@ -732,7 +732,23 @@ if (isset($_POST['submit'])) {
 
 
     <script>
+        
         $(document).ready(function() {
+
+            const config = {
+                search: true, // Enable search feature
+                creatable: false, // Disable creatable selection
+                clearable: false, // Disable clearable selection
+                maxHeight: '360px', // Max height for showing scrollbar
+                size: 'sm', // Size of the select, can be 'sm' or 'lg'
+            };
+
+            // Initialize dselect for the initial dropdowns
+            dselect(document.querySelector('#lev1'), config);
+            dselect(document.querySelector('#lev2'), config);
+            dselect(document.querySelector('#lev3'), config);
+            dselect(document.querySelector('#object_code'), config)
+
             // When company is changed, fetch the branches
             $('#lev1').change(function() {
                 var company_id = $(this).val();
@@ -754,6 +770,8 @@ if (isset($_POST['submit'])) {
                             $.each(branches, function(index, branch) {
                                 $('#lev2').append('<option value="' + branch.branch_id + '">' + branch.acc_lev_2 + ' - ' + branch.account_desc + '</option>');
                             });
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#lev2'), config);
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
@@ -782,18 +800,57 @@ if (isset($_POST['submit'])) {
                             $.each(departments, function(index, department) {
                                 $('#lev3').append('<option value="' + department.dept_id + '">' + department.acc_lev_3 + ' - ' + department.acc_desc + '</option>');
                             });
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#lev3'), config);
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
                     }
                 });
-            });
-        });
-    </script>
 
-    <script>
-        jQuery('#lev2').chosen();
-        jQuery('#lev3').chosen();
+            });
+
+            //get company, dept, branch
+            var company = getElementById('lev1').value;
+            var branch = getElementById('lev2').value;
+            var dept = getElementById('lev3').value;
+            var barcode = getElementById('barcode_select').value;
+            
+            if(company && branch ){
+               // When company is changed, fetch the barcodes
+            $('lev2').change(function() {
+                var branch_id = $(this).val();
+
+                // AJAX request to get barcodes for the selected company
+                $.ajax({
+                    url: 'get_branchBarcode.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var boxes = JSON.parse(response); //return the json response as an array
+                            // Clear existing branches
+                            $('#barcode_select').empty();
+                            $('#barcode_select').append('<option value="">Select Barcode</option>');
+                            // Add the new options from the response
+                            $.each(boxes, function(index, box) {
+                                $('#barcode_select').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
+                            });
+                            
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            }); 
+            
+        }
+            else if(company && branch && dept){
+
+            }
+        });
     </script>
 
     <script src="assets/js/main.js"></script>

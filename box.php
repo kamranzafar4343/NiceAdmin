@@ -386,13 +386,19 @@ if ($resultData->num_rows > 0) {
                 <!-- Admin-only Links -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="Companies.php">
-                        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Companies Nav -->
 
                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="account.php">
+                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+
+                <li class="nav-item">
                     <a class="nav-link active" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
@@ -419,7 +425,7 @@ if ($resultData->num_rows > 0) {
 
                 <li class="nav-item">
                     <a class="nav-link active" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
@@ -501,6 +507,7 @@ if ($resultData->num_rows > 0) {
 
                         while ($row = $result->fetch_assoc()) {
                             echo '<tr>';
+
                             // Get specific company id
                             $comp_id = $row['level1'];
                             $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
@@ -511,7 +518,11 @@ if ($resultData->num_rows > 0) {
                                 $acc_desc1 = $row3['acc_desc'];
                             }
                          
-
+                              //in case if no branch selected 
+                            if ($row['level2'] == "0") {
+                                $acc_lev2 = "null";
+                                $acc_desc2 = "null";}
+                                else{
                             // Get specific branch id
                             $branch_id = $row['level2'];
                             $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
@@ -521,7 +532,12 @@ if ($resultData->num_rows > 0) {
                                 $acc_lev2 = $row7['acc_lev_2'];
                                 $acc_desc2 = $row7['account_desc'];
                             }
-                            
+                        }
+                        //in case if no dept selected
+                        if ($row['level3'] == "0") {
+                            $acc_lev3 = "null";
+                            $acc_desc3 = "null";
+                        } else {
                             // Get specific dept id
                             $dept_id = $row['level3'];
                             $sql9 = "SELECT * FROM departments WHERE dept_id= '$dept_id'";
@@ -531,6 +547,7 @@ if ($resultData->num_rows > 0) {
                                 $acc_lev3 = $row9['acc_lev_3'];
                                 $acc_desc3 = $row9['acc_desc'];
                             }
+                        }
 
                             // Show account
                             echo '<td>' . $acc_lev1 ." / ". $acc_lev2 . " / ". $acc_lev3 . '</td>';

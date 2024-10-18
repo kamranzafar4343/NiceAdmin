@@ -363,13 +363,19 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                 <!-- Admin-only Links -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="Companies.php">
-                        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Companies Nav -->
 
                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="account.php">
+                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+                
+                <li class="nav-item">
                     <a class="nav-link active" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
@@ -396,7 +402,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
 
                 <li class="nav-item">
                     <a class="nav-link active" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
@@ -500,7 +506,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!-- FOR the alternative code -->
                     <div class="col-md-6">
                         <label for="alt_code" class="form-label">Alt Code</label>
-                        <input type="text" class="form-control" id="alt_code" name="alt_code">
+                        <input type="text" class="form-control" id="alt_code" name="alt_code" maxlength="8" placeholder="Enter Alt code">
                     </div>
                     <!--  Description -->
                     <div class="col-md-6">
@@ -541,16 +547,22 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
         function updateBarcodeInput() {
             const object_type = document.getElementById('object_code');
             const barcode_input = document.getElementById('barcode_select');
+            const alt_input = document.getElementById('alt_code');
 
             if (object_type.value === 'Container') {
                 barcode_input.maxLength = 7;
+                alt_input.maxLength = 7;
                 barcode_input.placeholder = "Enter 7 digit Container Barcode";
+                alt_input.placeholder = "Enter 7 digit Container alt code";
             } else {
                 barcode_input.maxLength = 8;
+                alt_input.maxLength = 8;
                 barcode_input.placeholder = "Enter 8 digit Filefolder Barcode";
+                alt_input.placeholder = "Enter 8 digit Filefolder alt code";
             }
             //clear input on type change
             barcode_input.value = "";
+            alt_input.value = "";
         }
     </script>
 

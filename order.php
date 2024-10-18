@@ -395,13 +395,19 @@ $resultShowOrders = $conn->query($showOrders);
                 <!-- Admin-only Links -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="Companies.php">
-                        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Companies Nav -->
 
                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="account.php">
+                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+                
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
@@ -459,7 +465,7 @@ $resultShowOrders = $conn->query($showOrders);
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
@@ -542,12 +548,12 @@ $resultShowOrders = $conn->query($showOrders);
                         echo '<table class="table datatable mt-4">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 17%;">Account Description</th>
+                        <th scope="col" style="width: 17%;">Action</th>
+                            <th scope="col" style="width: 20%;">Account Description</th>
                         <th scope="col" style="width: 10%;">Workorder no</th>
                             <th scope="col" style="width: 10%;">Account Code</th>
                             <th scope="col" style="width: 7%;">Priority</th>
                              <th scope="col" style="width: 10%;">Required By</th>
-                        
                              <th scope="col" style="width: 10%;">Contact Person</th>
                             <th scope="col" style="width: 10%;">Phone</th>                        
                             <th scope="col" style="width: 14%;">Pickup/Delivery Address</th>
@@ -569,7 +575,24 @@ $resultShowOrders = $conn->query($showOrders);
                         // Loop through results
                         while ($row = $resultShowOrders->fetch_assoc()) {
                             echo '<tr>';
-                            echo '<td>' . ($row['order_no']) . '</td>';
+                            ?>
+                            <td>
+                                <div style="display: flex; gap: 10px;">
+                                <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_id']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a> 
+                                <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="OrderUpdate.php?id="><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+
+                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                                        onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id="> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                    <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
+
+                                    <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
+                    onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=">Access</a> -->
+
+
+                                </div>
+                            </td>
+                    <?php
+                            
 
                             // Get specific company id
                             $comp_id = $row['level1'];
@@ -613,9 +636,16 @@ $resultShowOrders = $conn->query($showOrders);
                                     $acc_desc3 = $row9['acc_desc'];
                                 }
                             }
+                            //account descritpon
+                            echo '<td>' . $acc_desc1 . " / " . $acc_desc2 . " / " . $acc_desc3 . '</td>';
+
+
+                            //workorder_no
+                            echo '<td>' . ($row['order_no']) . '</td>';
+
                             // Show account
                             echo '<td>' . $acc_lev1 . (" / " . $acc_lev2) . (" / " . $acc_lev3) . '</td>';
-                            echo '<td>' . $acc_desc1 . " / " . $acc_desc2 . " / " . $acc_desc3 . '</td>';
+                            
 
 
                             echo '<td>';
@@ -639,7 +669,6 @@ $resultShowOrders = $conn->query($showOrders);
                             echo '<td>' . ($row["role"]) . '</td>';
                             echo '<td>' . ($row["req_date"]) . '</td>';
                             echo '<td>' . ($row["description"]) . '</td>';
-
 
                             echo '</tr>';
                         }

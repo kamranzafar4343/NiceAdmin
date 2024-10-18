@@ -419,28 +419,8 @@ if (isset($_POST['submit'])) {
                                 <i class="bi bi-circle"></i><span>Delivery Workorder</span>
                             </a>
                         </li>
-                        <!-- <li>
-                            <a class="nav-link collapse" href="access_order.php">
-                                <i class="bi bi-circle"></i><span>Acess Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="destroy_order.php">
-                                <i class="bi bi-circle"></i><span>Destroy Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="supplies_order.php">
-                                <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="permnentout_order.php">
-                                <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
-                            </a>
-                        </li>
                     </ul>
-                </li> -->
+                </li> 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -542,7 +522,7 @@ if (isset($_POST['submit'])) {
                     <!-- Select lev 2 of selected account -->
                     <div class="col-md-4">
                         <label for="lev2">Account level 2:</label>
-                        <select id="lev2" class="form-select" name="level2">
+                        <select id="lev2" class="form-select" name="level2" required>
                             <option value="">Select level 2</option>
                         </select>
                     </div>
@@ -572,7 +552,7 @@ if (isset($_POST['submit'])) {
 
                     <div class="col-md-3">
                         <label for="purirty" class="form-label">WO Type Action Code</label>
-                        <select class="form-select" id="" name="wo_typ_action">
+                        <select class="form-select" id="" name="wo_typ_action" required>
                         <option value="">Select Status</option>
                             <option value="Delivery">Delivery</option>
                             <option value="Open">Open</option>

@@ -25,10 +25,10 @@ if ($resultData->num_rows > 0) {
 $result = [];
 $box_data = null;
 // Get order ID from query string
-$order_id = $_GET['id'];
+$order_no = $_GET['id'];
 
 // Fetch company details
-$sql = "SELECT * FROM orders WHERE order_id = $order_id";
+$sql = "SELECT * FROM orders WHERE order_no = $order_no";
 $result = $conn->query($sql);
 $order_data = $result->fetch_assoc();
 
@@ -366,7 +366,7 @@ $order_data = $result->fetch_assoc();
 
 
             <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
@@ -384,7 +384,7 @@ $order_data = $result->fetch_assoc();
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li>

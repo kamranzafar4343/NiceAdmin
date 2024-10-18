@@ -25,7 +25,7 @@ if ($resultData->num_rows > 0) {
 $error = false;
 
 if (isset($_POST['submit'])) {
-    $order_no = mysqli_real_escape_string($conn, $_POST['order_no']);
+   
     $creator = mysqli_real_escape_string($conn, $_POST['creater']);
     $level1 = mysqli_real_escape_string($conn, $_POST['level1']);
     $level2 = mysqli_real_escape_string($conn, $_POST['level2']);
@@ -44,15 +44,15 @@ if (isset($_POST['submit'])) {
     $description = mysqli_real_escape_string($conn, $_POST['description']);
 
 
-    //check that no duplicate order_no exist
-    $checkOrder = "SELECT * FROM orders Where `order_no` = '$order_no' OR `barcode` ='$barcode_sel'";
+    //check that no duplicate barcode exist
+    $checkOrder = "SELECT * FROM orders Where `barcode` ='$barcode_sel'";
     $result_dup_order = mysqli_query($conn, $checkOrder);
 
     if (mysqli_num_rows($result_dup_order) > 0) {
-        die('Error: duplicate order no or barcode');
+        die('Error: workorder with this barcode already exist');
     } else {
-        $sql = "INSERT INTO orders (order_no, creator, level1, level2, level3, priority, date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
-     VALUES ('$order_no', '$creator', '$level1', '$level2', '$level3', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description')";
+        $sql = "INSERT INTO orders ( creator, level1, level2, level3, priority, date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
+     VALUES ( '$creator', '$level1', '$level2', '$level3', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description')";
 
         if ($conn->query($sql) === TRUE) {
             header("Location: order.php");
@@ -307,7 +307,7 @@ if (isset($_POST['submit'])) {
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Add Delivery Order</title>
+    <title>Create workOrder</title>
 
 
 </head>
@@ -418,7 +418,7 @@ if (isset($_POST['submit'])) {
                                 <i class="bi bi-circle"></i><span>Delivery Workorder</span>
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a class="nav-link collapse" href="access_order.php">
                                 <i class="bi bi-circle"></i><span>Acess Workorder</span>
                             </a>
@@ -439,7 +439,7 @@ if (isset($_POST['submit'])) {
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -532,7 +532,7 @@ if (isset($_POST['submit'])) {
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Delivery Workorder</h2>
+        <h2>Create a Workorder</h2>
     </div>
     <!-- End Header form -->
 
@@ -541,10 +541,7 @@ if (isset($_POST['submit'])) {
             <div class="card-body mt-3">
                 <form class="row g-3 needs-validation" action="" method="POST">
 
-                    <div class="col-md-4">
-                        <label class="form-label">order no.</label>
-                        <input type="text" class="form-control" name="order_no" id="order_no" required>
-                    </div>
+                  
                     <div class="col-md-4">
                         <label for="creater" class="form-label">Creator</label>
                         <input type="text" class="form-control" id="creater" name="creater" value="<?php echo ($_SESSION['role'] == 'admin') ? 'admin' : 'user'; ?>" readonly>
@@ -584,8 +581,15 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-3">
                         <label for="purirty" class="form-label">Service Priority</label>
                         <select class="form-select" id="purirty" name="purirty" required>
-                            <option value="Urgent">Urgent</option>
-                            <option value="Regular">Regular</option>
+                        <option value="">Select Service Priority</option>
+                            
+                            <option value="Urgent">Urgent - Rush Same Day</option>
+                            <option value="Regular">Regular - Next Working Day</option>
+                            <option value="Regular">Box Pickup</option>
+                            <option value="Regular">Cancel Work Order</option>
+                            <option value="Regular">Permanantly Out Boxes</option>
+                            <option value="Regular">Supplies - Packing Material</option>
+
                             <!-- <option value="FileFolder">FileBOX</option>
                             <option value="FileFolder">Barcode</option> -->
                         </select>
@@ -627,9 +631,7 @@ if (isset($_POST['submit'])) {
                     <!-- Select Barcode -->
                     <div class="col-md-4">
                         <label for="barcode_select">Select Barcode:</label>
-                        <select id="barcode_select" class="form-select" name="barcode_select">
-                            <option value="">Select a Barcode</option>
-                        </select>
+                    <input type="text" class="form-control" id="barcode_select" name="barcode-select">    
                     </div>
                     <!-- FOR the alternative code -->
                     <div class="col-md-4">
@@ -747,7 +749,7 @@ if (isset($_POST['submit'])) {
             dselect(document.querySelector('#lev1'), config);
             dselect(document.querySelector('#lev2'), config);
             dselect(document.querySelector('#lev3'), config);
-            dselect(document.querySelector('#object_code'), config)
+            
 
             // When company is changed, fetch the branches
             $('#lev1').change(function() {

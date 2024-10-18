@@ -404,7 +404,7 @@ $resultShowOrders = $conn->query($showOrders);
                         <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
-                
+
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
@@ -554,17 +554,7 @@ $resultShowOrders = $conn->query($showOrders);
                             <th scope="col" style="width: 10%;">Account Code</th>
                             <th scope="col" style="width: 7%;">Priority</th>
                              <th scope="col" style="width: 10%;">Required By</th>
-                             <th scope="col" style="width: 10%;">Contact Person</th>
-                            <th scope="col" style="width: 10%;">Phone</th>                        
-                            <th scope="col" style="width: 14%;">Pickup/Delivery Address</th>
-                            <th scope="col" style="width: 7%;">Object Code</th>
-                             <th scope="col" style="width: 9%;">Barcode</th>
-                             <th scope="col" style="width: 9%;">Alt code</th>
-                             <th scope="col" style="width: 10%;">Requestor Name</th>
-                             <th scope="col" style="width: 7%;">Role</th>
-                             <th scope="col" style="width: 10%;">Date</th>
-                             <th scope="col" style="width: 18%;">Description</th>
-                             
+                             <th scope="col" style="width: 10%;">Request Date</th>
                         </tr>
                     </thead>
                     <tbody>';
@@ -659,17 +649,9 @@ $resultShowOrders = $conn->query($showOrders);
                             echo '</td>';
 
                             echo '<td>' . ($row["date"]) . '</td>';
-                            echo '<td>' . ($row["foc"]) . '</td>';
-                            echo '<td>' . ($row["foc_phone"]) . '</td>';
-                            echo '<td>' . ($row["pickup_address"]) . '</td>';
-                            echo '<td>' . ($row["object_code"]) . '</td>';
-                            echo '<td>' . ($row["barcode"]) . '</td>';
-                            echo '<td>' . ($row["alt"]) . '</td>';
-                            echo '<td>' . ($row["requestor"]) . '</td>';
-                            echo '<td>' . ($row["role"]) . '</td>';
+                            
                             echo '<td>' . ($row["req_date"]) . '</td>';
-                            echo '<td>' . ($row["description"]) . '</td>';
-
+                            
                             echo '</tr>';
                         }
                         echo '</tbody></table>';

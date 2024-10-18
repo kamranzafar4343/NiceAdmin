@@ -637,7 +637,7 @@ if (isset($_POST['submit'])) {
 
                         </div>
 
-                        <h2 style="color: #0056b3; margin-top: 35px;">Add Supplies</h2>
+                        <h2 style="color: #0056b3; margin-top: 35px;">Add Supplies<span style="color:#343a40;"><h5>(leave empty in case of no supplies)</h5></span></h2>
                         <!--add supplies-->
                     <div class="col-md-5">
                         <label for="object-type" class="form-label">Object type</label>

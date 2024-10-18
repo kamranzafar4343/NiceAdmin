@@ -545,9 +545,6 @@ End Search Bar -->
             <label for="address" class="form-label">Address</label>
             <input type="text" class="form-control" id="" name="address" required>
             <br>
-            <input type="text" class="form-control" id="" name="address1">
-            <br>
-            <input type="text" class="form-control" id="" name="address2">
 
           </div>
 

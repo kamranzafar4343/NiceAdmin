@@ -35,10 +35,10 @@ $rowBranches = mysqli_fetch_assoc($resultBranches);
 $branchCount = $rowBranches['branch_count'];
 
 //get no of items for item card
-$queryItem = "SELECT COUNT(*) AS item_count FROM item";
-$resultItem = mysqli_query($conn, $queryItem);
-$rowItem = mysqli_fetch_assoc($resultItem);
-$itemCount = $rowItem['item_count'];
+$queryDept = "SELECT COUNT(*) AS dept_count FROM departments";
+$resultDept = mysqli_query($conn, $queryDept);
+$rowDept = mysqli_fetch_assoc($resultDept);
+$DeptCount = $rowDept['dept_count'];
 ?>
 <?php
 include "sidebar.php";
@@ -149,14 +149,14 @@ include "sidebar.php";
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title-indexphp">Items</h5>
+                  <h5 class="card-title-indexphp">Departments</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="ri-shopping-cart-line"></i>
                     </div>
                     <div class="ps-3">
-                      <h6><?php echo $itemCount; ?></h6>
+                      <h6><?php echo $DeptCount; ?></h6>
 
 
                     </div>

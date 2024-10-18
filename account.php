@@ -29,19 +29,6 @@ $error = false;
 // SQL query to get company details
 $sql = "SELECT * FROM acc_range";
 $result = $conn->query($sql);
-// if($result === true){
-//     $row3= $result->fetch_assoc();
-//     $comp_id = $row['comp_id'];
-
-// $sql = "SELECT acc_range.*, compani.acc_lev_1 AS Level1, branches.acc_lev_2 AS level2
-//         FROM acc_range
-//          JOIN compani ON acc_range.level1= compani.acc_lev_1
-//         JOIN branches ON acc_range.level2 = branches.acc_lev_2";
-// $result = $conn->query($sql);
-
-
-
-// $conn->close();
 ?>
 
 
@@ -182,7 +169,7 @@ $result = $conn->query($sql);
         #fixedButtonBranch {
             position: relative;
             top: 110px;
-            left: 1187px;
+            left: 1129px;
         }
 
         .row {
@@ -273,6 +260,7 @@ $result = $conn->query($sql);
             border-radius: 5px;
             background-color: white;
             font-size: 0.8rem;
+            margin-top: 98px;
 
         }
 
@@ -451,7 +439,7 @@ $result = $conn->query($sql);
                 <!-- Admin-only Links -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="Companies.php">
-                        <i class="ri-building-4-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Companies Nav -->
 
@@ -474,8 +462,8 @@ $result = $conn->query($sql);
                 </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="branches.php">
-                        <i class="bi bi-compani"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Racks Nav -->
 
@@ -501,8 +489,8 @@ $result = $conn->query($sql);
                 </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="branches.php">
-                        <i class="bi bi-compani"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Racks Nav -->
 
@@ -538,14 +526,6 @@ $result = $conn->query($sql);
     <!--new table design-->
     <!-- Button to add new compani -->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'Acount_range.php';" class="btn btn-primary mb-3">Add Account Range</button>
-
-    <!-- Search bar for branches -->
-    <div class="search-container">
-        <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Search by name..." autofocus>
-            <input type="submit" value="Search" class="btn btn-success btn-success">
-        </form>
-    </div>
     <main id="main" class="main">
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
@@ -557,11 +537,11 @@ $result = $conn->query($sql);
                             <thead>
                                 <tr>
                                     <th scope="col" style="width: 5%;">#</th>
-                                    <th scope="col" style="width: 15%;">Account Level 1</th>
-                                    <th scope="col" style="width: 15%;">Account Level 2</th>
+                                    <th scope="col" style="width: 13%;">Account Code</th>
+                                    <th scope="col" style="width: 15%;">Account Description</th>
                                     <th scope="col" style="width: 10%;">Object Code</th>
-                                    <th scope="col" style="width: 15%;">Begin Code</th>
-                                    <th scope="col" style="width: 15%;">End Code</th>
+                                    <th scope="col" style="width: 13%;">Begin Code</th>
+                                    <th scope="col" style="width: 13%;">End Code</th>
                                     <!-- Show "Actions" column only if the user is an admin -->
                                     <?php if ($_SESSION['role'] == 'admin'): ?>
                                         <th scope="col" style="width: 10%;">Actions</th>
@@ -583,20 +563,23 @@ $result = $conn->query($sql);
                                         if ($result3->num_rows > 0) {
                                             $row3 = $result3->fetch_assoc();
                                             $acc_lev_1 = $row3['acc_lev_1'];
+                                            $acc1_desc = $row3['acc_desc'];
                                         }
-                                        // Show specific company name
-                                        echo '<td>' . $acc_lev_1 . '</td>';
+                                        
                                         ?>
                                          <?php
                                         $branch_id = $row['level2'];
-                                        $sql3 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
-                                        $result3 = $conn->query($sql3);
-                                        if ($result3->num_rows > 0) {
-                                            $row3 = $result3->fetch_assoc();
-                                            $acc_lev_2 = $row3['acc_lev_2'];
+                                        $sql4 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
+                                        $result4 = $conn->query($sql4);
+                                        if ($result4->num_rows > 0) {
+                                            $row4 = $result4->fetch_assoc();
+                                            $acc_lev_2 = $row4['acc_lev_2'];
+                                            $acc2_desc = $row4['account_desc'];
                                         }
-                                        // Show specific company name
-                                        echo '<td>' . $acc_lev_2 . '</td>';
+                                        // Show account code
+                                        echo '<td>' . $acc_lev_1 . " / ". $acc_lev_2. '</td>';
+
+                                        echo '<td>' .$acc1_desc . " / "  . $acc2_desc.'</td>';
                                         ?>
 
                                        

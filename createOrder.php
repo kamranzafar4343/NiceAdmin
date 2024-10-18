@@ -31,6 +31,7 @@ if (isset($_POST['submit'])) {
     $level2 = mysqli_real_escape_string($conn, $_POST['level2']);
     $level3 = mysqli_real_escape_string($conn, $_POST['level3']);
     $priority = mysqli_real_escape_string($conn, $_POST['purirty']);
+    $type_action = mysqli_real_escape_string($conn, $_POST['wo_typ_action']);
     $date = mysqli_real_escape_string($conn, $_POST['date']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
@@ -42,17 +43,18 @@ if (isset($_POST['submit'])) {
     $role = mysqli_real_escape_string($conn, $_POST['designation']);
     $req_date = mysqli_real_escape_string($conn, $_POST['req_date']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
+    
+    $obj_type = mysqli_real_escape_string($conn, $_POST['object_type']);
+    $quant = mysqli_real_escape_string($conn, $_POST['quantity']);
+    $supp_req = mysqli_real_escape_string($conn, $_POST['supplies_req']);
+    $cc = mysqli_real_escape_string($conn, $_POST['cc']);
+    $confirmDate = mysqli_real_escape_string($conn, $_POST['date_time']);
+    $comment = mysqli_real_escape_string($conn, $_POST['comment']);
 
 
-    //check that no duplicate barcode exist
-    $checkOrder = "SELECT * FROM orders Where `barcode` ='$barcode_sel'";
-    $result_dup_order = mysqli_query($conn, $checkOrder);
-
-    if (mysqli_num_rows($result_dup_order) > 0) {
-        die('Error: workorder with this barcode already exist');
-    } else {
-        $sql = "INSERT INTO orders ( creator, level1, level2, level3, priority, date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
-     VALUES ( '$creator', '$level1', '$level2', '$level3', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description')";
+    
+        $sql = "INSERT INTO orders ( creator, level1, level2, level3, priority, WO_typ_action_code, date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description, obj_typ, quant, supp_requestor, cost_cent, dateTime, comment) 
+     VALUES ( '$creator', '$level1', '$level2', '$level3', '$priority', '$type_action' ,'$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description', '$obj_type', '$quant', '$supp_req', '$cc', '$confirmDate', '$comment')";
 
         if ($conn->query($sql) === TRUE) {
             header("Location: order.php");
@@ -61,7 +63,6 @@ if (isset($_POST['submit'])) {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
     }
-}
 
 ?>
 
@@ -465,33 +466,7 @@ if (isset($_POST['submit'])) {
                     <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                         <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a class="nav-link active" href="order.php">
-                                <i class="bi bi-circle"></i><span>Delivery Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="access_order.php">
-                                <i class="bi bi-circle"></i><span>Acess Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="destroy_order.php">
-                                <i class="bi bi-circle"></i><span>Destroy Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="supplies_order.php">
-                                <i class=" bi bi-circle"></i><span>Suppliies Workorder</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link collapse" href="permnentout_order.php">
-                                <i class=" bi bi-circle"></i><span>Permanent Out Workorder</span>
-                            </a>
-                        </li>
-                    </ul>
+                    
                 </li>
 
                 <li class="nav-item">
@@ -578,22 +553,39 @@ if (isset($_POST['submit'])) {
                         </select>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-5">
                         <label for="purirty" class="form-label">Service Priority</label>
                         <select class="form-select" id="purirty" name="purirty" required>
                         <option value="">Select Service Priority</option>
                             
                             <option value="Urgent">Urgent - Rush Same Day</option>
                             <option value="Regular">Regular - Next Working Day</option>
-                            <option value="Regular">Box Pickup</option>
-                            <option value="Regular">Cancel Work Order</option>
-                            <option value="Regular">Permanantly Out Boxes</option>
-                            <option value="Regular">Supplies - Packing Material</option>
+                            <option value="Box Pickup">Box Pickup</option>
+                            <option value="Cancel Workorder">Cancel Work Order</option>
+                            <option value="Permanantly out">Permanantly Out Boxes</option>
+                            <option value="Supplies">Supplies - Packing Material</option>
 
                             <!-- <option value="FileFolder">FileBOX</option>
                             <option value="FileFolder">Barcode</option> -->
                         </select>
                     </div>
+
+                    <div class="col-md-3">
+                        <label for="purirty" class="form-label">WO Type Action Code</label>
+                        <select class="form-select" id="" name="wo_typ_action">
+                        <option value="">Select Status</option>
+                            <option value="Delivery">Delivery</option>
+                            <option value="Open">Open</option>
+                            <option value="Picklist">Picklist</option>
+                            <option value="Route">Route</option>
+                            <option value="Print">Print</option>
+                            
+
+                            <!-- <option value="FileFolder">FileBOX</option>
+                            <option value="FileFolder">Barcode</option> -->
+                        </select>
+                    </div>
+
                     <!-- Required BY -->
                     <div class="col-md-3">
                         <label class="form-label">Required By</label>
@@ -618,11 +610,12 @@ if (isset($_POST['submit'])) {
                         <input type="text" class="form-control" id="" name="pickup_address" required>
                     </div>
 
-                    <hr style="color: white;">
+                    <h2 style="color: #0056b3; margin-top: 45px;">Add Container/Filefolder</h2>
+
                     <!-- Object Code -->
                     <div class="col-md-3">
                         <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" onchange="updateBarcodeInput()" required>
+                        <select class="form-select" id="object_code" name="object_code" onchange="updateBarcodeInput()" >
                             <option value="">Select object code</option>
                             <option value="Container">Container</option>
                             <option value="FileFolder">FileFolder</option>
@@ -630,8 +623,8 @@ if (isset($_POST['submit'])) {
                     </div>
                     <!-- Select Barcode -->
                     <div class="col-md-4">
-                        <label for="barcode_select">Select Barcode:</label>
-                    <input type="text" class="form-control" id="barcode_select" name="barcode-select">    
+                        <label for="barcode_select">Enter Barcode:</label>
+                    <input type="text" class="form-control" id="barcode_select" name="barcode_select">    
                     </div>
                     <!-- FOR the alternative code -->
                     <div class="col-md-4">
@@ -642,32 +635,66 @@ if (isset($_POST['submit'])) {
                     <!-- Select Requestor -->
                     <div class="col-md-4">
                         <label for="requestor" class="form-label">Requestor Name</label>
-                        <input type="text" class="form-control" id="requestor" name="requestor" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
+                        <input type="text" class="form-control" id="requestor" name="requestor" >
                     </div>
                     <!--  Comments -->
                     <div class="col-md-4">
                         <label for="designation" class="form-label">Contact Person Role</label>
-                        <input type="text" class="form-control" id="designation" name="designation" required>
+                        <input type="text" class="form-control" id="designation" name="designation" >
                     </div>
 
 
                     <div class="col-md-3">
                         <label class="form-label">request date</label>
-                        <input type="datetime-local" class="form-control" name="req_date" required>
+                        <input type="datetime-local" class="form-control" name="req_date" >
                     </div>
                     <!--  Comments -->
                     <div class="col-md-5">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
+                        <input type="text" class="form-control" id="description" name="description" >
                     </div>
                     <div>
 
-                    </div>
-                    <div>
-                        <input type="checkbox" name="checkbox" id="checkbox">
-                        <label for="term"> Permanent Out</label>
-                    </div>
+                        </div>
 
+                        <h2 style="color: #0056b3; margin-top: 35px;">Add Supplies</h2>
+                        <!--add supplies-->
+                    <div class="col-md-5">
+                        <label for="object-type" class="form-label">Object type</label>
+                        <select class="form-select" id="object_type" name="object_type" >
+                            <option value="">Select object type</option>
+                            <option value="Barcode - Boxes Barcode">Barcode - Boxes Barcode</option>
+                            <option value="File Box - Standard Storage Box">File Box - Standard Storage Box</option>
+                            <option value="File Box - Storage Boxes Cap">File Box - Storage Boxes Cap</option>
+                            <option value="Large Box - Large Storage Box">Large Box - Large Storage Box</option>
+                            <option value="Storage Boxes">Storage Boxes</option>
+                            <option value="Tape Storage Boxes">Tape Storage Boxes</option>
+
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" >
+                    </div>
+                       
+                    <div class="col-md-4">
+                        <label for="sup_req" class="form-label">Requestor</label>
+                        <input type="text" class="form-control" id="sup_req" name="supplies_req" >
+                    </div>
+                    <div class="col-md-4">
+                        <label for="cc" class="form-label">Cost Center</label>
+                        <input type="text" class="form-control" id="cc" name="cc" >
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="datetime" class="form-label">Confirm Date/time</label>
+                        <input type="datetime-local" class="form-control" id="date_time" name="date_time" >
+                    </div>
+                    <div class="col-md-6">
+                        <label for="comment" class="form-label">Comment</label>
+                        <input type="text" class="form-control" id="comment" name="comment" >
+                    </div>
+                    
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary">Reset</button>

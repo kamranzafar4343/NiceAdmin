@@ -417,11 +417,11 @@ $resultShowOrders = $conn->query($showOrders);
           </a>
         </li>End Work Orders Nav -->
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link active" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li>
-                
+
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -447,7 +447,7 @@ $resultShowOrders = $conn->query($showOrders);
                     <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                         <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    </li>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -481,7 +481,7 @@ $resultShowOrders = $conn->query($showOrders);
     <!--------------- End sidebar ------------------>
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
     <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-3 add">Delivery Order</button>
+    <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-1 add">Add Workorder</button>
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
@@ -498,9 +498,10 @@ $resultShowOrders = $conn->query($showOrders);
                         <th scope="col" style="width: 20%;">Account Description</th>
                         <th scope="col" style="width: 13%;">Workorder no</th>
                         <th scope="col" style="width: 14%;">Account Code</th>
+                        <th scope="col" style="width: 10%;">Create Date</th>
                         <th scope="col" style="width: 7%;">Priority</th>
-                        <th scope="col" style="width: 10%;">Required By</th>
-                        <th scope="col" style="width: 10%;">Request Date</th>
+                        <th scope="col" style="width: 12%;">Required By</th>
+                        <th scope="col" style="width: 10%;">WO type Action Code</th>
                         <th scope="col" style="width: 17%;">Action</th>
                         </tr>
                     </thead>
@@ -568,6 +569,7 @@ $resultShowOrders = $conn->query($showOrders);
                             echo '<td>' . $acc_lev1 . (" / " . $acc_lev2) . (" / " . $acc_lev3) . '</td>';
 
 
+                            echo '<td>' . ($row["order_creation_date"]) . '</td>';
 
                             echo '<td>';
                             if ($row["priority"] == 'Regular') {
@@ -575,18 +577,30 @@ $resultShowOrders = $conn->query($showOrders);
                                 echo '<span class="badge badge-pill badge-success">' . $row["priority"] . '</span>';
                             } elseif ($row["priority"] == 'Urgent') {
                                 // Display a red icon for "Urgent"
+                                echo '<span class="badge badge-pill badge-warning">' . $row["priority"] . '</span>';
+                            } elseif ($row["priority"] == 'Box Pickup') {
+                                // Display a red icon for "Urgent"
+                                echo '<span class="badge badge-pill badge-info">' . $row["priority"] . '</span>';
+                            } elseif ($row["priority"] == 'Cancel Workorder') {
+                                // Display a red icon for "Urgent"
+                                echo '<span class="badge badge-pill badge-secondary">' . $row["priority"] . '</span>';
+                            } elseif ($row["priority"] == 'Permanantly out') {
+                                // Display a red icon for "Urgent"
                                 echo '<span class="badge badge-pill badge-danger">' . $row["priority"] . '</span>';
+                            } elseif ($row["priority"] == 'Supplies') {
+                                // Display a red icon for "Urgent"
+                                echo '<span class="badge badge-pill badge-primary">' . $row["priority"] . '</span>';
                             }
                             echo '</td>';
 
-                            echo '<td>' . ($row["date"]) . '</td>';
 
-                            echo '<td>' . ($row["req_date"]) . '</td>';
+                            echo '<td>' . ($row["date"]) . '</td>';
+                            echo '<td>' . ($row["WO_typ_action_code"]) . '</td>';
 
                     ?>
                             <td>
                                 <div style="display: flex; gap: 10px;">
-                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
+                                    <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
                                     <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="OrderUpdate.php?id="><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                                     <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init

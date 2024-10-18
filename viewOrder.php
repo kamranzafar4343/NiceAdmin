@@ -42,7 +42,7 @@ $order_data = $result->fetch_assoc();
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Company Details</title>
+    <title>View Workorder</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -275,6 +275,30 @@ $order_data = $result->fetch_assoc();
             position: relative;
             left: -38px;
         }
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+        }
+        .invoice-container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 900px;
+            background-color: #fff;
+        }
+        .header-section {
+            border-bottom: 1px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-weight: bold;
+            text-align: center;
+            
+        }
+        .signature-area {
+            margin-top: 50px;
+            text-align: center;
+        }
     </style>
 
     <!-- Template Main CSS File -->
@@ -444,39 +468,79 @@ $order_data = $result->fetch_assoc();
         <!-- Main content container -->
         <div class="">
 
-            <!-- Card container -->
-<div class="col-md-12 col-lg-12 pb-3">
-    <div class="card card-custom bg-white border-white border-0">
-        <div class="card-body list-group mt-3">
-            <h4 class="card-title-info"><b>Work Order</b></h4>
-
+        <!-- Invoice container -->
+    <div class="invoice-container">
+        <div class="header-section">
+        <div class="row mt-5">
+            <div class="col-4">
+                <p>Data Technologies</p>
+            </div>
+            <div class="col-3 text-right">
+                <p>MCB - Vault </p>
+            </div>
+            <div class="col-3 text-right">
+                <p>MCB - Vault </p>
+            </div>
+            <div class="col-12 text-center">
+                <p>MCB - Vault </p>
+            </div>
             <div class="row">
-                <!-- First Column -->
                 <div class="col-6">
-                    <ul class="list-group">
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['order_no']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['creator']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['priority']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['date']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['foc']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['foc_phone']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['pickup_address']); ?></li>
-                    </ul>
+                    <p>MCB - Vault Record Room<br>
+                    Archival Unit Operation Department<br>
+                    14-A Shahrah-e-Aiwan Tijari, Race Course Road Lahore, Pakistan<br>
+                    CONTACT OPERATION MANAGER<br>
+                    PHONE: 042 - 38353077
+                    </p>
                 </div>
-                
-                <!-- Second Column -->
-                <div class="col-6">
-                    <ul class="list-group">
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['object_code']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['barcode']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['alt']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['requestor']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['role']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['req_date']); ?></li>
-                        <li class="list-group-item text-end" style="text-align: right;"><?php echo htmlspecialchars($order_data['description']); ?></li>
-                    </ul>
+                <div class="col-6 text-right">
+                    <p>Date: 5/2024 10:03 AM<br>
+                    DELIVERY WORKORDER<br>
+                    REGULAR - Next Working Day<br>
+                    </p>
+    
                 </div>
             </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <p>Location: A-H01-C-08<br>
+                Container: 4003042<br>
+                ID: 9970768 Complete Box<br>
+                </p>
+            </div>
+            <div class="col-6 text-right">
+                <p>Work Order No: 00069096<br>
+                Account: 40394011<br>
+                Acct PIC:<br>
+                Service Date: 9/5/2024 10:02 AM<br>
+                </p>
+            </div>
+        </div>
+
+        <div class="section-title">WORKORDER SUMMARY</div>
+        <div class="row">
+            <div class="col-6">
+                <p>Total Delivery Items:<br>
+                Containers: 1<br>
+                </p>
+            </div>
+            <div class="col-6 text-right">
+                <p>Filefolders: 0<br>
+                Tapes: 0<br>
+                </p>
+            </div>
+        </div>
+
+        <div class="signature-area">
+            <p>___________________________<br>
+            Signature</p>
+        </div>
+
+        
+        </div>
+    </div>
 
             <!-- Print Button -->
             <button class="btn btn-primary mt-3" onclick="window.print()">Print</button>

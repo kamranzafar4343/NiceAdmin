@@ -29,6 +29,23 @@ if (isset($_POST['submit'])) {
     $begin_code = $conn->real_escape_string($_POST['begin_code']);
     $end_code = $conn->real_escape_string($_POST['end_code']);
 
+    //check if company already exist 
+    $check_company = "SELECT * FROM acc_range WHERE level1 = '$level1' AND level2 = '$level2'";
+    $result_company = mysqli_query($conn, $check_company);
+    if ($result_company->num_rows > 0) {
+        echo "<script>alert('Account already exist');</script>";
+        exit();
+    }
+
+    //check if the account range already exist
+    $check_range = "SELECT * FROM acc_range WHERE begin_code = '$begin_code' AND end_code = '$end_code'";
+    $result_range = mysqli_query($conn, $check_range);
+    if ($result_range->num_rows > 0) {
+        echo "<script>alert('Account range already exist');</script>";
+        exit();
+    }
+
+
     // Insert the data into the acc_range table
     $sql = "INSERT INTO acc_range (level1, level2, object_code, begin_code, end_code) 
             VALUES ('$level1', '$level2', '$object_code', '$begin_code', '$end_code')";
@@ -40,10 +57,6 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
-
-
-
-
 
 <!doctype html>
 <html lang="en">

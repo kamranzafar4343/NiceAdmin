@@ -30,21 +30,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode_select']);
     $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
-    
-    //check if barcode is in the defined account range
-    $checkAccount = "SELECT * From acc_range where level1 = '$level_1' AND level2 = '$level2'";
+
+        //check if barcode is in the defined account range
+    $checkAccount = "SELECT begin_code, end_code From acc_range where level1 = '$level_1' AND level2 = '$level2'";
     $resultAccount = mysqli_query($conn, $checkAccount);
-    
-    if ($resultAccount->num_rows > 0) {
+
+    if ($resultAccount && $resultAccount->num_rows > 0) {
         $rowAcc = $resultAccount->fetch_assoc();
         $start = (int)$rowAcc['begin_code'];
         $end = (int)$rowAcc['end_code'];
+    } else {
+        die('Account range for selected company does not exist.');
     }
-    
-    if ($barcode < $start || $barcode > $end) {
+
+    if ($barcode <= $start || $barcode >= $end) {
         die('Barcode is not in the defined account range. Please enter a valid barcode.');
         exit();
     }
+
 
 
     //check if barcode is already in use
@@ -384,7 +387,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
-                
+
                 <li class="nav-item">
                     <a class="nav-link active" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
@@ -488,7 +491,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- For the Level 2 field -->
                     <div class="col-md-4">
                         <label for="level2">Level 2:</label>
-                        <select id="level2" class="form-select" name="level2" >
+                        <select id="level2" class="form-select" name="level2">
                             <option value="">Select a branch</option>
                         </select>
                     </div>
@@ -496,7 +499,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- For the Level 3 field -->
                     <div class="col-md-4">
                         <label for="level3">Level 3:</label>
-                        <select id="level3" class="form-select" name="level3" >
+                        <select id="level3" class="form-select" name="level3">
                             <option value="">Select a department</option>
                         </select>
                     </div>
@@ -523,7 +526,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!--  Description -->
                     <div class="col-md-6">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" >
+                        <input type="text" class="form-control" id="description" name="description">
                     </div>
 
                     <div class="text-center mt-4 mb-2">

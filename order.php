@@ -529,8 +529,8 @@ $resultShowOrders = $conn->query($showOrders);
 
                             //in case if no branch selected 
                             if ($row['level2'] == "0") {
-                                $acc_lev2 = "null";
-                                $acc_desc2 = "null";
+                                $acc_lev2 = " ";
+                                $acc_desc2 = " ";
                             } else {
                                 // Get specific branch
                                 $branch_id = $row['level2'];
@@ -545,8 +545,8 @@ $resultShowOrders = $conn->query($showOrders);
 
                             //in case if no dept selected
                             if ($row['level3'] == "0") {
-                                $acc_lev3 = "null";
-                                $acc_desc3 = "null";
+                                $acc_lev3 = " ";
+                                $acc_desc3 = " ";
                             } else {
                                 // Get specific dept id
                                 $dept_id = $row['level3'];

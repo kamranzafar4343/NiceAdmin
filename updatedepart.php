@@ -52,8 +52,6 @@ if (isset($_GET['id'])) {
     $contact_phone = $row['foc_phone'];
     $contact_fax = $row['contact_fax'];
     $address = $row['add_1'];
-    $address1 = $row['add_2'];
-    $address2 = $row['add_3'];
     $pickup_address = $row['pickup_address'];
   } else {
     echo "Branch not found!";
@@ -72,8 +70,6 @@ if (isset($_POST['update'])) {
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
   $contact_fax = mysqli_real_escape_string($conn, $_POST['contact_fax']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
-  $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
-  $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']);
 
   // SQL query to update the record
@@ -86,8 +82,6 @@ if (isset($_POST['update'])) {
                 `foc_phone` = '$contact_phone',
                 `contact_fax` = '$contact_fax',
                 `add_1` = '$address',
-                `add_2` = '$address1',
-                `add_3` = '$address2',
                 `pickup_address` = '$pickup_address' 
             WHERE `dept_id` = '$dept_id'";
 
@@ -748,10 +742,6 @@ End Search Bar -->
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
             <input type="text" class="form-control" id="" name="address" value="<?php echo isset($address) ? $address : ''; ?>" required>
-            <br>
-            <input type="text" class="form-control" id="" name="address1" value="<?php echo isset($address1) ? $address1 : ''; ?>">
-            <br>
-            <input type="text" class="form-control" id="" name="address2" value="<?php echo isset($address2) ? $address2 : ''; ?>">
           </div>
 
 

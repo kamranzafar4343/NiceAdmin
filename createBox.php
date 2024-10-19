@@ -30,6 +30,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode_select']);
     $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
+    
+    //check if barcode is in the defined account range
+    $checkAccount = "SELECT * From acc_range where level1 = '$level_1' AND level2 = '$level2'";
+    $resultAccount = mysqli_query($conn, $checkAccount);
+    
+    if ($resultAccount->num_rows > 0) {
+        $rowAcc = $resultAccount->fetch_assoc();
+        $start = (int)$rowAcc['begin_code'];
+        $end = (int)$rowAcc['end_code'];
+    }
+    
+    if ($barcode < $start || $barcode > $end) {
+        die('Barcode is not in the defined account range. Please enter a valid barcode.');
+        exit();
+    }
+
+
+    //check if barcode is already in use
+    $checkBarcode = "SELECT * FROM box WHERE barcode = '$barcode'";
+    $resultBarcode = mysqli_query($conn, $checkBarcode);
+
+    if ($resultBarcode->num_rows > 0) {
+        die('Barcode already in use. Please enter a different barcode.');
+        exit();
+    }
+
+
 
     // Insert data into box table
     $sql = "INSERT INTO box (level1, level2, level3, object, barcode, alt_code, box_desc, status) 
@@ -42,21 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $conn->close();
-}
-
-// Handle AJAX request to check if barcode already exists
-if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
-    $barcode = mysqli_real_escape_string($conn, $_POST['barcode_select']);
-    $query = "SELECT * FROM `box` WHERE `barcode`='$barcode'";
-    $result = mysqli_query($conn, $query);
-
-    // If the barcode exists, return JSON response
-    if ($result->num_rows > 0) {
-        echo json_encode(['exists' => true]);
-    } else {
-        echo json_encode(['exists' => false]);
-    }
-    exit(); // Prevent further execution of the script
 }
 
 ?>
@@ -476,7 +488,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!-- For the Level 2 field -->
                     <div class="col-md-4">
                         <label for="level2">Level 2:</label>
-                        <select id="level2" class="form-select" name="level2" data-live-search="true">
+                        <select id="level2" class="form-select" name="level2" >
                             <option value="">Select a branch</option>
                         </select>
                     </div>
@@ -484,7 +496,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!-- For the Level 3 field -->
                     <div class="col-md-4">
                         <label for="level3">Level 3:</label>
-                        <select id="level3" class="form-select" name="level3" data-live-search="true">
+                        <select id="level3" class="form-select" name="level3" >
                             <option value="">Select a department</option>
                         </select>
                     </div>
@@ -511,7 +523,7 @@ if (isset($_POST['checkBarcode']) && $_POST['checkBarcode'] == 'true') {
                     <!--  Description -->
                     <div class="col-md-6">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
+                        <input type="text" class="form-control" id="description" name="description" >
                     </div>
 
                     <div class="text-center mt-4 mb-2">

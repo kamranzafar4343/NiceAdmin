@@ -49,9 +49,7 @@ if (isset($_GET['id'])) {
     $contact_person = $row['foc'];
     $contact_phone = $row['foc_phone'];
     $address = $row['add_1'];
-    $address1 = $row['add_2'];
-    $address2 = $row['add_3'];
-  } else {
+    } else {
     // If no company found, display an error message
     echo "Company not found!";
     exit;
@@ -67,11 +65,8 @@ if (isset($_POST['update'])) {
   $expiry_date = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-  $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
-  $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
-  $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
-
+  
   // SQL query to update the company record
   $sql = "UPDATE `compani` SET 
             `acc_lev_1` = '$acc_lev_1',
@@ -80,10 +75,7 @@ if (isset($_POST['update'])) {
             `expiry` = '$expiry_date',
             `foc` = '$contact_person',
             `foc_phone` = '$contact_phone',
-            -- `foc_fax` = '$contact_fax',
-            `add_1` = '$address',
-            `add_2` = '$address1',
-            `add_3` = '$address2'
+            `add_1` = '$address'
           WHERE `comp_id` = '$comp_id'";
 
   // Execute the query and check for success or error
@@ -766,19 +758,10 @@ End Search Bar -->
             <input type="text" class="form-control" id="foc_phone" name="foc_phone" value="<?php echo $contact_phone; ?>" required>
           </div>
 
-          <!-- <div class="col-md-6">
-            <label for="foc_fax" class="form-label">Fax</label>
-            <input type="text" class="form-control" id="foc_fax" name="foc_fax" value="<?php echo $contact_fax; ?>">
-          </div> -->
-
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
             <input type="text" class="form-control" id="address" name="address" value="<?php echo $address; ?>" required>
-            <br>
-            <input type="text" class="form-control" id="address1" name="address1" value="<?php echo $address1; ?>">
-            <br>
-            <input type="text" class="form-control" id="address2" name="address2" value="<?php echo $address2; ?>">
-          </div>
+            </div>
           <div class="col-12 text-center">
             <button type="submit" class="btn btn-outline-primary mt-3" name="update" value="update">Update</button>
           </div>

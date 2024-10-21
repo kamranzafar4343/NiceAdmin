@@ -45,7 +45,6 @@ if (isset($_GET['id'])) {
     echo 'Error: Cannot delete a branch having departments. Please delete the departments first.';
   }
 
-
   // Fetch the company ID associated with the branch from the compID_FK column
   $sql = "SELECT `comp_id_fk` FROM `branches` WHERE `branch_id` = $branch_id";
   $result = $conn->query($sql);

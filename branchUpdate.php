@@ -702,7 +702,7 @@ End Search Bar -->
           <!-- Acc-Lev-2 -->
           <div class="col-md-6">
             <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
-            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" value="<?php echo isset($acc_lev_2) ? $acc_lev_2 : ''; ?>" required>
+            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" value="<?php echo isset($acc_lev_2) ? $acc_lev_2 : ''; ?>" readonly>
           </div>
 
           <!-- Account Description -->
@@ -714,7 +714,7 @@ End Search Bar -->
           <!-- Setup Date -->
           <div class="col-md-6">
             <label for="registration" class="form-label">Setup Date</label>
-            <input type="date" class="form-control" id="registration" name="registration" value="<?php echo isset($registration_date) ? $registration_date : ''; ?>" required>
+            <input type="date" class="form-control" id="registration" name="registration" value="<?php echo isset($registration_date) ? $registration_date : ''; ?>" readonly>
           </div>
 
           <!-- Expiry Date -->

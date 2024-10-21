@@ -40,10 +40,11 @@ if (isset($_GET['id'])) {
 
   // Check if the company exists
   if ($result && $result->num_rows > 0) {
+    
     // Fetch company data into variables
+    
     $row = $result->fetch_assoc();
-    $acc_lev_1 = $row['acc_lev_1'];
-    $account_desc = $row['acc_desc'];
+    $comp_name = $row['comp_name'];
     $registration_date = $row['registration'];
     $expiry_date = $row['expiry'];
     $contact_person = $row['foc'];
@@ -59,8 +60,8 @@ if (isset($_GET['id'])) {
 // Check if the form is submitted (update the record)
 if (isset($_POST['update'])) {
   // Sanitize and retrieve form data
-  $acc_lev_1 = mysqli_real_escape_string($conn, $_POST['acc_level_no']);
-  $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
+
+  $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
   $registration_date = mysqli_real_escape_string($conn, $_POST['registration']);
   $expiry_date = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
@@ -69,8 +70,8 @@ if (isset($_POST['update'])) {
   
   // SQL query to update the company record
   $sql = "UPDATE `compani` SET 
-            `acc_lev_1` = '$acc_lev_1',
-            `acc_desc` = '$account_desc',
+            
+            `comp_name` = '$comp_name',
             `registration` = '$registration_date',
             `expiry` = '$expiry_date',
             `foc` = '$contact_person',
@@ -728,19 +729,15 @@ End Search Bar -->
         <br>
         <!-- Multi Columns Form -->
         <form class="row g-3 needs-validation" action="" method="POST">
-          <div class="col-md-6">
-            <label for="comp_acc_level" class="form-label">Acc-Lev-1</label>
-            <input type="text" class="form-control" id="account_lev_no" name="acc_level_no" value="<?php echo $acc_lev_1; ?>" required>
-          </div>
 
           <div class="col-md-6">
-            <label for="account_description" class="form-label">Account Description</label>
-            <textarea class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"><?php echo $account_desc; ?></textarea>
+            <label for="comp_name" class="form-label">Comp_name</label>
+            <input class="form-control" id="comp_name" name="comp_name" value="<?php echo $comp_name; ?>">
           </div>
 
           <div class="col-md-6">
             <label for="registration" class="form-label">Setup Date</label>
-            <input type="date" class="form-control" id="registration" name="registration" value="<?php echo $registration_date; ?>" required>
+            <input type="date" class="form-control" id="registration" name="registration" value="<?php echo $registration_date; ?>" readonly>
           </div>
 
           <div class="col-md-6 mb-3">
@@ -757,6 +754,12 @@ End Search Bar -->
             <label for="foc_phone" class="form-label">Phone</label>
             <input type="text" class="form-control" id="foc_phone" name="foc_phone" value="<?php echo $contact_phone; ?>" required>
           </div>
+
+          <div class="col-md-6">
+            <label for="comp_email" class="form-label">Email</label>
+            <input class="form-control" id="comp_email" name="comp_email" value="<?php echo $comp_email; ?>">
+          </div>
+
 
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>

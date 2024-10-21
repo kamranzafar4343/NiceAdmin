@@ -293,7 +293,7 @@ $result = $conn->query($sql);
 
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
-  <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Account</button>
+  <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Company</button>
   <!-- <button id="fixedButton" type="button" onclick="window.location.href = 'emailTable.php';" class="btn btn-outline-info mail">
     <b><i class="ri-mail-line"></i></b>
   </button> -->
@@ -316,16 +316,15 @@ $result = $conn->query($sql);
             <table id="companies" class="">
               <thead>
                 <tr>
-                  <th scope="col" style="width:8%;">Level-1</th>
+                  
                   <!-- <th scope="col"  style="width:8%;" >Level-2</th> -->
                   <!-- <th scope="col"  style="width:8%;">Level-3</th> -->
 
-                  <th scope="col">Description</th>
+                  <th scope="col">Company Name</th>
                   <th scope="col">Setup Date</th>
                   <th scope="col">Expiry Date</th>
                   <th scope="col">Contact Person</th>
                   <th scope="col">Phone</th>
-                  <th scope="col">Fax</th>
                   <th scope="col" style="width:15%;">Address</th>
                   <th scope="col">Actions</th>
                 </tr>
@@ -339,17 +338,15 @@ $result = $conn->query($sql);
 
                   <td>
                     <a class="text-primary fw-bold" href="Branches.php?id=<?php echo $row['comp_id']; ?>">
-                      <?php echo $row['acc_lev_1']; ?>
+                      <?php echo $row['comp_name']; ?>
                     </a>
                   </td>
                   <?php
-                  echo "<td >" . htmlspecialchars($row["acc_desc"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["foc"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["foc_phone"]) . "</td>";
-                  echo "<td >" . htmlspecialchars($row["contact_fax"]) . "</td>";
-                  echo "<td >" . htmlspecialchars($row["add_1"]) . "<br>" . htmlspecialchars($row["add_2"]) . "<br>" . htmlspecialchars($row["add_3"]) . "</td>";
+                  echo "<td >" . htmlspecialchars($row["add_1"]) ."</td>";
                   ?>
                   <td>
                     <div style="display: flex; gap: 10px;">

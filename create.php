@@ -35,30 +35,30 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 
 
 if (isset($_POST['submit'])) {
-    $acc_1 = mysqli_real_escape_string($conn, $_POST['acc_level_no']);
-    $acc_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
+
+    $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-    $contact_fax=mysqli_real_escape_string($conn, $_POST['foc_fax']);
+    $comp_email = mysqli_real_escape_string($conn, $_POST['comp_email']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
-    $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
-    $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
 
 
-    //check account level no is already exist or not
-        $accCheckQuery = "SELECT * FROM `compani` WHERE `acc_lev_1` = '$acc_1'";
-        $accCheckResult = $conn->query($accCheckQuery);
-    
-        if ($accCheckResult->num_rows > 0) {
-            die("Error: The account level no. '$acc_1' already exists.");
-        }
-    
+    // //check account level no is already exist or not
+    // $accCheckQuery = "SELECT * FROM `compani` WHERE `acc_lev_1` = '$acc_1'";
+    // $accCheckResult = $conn->query($accCheckQuery);
+
+    // if ($accCheckResult->num_rows > 0) {
+    //     die("Error: The account level no. '$acc_1' already exists.");
+    // }
+
+    // //check if email already exist or not
+
 
     // Insert the record into the database
-    $sql = "INSERT INTO `compani` (`acc_lev_1`, `acc_desc`, `registration`, `expiry`, `foc`, `foc_phone`, `contact_fax`, `add_1`, `add_2`, `add_3`) 
-            VALUES ('$acc_1', '$acc_desc', '$registration', '$expiry', '$foc', '$foc_phone', '$contact_fax', '$address', '$address1', '$address2')";
+    $sql = "INSERT INTO `compani` (`comp_name`, `registration`, `expiry`, `foc`, `foc_phone`, `email`, `add_1`) 
+            VALUES ('$comp_name', '$registration', '$expiry', '$foc', '$foc_phone', '$comp_email', '$address')";
 
     $result = $conn->query($sql);
 
@@ -458,7 +458,7 @@ if (isset($_POST['submit'])) {
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Create Account</h2>
+        <h2>Create Company</h2>
     </div>
     <!-- End Header form -->
     <div class="container d-flex justify-content-center">
@@ -468,19 +468,11 @@ if (isset($_POST['submit'])) {
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST">
-                    <div class="col-md-6">
-                        <label for="comp_acc_level" class="form-label">Acc-Lev-1</label>
-                        <input type="text" class="form-control" id="account_lev_no" name="acc_level_no" required>
-                        <div id="accFeedback" class="invalid-feedback">
-                            <!-- Error message will be displayed here -->
-                        </div>
-                    </div>
 
                     <div class="col-md-6">
-                        <label for="account_description" class="form-label">Account Description</label>
-                        <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
+                        <label for="account_description" class="form-label">Company Name</label>
+                        <input type="text" class="form-control" id="comp_name" name="comp_name" required>
                     </div>
-
 
                     <div class="col-md-6">
                         <label for="registration" class="form-label">Setup Date</label>
@@ -500,8 +492,8 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <div class="col-md-6">
-                        <label for="phone" class="form-label">Fax</label>
-                        <input type="text" class="form-control" id="" name="foc_fax">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="comp_email" name="comp_email" required>
                     </div>
 
                     <div class="col-md-6">
@@ -551,9 +543,9 @@ if (isset($_POST['submit'])) {
     </script>
     <script>
         //prevent resubmission on refresh
-        if ( window.history.replaceState ) {
-        window.history.replaceState( null, null, window.location.href );
-    }
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
     </script>
     <script src="assets/js/main.js"></script>
 </body>

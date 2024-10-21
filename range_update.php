@@ -526,13 +526,13 @@ if (isset($_POST['update'])) {
                     <!-- Acc Level 1 -->
                     <div class="col-md-6">
                         <label for="acc_range_level" class="form-label">Acc-Lev-1</label>
-                        <input type="text" class="form-control" id="lev1" name="level1" value="<?php echo $acc_lev_1_name; ?>" required>
+                        <input type="text" class="form-control" id="lev1" name="level1" value="<?php echo $acc_lev_1_name; ?>" readonly>
                     </div>
 
                     <!-- Acc Level 2 -->
                     <div class="col-md-6">
                         <label for="acc_range_level2" class="form-label">Acc-Lev-2</label>
-                        <input type="text" class="form-control" id="lev2" name="level2" value="<?php echo $acc_lev_2_name; ?>" required>
+                        <input type="text" class="form-control" id="lev2" name="level2" value="<?php echo $acc_lev_2_name; ?>" readonly>
                     </div>
 
                     <!-- Object Code Dropdown -->

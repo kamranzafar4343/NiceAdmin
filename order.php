@@ -604,7 +604,7 @@ $resultShowOrders = $conn->query($showOrders);
                                     <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="OrderUpdate.php?id="><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                                     <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                        onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id="> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                        onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                                     <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
 
                                     <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init

@@ -46,7 +46,7 @@ if ($resultData->num_rows > 0) {
     <meta content="" name="keywords">
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Favicons -->
     <link href="assets/img/favicon.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -481,8 +481,8 @@ if ($resultData->num_rows > 0) {
                     <h5 class="card-title">List of containers/filefolders</h5>
 
                     <?php
-                        // Default query
-                        $sql = "SELECT * FROM box";
+                    // Default query
+                    $sql = "SELECT * FROM box";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
@@ -494,7 +494,7 @@ if ($resultData->num_rows > 0) {
                             <th scope="col" style="width: 14%;">Object code</th>
                             <th scope="col" style="width: 10%;">Barcode No.</th>
                             <th scope="col" style="width: 10%;">Alt code</th>
-                            <th scope="col" style="width: 12%;">description</th>
+                          
                             <th scope="col" style="width: 10%;">Status</th>
                             <th scope="col" style="width: 10%;">Creation time</th>';
                         // Show "Action" column only for admins
@@ -517,46 +517,45 @@ if ($resultData->num_rows > 0) {
                                 $acc_lev1 = $row3['acc_lev_1'];
                                 $acc_desc1 = $row3['acc_desc'];
                             }
-                         
-                              //in case if no branch selected 
+
+                            //in case if no branch selected 
                             if ($row['level2'] == "0") {
                                 $acc_lev2 = "";
-                                $acc_desc2 = "";}
-                                else{
-                            // Get specific branch id
-                            $branch_id = $row['level2'];
-                            $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
-                            $result7 = $conn->query($sql7);
-                            if ($result7->num_rows > 0) {
-                                $row7 = $result7->fetch_assoc();
-                                $acc_lev2 = $row7['acc_lev_2'];
-                                $acc_desc2 = $row7['account_desc'];
+                                $acc_desc2 = "";
+                            } else {
+                                // Get specific branch id
+                                $branch_id = $row['level2'];
+                                $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
+                                $result7 = $conn->query($sql7);
+                                if ($result7->num_rows > 0) {
+                                    $row7 = $result7->fetch_assoc();
+                                    $acc_lev2 = $row7['acc_lev_2'];
+                                    $acc_desc2 = $row7['account_desc'];
+                                }
                             }
-                        }
-                        //in case if no dept selected
-                        if ($row['level3'] == "0") {
-                            $acc_lev3 = "";
-                            $acc_desc3 = "";
-                        } else {
-                            // Get specific dept id
-                            $dept_id = $row['level3'];
-                            $sql9 = "SELECT * FROM departments WHERE dept_id= '$dept_id'";
-                            $result9 = $conn->query($sql9);
-                            if ($result9->num_rows > 0) {
-                                $row9 = $result9->fetch_assoc();
-                                $acc_lev3 = $row9['acc_lev_3'];
-                                $acc_desc3 = $row9['acc_desc'];
+                            //in case if no dept selected
+                            if ($row['level3'] == "0") {
+                                $acc_lev3 = "";
+                                $acc_desc3 = "";
+                            } else {
+                                // Get specific dept id
+                                $dept_id = $row['level3'];
+                                $sql9 = "SELECT * FROM departments WHERE dept_id= '$dept_id'";
+                                $result9 = $conn->query($sql9);
+                                if ($result9->num_rows > 0) {
+                                    $row9 = $result9->fetch_assoc();
+                                    $acc_lev3 = $row9['acc_lev_3'];
+                                    $acc_desc3 = $row9['acc_desc'];
+                                }
                             }
-                        }
 
                             // Show account
-                            echo '<td>' . $acc_lev1 ." / ". $acc_lev2 . " / ". $acc_lev3 . '</td>';
-                            echo '<td>' . $acc_desc1 ." / ". $acc_desc2 . " / ". $acc_desc3 . '</td>';
+                            echo '<td>' . $acc_lev1 . " / " . $acc_lev2 . " / " . $acc_lev3 . '</td>';
+                            echo '<td>' . $acc_desc1 . " / " . $acc_desc2 . " / " . $acc_desc3 . '</td>';
 
                             echo '<td>' . ($row["object"]) . '</td>';
                             echo '<td>' . ($row["barcode"]) . '</td>';
                             echo '<td>' . ($row["alt_code"]) . '</td>';
-                            echo '<td>' . ($row["box_desc"]) . '</td>';
 
                             echo '<td><i class="';
                             if ($row["status"] == 'In') {
@@ -569,12 +568,13 @@ if ($resultData->num_rows > 0) {
 
                             echo '"></i> ' . $row["status"] . '</td>';
                             echo '<td>' . ($row["created_at"]) . '</td>';
-                            
+
                             // Show action buttons only for admins
                             if ($_SESSION['role'] == 'admin') {
                                 echo '<td>
                                 <div style="display: flex; gap: 10px;">
-                                    
+                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="boxUpdate.php?id= ' . $row['box_id'] .'"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+ 
                                 <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
                                         onclick="return confirm(\'Are you sure you want to delete this record?\');" href="boxDelete.php?id=' . $row['box_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                                 </div>

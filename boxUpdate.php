@@ -31,26 +31,18 @@ if (isset($_GET['id'])) {
     $result = $conn->query($sql);
     $row = mysqli_fetch_array($result);
     $barcode = $row['barcode'];
+    $description = $row['box_desc'];
 }
 
-if (isset($_GET['id'])) {
-    $box_id = intval($_GET['id']);
-    $sql = "SELECT `companiID_FK` FROM `box` WHERE `box_id` = $box_id";
-    $result = $conn->query($sql);
-
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $company_id = $row['companiID_FK'];
-    }
-}
 //update the record
 if (isset($_POST['update'])) {
-    $barcode =  mysqli_real_escape_string($conn, $_POST['barcode']);
+    $barcode =  mysqli_real_escape_string($conn, $_POST['barcode_select']);
+    $box_desc =  mysqli_real_escape_string($conn, $_POST['description']);
 
-    $sql = "UPDATE `box` SET `barcode`='$barcode' WHERE `box_id`='$box_id'";
+    $sql = "UPDATE `box` SET `barcode`='$barcode', `box_desc`='$box_desc' WHERE `box_id`='$box_id'";
 
     if (mysqli_query($conn, $sql)) {
-        header("Location: box.php?id=" . $company_id);
+        header("Location: box.php");
         exit;
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -560,11 +552,18 @@ End Search Bar -->
     </header><!-- End Header -->
 
 
+    <!-- ======= header ======= -->
+    <?php include 'headerfile.php'; ?>
+    <?php
+    include "config/db.php";
+    $role = $_SESSION['role'];
+    ?>
+
     <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="sidebar">
-
         <ul class="sidebar-nav" id="sidebar-nav">
 
+            <!-- Dashboard Link (Visible to all users) -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="index.php">
                     <i class="ri-home-8-line"></i>
@@ -572,53 +571,91 @@ End Search Bar -->
                 </a>
             </li><!-- End Dashboard Nav -->
 
+            <?php if ($_SESSION['role'] == 'admin') { ?>
+                <!-- Admin-only Links -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="Companies.php">
+                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Companies Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-                    <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li><!-- End Tables Nav -->
-
-            <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="account.php">
                         <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-                    <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+
+            <?php } else { ?>
+                <!-- User-only Links -->
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+            <?php } ?>
 
 
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
+                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
                 </a>
-            </li><!-- End Login Page Nav -->
-
+            </li><!-- End Login Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-contact.php">
-                    <i class="bi bi-envelope"></i>
-                    <span>Contact</span>
+                <a class="nav-link collapsed" href="logout.php">
+                    <i class="bi bi-box-arrow-left"></i><span>Logout</span>
                 </a>
-            </li><!-- End Contact Page Nav -->
+            </li><!-- End Logout Nav -->
 
         </ul>
-
     </aside>
+    <!--------------- End sidebar ------------------>
 
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
@@ -627,7 +664,7 @@ End Search Bar -->
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/update.png.png" alt="network-logo" width="50" height="50" />
-        <h2>Update box</h2>
+        <h2>Update Container/filefolder</h2>
     </div>
     <!-- End Header form -->
 
@@ -636,10 +673,17 @@ End Search Bar -->
             <div class="card-body">
                 <!-- <h5 class="card-title">Update Company Information</h5> -->
                 <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
+                 
+                    <!-- Select Barcode -->
                     <div class="col-md-6">
-                        <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" value="<?php echo $barcode; ?>" readonly>
-
+                        <label for="barcode_select" class="form-label">Barcode</label>
+                        <input type="text" class="form-control" id="barcode_select" value="<?php echo $barcode; ?>" name="barcode_select" readonly>
+                    </div>
+                    <hr style="color: white;">
+                    <!--  Description -->
+                    <div class="col-md-6">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="summernotelib" name="description" rows="3"><?php echo htmlspecialchars($description); ?></textarea>
                     </div>
 
                     <div class="col-12 text-center">
@@ -660,7 +704,16 @@ End Search Bar -->
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
+   
     <script>
+      tinymce.init({
+            selector: '#summernotelib', // Replace with your textarea ID
+            menubar: false,
+            width: 600 // Optional: Remove the menu bar if you want
+        });
+    </script>
+
+   <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {
             searchable: false,
             fixedHeight: true,

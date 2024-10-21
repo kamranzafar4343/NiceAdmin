@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
 
-        //check if barcode is in the defined account range
+    //check if barcode is in the defined account range
     $checkAccount = "SELECT begin_code, end_code From acc_range where level1 = '$level_1' AND level2 = '$level2'";
     $resultAccount = mysqli_query($conn, $checkAccount);
 
@@ -96,8 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
@@ -105,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="library/dselect.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
@@ -137,16 +135,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery/3.7.1/jquery.min.js"></script>
     <!-- dselect -->
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
-
 
     <style>
         /* Custom CSS to decrease font size of the table */
@@ -523,10 +518,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="alt_code" class="form-label">Alt Code</label>
                         <input type="text" class="form-control" id="alt_code" name="alt_code" maxlength="8" placeholder="Enter Alt code">
                     </div>
+                    <hr style="color: white;">
                     <!--  Description -->
                     <div class="col-md-6">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description">
+                        <textarea class="form-control" id="summernotelib" name="description" rows="3"></textarea>
                     </div>
 
                     <div class="text-center mt-4 mb-2">
@@ -611,9 +607,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+
+
+
     <script>
         $(document).ready(function() {
 
+            //d-search dropdown
             const config = {
                 search: true, // Enable search feature
                 creatable: false, // Disable creatable selection
@@ -690,26 +690,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             });
         });
     </script>
-    <!--corrected jquery version-->
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+    <!--corrected jquery version-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/vendor/chart.js/chart.umd.js"></script>
     <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js">
     </script>
-    <!-- Bootstrap JS (Optional)
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
- -->
+
+    <!--tinymce text editor integration-->
+    <script>
+        tinymce.init({
+            selector: '#summernotelib', // Replace with your textarea ID
+            menubar: false,
+            width: 600 // Optional: Remove the menu bar if you want
+        });
+    </script>
+
 
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {

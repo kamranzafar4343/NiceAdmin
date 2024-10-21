@@ -30,7 +30,29 @@ $order_no = $_GET['id'];
 // Fetch company details
 $sql = "SELECT * FROM orders WHERE order_no = $order_no";
 $result = $conn->query($sql);
-$order_data = $result->fetch_assoc();
+
+// if($result && $result->num_rows>0){
+//         $row3 = $result->fetch_assoc();
+//         $ = $row3['name'];
+//         $ = $row3['email'];
+//         $ = $row3['name'];
+//         $ = $row3['email'];
+//         $ = $row3['name'];
+//         $ = $row3['email'];
+//         $ = $row3['name'];
+//         $ = $row3['email'];
+//         $ = $row3['name'];
+//         $ = $row3['email'];
+//         $ = $row3['name'];
+//         $ = $row3['email'];
+//         $ = $row3['name'];
+//         $ = $row3['email'];
+//         $ = $row3['name'];
+//         $ = $row3['email'];
+//         $ = $row3['name'];
+//         $ = $row3['email'];
+//     }
+
 
 ?>
 

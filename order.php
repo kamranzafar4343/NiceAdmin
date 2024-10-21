@@ -32,7 +32,7 @@ $resultShowOrders = $conn->query($showOrders);
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Delievry Orders</title>
+    <title>Workorders</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -601,7 +601,7 @@ $resultShowOrders = $conn->query($showOrders);
                             <td>
                                 <div style="display: flex; gap: 10px;">
                                     <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
-                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="OrderUpdate.php?id="><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="OrderUpdate.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                                     <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
                                         onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>

@@ -22,14 +22,43 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$error = false;
+//show previous form values
+if (isset($_GET['id'])) {
+
+    $order_id = $_GET['id'];
+    $sql = "SELECT * FROM `orders` WHERE `order_no`= '$order_id'";
+
+    $result = $conn->query($sql);
+    $row = mysqli_fetch_array($result);
+    $creator = $row['creator'];
+    $lvl1 = $row['level1'];
+    $lvl2 = $row['level2'];
+    $lvl3 = $row['level3'];
+    $priority = $row['priority'];
+    $order_type = $row['WO_typ_action_code'];
+    $date = $row['date'];
+    $foc = $row['foc'];
+    $foc_phone = $row['foc_phone'];
+    $pick_add = $row['pickup_address'];
+    $obj_code = $row['object_code'];
+    $barcode = $row['barcode'];
+    $alt = $row['alt'];
+    $requestor = $row['requestor'];
+    $role = $row['role'];
+    $req_date = $row['req_date'];
+    $description = $row['description'];
+    $obj_type = $row['object_type'];
+    $quantity = $row['quantity'];
+    $supp_req = $row['supp_requestor'];
+    $description = $row['description'];
+    $cc = $row['cost_center'];
+    $datetime = $row['dateTime'];
+    $cmnt = $row['comment'];
+}
+
 
 if (isset($_POST['submit'])) {
-   
-    $creator = mysqli_real_escape_string($conn, $_POST['creater']);
-    $level1 = mysqli_real_escape_string($conn, $_POST['level1']);
-    $level2 = mysqli_real_escape_string($conn, $_POST['level2']);
-    $level3 = mysqli_real_escape_string($conn, $_POST['level3']);
+
     $priority = mysqli_real_escape_string($conn, $_POST['purirty']);
     $type_action = mysqli_real_escape_string($conn, $_POST['wo_typ_action']);
     $date = mysqli_real_escape_string($conn, $_POST['date']);
@@ -43,7 +72,6 @@ if (isset($_POST['submit'])) {
     $role = mysqli_real_escape_string($conn, $_POST['designation']);
     $req_date = mysqli_real_escape_string($conn, $_POST['req_date']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
-    
     $obj_type = mysqli_real_escape_string($conn, $_POST['object_type']);
     $quant = mysqli_real_escape_string($conn, $_POST['quantity']);
     $supp_req = mysqli_real_escape_string($conn, $_POST['supplies_req']);
@@ -52,24 +80,17 @@ if (isset($_POST['submit'])) {
     $comment = mysqli_real_escape_string($conn, $_POST['comment']);
 
 
-    
-        $sql = "INSERT INTO orders ( creator, level1, level2, level3, priority, WO_typ_action_code, date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description, obj_typ, quant, supp_requestor, cost_cent, dateTime, comment) 
-     VALUES ( '$creator', '$level1', '$level2', '$level3', '$priority', '$type_action' ,'$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description', '$obj_type', '$quant', '$supp_req', '$cc', '$confirmDate', '$comment')";
 
-        if ($conn->query($sql) === TRUE) {
-            header("Location: order.php");
-            exit();
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-    }
+    $sql = "UPDATE orders priority='$priority', WO_typ_action_code='$type_action', date='$date', foc='$foc', foc_phone='$foc_phone', pickup_address='$pickup_address', object_code='$barcode_sel', barcode='$barcode_sel', alt='$alt_code', requestor='$requestor', role='$role', req_date='$req_date', description='$description', obj_typ='$obj_type', quant='$quant', supp_requestor='$supp_req', cost_cent='$cc', dateTime='$confirmDate', comment='$comment'";
 
-    //check if a workorder with barcode already exists
-    $checkBarcode = "SELECT * FROM orders WHERE barcode = '$barcode_sel'";
-    $resultBarcode = mysqli_query($conn, $checkBarcode);
-    if ($resultBarcode->num_rows > 0) {
-     die('Cant make workorder of a barcode. Workorder of given barcode already exists.');
+    if ($conn->query($sql) === TRUE) {
+        header("Location: order.php");
+        exit();
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
+}
+
 ?>
 
 
@@ -426,7 +447,7 @@ if (isset($_POST['submit'])) {
                             </a>
                         </li>
                     </ul>
-                </li> 
+                </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -452,7 +473,7 @@ if (isset($_POST['submit'])) {
                     <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                         <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    
+
                 </li>
 
                 <li class="nav-item">
@@ -502,7 +523,7 @@ if (isset($_POST['submit'])) {
             <div class="card-body mt-3">
                 <form class="row g-3 needs-validation" action="" method="POST">
 
-                  
+
                     <div class="col-md-4">
                         <label for="creater" class="form-label">Creator</label>
                         <input type="text" class="form-control" id="creater" name="creater" value="<?php echo ($_SESSION['role'] == 'admin') ? 'admin' : 'user'; ?>" readonly>
@@ -513,6 +534,7 @@ if (isset($_POST['submit'])) {
                     <!-- Select Company -->
                     <div class="col-md-4">
                         <label for="lev1">Account level 1:</label>
+                        <input type="text" id="lev1" class="form-control" name="level1" value="<?php echo $_SESSION['level1']; ?>">
                         <select id="lev1" class="form-select" name="level1" required>
                             <option value="">Select Account lev 1</option>
                             <?php
@@ -542,8 +564,8 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-5">
                         <label for="purirty" class="form-label">Service Priority</label>
                         <select class="form-select" id="purirty" name="purirty" required>
-                        <option value="">Select Service Priority</option>
-                            
+                            <option value="">Select Service Priority</option>
+
                             <option value="Urgent">Urgent - Rush Same Day</option>
                             <option value="Regular">Regular - Next Working Day</option>
                             <option value="Box Pickup">Box Pickup</option>
@@ -559,13 +581,13 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-3">
                         <label for="purirty" class="form-label">WO Type Action Code</label>
                         <select class="form-select" id="" name="wo_typ_action" required>
-                        <option value="">Select Status</option>
+                            <option value="">Select Status</option>
                             <option value="Delivery">Delivery</option>
                             <option value="Open">Open</option>
                             <option value="Picklist">Picklist</option>
                             <option value="Route">Route</option>
                             <option value="Print">Print</option>
-                            
+
 
                             <!-- <option value="FileFolder">FileBOX</option>
                             <option value="FileFolder">Barcode</option> -->
@@ -601,7 +623,7 @@ if (isset($_POST['submit'])) {
                     <!-- Object Code -->
                     <div class="col-md-3">
                         <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" onchange="updateBarcodeInput()" >
+                        <select class="form-select" id="object_code" name="object_code" onchange="updateBarcodeInput()">
                             <option value="">Select object code</option>
                             <option value="Container">Container</option>
                             <option value="FileFolder">FileFolder</option>
@@ -610,7 +632,7 @@ if (isset($_POST['submit'])) {
                     <!-- Select Barcode -->
                     <div class="col-md-4">
                         <label for="barcode_select">Enter Barcode:</label>
-                    <input type="text" class="form-control" id="barcode_select" name="barcode_select">    
+                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
                     </div>
                     <!-- FOR the alternative code -->
                     <div class="col-md-4">
@@ -621,33 +643,35 @@ if (isset($_POST['submit'])) {
                     <!-- Select Requestor -->
                     <div class="col-md-4">
                         <label for="requestor" class="form-label">Requestor Name</label>
-                        <input type="text" class="form-control" id="requestor" name="requestor" >
+                        <input type="text" class="form-control" id="requestor" name="requestor">
                     </div>
                     <!--  Comments -->
                     <div class="col-md-4">
                         <label for="designation" class="form-label">Contact Person Role</label>
-                        <input type="text" class="form-control" id="designation" name="designation" >
+                        <input type="text" class="form-control" id="designation" name="designation">
                     </div>
 
 
                     <div class="col-md-3">
                         <label class="form-label">request date</label>
-                        <input type="datetime-local" class="form-control" name="req_date" >
+                        <input type="datetime-local" class="form-control" name="req_date">
                     </div>
                     <!--  Comments -->
                     <div class="col-md-5">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" >
+                        <input type="text" class="form-control" id="description" name="description">
                     </div>
                     <div>
 
-                        </div>
+                    </div>
 
-                        <h2 style="color: #0056b3; margin-top: 35px;">Add Supplies<span style="color:#343a40;"><h5>(leave empty in case of no supplies)</h5></span></h2>
-                        <!--add supplies-->
+                    <h2 style="color: #0056b3; margin-top: 35px;">Add Supplies<span style="color:#343a40;">
+                            <h5>(leave empty in case of no supplies)</h5>
+                        </span></h2>
+                    <!--add supplies-->
                     <div class="col-md-5">
                         <label for="object-type" class="form-label">Object type</label>
-                        <select class="form-select" id="object_type" name="object_type" >
+                        <select class="form-select" id="object_type" name="object_type">
                             <option value="">Select object type</option>
                             <option value="Barcode - Boxes Barcode">Barcode - Boxes Barcode</option>
                             <option value="File Box - Standard Storage Box">File Box - Standard Storage Box</option>
@@ -660,27 +684,27 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class="col-md-4">
                         <label for="quantity" class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="quantity" name="quantity" >
+                        <input type="number" class="form-control" id="quantity" name="quantity">
                     </div>
-                       
+
                     <div class="col-md-4">
                         <label for="sup_req" class="form-label">Requestor</label>
-                        <input type="text" class="form-control" id="sup_req" name="supplies_req" >
+                        <input type="text" class="form-control" id="sup_req" name="supplies_req">
                     </div>
                     <div class="col-md-4">
                         <label for="cc" class="form-label">Cost Center</label>
-                        <input type="text" class="form-control" id="cc" name="cc" >
+                        <input type="text" class="form-control" id="cc" name="cc">
                     </div>
-                    
+
                     <div class="col-md-4">
                         <label for="datetime" class="form-label">Confirm Date/time</label>
-                        <input type="datetime-local" class="form-control" id="date_time" name="date_time" >
+                        <input type="datetime-local" class="form-control" id="date_time" name="date_time">
                     </div>
                     <div class="col-md-6">
                         <label for="comment" class="form-label">Comment</label>
-                        <input type="text" class="form-control" id="comment" name="comment" >
+                        <input type="text" class="form-control" id="comment" name="comment">
                     </div>
-                    
+
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary">Reset</button>
@@ -747,7 +771,6 @@ if (isset($_POST['submit'])) {
 
 
     <script>
-        
         $(document).ready(function() {
 
             const config = {
@@ -762,7 +785,7 @@ if (isset($_POST['submit'])) {
             dselect(document.querySelector('#lev1'), config);
             dselect(document.querySelector('#lev2'), config);
             dselect(document.querySelector('#lev3'), config);
-            
+
 
             // When company is changed, fetch the branches
             $('#lev1').change(function() {
@@ -830,39 +853,38 @@ if (isset($_POST['submit'])) {
             var branch = getElementById('lev2').value;
             var dept = getElementById('lev3').value;
             var barcode = getElementById('barcode_select').value;
-            
-            if(company && branch ){
-               // When company is changed, fetch the barcodes
-            $('lev2').change(function() {
-                var branch_id = $(this).val();
 
-                // AJAX request to get barcodes for the selected company
-                $.ajax({
-                    url: 'get_branchBarcode.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            var boxes = JSON.parse(response); //return the json response as an array
-                            // Clear existing branches
-                            $('#barcode_select').empty();
-                            $('#barcode_select').append('<option value="">Select Barcode</option>');
-                            // Add the new options from the response
-                            $.each(boxes, function(index, box) {
-                                $('#barcode_select').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
-                            });
-                            
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
+            if (company && branch) {
+                // When company is changed, fetch the barcodes
+                $('lev2').change(function() {
+                    var branch_id = $(this).val();
+
+                    // AJAX request to get barcodes for the selected company
+                    $.ajax({
+                        url: 'get_branchBarcode.php',
+                        type: 'POST',
+                        data: {
+                            branch_id: branch_id
+                        },
+                        success: function(response) {
+                            try {
+                                var boxes = JSON.parse(response); //return the json response as an array
+                                // Clear existing branches
+                                $('#barcode_select').empty();
+                                $('#barcode_select').append('<option value="">Select Barcode</option>');
+                                // Add the new options from the response
+                                $.each(boxes, function(index, box) {
+                                    $('#barcode_select').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
+                                });
+
+                            } catch (e) {
+                                console.error("Invalid JSON response", response);
+                            }
                         }
-                    }
+                    });
                 });
-            }); 
-            
-        }
-            else if(company && branch && dept){
+
+            } else if (company && branch && dept) {
 
             }
         });

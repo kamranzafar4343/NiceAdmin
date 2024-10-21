@@ -10,7 +10,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Include the database connection
-include 'config/db.php'; 
+include 'config/db.php';
 
 // Get session email 
 $email = $_SESSION['email'];
@@ -26,39 +26,49 @@ if ($resultData->num_rows > 0) {
 }
 
 // Check if the user is an admin, otherwise redirect
-if (isset($_SESSION['role']) &&$_SESSION['role'] != 'admin') {
+if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
   // If the user is not an Admin, redirect to index page
   header("Location: index.php");
   exit();
 }
 
 if (isset($_GET['id'])) {
-    $branch_id = intval($_GET['id']); // Ensure branch ID is an integer
+  $branch_id = intval($_GET['id']); // Ensure branch ID is an integer
 
-    // Fetch the company ID associated with the branch from the compID_FK column
-    $sql = "SELECT `comp_id_fk` FROM `branches` WHERE `branch_id` = $branch_id";
-    $result = $conn->query($sql);
+  // Get the number of branches for the specific box
+  $queryCount = "SELECT COUNT(*) AS Acc3_count FROM departments WHERE branch_id_fk = '$branch_id'";
+  $resultCount = mysqli_query($conn, $queryCount);
+  $rowCount = mysqli_fetch_assoc($resultCount);
+  $Count = $rowCount['Acc3_count'];
 
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $company_id = $row['comp_id_fk'];
+  if ($Count > 0) {
+    echo 'Error: Cannot delete a branch having departments. Please delete the departments first.';
+  }
 
-        // Now, perform the delete operation
-        $delete_sql = "DELETE FROM `branches` WHERE `branch_id` = $branch_id";
-        if ($conn->query($delete_sql) === TRUE) {
-            // Redirect to the company's branches page after successful deletion
-            header("Location: Branches.php?id=" . $company_id);
-            exit;
-        } else {
-            echo "Error deleting record: " . $conn->error;
-        }
+
+  // Fetch the company ID associated with the branch from the compID_FK column
+  $sql = "SELECT `comp_id_fk` FROM `branches` WHERE `branch_id` = $branch_id";
+  $result = $conn->query($sql);
+
+  if ($result && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $company_id = $row['comp_id_fk'];
+
+    // Now, perform the delete operation
+    $delete_sql = "DELETE FROM `branches` WHERE `branch_id` = $branch_id";
+    if ($conn->query($delete_sql) === TRUE) {
+      // Redirect to the company's branches page after successful deletion
+      header("Location: Branches.php?id=" . $company_id);
+      exit;
     } else {
-        echo "Error: No company found for this branch.";
+      echo "Error deleting record: " . $conn->error;
     }
+  } else {
+    echo "Error: No company found for this branch.";
+  }
 
-    // Close the database connection
-    $conn->close();
+  // Close the database connection
+  $conn->close();
 } else {
-    echo "No branch ID provided.";
+  echo "No branch ID provided.";
 }
-?>

@@ -78,7 +78,6 @@ if (isset($_POST['update'])) {
                 `expiry` = '$expiry_date',
                 `foc` = '$contact_person',
                 `foc_phone` = '$contact_phone',
-                `contact_fax` = '$contact_fax',
                 `add_1` = '$address',
                 `pickup_address` = '$pickup_address' 
             WHERE `dept_id` = '$dept_id'";

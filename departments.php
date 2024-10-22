@@ -40,17 +40,15 @@ $branch_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $sql = "SELECT * FROM `departments` WHERE `branch_id_fk` = $branch_id";
 $result = $conn->query($sql);
 
-//get info from branches table
-$sql2 = "Select * from branches where branch_id= $branch_id";
+//get name of branch to show on top of table
+$sql2 = "Select branch_name from branches where branch_id= $branch_id";
 $result2 = $conn->query($sql2);
 
-$acc_lev2 = "";
-$acc_desc = "";
+$branch_name = "";
 
 if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
-    $acc_lev2 = $row2['acc_lev_2'];
-    $acc_desc = $row2['account_desc'];
+    $branch_name = $row2['branch_name'];
 }
 
 ?>
@@ -62,7 +60,7 @@ if ($result2->num_rows > 0) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Branches</title>
+    <title>Departments</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -486,7 +484,7 @@ if ($result2->num_rows > 0) {
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $acc_lev2 . " - " . $acc_desc; ?></h2>
+                    <h2 class="card-title fw-bold text-uppercase"><?php echo $branch_name; ?></h2>
 
                     <?php
                     if ($result->num_rows > 0) {
@@ -495,13 +493,13 @@ if ($result2->num_rows > 0) {
                             <thead>
                                 <tr>
                                     <!-- <th scope="col">ID</th> -->
-                                    <th scope="col">Acc_lev_3</th>
+                                    <th scope="col">Department Name</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Registration date</th>
                                     <th scope="col">Contract Expire</th>
                                     <th scope="col">Contact Person</th>
                                     <th scope="col">Phone</th>
-                                    <th scope="col">Contact Fax</th>
+                           
                                     <th scope="col">Address</th>
                                     <th scope="col">Pick Up Address</th>
                                     <th scope="col">Actions</th>
@@ -511,16 +509,17 @@ if ($result2->num_rows > 0) {
                                 <?php
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
-                                    echo "<tr>";
-                                    //    echo "<td>" . ($row["branch_id"]) . "</td>";
-                                    echo "<td>" . ($row["acc_lev_3"]) . "</td>";
+                                
+                                    
+                                    echo "<td>" . ($row["dept_name"]) . "</td>";
                                     echo "<td>" . ($row["acc_desc"]) . "</td>";
                                     echo "<td>" . ($row["registration"]) . "</td>";
                                     echo "<td>" . ($row["expiry"]) . "</td>";
-                                    echo "<td>" . ($row["foc"]) . "</td>";
-                                    echo "<td>" . ($row["foc_phone"]) . "</td>";
-                                    echo "<td>" . ($row["contact_fax"]) . "</td>";
-                                    echo "<td>" . ($row["add_1"]) . "<br>" . ($row["add_2"]) . "<br>" . ($row["add_3"]) . "</td>";
+                                    echo "<td style= ' color: #fd7e14; font-weight: bold; opacity: 0.8;'> " . ($row["foc"]) . "</td>"; //foc means focal person
+                                 
+                                    echo "<td>" . ($row["foc_phone"]) . "</td>"; //foc mean focal person
+                                  
+                                    echo "<td>" . ($row["add_1"]) . "</td>"; //add_1 is address
                                     echo "<td>" . ($row["pickup_address"]) . "</td>";
                                 ?>
                                     <td>

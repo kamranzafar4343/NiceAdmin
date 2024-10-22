@@ -518,7 +518,7 @@ if ($result2->num_rows > 0) {
                                 <?php
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
-                                    echo "<tr>";
+                               
                                     ?>
                                     <td>
                                         <a class="text-primary fw-bold" href="departments.php?id=<?php echo $row['branch_id']; ?>">
@@ -530,7 +530,7 @@ if ($result2->num_rows > 0) {
                                        echo "<td>" . ($row["account_desc"]) . "</td>";
                                     echo "<td>" . ($row["registration_date"]) . "</td>";
                                     echo "<td>" . ($row["expiry_date"]) . "</td>";
-                                    echo "<td>" . ($row["contact_person"]) . "</td>";
+                                    echo "<td style= ' color:#28a745; font-weight: bold; opacity: 0.8;'> " . ($row["contact_person"]) . "</td>"; 
                                     echo "<td>" . ($row["contact_phone"]) . "</td>";
                                    
                                     echo "<td>" . ($row["address"]) . "</td>";

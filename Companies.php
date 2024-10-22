@@ -338,7 +338,7 @@ $result = $conn->query($sql);
                   echo "<td>" . htmlspecialchars($row["acc_desc"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
-                  echo "<td >" . htmlspecialchars($row["foc"]) . "</td>";
+                  echo "<td style= '  color: #6f42c1; font-weight: bold; opacity: 0.8;'> " . ($row["foc"]) . "</td>"; 
                   echo "<td >" . htmlspecialchars($row["foc_phone"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["add_1"]) ."</td>";
                   ?>

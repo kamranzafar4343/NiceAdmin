@@ -39,7 +39,7 @@ if (isset($_POST['submit'])) {
     $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
-    $foc = mysqli_real_escape_string($conn, $_POST['foc']);
+    $foc = mysqli_real_escape_string($conn, $_POST['foc']); //foc means focal person = contact person
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
     $comp_email = mysqli_real_escape_string($conn, $_POST['comp_email']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);

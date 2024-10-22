@@ -44,13 +44,12 @@ if (isset($_GET['id'])) {
   if ($result && $result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $company_id = $row['comp_id_fk'];
-    $acc_lev_2 = $row['acc_lev_2'];
+    $branch_name = $row['branch_name'];
     $account_desc = $row['account_desc'];
     $registration_date = $row['registration_date'];
     $expiry_date = $row['expiry_date'];
     $contact_person = $row['contact_person'];
     $contact_phone = $row['contact_phone'];
-    $contact_fax = $row['contact_fax'];
     $address = $row['address'];
     $pickup_address = $row['pickup_address'];
   } else {
@@ -62,25 +61,23 @@ if (isset($_GET['id'])) {
 // Update the record
 if (isset($_POST['update'])) {
   // Retrieve and sanitize form data
-  $acc_lev_2 = mysqli_real_escape_string($conn, $_POST['acc_lev_2']);
+  $branch_name = mysqli_real_escape_string($conn, $_POST['branch_name']);
   $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
   $registration_date = mysqli_real_escape_string($conn, $_POST['registration']);
   $expiry_date = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-  $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']);
 
   // SQL query to update the record
   $sql = "UPDATE `branches` SET 
-                `acc_lev_2` = '$acc_lev_2',
+                `branch_name` = '$branch_name',
                 `account_desc` = '$account_desc',
                 `registration_date` = '$registration_date',
                 `expiry_date` = '$expiry_date',
                 `contact_person` = '$contact_person',
                 `contact_phone` = '$contact_phone',
-                `contact_fax` = '$contact_fax',
                 `address` = '$address',
                 `pickup_address` = '$pickup_address' 
             WHERE `branch_id` = '$branch_id'";
@@ -701,8 +698,8 @@ End Search Bar -->
 
           <!-- Acc-Lev-2 -->
           <div class="col-md-6">
-            <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-2</label>
-            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_2" value="<?php echo isset($acc_lev_2) ? $acc_lev_2 : ''; ?>" readonly>
+            <label for="" class="form-label">Branch Name</label>
+            <input type="text" class="form-control" id="" name="branch_name" value="<?php echo isset($branch_name) ? $branch_name : ''; ?>" readonly>
           </div>
 
           <!-- Account Description -->
@@ -734,12 +731,7 @@ End Search Bar -->
             <label for="phone" class="form-label">Phone</label>
             <input type="text" class="form-control" id="" name="foc_phone" value="<?php echo isset($contact_phone) ? $contact_phone : ''; ?>" required>
           </div>
-
-          <!-- Fax -->
-          <div class="col-md-6">
-            <label for="fax" class="form-label">Fax</label>
-            <input type="text" class="form-control" id="" name="foc_fax" value="<?php echo isset($contact_fax) ? $contact_fax : ''; ?>">
-          </div>
+          
           <!-- Pickup/Delivery Address -->
           <div class="col-md-6">
             <label for="pickup_address" class="form-label">Pickup/Delivery Address</label>

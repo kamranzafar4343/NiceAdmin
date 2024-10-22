@@ -475,7 +475,7 @@ $resultShowOrders = $conn->query($showOrders);
     <!--------------- End sidebar ------------------>
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
     <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-1 add">Add Workorder</button>
+    <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-1 add">Create Workorder</button>
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
@@ -568,22 +568,22 @@ $resultShowOrders = $conn->query($showOrders);
                             echo '<td>';
                             if ($row["priority"] == 'Regular') {
                                 // Display a green badge for "Regular"
-                                echo '<span class="badge badge-pill badge-success">' . $row["priority"] . '</span>';
+                                echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["priority"] . '</span>';
                             } elseif ($row["priority"] == 'Urgent') {
                                 // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-warning">' . $row["priority"] . '</span>';
+                                echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["priority"] . '</span>';
                             } elseif ($row["priority"] == 'Box Pickup') {
                                 // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-info">' . $row["priority"] . '</span>';
+                                echo '<span class="badge badge-pill badge-info" style="font-size: 12px;">' . $row["priority"] . '</span>';
                             } elseif ($row["priority"] == 'Cancel Workorder') {
                                 // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-secondary">' . $row["priority"] . '</span>';
+                                echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["priority"] . '</span>';
                             } elseif ($row["priority"] == 'Permanantly out') {
                                 // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-danger">' . $row["priority"] . '</span>';
+                                echo '<span class="badge badge-pill badge-danger" style="font-size: 12px;">' . $row["priority"] . '</span>';
                             } elseif ($row["priority"] == 'Supplies') {
                                 // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-primary">' . $row["priority"] . '</span>';
+                                echo '<span class="badge badge-pill badge-primary" style="font-size: 12px;">' . $row["priority"] . '</span>';
                             }
                             echo '</td>';
 

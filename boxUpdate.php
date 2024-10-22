@@ -579,12 +579,7 @@ End Search Bar -->
                     </a>
                 </li><!-- End Companies Nav -->
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="account.php">
-                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
-
+        
                 <li class="nav-item">
                     <a class="nav-link active" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>

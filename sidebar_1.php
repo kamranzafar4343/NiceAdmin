@@ -16,11 +16,6 @@
                 </a>
             </li><!-- End Tables Nav -->
 
-            <li class="nav-item">
-                    <a class="nav-link collapsed" href="account.php">
-                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
 
             <li class="nav-item">
                 <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">

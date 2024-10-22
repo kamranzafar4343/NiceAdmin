@@ -409,12 +409,6 @@ if (isset($_POST['submit'])) {
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="account.php">
-                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
-
-                <li class="nav-item">
                     <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                         <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>

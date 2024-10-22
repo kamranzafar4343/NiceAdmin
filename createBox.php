@@ -389,11 +389,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </a>
                 </li><!-- End Boxes Nav -->
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Work Orders Nav -->
+  
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
@@ -416,11 +412,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </a>
                 </li><!-- End Boxes Nav -->
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">

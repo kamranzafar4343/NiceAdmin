@@ -25,14 +25,6 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-
-
-
-// if (isset($_GET['comp_id'])) {
-//     $comp_id = $_GET['comp_id'];
-//     $sql = "SELECT * FROM box WHERE companiID_FK = '$comp_id'";
-//     $result = $conn->query($sql);
-// }
 ?>
 
 <!DOCTYPE html>
@@ -391,12 +383,6 @@ if ($resultData->num_rows > 0) {
                 </li><!-- End Companies Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="account.php">
-                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
-
-                <li class="nav-item">
                     <a class="nav-link active" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
@@ -428,13 +414,6 @@ if ($resultData->num_rows > 0) {
                         <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
-
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">

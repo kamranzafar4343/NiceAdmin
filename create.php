@@ -45,15 +45,15 @@ if (isset($_POST['submit'])) {
     $address = mysqli_real_escape_string($conn, $_POST['address']);
 
 
-    // //check account level no is already exist or not
-    // $accCheckQuery = "SELECT * FROM `compani` WHERE `acc_lev_1` = '$acc_1'";
-    // $accCheckResult = $conn->query($accCheckQuery);
+    //check account level no is already exist or not
+    $accCheckQuery = "SELECT * FROM `compani` WHERE `comp_name` = '$comp_name' AND `email` = '$comp_email'";
+    $accCheckResult = $conn->query($accCheckQuery);
 
-    // if ($accCheckResult->num_rows > 0) {
-    //     die("Error: The account level no. '$acc_1' already exists.");
-    // }
+    if ($accCheckResult && $accCheckResult->num_rows > 0) {
+        die("Error: The company name or email already exists.");
+    }
 
-    // //check if email already exist or not
+    //check if email already exist or not
 
 
     // Insert the record into the database
@@ -373,11 +373,6 @@ if (isset($_POST['submit'])) {
                     </a>
                 </li><!-- End Companies Nav -->
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="account.php">
-                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
@@ -412,11 +407,6 @@ if (isset($_POST['submit'])) {
                     </a>
                 </li><!-- End Boxes Nav -->
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">

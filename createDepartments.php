@@ -37,7 +37,7 @@ $branch_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 
 // gives error if someone tries to access the page without a branch_id
-$branchQuery = "SELECT branch_id, acc_lev_2 FROM branches WHERE branch_id = $branch_id";
+$branchQuery = "SELECT branch_id FROM branches WHERE branch_id = $branch_id";
 $branchResult = $conn->query($branchQuery);
 
 if ($branchResult->num_rows === 0) {
@@ -46,29 +46,26 @@ if ($branchResult->num_rows === 0) {
 
 if (isset($_POST['submit'])) {
   // Fetching values from the form using POST and ensuring security with real_escape_string
-  $acc_lev_3 = mysqli_real_escape_string($conn, $_POST['acc_lev_3']);
+  $dept_name = mysqli_real_escape_string($conn, $_POST['dept_name']);
   $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
   $registration = mysqli_real_escape_string($conn, $_POST['registration']);
   $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-  $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
-  $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
-  $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
-    //check account level no is already exist or not
-    $accCheckQuery = "SELECT * FROM `departments` WHERE `acc_lev_3` = '$acc_lev_3'";
+    //check dept name already exist or not
+    $accCheckQuery = "SELECT * FROM `departments` WHERE `dept_name` = '$dept_name'";
     $accCheckResult = $conn->query($accCheckQuery);
   
     if ($accCheckResult->num_rows > 0) {
-      die("Error: The account level no. '$acc_lev_3' already exists.");
+      die("Error: The department name '$dept_name' already exists.");
     }
 
   // SQL query to insert the data into the database
-  $sql = "INSERT INTO departments (branch_id_fk, acc_lev_3, acc_desc, registration, expiry, foc, foc_phone, contact_fax, add_1, add_2, add_3, pickup_address) 
-          VALUES ('$branch_id', '$acc_lev_3', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$contact_fax', '$address', '$address1', '$address2', '$pickup_address')";
+  $sql = "INSERT INTO departments (branch_id_fk, dept_name, acc_desc, registration, expiry, foc, foc_phone,  add_1, pickup_address) 
+          VALUES ('$branch_id', '$dept_name', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone',  '$address', '$pickup_address')";
 
   if ($conn->query($sql) === TRUE) {
       // Redirecting after successful insertion
@@ -472,27 +469,10 @@ End Search Bar -->
         <!-- Multi Columns Form -->
         <form class="row g-3 p-3" action="#" method="POST">
           
-          <!-- Branch ID input (readonly) -->
-          <!-- <div class="col-md-6">
-            <label class="form-label">Branch ID</label>
-            <input type="text" class="form-control" name="branch_id_fk" value="<?php echo htmlspecialchars($branch_id); ?>" readonly>
-          </div> -->
-
-        <!-- fetching acc lev 2 from branch table (readonly) -->
-          <?php
-          $getAccLev2 = "SELECT * FROM branches WHERE branch_id = '$branch_id'";
-          $resultAccLev2 = mysqli_query($conn, $getAccLev2);
-          if ($resultAccLev2->num_rows > 0) {
-            $rowAccLev2 = $resultAccLev2->fetch_assoc();
-
-            $fetchAcc2 = $rowAccLev2['acc_lev_2'];
-          }
-
-          ?>
 
           <div class="col-md-6">
             <label class="form-label">Department Name</label>
-            <input type="text" class="form-control" name="" value="dept_name" readonly>
+            <input type="text" class="form-control" name="dept_name" required>
           </div>
 
           <div class="col-md-6">

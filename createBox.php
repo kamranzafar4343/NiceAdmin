@@ -31,25 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
 
-    //check if barcode is in the defined account range
-    $checkAccount = "SELECT begin_code, end_code From acc_range where level1 = '$level_1' AND level2 = '$level2'";
-    $resultAccount = mysqli_query($conn, $checkAccount);
-
-    if ($resultAccount && $resultAccount->num_rows > 0) {
-        $rowAcc = $resultAccount->fetch_assoc();
-        $start = (int)$rowAcc['begin_code'];
-        $end = (int)$rowAcc['end_code'];
-    } else {
-        die('Account range for selected company does not exist.');
-    }
-
-    if ($barcode <= $start || $barcode >= $end) {
-        die('Barcode is not in the defined account range. Please enter a valid barcode.');
-        exit();
-    }
-
-
-
     //check if barcode is already in use
     $checkBarcode = "SELECT * FROM box WHERE barcode = '$barcode'";
     $resultBarcode = mysqli_query($conn, $checkBarcode);

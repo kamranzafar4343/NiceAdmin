@@ -146,7 +146,7 @@ if ($result2->num_rows > 0) {
         #fixedButtonBranch {
             position: relative;
             top: 110px;
-            left: 1187px;
+            left: 1149px;
         }
 
         .row {
@@ -429,7 +429,7 @@ if ($result2->num_rows > 0) {
                     <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
-            
+
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
                     <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
@@ -499,7 +499,7 @@ if ($result2->num_rows > 0) {
                                     <th scope="col">Contract Expire</th>
                                     <th scope="col">Contact Person</th>
                                     <th scope="col">Phone</th>
-                           
+
                                     <th scope="col">Address</th>
                                     <th scope="col">Pick Up Address</th>
                                     <th scope="col">Actions</th>
@@ -509,16 +509,16 @@ if ($result2->num_rows > 0) {
                                 <?php
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
-                                
-                                    
+
+
                                     echo "<td>" . ($row["dept_name"]) . "</td>";
                                     echo "<td>" . ($row["acc_desc"]) . "</td>";
                                     echo "<td>" . ($row["registration"]) . "</td>";
                                     echo "<td>" . ($row["expiry"]) . "</td>";
                                     echo "<td style= ' color: #fd7e14; font-weight: bold; opacity: 0.8;'> " . ($row["foc"]) . "</td>"; //foc means focal person
-                                 
+
                                     echo "<td>" . ($row["foc_phone"]) . "</td>"; //foc mean focal person
-                                  
+
                                     echo "<td>" . ($row["add_1"]) . "</td>"; //add_1 is address
                                     echo "<td>" . ($row["pickup_address"]) . "</td>";
                                 ?>

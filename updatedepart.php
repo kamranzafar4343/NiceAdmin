@@ -44,13 +44,12 @@ if (isset($_GET['id'])) {
   if ($result && $result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $branch_id=$row['branch_id_fk'];
-    $acc_lev_3 = $row['acc_lev_3'];
+    $dept_name = $row['dept_name'];
     $account_desc = $row['acc_desc'];
     $registration_date = $row['registration'];
     $expiry_date = $row['expiry'];
     $contact_person = $row['foc'];
     $contact_phone = $row['foc_phone'];
-    $contact_fax = $row['contact_fax'];
     $address = $row['add_1'];
     $pickup_address = $row['pickup_address'];
   } else {
@@ -62,19 +61,18 @@ if (isset($_GET['id'])) {
 // Update the record
 if (isset($_POST['update'])) {
   // Retrieve and sanitize form data
-  $acc_lev_3 = mysqli_real_escape_string($conn, $_POST['acc_lev_3']);
+  $dept_name = mysqli_real_escape_string($conn, $_POST['dept_name']);
   $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
   $registration_date = mysqli_real_escape_string($conn, $_POST['registration']);
   $expiry_date = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-  $contact_fax = mysqli_real_escape_string($conn, $_POST['contact_fax']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']);
 
   // SQL query to update the record
   $sql = "UPDATE `departments` SET 
-                `acc_lev_3` = '$acc_lev_3',
+                `dept_name` = '$dept_name',
                 `acc_desc` = '$account_desc',
                 `registration` = '$registration_date',
                 `expiry` = '$expiry_date',
@@ -614,11 +612,7 @@ End Search Bar -->
         </a>
       </li><!-- End Tables Nav -->
 
-      <li class="nav-item">
-                    <a class="nav-link collapsed" href="account.php">
-                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
+
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
@@ -692,10 +686,10 @@ End Search Bar -->
       <div class="card-body">
         <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
 
-          <!-- Acc-Lev-2 -->
+
           <div class="col-md-6">
-            <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-3</label>
-            <input type="text" class="form-control" id="acc_lev_2" name="acc_lev_3" value="<?php echo isset($acc_lev_3) ? $acc_lev_3 : ''; ?>" readonly>
+            <label for="BRANCH_ACC_LEVEL" class="form-label">Department Name</label>
+            <input type="text" class="form-control" id="dept_name" name="dept_name" value="<?php echo isset($dept_name) ? $dept_name : ''; ?>" readonly>
           </div>
 
           <!-- Account Description -->
@@ -728,11 +722,6 @@ End Search Bar -->
             <input type="text" class="form-control" id="" name="foc_phone" value="<?php echo isset($contact_phone) ? $contact_phone : ''; ?>" required>
           </div>
 
-          <!-- Fax -->
-          <div class="col-md-6">
-            <label for="fax" class="form-label">Fax</label>
-            <input type="text" class="form-control" id="" name="contact_fax" value="<?php echo isset($contact_fax) ? $contact_fax : ''; ?>">
-          </div>
           <!-- Pickup/Delivery Address -->
           <div class="col-md-6">
             <label for="pickup_address" class="form-label">Pickup/Delivery Address</label>

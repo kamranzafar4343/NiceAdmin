@@ -37,13 +37,13 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 if (isset($_POST['submit'])) {
 
     $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
+    $desc = mysqli_real_escape_string($conn, $_POST['desc']);
     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']); //foc means focal person = contact person
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
     $comp_email = mysqli_real_escape_string($conn, $_POST['comp_email']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
-
 
     //check account level no is already exist or not
     $accCheckQuery = "SELECT * FROM `compani` WHERE `comp_name` = '$comp_name' AND `email` = '$comp_email'";
@@ -57,17 +57,10 @@ if (isset($_POST['submit'])) {
 
 
     // Insert the record into the database
-    $sql = "INSERT INTO `compani` (`comp_name`, `registration`, `expiry`, `foc`, `foc_phone`, `email`, `add_1`) 
-            VALUES ('$comp_name', '$registration', '$expiry', '$foc', '$foc_phone', '$comp_email', '$address')";
-
-    $result = $conn->query($sql);
-
-    if ($result === true) {
-        header("Location: Companies.php");
-        exit();
-    } else {
-        echo 'error';
-    }
+    $sql = "INSERT INTO `compani` (`comp_name`, `acc_desc` `registration`, `expiry`, `foc`, `foc_phone`, `email`, `add_1`) 
+            VALUES ('$comp_name', '$registration', '$desc', '$expiry', '$foc', '$foc_phone', '$comp_email', '$address')";
+    $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
+    
 }
 ?>
 
@@ -460,8 +453,13 @@ if (isset($_POST['submit'])) {
                 <form class="row g-3 needs-validation" action="" method="POST">
 
                     <div class="col-md-6">
-                        <label for="account_description" class="form-label">Company Name</label>
+                        <label for="" class="form-label">Company Name</label>
                         <input type="text" class="form-control" id="comp_name" name="comp_name" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="account_description" class="form-label">Description</label>
+                        <textarea class="form-control" id="desc" name="desc" required></textarea>
                     </div>
 
                     <div class="col-md-6">

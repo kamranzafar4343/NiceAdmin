@@ -313,11 +313,9 @@ $result = $conn->query($sql);
                 <tr>
 
                   <th scope="col">Company Name</th>
-                  <th scope="col">Description</th>
-                  <th scope="col">Setup Date</th>
-                  <th scope="col">Expiry Date</th>
+                  
                   <th scope="col">Contact Person</th>
-                  <th scope="col">Phone</th>
+                  
                   <th scope="col" style="width:15%;">Address</th>
                   <th scope="col">Actions</th>
                 </tr>
@@ -335,16 +333,15 @@ $result = $conn->query($sql);
                     </a>
                   </td>
                   <?php
-                  echo "<td>" . htmlspecialchars($row["acc_desc"]) . "</td>";
-                  echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
-                  echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
+                 
                   echo "<td style= '  color: #6f42c1; font-weight: bold; opacity: 0.8;'> " . ($row["foc"]) . "</td>"; 
-                  echo "<td >" . htmlspecialchars($row["foc_phone"]) . "</td>";
+                  
                   echo "<td >" . htmlspecialchars($row["add_1"]) ."</td>";
                   ?>
                   <td>
                     <div style="display: flex; gap: 10px;">
-                      <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                    <a type="button" class="btn btn-success btn-success d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-file-lines"></i></a>  
+                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                       <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
 

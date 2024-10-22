@@ -368,7 +368,7 @@ if ($result2->num_rows > 0) {
             </form>
         </div><!-- End Search Bar -->
 
-        <h3>List of Departemnts</h3>
+        <h3>List of Departments</h3>
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">

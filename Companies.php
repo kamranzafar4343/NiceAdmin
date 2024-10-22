@@ -210,7 +210,7 @@ $result = $conn->query($sql);
             <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
           </a>
         </li><!-- End Companies Nav -->
-        
+
         <li class="nav-item">
           <a class="nav-link collapsed" href="box.php">
             <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
@@ -311,11 +311,9 @@ $result = $conn->query($sql);
             <table id="companies" class="">
               <thead>
                 <tr>
-                  
-                  <!-- <th scope="col"  style="width:8%;" >Level-2</th> -->
-                  <!-- <th scope="col"  style="width:8%;">Level-3</th> -->
 
                   <th scope="col">Company Name</th>
+                  <th scope="col">Description</th>
                   <th scope="col">Setup Date</th>
                   <th scope="col">Expiry Date</th>
                   <th scope="col">Contact Person</th>
@@ -337,6 +335,7 @@ $result = $conn->query($sql);
                     </a>
                   </td>
                   <?php
+                  echo "<td>" . htmlspecialchars($row["acc_desc"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["registration"]) . "</td>";
                   echo "<td>" . htmlspecialchars($row["expiry"]) . "</td>";
                   echo "<td >" . htmlspecialchars($row["foc"]) . "</td>";

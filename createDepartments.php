@@ -491,42 +491,33 @@ End Search Bar -->
           ?>
 
           <div class="col-md-6">
-            <label class="form-label">Account level 2</label>
-            <input type="text" class="form-control" name="" value="<?php echo htmlspecialchars($fetchAcc2); ?>" readonly>
+            <label class="form-label">Department Name</label>
+            <input type="text" class="form-control" name="" value="dept_name" readonly>
           </div>
-
-          <div class="col-md-6">
-            <label for="BRANCH_ACC_LEVEL" class="form-label">Acc-Lev-3</label>
-            <input type="text" class="form-control" id="acc_lev_3" name="acc_lev_3" required>
-          </div>
-
 
           <div class="col-md-6">
             <label for="account_description" class="form-label">Account Description</label>
             <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
           </div>
 
-
           <div class="col-md-6">
             <label for="registration" class="form-label">Setup Date</label>
             <input type="date" class="form-control" id="registration" name="registration" required>
           </div>
+
           <div class="col-md-6 mb-3">
             <label for="expiry" class="form-label">Conract Exp_Date</label>
             <input type="date" class="form-control" id="expiry" name="expiry">
           </div>
+
           <div class="col-md-6">
             <label for="" class="form-label">Contact Person</label>
             <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
           </div>
+
           <div class="col-md-6">
             <label for="phone" class="form-label">Phone</label>
             <input type="text" class="form-control" id="" name="foc_phone" required>
-          </div>
-
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Fax</label>
-            <input type="text" class="form-control" id="" name="foc_fax">
           </div>
 
           <div class="col-md-6">

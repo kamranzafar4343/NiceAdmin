@@ -40,17 +40,15 @@ $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $sql = "SELECT * FROM branches WHERE comp_id_fk = $company_id";
 $result = $conn->query($sql);
 
-//2nd query to fetch the info of the company
-$sql2 = "Select * from compani where comp_id= $company_id";
+//2nd query to fetch the info of the company to show on top of table
+$sql2 = "Select comp_name from compani where comp_id = $company_id";
 $result2 = $conn->query($sql2);
 
-$Acc_lev_1 = "";
-$acc_desc = "";
+$comp_name = "";
 
 if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
-    $Acc_lev_1 = $row2['acc_lev_1'];
-    $acc_desc = $row2['acc_desc'];
+    $comp_name = $row2['comp_name'];
 }
 
 ?>
@@ -497,7 +495,7 @@ if ($result2->num_rows > 0) {
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h2 class="card-title fw-bold text-uppercase"><?php echo $Acc_lev_1 . " - " . $acc_desc; ?></h2>
+                    <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
 
                     <?php
                     if ($result->num_rows > 0) {
@@ -505,13 +503,12 @@ if ($result2->num_rows > 0) {
                         <table id="branchTable" class="table table-borderless datatable" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th scope="col">Acc_lev_2</th>
+                                    <th scope="col">Branch Name</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Registration date</th>
-                                    <th scope="col">Contract Expire</th>
+                                    <th scope="col">Contract Expiry</th>
                                     <th scope="col">Contact Person</th>
                                     <th scope="col">Phone</th>
-                                    <th scope="col">Contact Fax</th>
                                     <th scope="col">Address</th>
                                     <th scope="col">Pick Up Address</th>
                                     <th scope="col">Actions</th>
@@ -522,24 +519,21 @@ if ($result2->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
                                     echo "<tr>";
-                                    //    echo "<td>" . ($row["branch_id"]) . "</td>";
-
-                                ?>
+                                    ?>
                                     <td>
                                         <a class="text-primary fw-bold" href="departments.php?id=<?php echo $row['branch_id']; ?>">
-                                            <?php echo $row['acc_lev_2']; ?>
+                                            <?php echo $row['branch_name']; ?>
                                         </a>
                                     </td>
                                     <?php
 
-
-                                    echo "<td>" . ($row["account_desc"]) . "</td>";
+                                       echo "<td>" . ($row["account_desc"]) . "</td>";
                                     echo "<td>" . ($row["registration_date"]) . "</td>";
                                     echo "<td>" . ($row["expiry_date"]) . "</td>";
                                     echo "<td>" . ($row["contact_person"]) . "</td>";
                                     echo "<td>" . ($row["contact_phone"]) . "</td>";
-                                    echo "<td>" . ($row["contact_fax"]) . "</td>";
-                                    echo "<td>" . ($row["address"]) . "<br>" . ($row["address1"]) . "<br>" . ($row["address2"]) . "</td>";
+                                   
+                                    echo "<td>" . ($row["address"]) . "</td>";
                                     echo "<td>" . ($row["pickup_address"]) . "</td>";
                                     ?>
                                     <td>

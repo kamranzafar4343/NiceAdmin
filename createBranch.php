@@ -36,38 +36,35 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Validate company ID
-$companyQuery = "SELECT comp_id, acc_lev_1 FROM compani WHERE comp_id = $company_id";
+$companyQuery = "SELECT comp_id FROM compani WHERE comp_id = $company_id";
 $companyResult = $conn->query($companyQuery);
 
-if ($companyResult->num_rows === 0) {
+if ($companyResult && $companyResult->num_rows === 0) {
   die("Error: Company ID does not exist.");
 }
 
 if (isset($_POST['submit'])) {
   // Fetching values from the form using POST and ensuring security with real_escape_string
-  $acc_lev_2 = mysqli_real_escape_string($conn, $_POST['acc_lev_2']);
+  $branch_name = mysqli_real_escape_string($conn, $_POST['branch_name']);
   $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
   $registration = mysqli_real_escape_string($conn, $_POST['registration']);
   $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-  $contact_fax = mysqli_real_escape_string($conn, $_POST['foc_fax']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
-  $address1 = mysqli_real_escape_string($conn, $_POST['address1']);
-  $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
-  //check account level no is already exist or not
-  $accCheckQuery = "SELECT * FROM `branches` WHERE `acc_lev_2` = '$acc_lev_2'";
+  //check duplicate company name
+  $accCheckQuery = "SELECT * FROM `branches` WHERE `branch_name` = '$branch_name'";
   $accCheckResult = $conn->query($accCheckQuery);
 
   if ($accCheckResult->num_rows > 0) {
-    die("Error: The account level no. '$acc_lev_2' already exists.");
+    die("Error: The company name '$branch_name' already exists.");
   }
 
   // SQL query to insert the data into the database
-  $sql = "INSERT INTO branches (comp_id_fk, acc_lev_2, account_desc, registration_date, expiry_date, contact_person, contact_phone, contact_fax, address, address1, address2, pickup_address) 
-          VALUES ('$company_id', '$acc_lev_2', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$contact_fax', '$address', '$address1', '$address2', '$pickup_address')";
+  $sql = "INSERT INTO branches (comp_id_fk, branch_name, account_desc, registration_date, expiry_date, contact_person, contact_phone, address, pickup_address) 
+          VALUES ('$company_id', '$branch_name', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$address', '$pickup_address')";
 
   if ($conn->query($sql) === TRUE) {
     header("Location: Branches.php?id=" . $company_id);
@@ -474,27 +471,24 @@ End Search Bar -->
           $resultAccLev1 = mysqli_query($conn, $getAccLev1);
           if ($resultAccLev1->num_rows > 0) {
             $rowAccLev1 = $resultAccLev1->fetch_assoc();
-
-            $fetchAcc1 = $rowAccLev1['acc_lev_1'];
+            // $fetchAcc1 = $rowAccLev1['acc_lev_1'];
           }
-
           ?>
 
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <label class="form-label">Account level 1</label>
             <input type="text" class="form-control" name="" value="<?php echo htmlspecialchars($fetchAcc1); ?>" readonly>
-          </div>
+          </div> -->
 
           <div class="col-md-6">
-            <label class="form-label">Account level 2</label>
-            <input type="text" class="form-control" name="acc_lev_2" required>
+            <label class="form-label">Branch Name</label>
+            <input type="text" class="form-control" name="branch_name" required>
           </div>
 
           <div class="col-md-6">
             <label for="account_description" class="form-label">Account Description</label>
             <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
           </div>
-
 
           <div class="col-md-6">
             <label for="registration" class="form-label">Setup Date</label>
@@ -504,18 +498,15 @@ End Search Bar -->
             <label for="expiry" class="form-label">Conract Exp_Date</label>
             <input type="date" class="form-control" id="expiry" name="expiry">
           </div>
+
           <div class="col-md-6">
             <label for="" class="form-label">Contact Person</label>
             <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
           </div>
+
           <div class="col-md-6">
             <label for="phone" class="form-label">Phone</label>
             <input type="text" class="form-control" id="" name="foc_phone" required>
-          </div>
-
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Fax</label>
-            <input type="text" class="form-control" id="" name="foc_fax">
           </div>
 
           <div class="col-md-6">

@@ -153,7 +153,7 @@ include "sidebar.php";
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="ri-shopping-cart-line"></i>
+                      <i class="ri-organization-chart"></i>
                     </div>
                     <div class="ps-3">
                       <h6><?php echo $DeptCount; ?></h6>

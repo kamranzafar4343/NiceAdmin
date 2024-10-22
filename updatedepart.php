@@ -753,6 +753,7 @@ End Search Bar -->
   <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
+  
   <script>
     const dataTable = new simpleDatatables.DataTable("#myTable2", {
       searchable: false,
@@ -772,7 +773,8 @@ End Search Bar -->
   <!-- Bootstrap JS (Optional) -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
-  <script>
+
+<script>
     <?php if (isset($_SESSION['data_inserted']) && $_SESSION['data_inserted']): ?>
       alert('Company Updated successfully! Click OK to see the Companies List');
       window.location.href = 'Companies.php';
@@ -783,66 +785,6 @@ End Search Bar -->
       <?php unset($_SESSION['data_inserted']); ?>
     <?php endif; ?>
 
-    //for the country, state, city dropdown
-    document.addEventListener('DOMContentLoaded', function() {
-      const countryStateCityData = {
-        Pakistan: {
-          Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Okara", "Pattoki", "Sialkot", "Sargodha", "Bahawalpur", "Jhang", "Sheikhupura"],
-          KPK: ["Peshawar", "Mardan", "Mingora", "Abbottabad", "Mansehra", "Kohat", "Dera Ismail Khan"],
-          Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Shikarpur", "Jacobabad"],
-          Balochistan: ["Quetta", "Gwadar", "Turbat", "Sibi", "Khuzdar", "Zhob"],
-
-        },
-        USA: {
-          California: ["Los Angeles", "San Francisco", "San Diego"],
-          Texas: ["Houston", "Austin", "Dallas"]
-          // Add more states and cities
-        },
-        Canada: {
-          Ontario: ["Toronto", "Ottawa", "Hamilton"],
-          Quebec: ["Montreal", "Quebec City"]
-          // Add more provinces and cities
-        },
-      };
-
-      const countrySelect = document.getElementById('country');
-      const stateSelect = document.getElementById('state');
-      const citySelect = document.getElementById('city');
-
-      // Update states dropdown when a country is selected
-      countrySelect.addEventListener('change', function() {
-        const selectedCountry = countrySelect.value;
-        stateSelect.innerHTML = '<option value="">Select State</option>'; // Reset states
-        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-        if (selectedCountry) {
-          const states = Object.keys(countryStateCityData[selectedCountry]);
-          states.forEach(function(state) {
-            const option = document.createElement('option');
-            option.value = state;
-            option.text = state;
-            stateSelect.add(option);
-          });
-        }
-      });
-
-      // Update cities dropdown when a state is selected
-      stateSelect.addEventListener('change', function() {
-        const selectedCountry = countrySelect.value;
-        const selectedState = stateSelect.value;
-        citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
-
-        if (selectedCountry && selectedState) {
-          const cities = countryStateCityData[selectedCountry][selectedState];
-          cities.forEach(function(city) {
-            const option = document.createElement('option');
-            option.value = city;
-            option.text = city;
-            citySelect.add(option);
-          });
-        }
-      });
-    });
   </script>
 
 </body>

@@ -732,7 +732,7 @@ End Search Bar -->
 
           <div class="col-md-6">
             <label for="comp_name" class="form-label">Comp_name</label>
-            <input class="form-control" id="comp_name" name="comp_name" value="<?php echo $comp_name; ?>">
+            <input class="form-control" id="comp_name" name="comp_name" value="<?php echo $comp_name; ?>" readonly>
           </div>
 
           <div class="col-md-6">

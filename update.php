@@ -42,7 +42,6 @@ if (isset($_GET['id'])) {
   if ($result && $result->num_rows > 0) {
     
     // Fetch company data into variables
-    
     $row = $result->fetch_assoc();
     $comp_name = $row['comp_name'];
     $registration_date = $row['registration'];
@@ -50,6 +49,7 @@ if (isset($_GET['id'])) {
     $contact_person = $row['foc'];
     $contact_phone = $row['foc_phone'];
     $address = $row['add_1'];
+    $comp_email = $row['email'];
     } else {
     // If no company found, display an error message
     echo "Company not found!";

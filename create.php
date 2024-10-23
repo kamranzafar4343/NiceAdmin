@@ -45,22 +45,28 @@ if (isset($_POST['submit'])) {
     $comp_email = mysqli_real_escape_string($conn, $_POST['comp_email']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
 
-    //check account level no is already exist or not
-    $accCheckQuery = "SELECT * FROM `compani` WHERE `comp_name` = '$comp_name' AND `email` = '$comp_email'";
+    //check comp name is already exist or not
+    $accCheckQuery = "SELECT * FROM `compani` WHERE `comp_name` = '$comp_name'";
     $accCheckResult = $conn->query($accCheckQuery);
 
     if ($accCheckResult && $accCheckResult->num_rows > 0) {
-        die("Error: The company name or email already exists.");
+        die("Error: The company name already exists.");
     }
 
     //check if email already exist or not
+    $emailCheckQuery = "SELECT * FROM `compani` WHERE `email` = '$comp_email'";
+    $emailCheckResult = $conn->query($emailCheckQuery);
 
+    if ($emailCheckResult && $emailCheckResult->num_rows > 0) {
+        die("Error: The email already exists for another company.");
+    }
 
     // Insert the record into the database
     $sql = "INSERT INTO `compani` (`comp_name`, `acc_desc` `registration`, `expiry`, `foc`, `foc_phone`, `email`, `add_1`) 
             VALUES ('$comp_name', '$registration', '$desc', '$expiry', '$foc', '$foc_phone', '$comp_email', '$address')";
     $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
     
+
 }
 ?>
 

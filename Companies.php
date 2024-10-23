@@ -212,6 +212,12 @@ $result = $conn->query($sql);
         </li><!-- End Companies Nav -->
 
         <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+            <i class="ri-user-fill"></i><span>Staff</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li>
+
+        <li class="nav-item">
           <a class="nav-link collapsed" href="box.php">
             <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
           </a>
@@ -313,9 +319,9 @@ $result = $conn->query($sql);
                 <tr>
 
                   <th scope="col">Company Name</th>
-                  
+
                   <th scope="col">Contact Person</th>
-                  
+
                   <th scope="col" style="width:15%;">Address</th>
                   <th scope="col">Actions</th>
                 </tr>
@@ -333,15 +339,15 @@ $result = $conn->query($sql);
                     </a>
                   </td>
                   <?php
-                 
-                  echo "<td style= '  color: #6f42c1; font-weight: bold; opacity: 0.8;'> " . ($row["foc"]) . "</td>"; 
-                  
-                  echo "<td >" . htmlspecialchars($row["add_1"]) ."</td>";
+
+                  echo "<td style= '  color: #6f42c1; font-weight: bold; opacity: 0.8;'> " . ($row["foc"]) . "</td>";
+
+                  echo "<td >" . htmlspecialchars($row["add_1"]) . "</td>";
                   ?>
                   <td>
                     <div style="display: flex; gap: 10px;">
-                    <a type="button" class="btn btn-success btn-success d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="CompanyInfo.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-file-lines"></i></a>  
-                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                      <a type="button" class="btn btn-success btn-success d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="CompanyInfo.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-file-lines"></i></a>
+                      <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                       <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="delete.php?id=<?php echo $row['comp_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
 
@@ -430,10 +436,9 @@ $result = $conn->query($sql);
 
 
 
-   <!--for showing print and export buttons--> 
+  <!--for showing print and export buttons-->
   <script>
-    new DataTable('#companies', 
-    {
+    new DataTable('#companies', {
       pageLength: 50, // Set default number of rows displayed to 50
       layout: {
         topStart: {

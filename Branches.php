@@ -443,7 +443,6 @@ if ($result2->num_rows > 0) {
                     <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Tables Nav -->
-
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
                     <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
@@ -560,10 +559,9 @@ if ($result2->num_rows > 0) {
             $('#branchTable').DataTable({
                 "paging": true,
                 "searching": true,
-                "ordering": true,
                 "info": true,
                 "lengthChange": true,
-                "pageLength": 10,
+                "pageLength": 50,
                 "dom": '<"top"f>rt<"bottom"lip><"clear">',
                 "language": {
                     "search": "Search:",
@@ -579,6 +577,7 @@ if ($result2->num_rows > 0) {
             });
         });
     </script>
+
 </body>
 
 </html>

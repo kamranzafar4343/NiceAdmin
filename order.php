@@ -405,11 +405,12 @@ $resultShowOrders = $conn->query($showOrders);
                     </a>
                 </li><!-- End Boxes Nav -->
 
-                <!-- <li class="nav-item">
-          <a class="nav-link active" href="order.php">
-            <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li>End Work Orders Nav -->
+                <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
+                    <i class="ri-user-fill"></i><span>Staff</span><i class="bi bi-chevron ms-auto"></i>
+                </a>
+            </li>
+
                 <li class="nav-item">
                     <a class="nav-link active" href="order.php">
                         <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron ms-auto"></i>

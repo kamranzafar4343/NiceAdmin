@@ -494,14 +494,8 @@ if ($result2->num_rows > 0) {
                                 <tr>
                                     <!-- <th scope="col">ID</th> -->
                                     <th scope="col">Department Name</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Registration date</th>
-                                    <th scope="col">Contract Expire</th>
                                     <th scope="col">Contact Person</th>
-                                    <th scope="col">Phone</th>
-
                                     <th scope="col">Address</th>
-                                    <th scope="col">Pick Up Address</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -512,18 +506,12 @@ if ($result2->num_rows > 0) {
 
 
                                     echo "<td>" . ($row["dept_name"]) . "</td>";
-                                    echo "<td>" . ($row["acc_desc"]) . "</td>";
-                                    echo "<td>" . ($row["registration"]) . "</td>";
-                                    echo "<td>" . ($row["expiry"]) . "</td>";
                                     echo "<td style= ' color: #fd7e14; font-weight: bold; opacity: 0.8;'> " . ($row["foc"]) . "</td>"; //foc means focal person
-
-                                    echo "<td>" . ($row["foc_phone"]) . "</td>"; //foc mean focal person
-
                                     echo "<td>" . ($row["add_1"]) . "</td>"; //add_1 is address
-                                    echo "<td>" . ($row["pickup_address"]) . "</td>";
-                                ?>
+                                    ?>
                                     <td>
                                         <div style="display: flex; gap: 10px;">
+                                            <a type="button" class="btn btn-success btn-success d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height: 28px;" href="updatedepart.php?id=<?php echo $row['dept_id']; ?>"><i style="width: 20px;" class="fa-solid fa-file-lines"></i></a>
                                             <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="updatedepart.php?id=<?php echo $row['dept_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
 
                                             <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="padding-bottom: 0px; width:25px; height:28px" data-mdb-ripple-init onclick="return confirm('Are you sure you want to delete this record?');" href="deletedepart.php?id=<?php echo $row['dept_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>

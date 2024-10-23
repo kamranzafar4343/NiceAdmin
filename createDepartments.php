@@ -55,14 +55,6 @@ if (isset($_POST['submit'])) {
   $address = mysqli_real_escape_string($conn, $_POST['address']);
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
-    //check dept name already exist or not
-    $accCheckQuery = "SELECT * FROM `departments` WHERE `dept_name` = '$dept_name'";
-    $accCheckResult = $conn->query($accCheckQuery);
-  
-    if ($accCheckResult->num_rows > 0) {
-      die("Error: The department name '$dept_name' already exists.");
-    }
-
   // SQL query to insert the data into the database
   $sql = "INSERT INTO departments (branch_id_fk, dept_name, acc_desc, registration, expiry, foc, foc_phone,  add_1, pickup_address) 
           VALUES ('$branch_id', '$dept_name', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone',  '$address', '$pickup_address')";

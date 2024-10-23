@@ -843,10 +843,6 @@ if ($result->num_rows > 0) {
                 <strong>Phone:</strong> <?php echo $phone; ?><br>
                 <strong>Address:</strong> <?php echo $address ?> <br>
                 <strong>pickup Address:</strong> <?php echo $pick_address; ?><br>
-
-
-
-
               </p>
 
             </div>

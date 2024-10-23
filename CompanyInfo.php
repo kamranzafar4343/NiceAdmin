@@ -121,7 +121,7 @@ if ($result->num_rows > 0) {
     /* css for setting table position */
     .cbd-position{
       position: relative;
-      
+
     }
 
     input.btn.btn-success {
@@ -852,67 +852,6 @@ if ($result->num_rows > 0) {
             </div>
           </div>
         </div>
-
-        <!-- Second Column -->
-        <!--new table design-->
-        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
-
-        <div class="col-6">
-          <div class="cardBranch recent-sales">
-            <div class="card-body cbd-position">
-              <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
-
-              <?php
-              if ($result->num_rows > 0) {
-              ?>
-                <table id="branchTable" class="table table-bordered datatable">
-                  <thead>
-                    <tr>
-                      <th scope="col">Contact Person</th>
-                      <th scope="col">Role</th>
-                      <th scope="col">Access Authority</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-                    while ($row = $result->fetch_assoc()) {
-                      echo "<tr>";
-
-                    ?>
-                      <td>
-                        <a class="text-primary fw-bold" href="departments.php?id=<?php echo $row['branch_id']; ?>">
-                          <?php echo $row['branch_name']; ?>
-                        </a>
-                      </td>
-                      <?php
-                      echo "<td style= ' color:#28a745; font-weight: bold; opacity: 0.8;'> " . ($row["contact_person"]) . "</td>";
-
-                      echo "<td>" . ($row["address"]) . "</td>";
-                      ?>
-                      <td>
-                        <div style="display: flex; gap: 10px;">
-
-                          <a type="button" class="btn btn-success btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href=".php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-file-lines"></i></a>
-                          <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-
-                          <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                            onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-
-                        </div>
-                      </td>
-                      </tr>
-                    <?php
-                    }
-                    ?>
-
-                  </tbody>
-                </table>
-              <?php
-              }
-              ?>
-            </div>
-          </div>
-        </div><!-- End table -->
 
       </div>
     </div>

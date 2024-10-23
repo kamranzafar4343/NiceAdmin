@@ -473,7 +473,7 @@ if (isset($_POST['submit'])) {
                         <input type="date" class="form-control" id="registration" name="registration" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="expiry" class="form-label">Conract Exp_Date</label>
+                        <label for="expiry" class="form-label">Contract Exp_Date</label>
                         <input type="date" class="form-control" id="expiry" name="expiry">
                     </div>
                     <div class="col-md-6">

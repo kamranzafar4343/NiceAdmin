@@ -40,13 +40,25 @@ $company_id = $_GET['id'];
 // Fetch company details
 $sql = "SELECT * FROM compani WHERE comp_id = $company_id";
 $result = $conn->query($sql);
-$company_data = $result->fetch_assoc();
+
+if ($result->num_rows > 0) {
+  $company_data = $result->fetch_assoc();
+  $comp_name = $company_data['comp_name'];
+  $description = $company_data['acc_desc'];
+  $email = $company_data['email'];
+  $registration = $company_data['registration'];
+  $expiry = $company_data['expiry'];
+  $contact_person = $company_data['foc'];
+  $phone = $company_data['foc_phone'];
+  $address = $company_data['add_1'];
+}
+
 
 
 //fetch employee table
-$emp_sql = "Select * from employee where comp_FK_emp = $company_id";
-$result_emp = $conn->query($emp_sql);
-$emp_data = $result_emp->fetch_assoc();
+// $emp_sql = "Select * from employee where comp_FK_emp = $company_id";
+// $result_emp = $conn->query($emp_sql);
+// $emp_data = $result_emp->fetch_assoc();
 
 
 ?>
@@ -102,7 +114,16 @@ $emp_data = $result_emp->fetch_assoc();
 
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
   <style>
-    /* copied css start */
+    /* css for making card text a bit large */
+    .card-text {
+      font-size: 15px;
+    }
+    /* css for setting table position */
+    .cbd-position{
+      position: relative;
+      
+    }
+
     input.btn.btn-success {
       margin-left: 7px;
       height: 41px;
@@ -175,8 +196,10 @@ $emp_data = $result_emp->fetch_assoc();
 
     #fixedButtonBranch {
       position: relative;
-      top: 47px;
-      left: 419px;
+      top: 1px;
+      left: 390px;
+      max-width: 122px;
+      max-height: 43px;
     }
 
     .row {
@@ -348,10 +371,6 @@ $emp_data = $result_emp->fetch_assoc();
       margin-left: 50px;
     }
 
-    .datatable-top {
-      width: 942px;
-    }
-
     .barcode {
       height: 37px;
       width: 167px;
@@ -433,8 +452,8 @@ $emp_data = $result_emp->fetch_assoc();
 
     .datatable-wrapper.no-footer .datatable-container {
       border: none;
-      margin-left: -315px !important;
-      width: 700px !important;
+      margin-left: -337px !important;
+    width: 421px !important;
     }
 
     .company-title {
@@ -587,9 +606,9 @@ $emp_data = $result_emp->fetch_assoc();
       text-align: center;
     }
 
+/* hiding datatabe top */
     .datatable-top {
-      margin-left: 10px !important;
-      width: 0px;
+      display: none !important;
     }
 
     .customImage {
@@ -718,209 +737,185 @@ $emp_data = $result_emp->fetch_assoc();
       </li><!-- End Dashboard Nav -->
 
 
-      <li class="nav-item">
-        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-          <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li><!-- End Tables Nav -->
+      <?php if ($_SESSION['role'] == 'admin') { ?>
+        <!-- Admin-only Links -->
+        <li class="nav-item">
+          <a class="nav-link active" href="Companies.php">
+            <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Companies Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-          <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="box.php">
+            <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Boxes Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-          <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
-          <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
-          <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
-          <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="order.php">
+            <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Work Orders Nav -->
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="racks.php">
+            <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Racks Nav -->
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="store.php">
+            <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Store Nav -->
+
+      <?php } else { ?>
+        <!-- User-only Links -->
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="box.php">
+            <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Boxes Nav -->
+
+
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="order.php">
+            <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Work Orders Nav -->
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="racks.php">
+            <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Racks Nav -->
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="store.php">
+            <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Store Nav -->
+      <?php } ?>
 
 
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.php">
-          <i class="bi bi-person"></i>
-          <span>Profile</span>
-        </a>
-      </li>
-      <!-- End Profile Page Nav -->
-      <!-- <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-register.php">
-      <i class="bi bi-card-list"></i>
-      <span>Register</span>
-    </a>
-  </li> -->
-      <!-- End Register Page Nav -->
-
-      <li class="nav-item">
         <a class="nav-link collapsed" href="pages-login.php">
-          <i class="bi bi-box-arrow-in-right"></i>
-          <span>Login</span>
+          <i class="bi bi-box-arrow-right"></i><span>Login</span>
         </a>
-      </li><!-- End Login Page Nav -->
+      </li><!-- End Login Nav -->
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="logout.php">
-          <i class="bi bi-box-arrow-in-right"></i>
-          <span>Logout</span>
+          <i class="bi bi-box-arrow-left"></i><span>Logout</span>
         </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-contact.php">
-          <i class="bi bi-envelope"></i>
-          <span>Contact</span>
-        </a>
-      </li><!-- End Contact Page Nav -->
+      </li><!-- End Logout Nav -->
 
     </ul>
-
   </aside>
-
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
 
   <main id="main" class="main">
-    <div class="headerbox">
-    </div><!-- End Page Title -->
-    <div class="pagetitleinside mt-1">
-    </div>
-    </div>
+    <div class="container mt-5">
+      <div class="row">
+        <!-- First Column -->
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header bg-primary text-white p-3">
+              <h4>Company Information</h4>
+            </div>
+            <div class="card-body">
 
-    <!-- Main content container -->
-    <div class="d-flex flex-wrap">
+              <h4 class="card-title mt-0"><?php echo $comp_name; ?></h4>
 
-      <!-- Table container -->
+              <p class="card-text ml-3 mb-3">
+                <strong>Registration Date:</strong> <?php echo $registration; ?><br>
+                <strong>Contract Expiry Date:</strong> <?php echo $expiry; ?><br>
+                <strong>Description:</strong> <?php echo $description; ?><br>
+                <br>
+                <label for="" class="h6"><em>Contact Person Info:</em></label> <br>
+                <strong>Contact Person:</strong> <?php echo $contact_person; ?><br>
+                <strong>Email:</strong> <?php echo $email; ?><br>
+                <strong>Phone:</strong> <?php echo $phone; ?><br>
+                <strong>Address:</strong> <?php echo $address ?> <br>
 
-    </div>
-    <!-- Card container -->
-    <div class="col-md-12 col-lg-12 mt-5">
-      <div class="card card-custom bg-white border-white border-0">
 
-        <div class="d-flex flex-row bd-highlight mb-3">
-        
-        <div class="card-custom-avatar align-center mt-0">
-          <img class="img-fluid customImage" src="<?php echo $company_data['image']; ?>" width="250px" alt="image" id="image-<?php echo $company_data['comp_id']; ?>">
-        </div>
 
-        <div class="">
-        <div class="card-body list-group">
-          <?php if ($company_data !== null): ?>
-            <h4 class="card-title-info"><?php echo $company_data['comp_name']; ?></h4>
-          <?php else: ?>
-            <h4 class="card-title-info">No company data found</h4>
-          <?php endif; ?>
-          <div class="d-flex justify-content-center">
-            <a href="Branches.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-git-merge-line remix" style="font-size: 30px;"></i></a>
-            <!-- <a href="showItems.php?id=<?php echo $company_data['comp_id']; ?>"><i class="ri-shopping-cart-2-line remix" style="font-size: 30px;"></i></a> -->
+
+              </p>
+
+            </div>
           </div>
         </div>
-        </div>
-        </div>
-        
-        
+
+        <!-- Second Column -->
+        <!--new table design-->
+        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
+
+        <div class="col-6">
+          <div class="cardBranch recent-sales">
+            <div class="card-body cbd-position">
+              <h2 class="card-title fw-bold text-uppercase"><?php echo $comp_name; ?></h2>
+
+              <?php
+              if ($result->num_rows > 0) {
+              ?>
+                <table id="branchTable" class="table table-bordered datatable">
+                  <thead>
+                    <tr>
+                      <th scope="col">Contact Person</th>
+                      <th scope="col">Role</th>
+                      <th scope="col">Access Authority</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    while ($row = $result->fetch_assoc()) {
+                      echo "<tr>";
+
+                    ?>
+                      <td>
+                        <a class="text-primary fw-bold" href="departments.php?id=<?php echo $row['branch_id']; ?>">
+                          <?php echo $row['branch_name']; ?>
+                        </a>
+                      </td>
+                      <?php
+                      echo "<td style= ' color:#28a745; font-weight: bold; opacity: 0.8;'> " . ($row["contact_person"]) . "</td>";
+
+                      echo "<td>" . ($row["address"]) . "</td>";
+                      ?>
+                      <td>
+                        <div style="display: flex; gap: 10px;">
+
+                          <a type="button" class="btn btn-success btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href=".php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-file-lines"></i></a>
+                          <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+
+                          <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                            onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+
+                        </div>
+                      </td>
+                      </tr>
+                    <?php
+                    }
+                    ?>
+
+                  </tbody>
+                </table>
+              <?php
+              }
+              ?>
+            </div>
+          </div>
+        </div><!-- End table -->
+
       </div>
     </div>
-
-    <div class="col-md-10 col-lg-12 mt-4">
-      <div class="cardBranch recent-sales overflow-auto">
-        <div class="card-body" style="font-size: 0.8rem;">
-          <button id="fixedButtonBranch" type="button" onclick="redirectToFormPage()" class="btn btn-primary emp_btn">Add Employee</button>
-          <h5 class="card-title emp-card">List of employees</h5>
-          <?php
-          if ($result_emp->num_rows >= 0) {
-          ?>
-            <table class="table datatable emp_tb">
-              <thead>
-                <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col" class="email-col">Email</th>
-                  <th scope="col">Phone</th>
-                  <th scope="col">Role</th>
-                  <!-- <th scope="col" >Received</th> -->
-                  <!-- <th scope="col" style="width: 30%;">Barcode</th> -->
-                  <th scope="col">Auth_status</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody style="table-layout: fixed;">
-                <?php
-
-                //counter variable
-                $counter = 1;
-
-                while ($emp_data = $result_emp->fetch_assoc()) {
-
-                  //dexlare variable for box_id
-
-                  echo "<tr>";
-                  echo "<tr>";
-                  echo "<td>" . ($emp_data["name"]) . "</td>";
-
-                  // echo "<td>" . $branch_name . "</td>";
-                  echo "<td>" . ($emp_data["email"]) . "</td>";
-                  echo "<td>" . ($emp_data["phone"]) . "</td>";
-                  // echo "<td>" . ($emp_data["gender"]) . "</td>";
-                  // echo "<td>" . ($emp_data["Address"]) . "</td>";
-                  echo "<td>" . ($emp_data["Authority"]) . "</td>";
-                  echo "<td>" . ($emp_data["auth_status"]) . "</td>";
-
-                  // echo "<td>" . '<img class="barcode" alt="' . ($row["barcode"]) . '" src="barcode.php?text=' . urlencode($row["barcode"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/>' . "</td>";
-                ?>
-                  <td>
-                    <div style="display: flex; gap: 10px;">
-                      <a type="button" class="btn btn-success btn-info d-flex justify-content-center align-items-center text-center"
-                        style="padding-bottom: 0px; width:25px; height: 28px;"
-                        href="employeeUpdate.php?id=<?php echo $emp_data['emp_id']; ?>">
-                        <i class="ri-edit-box-line mb-1"></i>
-                      </a>
-
-                      <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center align-items-center text-center"
-                        style="padding-bottom: 0; width: 25px; height: 28px;"
-                        data-mdb-ripple-init
-                        onclick="return confirm('Are you sure you want to delete this employee?');"
-                        href="employeeDelete.php?id=<?php echo $emp_data['emp_id']; ?>">
-                        <i class="ri-delete-bin-6-line mb-1"></i>
-                      </a>
-                    </div>
-                  </td>
-                <?php
-                }
-                ?>
-              </tbody>
-            </table>
-          <?php
-          } else {
-
-            echo '<br>';
-            echo 'No Employees found for Company ' . '<b>' . $company_data['comp_name'] . '<b>';
-          }
-          ?>
-        </div>
-      </div>
-    </div>
-
-
-
-    </div>
-    <!-- End d-flex container -->
   </main><!-- End #main -->
 
   <!-- End #main -->

@@ -62,11 +62,25 @@ if (isset($_POST['submit'])) {
     }
 
     // Insert the record into the database
-    $sql = "INSERT INTO `compani` (`comp_name`, `acc_desc` `registration`, `expiry`, `foc`, `foc_phone`, `email`, `add_1`) 
+    $sql = "INSERT INTO `compani` (`comp_name`, `acc_desc`, `registration`, `expiry`, `foc`, `foc_phone`, `email`, `add_1`) 
             VALUES ('$comp_name', '$registration', '$desc', '$expiry', '$foc', '$foc_phone', '$comp_email', '$address')";
-    $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
-    
 
+    //added code to insert data into branch table and redirect to branches table of specific company
+    if (mysqli_query($conn, $sql)) {
+
+        // Step 2: Get the ID of the newly inserted company
+        $newCompanyId = mysqli_insert_id($conn);
+
+        $insertBranchSql = "INSERT INTO `branches` (`comp_id_fk`, `branch_name`, `account_desc`, `registration_date` , `expiry_date`, `contact_person`,  `contact_phone`, `address`) VALUES ('$newCompanyId', '$comp_name Head Office', '$desc', '$registration', '$expiry', '$foc', '$foc_phone', '$address')";
+    
+    }
+
+    if (mysqli_query($conn, $insertBranchSql)) {
+        header("Location: Branches.php?id=" . $newCompanyId);
+        exit; // Stop further script execution
+    } else {
+        echo "Error creating branch: " . mysqli_error($conn);
+    }
 }
 ?>
 

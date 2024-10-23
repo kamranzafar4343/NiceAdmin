@@ -427,8 +427,14 @@ $result = $conn->query($sql);
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
   <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+
+
+
+   <!--for showing print and export buttons--> 
   <script>
-    new DataTable('#companies', {
+    new DataTable('#companies', 
+    {
+      pageLength: 50, // Set default number of rows displayed to 50
       layout: {
         topStart: {
           buttons: [{

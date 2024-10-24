@@ -211,11 +211,7 @@ $result = $conn->query($sql);
           </a>
         </li><!-- End Companies Nav -->
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
-            <i class="ri-user-fill"></i><span>Staff</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li>
+  
 
         <li class="nav-item">
           <a class="nav-link collapsed" href="box.php">

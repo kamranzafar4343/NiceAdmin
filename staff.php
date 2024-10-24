@@ -194,19 +194,11 @@ if ($result->num_rows > 0) {
 
     }
 
-    .col-6 {
-    flex: 0 0 auto !important;
-    width: 50% !important;
-    position: relative !important;
-    top: 76px !important;
-    left: -60px !important;
-    }
-
     #fixedButtonBranch {
       position: relative;
-    top: 21px;
-    left: 415px;
-    max-width: 122px;
+      top: 1px;
+      left: 390px;
+      max-width: 122px;
       max-height: 43px;
     }
 
@@ -748,7 +740,7 @@ if ($result->num_rows > 0) {
       <?php if ($_SESSION['role'] == 'admin') { ?>
         <!-- Admin-only Links -->
         <li class="nav-item">
-          <a class="nav-link active" href="Companies.php">
+          <a class="nav-link collapsed" href="Companies.php">
             <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
           </a>
         </li><!-- End Companies Nav -->
@@ -759,6 +751,11 @@ if ($result->num_rows > 0) {
           </a>
         </li><!-- End Boxes Nav -->
 
+        <li class="nav-item">
+          <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="staff.php">
+            <i class="ri-user-fill"></i><span>Staff</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li>
 
         <li class="nav-item">
           <a class="nav-link collapsed" href="order.php">
@@ -831,35 +828,10 @@ if ($result->num_rows > 0) {
   <main id="main" class="main">
     <div class="container mt-5">
       <div class="row">
-        <!-- First Column -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-header bg-primary text-white p-3">
-              <h4>Branch Information</h4>
-            </div>
-            <div class="card-body">
-
-              <h4 class="card-title mt-0"><?php echo $branch_name; ?></h4>
-
-              <p class="card-text ml-3 mb-3">
-                <strong>Registration Date:</strong> <?php echo $registration; ?><br>
-                <strong>Contract Expiry Date:</strong> <?php echo $expiry; ?><br>
-                <strong>Description:</strong> <?php echo $description; ?><br>
-                <br>
-                <label for="" class="h6"><em>Contact Person Info:</em></label> <br>
-                <strong>Contact Person:</strong> <?php echo $contact_person; ?><br>
-                <strong>Phone:</strong> <?php echo $phone; ?><br>
-                <strong>Address:</strong> <?php echo $address ?> <br>
-                <strong>pickup Address:</strong> <?php echo $pick_address; ?><br>
-              </p>
-
-            </div>
-          </div>
-        </div>
 
         <!-- Second Column -->
         <!--new table design-->
-        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Staff</button>
+        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Branch</button>
 
         <div class="col-6">
           <div class="cardBranch recent-sales">

@@ -499,23 +499,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-    <!-- Modal for Duplicate Barcode -->
-    <div class="modal fade" id="duplicateBarcodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Duplicate Barcode</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    The barcode you entered already exists. Please use a different barcode.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <!--Function to update the barcode input field on selection of the object type-->
     <script>
@@ -541,34 +525,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </script>
 
-    <script>
-        document.getElementById('box_barcode').addEventListener('input', function() {
-            let barcode = this.value;
-
-            if (barcode.length === 7) {
-                let xhr = new XMLHttpRequest();
-                xhr.open('POST', 'createBox.php', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let response = JSON.parse(xhr.responseText);
-                        if (response.exists) {
-                            // Show modal popup if barcode exists
-                            let duplicateModal = new bootstrap.Modal(document.getElementById('duplicateBarcodeModal'));
-                            duplicateModal.show();
-                            document.getElementById('submitBtn').disabled = true; // Disable submit button
-                        } else {
-                            document.getElementById('submitBtn').disabled = false; // Enable submit button
-                        }
-                    }
-                };
-                xhr.send('checkBarcode=true&barcode=' + barcode);
-            } else {
-                document.getElementById('submitBtn').disabled = false; // Enable submit button for other lengths
-            }
-        });
-    </script>
-
+   
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 
@@ -589,7 +546,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Initialize dselect for the initial dropdowns
             dselect(document.querySelector('#lev1'), config);
             dselect(document.querySelector('#level2'), config);
-            dselect(document.querySelector('#level3'), config);
 
             // When company is changed, fetch the branches
             $('#lev1').change(function() {
@@ -610,7 +566,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $('#level2').append('<option value="">Select a Branch</option>');
                             // Add the new options from the response
                             $.each(branches, function(index, branch) {
-                                $('#level2').append('<option value="' + branch.branch_id + '">' + branch.acc_lev_2 + ' - ' + branch.account_desc + '</option>');
+                                $('#level2').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
                             });
                             // Refresh or reinitialize dselect
                             dselect(document.querySelector('#level2'), config);

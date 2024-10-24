@@ -443,31 +443,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <!-- For the Level 1 field -->
                     <div class="col-md-4">
-                        <label for="lev1">Account level 1:</label>
+                        <label for="lev1">Select Company:</label>
                         <select id="lev1" class="form-select" name="level1" required>
-                            <option value="">Select a company</option>
+                            <option value="">Select company</option>
                             <?php
                             // Fetch the account levels from the database
-                            $result = $conn->query("SELECT comp_id, acc_lev_1, acc_desc FROM compani");
+                            $result = $conn->query("SELECT comp_id, comp_name, acc_desc FROM compani");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']} - {$row['acc_desc']}</option>";
+                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']} </option>";
                             }
                             ?>
                         </select>
                     </div>
                     <!-- For the Level 2 field -->
                     <div class="col-md-4">
-                        <label for="level2">Level 2:</label>
+                        <label for="level2">Select Branch:</label>
                         <select id="level2" class="form-select" name="level2">
                             <option value="">Select a branch</option>
-                        </select>
-                    </div>
-
-                    <!-- For the Level 3 field -->
-                    <div class="col-md-4">
-                        <label for="level3">Level 3:</label>
-                        <select id="level3" class="form-select" name="level3">
-                            <option value="">Select a department</option>
                         </select>
                     </div>
 
@@ -623,37 +615,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             // Refresh or reinitialize dselect
                             dselect(document.querySelector('#level2'), config);
 
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            });
-
-            // When branch is changed, fetch the departments
-            $('#level2').change(function() {
-                var branch_id = $(this).val();
-
-                // AJAX request to get dept's for the selected branch
-                $.ajax({
-                    url: 'get_departments.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            var departments = JSON.parse(response); //return the json response as an array
-                            // Clear existing dept's
-                            $('#level3').empty();
-                            $('#level3').append('<option value="">Select a Department</option>');
-
-                            // Add the new options from the response
-                            $.each(departments, function(index, department) {
-                                $('#level3').append('<option value="' + department.dept_id + '">' + department.acc_lev_3 + ' - ' + department.acc_desc + '</option>');
-                            });
-                            // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#level3'), config);
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }

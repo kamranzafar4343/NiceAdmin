@@ -1,90 +1,86 @@
-<?PHP
+<?php
 
-// Start session
+// Start the session
 session_start();
 
-// Check if user is logged in
+// Check if the user is logged in
 if (!isset($_SESSION['email'])) {
+    // If not logged in, redirect to login page
     header("Location: pages-login.php");
     exit();
 }
 
-// Include database connection
+// Include the database connection
 include 'config/db.php';
+
+// Get session email 
+$email = $_SESSION['email'];
+
+// Get user name, email, and role from the register table
+$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+$resultData = mysqli_query($conn, $getAdminData);
+if ($resultData->num_rows > 0) {
+    $row2 = $resultData->fetch_assoc();
+    $adminName = $row2['name'];
+    $adminEmail = $row2['email'];
+    $userRole = $row2['role'];
+}
+
+// Check if the user is an admin, otherwise redirect
+if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
+    // If the user is not an Admin, redirect to index page
+    header("Location: index.php");
+    exit();
+}
+
+// Get emp ID from query string -----------------------
+$emp_id = $_GET['id'];
+
+//get employee data from employee table
+$getEmpId = "SELECT * FROM employee WHERE emp_id = '$emp_id'";
+$resultEmpId = mysqli_query($conn, $getEmpId);
+if ($resultEmpId->num_rows > 0) {
+    $rowEmpId = $resultEmpId->fetch_assoc();
+    $branch_id = $rowEmpId['branch_id_fk'];
+    $name = $rowEmpId['name'];
+    $phone = $rowEmpId['phone'];
+    $email = $rowEmpId['email'];
+    $e_role = $rowEmpId['role'];
+    $auth = $rowEmpId['Authority'];
+}
 
 // Check for POST request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get employee ID from hidden input field
-    $emp_id = mysqli_real_escape_string($conn, $_POST['emp_id']);
 
     // Get form data
-    $employee_name = mysqli_real_escape_string($conn, $_POST['employee_name']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $employee = mysqli_real_escape_string($conn, $_POST['name']);
+    $e_email = mysqli_real_escape_string($conn, $_POST['email']);
     $phone = mysqli_real_escape_string($conn, $_POST['phone']);
     $role = mysqli_real_escape_string($conn, $_POST['role']);
-    $gender = mysqli_real_escape_string($conn, $_POST['gender']);
-    $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $auth = mysqli_real_escape_string($conn, $_POST['authority']);
 
     // Update employee data
     $sql = "UPDATE employee SET 
-        name = '$employee_name', 
-        email = '$email', 
+        name = '$employee', 
+        email = '$e_email', 
         phone = '$phone', 
-        authority = '$role', 
-        gender = '$gender', 
-        address = '$address' 
+        authority = '$auth', 
+        role = '$role'
         WHERE emp_id = $emp_id";
+
     // Execute query and handle result
     if ($conn->query($sql)) {
-        // Retrieve company ID associated with the employee ID
-        $sql_comp_id = "SELECT comp_FK_emp FROM `employee` WHERE `emp_id`='$emp_id'";
-        $result_comp_id = $conn->query($sql_comp_id);
-        if ($result_comp_id->num_rows > 0) {
-            $row_comp_id = mysqli_fetch_array($result_comp_id);
-            $comp_id = $row_comp_id['comp_FK_emp'];
-            $_SESSION['data_updated'] = true;
-            header("Location: CompanyInfo.php?id=" . $comp_id);
-            exit();
-        } else {
-            // Handle error or exception
-        }
+        header("Location: branchInfo.php?id=" . $branch_id);
+        exit;
     } else {
-        $_SESSION['data_updated'] = false;
-        $error = "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error updating record: " . mysqli_error($conn);
     }
-
-    // Close database connection
-    $conn->close();
-
-    // Display error message if query fails
-    if (isset($error)) {
-        echo $error;
-    }
-} elseif (isset($_GET['id'])) {
-    // Get employee ID from query string
-    $emp_id = $_GET['id'];
-
-    // Retrieve employee data
-    $sql = "SELECT name, email, phone, authority, gender, address FROM `employee` WHERE `emp_id`='$emp_id'";
-    $result = $conn->query($sql);
-
-    // Check if query returns results
-    if ($result->num_rows > 0) {
-        $row = mysqli_fetch_array($result);
-        $emp_name = $row['name'] ?? '';
-        $emp_email = $row['email'] ?? '';
-        $emp_phone = $row['phone'] ?? '';
-        $emp_role = $row['authority'] ?? '';
-        $emp_gender = $row['gender'] ?? '';
-        $emp_address = $row['address'] ?? '';
-    } else {
-        header("Location: employeeList.php");
-        exit();
-    }
-
-    // Close database connection
-    $conn->close();
 }
+
+
+
+// Close database connection
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -322,59 +318,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <?php
-    // include "db.php";
-
-    // //get company id for updating the specific company
-    // if (isset($_GET['id'])) {
-    //     $user_id = $_GET['id'];
-    //     $sql = "SELECT * FROM `compani` WHERE `comp_id`='$user_id'";
-    //     $result = $conn->query($sql);
-    //     $row = mysqli_fetch_array($result);
-    //     $comp_name = $row['comp_name'];
-    //     $phone = $row['phone'];
-    //     $email = $row['email'];
-    //     $password = $row['password'];
-    //     $city = $row['city'];
-    //     $state = $row['state'];
-    //     $country = $row['country'];
-    //     $registration = $row['registration'];
-    //     $expiry = $row['expiry'];
-    // }
-
-    // //update the record
-    // if (isset($_POST['update'])) {
-    //     $user_id = $_POST['comp_id'];
-
-    //     $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
-    //     $phone =  mysqli_real_escape_string($conn, $_POST['phone']);
-    //     $email =  mysqli_real_escape_string($conn, $_POST['email']);
-    //     $password = mysqli_real_escape_string($conn, $_POST['password']);
-    //     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-    //     $city = mysqli_real_escape_string($conn, $_POST['city']);
-    //     $state = mysqli_real_escape_string($conn, $_POST['state']);
-    //     $country = mysqli_real_escape_string($conn, $_POST['country']);
-    //     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
-    //     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
-
-    //     $sql = "UPDATE `compani` SET `comp_name`='$comp_name', `phone`='$phone', `email`='$email', `password`='$hashedPassword', `city`='$city', `state`='$state', `country`='$country', `registration`='$registration', `expiry`='$expiry'  WHERE `comp_id`='$user_id'";
-
-    //     if (mysqli_query($conn, $sql)) {
-    //         $_SESSION['data_inserted'] = true;
-    //     } else {
-    //         $_SESSION['data_inserted'] = false;
-
-    //         echo "Error: " . $sql . "<br>" . $conn->error;
-    //     }
-
-    //     // header("location:update.php");
-    //     // exit();
-
-    //     $conn->close();
-    // }
-
-    ?>
 
     <!doctype html>
     <html lang="en">
@@ -652,10 +595,18 @@ End Search Bar -->
 
 
     <!-- ======= Sidebar ======= -->
-    <aside id="sidebar" class="sidebar">
+    <?php
+    include "config/db.php";
 
+    $role = $_SESSION['role'];
+    ?>
+
+    <!-- ======= Sidebar ======= -->
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
         <ul class="sidebar-nav" id="sidebar-nav">
 
+            <!-- Dashboard Link (Visible to all users) -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="index.php">
                     <i class="ri-home-8-line"></i>
@@ -663,78 +614,80 @@ End Search Bar -->
                 </a>
             </li><!-- End Dashboard Nav -->
 
+            <?php if ($_SESSION['role'] == 'admin') { ?>
+                <!-- Admin-only Links -->
+                <li class="nav-item">
+                    <a class="nav-link active" href="Companies.php">
+                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Companies Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-                    <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li><!-- End Tables Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
-                    <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
-                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
-                    <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Work Orders Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+
+            <?php } else { ?>
+                <!-- User-only Links -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
+
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+            <?php } ?>
+
 
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-            <!-- End Profile Page Nav -->
-
-
-
-            <!-- <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-register.php">
-      <i class="bi bi-card-list"></i>
-      <span>Register</span>
-    </a>
-  </li> -->
-            <!-- End Register Page Nav -->
-
-            <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
+                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
                 </a>
-            </li><!-- End Login Page Nav -->
-
+            </li><!-- End Login Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-contact.php">
-                    <i class="bi bi-envelope"></i>
-                    <span>Contact</span>
+                <a class="nav-link collapsed" href="logout.php">
+                    <i class="bi bi-box-arrow-left"></i><span>Logout</span>
                 </a>
-            </li><!-- End Contact Page Nav -->
+            </li><!-- End Logout Nav -->
 
         </ul>
-
     </aside>
+    <!--------------- End sidebar ------------------>
 
 
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
@@ -743,48 +696,56 @@ End Search Bar -->
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/update.png.png" alt="network-logo" width="50" height="50" />
-        <h2>Update Employee Information</h2>
+        <h2>Update</h2>
     </div>
     <!-- End Header form -->
 
     <section class="container d-flex justify-content-center my-4">
         <div class="card custom-card2 shadow-lg" style="border: none; box-shadow:none; border:none;">
             <div class="card-body">
-                <form class="row g-3 mt-2" action="employeeUpdate.php" method="POST" enctype="multipart/form-data">
+                <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
                     <div class="col-md-6">
-                        <label class="form-label">Employee Name</label>
-                        <input type="text" class="form-control" name="employee_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $emp_name; ?>" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" value="<?php echo $emp_email; ?>" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Phone</label>
-                        <input type="text" class="form-control" name="phone" required pattern="\+?[0-9]{10,15}" minlength="10" maxlength="17" title="Phone number should be between 10 to 15 digits" value="<?php echo $emp_phone; ?>" required pattern="\d{10,15}">
+                        <label for="" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="" name="name" value="<?php echo $name; ?>" required>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Role</label>
-                        <input type="text" class="form-control" name="role" value="<?php echo $emp_role; ?>" required>
+                        <label for="" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="" name="email" value="<?php echo $email; ?>" required>
                     </div>
+
                     <div class="col-md-6">
-                        <label class="form-label">Address</label>
-                        <textarea class="form-control" name="address" required><?php echo $emp_address; ?></textarea>
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="" name="phone" value="<?php echo $phone; ?>" required>
                     </div>
+
                     <div class="col-md-6">
-                        <label class="form-label">Gender</label><br>
-                        <input type="radio" id="male" name="gender" value="male" <?php if ($emp_gender == 'male') echo 'checked'; ?>>
-                        <label for="male">Male</label>
-                        <input type="radio" id="female" name="gender" value="female" <?php if ($emp_gender == 'female') echo 'checked'; ?>>
-                        <label for="female">Female</label>
-                        <input type="radio" id="other" name="gender" value="other" <?php if ($emp_gender == 'other') echo 'checked'; ?>>
-                        <label for="other">Other</label>
+                        <label for="" class="form-label">Role</label>
+                        <select name="role" id="" class="form-select">
+                            <option value="">Select Role of the Employee</option>
+                            <option value="Branch Manager" <?php echo $e_role == 'Branch Manager' ? 'selected' : ''; ?>>Branch Manager</option>
+                            <option value="Department Manager" <?php echo $e_role == 'Department Manager' ? 'selected' : ''; ?>>Department Manager</option>
+                            <option value="Junior Employee" <?php echo $e_role == 'Junior Employee' ? 'selected' : ''; ?>>Junior Employee</option>
+                            <option value="Head of Operations" <?php echo $e_role == 'Head of Operations' ? 'selected' : ''; ?>>Head of Operations</option>
+                        </select>
                     </div>
-                    <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-outline-primary mt-3" name="update" value="update">Update</button>
+
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label">Access/Authority</label>
+                        <select name="authority" id="" class="form-select">
+                            <option value="">Select level of access</option>
+                            <option value="can get information about branch boxes" <?php echo $auth == 'can get information about branch boxes' ? 'selected' : ''; ?>>can get information about branch boxes</option>
+                            <option value="only retrieve department boxes" <?php echo $auth == 'only retrieve department boxes' ? 'selected' : ''; ?>>only retrieve department boxes</option>
+                            <option value="all departments of their branch" <?php echo $auth == 'all departments of their branch' ? 'selected' : ''; ?>>all departments of their branch</option>
+                            <option value="all departments and all branches of company" <?php echo $auth == 'all departments and all branches of company' ? 'selected' : ''; ?>>all departments and all branches of company</option>
+                        </select>
                     </div>
+
+                    <div class="text-center mt-4 mb-2">
+                        <button type="submit" class="btn btn-outline-primary mr-2" name="update" value="update">Submit</button>
+                        <button type="reset" class="btn btn-outline-secondary ">Reset</button>
+                    </div>
+
                 </form>
             </div>
         </div>

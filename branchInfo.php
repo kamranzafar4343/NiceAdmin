@@ -43,21 +43,21 @@ $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
   $branch_data = $result->fetch_assoc();
-  $branch_name = $branch_data ['branch_name'];
-  $description = $branch_data ['account_desc'];
-  $registration = $branch_data ['registration_date'];
-  $expiry = $branch_data ['expiry_date'];
-  $contact_person = $branch_data ['contact_person'];
-  $phone = $branch_data ['contact_phone'];
-  $address = $branch_data ['address'];
-  $pick_address = $branch_data ['pickup_address'];
+  $branch_name = $branch_data['branch_name'];
+  $description = $branch_data['account_desc'];
+  $registration = $branch_data['registration_date'];
+  $expiry = $branch_data['expiry_date'];
+  $contact_person = $branch_data['contact_person'];
+  $phone = $branch_data['contact_phone'];
+  $address = $branch_data['address'];
+  $pick_address = $branch_data['pickup_address'];
 }
 
 //fetch employee table
 $emp_sql = "Select * from employee where branch_id_fk = $branch_id";
 $result_emp = $conn->query($emp_sql);
 
-if($result_emp->num_rows > 0){
+if ($result_emp->num_rows > 0) {
   $emp_data = $result_emp->fetch_assoc();
   $emp_id = $emp_data['emp_id'];
   $emp_name = $emp_data['name'];
@@ -124,10 +124,20 @@ if($result_emp->num_rows > 0){
     .card-text {
       font-size: 15px;
     }
+
     /* css for setting table position */
-    .cbd-position{
+    .cbd-position {
       position: relative;
-      
+
+    }
+
+    /* css for setting col-4 width of card */
+
+    @media (min-width: 768px) {
+      .col-md-4 {
+        flex: 0 0 auto !important;
+        width: 37.333333% !important;
+      }
     }
 
     input.btn.btn-success {
@@ -201,18 +211,18 @@ if($result_emp->num_rows > 0){
     }
 
     .col-6 {
-    flex: 0 0 auto !important;
-    width: 50% !important;
-    position: relative !important;
-    top: 76px !important;
-    left: -60px !important;
+      flex: 0 0 auto !important;
+      width: 50% !important;
+      position: relative !important;
+      top: 76px !important;
+      left: -60px !important;
     }
 
     #fixedButtonBranch {
       position: relative;
-    top: 21px;
-    left: 415px;
-    max-width: 122px;
+      top: 21px;
+      left: 415px;
+      max-width: 122px;
       max-height: 43px;
     }
 
@@ -467,7 +477,7 @@ if($result_emp->num_rows > 0){
     .datatable-wrapper.no-footer .datatable-container {
       border: none;
       margin-left: -337px !important;
-    width: 421px !important;
+      width: 421px !important;
     }
 
     .company-title {
@@ -620,7 +630,7 @@ if($result_emp->num_rows > 0){
       text-align: center;
     }
 
-/* hiding datatabe top */
+    /* hiding datatabe top */
     .datatable-top {
       display: none !important;
     }
@@ -865,7 +875,7 @@ if($result_emp->num_rows > 0){
 
         <!-- Second Column -->
         <!--new table design-->
-        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'add&editStaff.php?id=<?php echo $emp_id; ?>'" class="btn btn-primary mb-3">Add Staff</button>
+        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'addStaff.php?id=<?php echo $branch_id; ?>'" class="btn btn-primary mb-3">Add Staff</button>
 
         <div class="col-6">
           <div class="cardBranch recent-sales">
@@ -878,8 +888,8 @@ if($result_emp->num_rows > 0){
                 <table id="branchTable" class="table datatable">
                   <thead>
                     <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">Role</th>
+                      <th scope="col" style="width: 15%;">Name</th>
+                      <th scope="col" style="width: 18%;">Role</th>
                       <th scope="col">Access Authority</th>
                       <th scope="col">Action</th>
                     </tr>
@@ -887,15 +897,29 @@ if($result_emp->num_rows > 0){
                   <tbody>
                     <?php
                     while ($row2 = $result_emp->fetch_assoc()) {
-                      echo "<tr>";    
+                      echo "<tr>";
                       echo "<td>" . $emp_name . "</td>";
-                      echo "<td>" . $emp_role . "</td>";
+                      echo '<td>';
+                      if ($row2["role"] == 'Branch Manager') {
+                          // Display a green badge for "Regular"
+                          echo '<span class="badge badge-pill badge-info" style="font-size: 10px; padding:3px;">' . $row2["role"] . '</span>';
+                      } elseif ($row2["role"] == 'Department Manager') {
+                          // Display a red icon for "Urgent"
+                          echo '<span class="badge badge-pill badge-info" style="font-size: 10px; padding:3px;">' . $row2["role"] . '</span>';
+                      } elseif ($row2["role"] == 'Junior Employee') {
+                          // Display a red icon for "Urgent"
+                          echo '<span class="badge badge-pill badge-info" style="font-size: 10px; padding:3px;">' . $row2["role"] . '</span>';
+                      } elseif ($row2["role"] == 'Head of Operations') {
+                          // Display a red icon for "Urgent"
+                          echo '<span class="badge badge-pill badge-info" style="font-size: 10px; padding:3px;">' . $row2["role"] . '</span>';
+                      } 
+                      echo '</td>';
                       echo "<td>" . $emp_auth . "</td>";
-                      ?>
+                    ?>
                       <td>
                         <div style="display: flex; gap: 10px;">
 
-                          <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:23px; height: 28px;" href="add&editStaff.php?id=<?php echo $emp_id; ?>"><i style="width: 20px; font-weight:500;" class="bx bxs-edit"></i></a>
+                          <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:23px; height: 28px;" href="updateStaff.php?id=<?php echo $emp_id; ?>"><i style="width: 20px; font-weight:500;" class="bx bxs-edit"></i></a>
 
                           <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:23px; height:28px" data-mdb-ripple-init
                             onclick="return confirm('Are you sure you want to delete this record?');" href="employeeDelete.php?id=<?php echo $emp_id; ?>"> <i style="width: 20px;" class="bx bxs-trash-alt"></i></a>

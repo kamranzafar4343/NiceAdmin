@@ -33,7 +33,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
   exit();
 }
 
-// Show branch previous data
+// Show dept previous data
 if (isset($_GET['id'])) {
   $dept_id = intval($_GET['id']);
 

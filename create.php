@@ -41,6 +41,8 @@ if (isset($_POST['submit'])) {
     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']); //foc means focal person = contact person
+    $role = mysqli_real_escape_string($conn, $_POST['role']); //foc means focal person = contact person
+    $auth = mysqli_real_escape_string($conn, $_POST['authority']); //foc means focal person = contact person
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
     $comp_email = mysqli_real_escape_string($conn, $_POST['comp_email']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
@@ -62,8 +64,9 @@ if (isset($_POST['submit'])) {
     }
 
     // Insert the record into the database
-    $sql = "INSERT INTO `compani` (`comp_name`, `acc_desc`, `registration`, `expiry`, `foc`, `foc_phone`, `email`, `add_1`) 
-            VALUES ('$comp_name', '$registration', '$desc', '$expiry', '$foc', '$foc_phone', '$comp_email', '$address')";
+    $sql = "INSERT INTO `compani` (`comp_name`, `acc_desc`, `registration`, `expiry`, `foc`, `role`, `auth` , `foc_phone`, `email`, `add_1`) 
+            VALUES ('$comp_name', '$registration', '$desc', '$expiry', '$foc', '$role', '$auth', '$foc_phone', '$comp_email', '$address')";
+
 
     //added code to insert data into branch table and redirect to branches table of specific company
     if (mysqli_query($conn, $sql)) {
@@ -72,10 +75,17 @@ if (isset($_POST['submit'])) {
         $newCompanyId = mysqli_insert_id($conn);
 
         $insertBranchSql = "INSERT INTO `branches` (`comp_id_fk`, `branch_name`, `account_desc`, `registration_date` , `expiry_date`, `contact_person`,  `contact_phone`, `address`) VALUES ('$newCompanyId', '$comp_name Head Office', '$desc', '$registration', '$expiry', '$foc', '$foc_phone', '$address')";
-    
+
+        if (mysqli_query($conn, $insertBranchSql)) {
+
+            //get id of newly inserted branch
+            $newBranchId = mysqli_insert_id($conn);
+
+            $addStaff = "INSERT INTO `employee` (`branch_id_fk`, `name`, `email`, `phone`, `role`, `Authority`) VALUES ('$newBranchId', '$foc', '$comp_email', '$foc_phone', '$role', '$auth') ";
+        }
     }
 
-    if (mysqli_query($conn, $insertBranchSql)) {
+    if (mysqli_query($conn, $addStaff)) {
         header("Location: Branches.php?id=" . $newCompanyId);
         exit; // Stop further script execution
     } else {
@@ -493,6 +503,27 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-6">
                         <label for="" class="form-label">Contact Person</label>
                         <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="" class="form-label">Role</label>
+                        <select name="role" id="" class="form-select">
+                            <option value="">Select Role of the Employee</option>
+                            <option value="Branch Manager">Branch Manager</option>
+                            <option value="Department Manager">Department Manager</option>
+                            <option value="Junior Employee">Junior Employee</option>
+                            <option value="Head of Operations">Head of Operations</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label">Access/Authority</label>
+                        <select name="authority" id="" class="form-select">
+                            <option value="">Select level of access</option>
+                            <option value="can get information about branch boxes">can get information about branch boxes</option>
+                            <option value="only retrieve department boxes">only retrieve department boxes</option>
+                            <option value="all departments of their branch">all departments of their branch</option>
+                            <option value="all departments and all branches of company">all departments and all branches of company</option>
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Phone</label>

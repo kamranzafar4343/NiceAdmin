@@ -50,7 +50,6 @@ if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
     $comp_name = $row2['comp_name'];
 }
-
 ?>
 
 <!DOCTYPE html>

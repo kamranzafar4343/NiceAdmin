@@ -14,17 +14,19 @@ include 'config/db.php';
 // Get employee ID from query string
 $emp_id = $_GET['id'];
 
-// Get company ID from employee data
-$emp_sql = "SELECT comp_FK_emp FROM employee WHERE emp_id = $emp_id";
+// Get branch ID from employee data
+$emp_sql = "SELECT branch_id_fk FROM employee WHERE emp_id = $emp_id";
 $result_emp = $conn->query($emp_sql);
+
+//getting branch to redirect on branch info page
 $emp_data = $result_emp->fetch_assoc();
-$company_id = $emp_data['comp_FK_emp'];
+$branch_id = $emp_data['branch_id_fk'];
 
 // Delete employee data
 $delete_sql = "DELETE FROM employee WHERE emp_id = $emp_id";
 
 if ($conn->query($delete_sql) === TRUE) {
-  header("Location: CompanyInfo.php?id=$company_id");
+  header("Location: branchInfo.php?id=$branch_id");
   exit();
 } else {
   echo "Error deleting employee: " . $conn->error;

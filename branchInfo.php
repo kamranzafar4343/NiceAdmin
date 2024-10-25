@@ -53,12 +53,18 @@ if ($result->num_rows > 0) {
   $pick_address = $branch_data ['pickup_address'];
 }
 
-
-
 //fetch employee table
-// $emp_sql = "Select * from employee where comp_FK_emp = $company_id";
-// $result_emp = $conn->query($emp_sql);
-// $emp_data = $result_emp->fetch_assoc();
+$emp_sql = "Select * from employee where branch_id_fk = $branch_id";
+$result_emp = $conn->query($emp_sql);
+
+if($result_emp->num_rows > 0){
+  $emp_data = $result_emp->fetch_assoc();
+  $emp_id = $emp_data['emp_id'];
+  $emp_name = $emp_data['name'];
+  $emp_role = $emp_data['role'];
+  $emp_auth = $emp_data['Authority'];
+}
+
 
 
 ?>
@@ -859,48 +865,40 @@ if ($result->num_rows > 0) {
 
         <!-- Second Column -->
         <!--new table design-->
-        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBranch.php?id=<?php echo $company_id; ?>'" class="btn btn-primary mb-3">Add Staff</button>
+        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'add&editStaff.php?id=<?php echo $emp_id; ?>'" class="btn btn-primary mb-3">Add Staff</button>
 
         <div class="col-6">
           <div class="cardBranch recent-sales">
             <div class="card-body cbd-position">
-              <h2 class="card-title fw-bold text-uppercase"><?php echo $branch_name; ?></h2>
+              <h2 class="card-title fw-bold text-uppercase"><?php echo 'Staff List'; ?></h2>
 
               <?php
               if ($result->num_rows > 0) {
               ?>
-                <table id="branchTable" class="table table-bordered datatable">
+                <table id="branchTable" class="table datatable">
                   <thead>
                     <tr>
-                      <th scope="col">Contact Person</th>
+                      <th scope="col">Name</th>
                       <th scope="col">Role</th>
                       <th scope="col">Access Authority</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php
-                    while ($row = $result->fetch_assoc()) {
-                      echo "<tr>";
-
-                    ?>
-                      <td>
-                        <a class="text-primary fw-bold" href="departments.php?id=<?php echo $row['branch_id']; ?>">
-                          <?php echo $row['branch_name']; ?>
-                        </a>
-                      </td>
-                      <?php
-                      echo "<td style= ' color:#28a745; font-weight: bold; opacity: 0.8;'> " . ($row["contact_person"]) . "</td>";
-
-                      echo "<td>" . ($row["address"]) . "</td>";
+                    while ($row2 = $result_emp->fetch_assoc()) {
+                      echo "<tr>";    
+                      echo "<td>" . $emp_name . "</td>";
+                      echo "<td>" . $emp_role . "</td>";
+                      echo "<td>" . $emp_auth . "</td>";
                       ?>
                       <td>
                         <div style="display: flex; gap: 10px;">
 
-                          <a type="button" class="btn btn-success btn-success d-flex justify-content-center " style="width:25px; height: 28px;" href=".php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-file-lines"></i></a>
-                          <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:25px; height: 28px;" href="branchUpdate.php?id=<?php echo $row['branch_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                          <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="width:23px; height: 28px;" href="add&editStaff.php?id=<?php echo $emp_id; ?>"><i style="width: 20px; font-weight:500;" class="bx bxs-edit"></i></a>
 
-                          <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                            onclick="return confirm('Are you sure you want to delete this record?');" href="branchDelete.php?id=<?php echo $row['branch_id']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                          <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:23px; height:28px" data-mdb-ripple-init
+                            onclick="return confirm('Are you sure you want to delete this record?');" href="employeeDelete.php?id=<?php echo $emp_id; ?>"> <i style="width: 20px;" class="bx bxs-trash-alt"></i></a>
 
                         </div>
                       </td>
@@ -938,16 +936,6 @@ if ($result->num_rows > 0) {
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/main.js">
-  </script>
-
-  <script>
-    //used to refer to other page 
-    function redirectToFormPage() {
-      // Get the current page URL
-      var referrer = encodeURIComponent(window.location.href);
-      // Redirect to the form page with the referrer URL as a query parameter
-      window.location.href = 'createEmployee.php?referrer=' + referrer;
-    }
   </script>
 
   <!-- Template Main JS File -->

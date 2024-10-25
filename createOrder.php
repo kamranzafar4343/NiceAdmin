@@ -505,14 +505,14 @@ if (isset($_POST['submit'])) {
 
                     <!-- Select Company -->
                     <div class="col-md-4">
-                        <label for="lev1">Account level 1:</label>
+                        <label for="lev1">Company Company:</label>
                         <select id="lev1" class="form-select" name="level1" required>
-                            <option value="">Select Account lev 1</option>
+                            <option value="">Select Company</option>
                             <?php
                             // Fetch the account levels from the database
-                            $result = $conn->query("SELECT comp_id, acc_lev_1, acc_desc FROM compani");
+                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['acc_lev_1']} - {$row['acc_desc']}</option>";
+                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']} - {$row['acc_desc']}</option>";
                             }
                             ?>
                         </select>

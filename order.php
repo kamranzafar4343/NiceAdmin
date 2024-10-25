@@ -487,7 +487,6 @@ $resultShowOrders = $conn->query($showOrders);
                         <tr>
                         <th scope="col" style="width: 20%;">Account Description</th>
                         <th scope="col" style="width: 13%;">Workorder no</th>
-                        <th scope="col" style="width: 14%;">Account Code</th>
                         <th scope="col" style="width: 10%;">Create Date</th>
                         <th scope="col" style="width: 7%;">Priority</th>
                         <th scope="col" style="width: 12%;">Required By</th>
@@ -507,56 +506,32 @@ $resultShowOrders = $conn->query($showOrders);
 
 
                             // Get specific company id
-                            $comp_id = $row['level1'];
+                            $comp_id = $row['comp_id_fk'];
                             $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
                             $result3 = $conn->query($sql3);
                             if ($result3->num_rows > 0) {
                                 $row3 = $result3->fetch_assoc();
-                                $acc_lev1 = $row3['acc_lev_1'];
-                                $acc_desc1 = $row3['acc_desc'];
+                                $comp_name = $row3['comp_name'];
+                               
                             }
 
-
-                            //in case if no branch selected 
-                            if ($row['level2'] == "0") {
-                                $acc_lev2 = " ";
-                                $acc_desc2 = " ";
-                            } else {
-                                // Get specific branch
-                                $branch_id = $row['level2'];
+                           
+                                // Get specific branch id
+                                $branch_id = $row['branch_id_fk'];
                                 $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
                                 $result7 = $conn->query($sql7);
                                 if ($result7->num_rows > 0) {
                                     $row7 = $result7->fetch_assoc();
-                                    $acc_lev2 = $row7['acc_lev_2'];
-                                    $acc_desc2 = $row7['account_desc'];
+                                    $branch_name = $row7['branch_name'];
+                                   
                                 }
-                            }
 
-                            //in case if no dept selected
-                            if ($row['level3'] == "0") {
-                                $acc_lev3 = " ";
-                                $acc_desc3 = " ";
-                            } else {
-                                // Get specific dept id
-                                $dept_id = $row['level3'];
-                                $sql9 = "SELECT * FROM departments WHERE dept_id= '$dept_id'";
-                                $result9 = $conn->query($sql9);
-                                if ($result9->num_rows > 0) {
-                                    $row9 = $result9->fetch_assoc();
-                                    $acc_lev3 = $row9['acc_lev_3'];
-                                    $acc_desc3 = $row9['acc_desc'];
-                                }
-                            }
-                            //account descritpon
-                            echo '<td>' . $acc_desc1 . " / " . $acc_desc2 . " / " . $acc_desc3 . '</td>';
+                            // Show account
+                            echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
 
 
                             //workorder_no
                             echo '<td>' . ($row['order_no']) . '</td>';
-
-                            // Show account
-                            echo '<td>' . $acc_lev1 . (" / " . $acc_lev2) . (" / " . $acc_lev3) . '</td>';
 
 
                             echo '<td>' . ($row["order_creation_date"]) . '</td>';

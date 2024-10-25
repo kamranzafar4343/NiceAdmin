@@ -468,8 +468,8 @@ if ($resultData->num_rows > 0) {
                         echo '<table class="table datatable mt-4">
                     <thead>
                         <tr>
+                            
                             <th scope="col" style="width: 13%;">Account</th>
-                            <th scope="col" style="width: 13%;">Account Info</th>
                             <th scope="col" style="width: 14%;">Object code</th>
                             <th scope="col" style="width: 10%;">Barcode No.</th>
                             <th scope="col" style="width: 10%;">Alt code</th>
@@ -488,7 +488,7 @@ if ($resultData->num_rows > 0) {
                             echo '<tr>';
 
                             // Get specific company id
-                            $comp_id = $row['level1'];
+                            $comp_id = $row['comp_id_fk'];
                             $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
                             $result3 = $conn->query($sql3);
                             if ($result3->num_rows > 0) {

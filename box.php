@@ -465,7 +465,7 @@ if ($resultData->num_rows > 0) {
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
-                        echo '<table class="table datatable mt-4">
+                        echo '<table id="box" class="table datatable mt-4">
                     <thead>
                         <tr>
                             
@@ -473,7 +473,6 @@ if ($resultData->num_rows > 0) {
                             <th scope="col" style="width: 14%;">Object code</th>
                             <th scope="col" style="width: 10%;">Barcode No.</th>
                             <th scope="col" style="width: 10%;">Alt code</th>
-                          
                             <th scope="col" style="width: 10%;">Status</th>
                             <th scope="col" style="width: 10%;">Creation time</th>';
                         // Show "Action" column only for admins
@@ -493,44 +492,23 @@ if ($resultData->num_rows > 0) {
                             $result3 = $conn->query($sql3);
                             if ($result3->num_rows > 0) {
                                 $row3 = $result3->fetch_assoc();
-                                $acc_lev1 = $row3['acc_lev_1'];
-                                $acc_desc1 = $row3['acc_desc'];
+                                $comp_name = $row3['comp_name'];
+                               
                             }
 
-                            //in case if no branch selected 
-                            if ($row['level2'] == "0") {
-                                $acc_lev2 = "";
-                                $acc_desc2 = "";
-                            } else {
+                           
                                 // Get specific branch id
-                                $branch_id = $row['level2'];
+                                $branch_id = $row['branch_id_fk'];
                                 $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
                                 $result7 = $conn->query($sql7);
                                 if ($result7->num_rows > 0) {
                                     $row7 = $result7->fetch_assoc();
-                                    $acc_lev2 = $row7['acc_lev_2'];
-                                    $acc_desc2 = $row7['account_desc'];
+                                    $branch_name = $row7['branch_name'];
+                                   
                                 }
-                            }
-                            //in case if no dept selected
-                            if ($row['level3'] == "0") {
-                                $acc_lev3 = "";
-                                $acc_desc3 = "";
-                            } else {
-                                // Get specific dept id
-                                $dept_id = $row['level3'];
-                                $sql9 = "SELECT * FROM departments WHERE dept_id= '$dept_id'";
-                                $result9 = $conn->query($sql9);
-                                if ($result9->num_rows > 0) {
-                                    $row9 = $result9->fetch_assoc();
-                                    $acc_lev3 = $row9['acc_lev_3'];
-                                    $acc_desc3 = $row9['acc_desc'];
-                                }
-                            }
 
                             // Show account
-                            echo '<td>' . $acc_lev1 . " / " . $acc_lev2 . " / " . $acc_lev3 . '</td>';
-                            echo '<td>' . $acc_desc1 . " / " . $acc_desc2 . " / " . $acc_desc3 . '</td>';
+                            echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
 
                             echo '<td>' . ($row["object"]) . '</td>';
                             echo '<td>' . ($row["barcode"]) . '</td>';
@@ -608,6 +586,15 @@ if ($resultData->num_rows > 0) {
                 document.getElementById("searchForm").submit(); // Manually submit the form
             }
         });
+    </script>
+    <script>
+        // $(document).ready(function() {
+        //     $('#box').DataTable({
+                
+        //         "pageLength": 100,
+                
+        //     });
+        // });
     </script>
 </body>
 

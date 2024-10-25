@@ -139,6 +139,8 @@ $result = $conn->query($sql);
       </form>
     </div><!-- End Search Bar -->
 
+    <h3>List of Companies</h3>
+
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 

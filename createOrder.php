@@ -505,14 +505,14 @@ if (isset($_POST['submit'])) {
 
                     <!-- Select Company -->
                     <div class="col-md-4">
-                        <label for="lev1">Company Company:</label>
-                        <select id="lev1" class="form-select" name="level1" required>
+                        <label for="company">Company Company:</label>
+                        <select id="company" class="form-select" name="company" required>
                             <option value="">Select Company</option>
                             <?php
                             // Fetch the account levels from the database
                             $result = $conn->query("SELECT comp_id, comp_name FROM compani");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']} - {$row['acc_desc']}</option>";
+                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
                             }
                             ?>
                         </select>
@@ -520,15 +520,15 @@ if (isset($_POST['submit'])) {
 
                     <!-- Select lev 2 of selected account -->
                     <div class="col-md-4">
-                        <label for="lev2">Account level 2:</label>
-                        <select id="lev2" class="form-select" name="level2" required>
-                            <option value="">Select level 2</option>
+                        <label for="branch">Branch Name:</label>
+                        <select id="branch" class="form-select" name="branch" required>
+                            <option value="">Select branch</option>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="lev3">Account level 3:</label>
-                        <select id="lev3" class="form-select" name="level3">
-                            <option value="">Select level 3</option>
+                        <label for="dept">Department:</label>
+                        <select id="dept" class="form-select" name="dept">
+                            <option value="">Select Department</option>
                         </select>
                     </div>
 
@@ -759,7 +759,7 @@ if (isset($_POST['submit'])) {
 
 
             // When company is changed, fetch the branches
-            $('#lev1').change(function() {
+            $('#company').change(function() {
                 var company_id = $(this).val();
 
                 // AJAX request to get branches for the selected company

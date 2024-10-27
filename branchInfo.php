@@ -885,7 +885,7 @@ $result_emp = $conn->query($emp_sql);
               <?php
               if ($result->num_rows > 0) {
               ?>
-                <table id="branchTable" class="table table-bordered datatable">
+                <table id="branchTable" class="table table-hover table-bordered datatable">
                   <thead>
                     <tr>
                       <th scope="col" style="width: 15%;">Name</th>

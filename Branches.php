@@ -560,7 +560,7 @@ if ($result2->num_rows > 0) {
                 "searching": true,
                 "info": true,
                 "lengthChange": true,
-                "pageLength": 50,
+                "pageLength": 100,
                 "dom": '<"top"f>rt<"bottom"lip><"clear">',
                 "language": {
                     "search": "Search:",

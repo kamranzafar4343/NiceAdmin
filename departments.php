@@ -544,7 +544,7 @@ if ($result2->num_rows > 0) {
                 "ordering": true,
                 "info": true,
                 "lengthChange": true,
-                "pageLength": 50,
+                "pageLength": 100,
                 "language": {
                     "search": "Search:",
                     "lengthMenu": "Show _MENU_ entries",

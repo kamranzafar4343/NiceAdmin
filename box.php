@@ -478,9 +478,10 @@ if ($resultData->num_rows > 0) {
                         <tr>
                             
                             <th scope="col" style="width: 20%;">Account</th>
-                            <th scope="col" style="width: 13%;">Object</th>
+                            <th scope="col" style="width: 9%;">Object</th>
                             <th scope="col" style="width: 13%;">Barcode No.</th>
-                            <th scope="col" style="width: 13%;">Status</th>
+                            <th scope="col" style="width: 13%;">Alt code</th>
+                            <th scope="col" style="width: 9%;">Status</th>
                             <th scope="col" style="width: 15%;">Create Date</th>';
                         
                             // Show "Action" column only for admins
@@ -528,7 +529,7 @@ if ($resultData->num_rows > 0) {
                             echo '"></i> ' . '</td>';
                             
                             echo '<td>' . ($row["barcode"]) . '</td>';
-                            
+                            echo '<td>' . ($row["alt_code"]) . '</td>';
                         
 
                             echo '<td><i class="';

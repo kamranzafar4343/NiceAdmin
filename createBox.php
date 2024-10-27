@@ -23,9 +23,8 @@ if ($resultData->num_rows > 0) {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $level_1 = mysqli_real_escape_string($conn, $_POST['level1']);
-    $level2 = mysqli_real_escape_string($conn, $_POST['level2']);
-    $level3 = mysqli_real_escape_string($conn, $_POST['level3']);
+    $company = mysqli_real_escape_string($conn, $_POST['company']);
+    $branch = mysqli_real_escape_string($conn, $_POST['branch']);
     $object_code = mysqli_real_escape_string($conn, $_POST['object_code']);
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode_select']);
     $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
@@ -43,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     // Insert data into box table
-    $sql = "INSERT INTO box (level1, level2, level3, object, barcode, alt_code, box_desc, status) 
-            VALUES ('$level_1', '$level2', '$level3', '$object_code', '$barcode', '$alt_code', '$description', 'In')";
+    $sql = "INSERT INTO box (comp_id_fk, branch_id_fk, object, barcode, alt_code, box_desc, status) 
+            VALUES ('$company', '$branch', '$object_code', '$barcode', '$alt_code', '$description', 'In')";
 
     if ($conn->query($sql) === TRUE) {
         header("location: createBox.php");
@@ -443,8 +442,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <!-- For the Level 1 field -->
                     <div class="col-md-4">
-                        <label for="lev1">Select Company:</label>
-                        <select id="lev1" class="form-select" name="level1" required>
+                        <label for="company">Select Branch:</label>
+                        <select id="company" class="form-select" name="company" required>
                             <option value="">Select company</option>
                             <?php
                             // Fetch the account levels from the database
@@ -457,8 +456,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <!-- For the Level 2 field -->
                     <div class="col-md-4">
-                        <label for="level2">Select Branch:</label>
-                        <select id="level2" class="form-select" name="level2">
+                        <label for="branch">Select Branch:</label>
+                        <select id="branch" class="form-select" name="branch">
                             <option value="">Select a branch</option>
                         </select>
                     </div>
@@ -544,11 +543,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             };
 
             // Initialize dselect for the initial dropdowns
-            dselect(document.querySelector('#lev1'), config);
-            dselect(document.querySelector('#level2'), config);
+            dselect(document.querySelector('#company'), config);
+            dselect(document.querySelector('#branch'), config);
 
             // When company is changed, fetch the branches
-            $('#lev1').change(function() {
+            $('#company').change(function() {
                 var company_id = $(this).val();
 
                 // AJAX request to get branches for the selected company
@@ -562,14 +561,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         try {
                             var branches = JSON.parse(response); //return the json response as an array
                             // Clear existing branches
-                            $('#level2').empty();
-                            $('#level2').append('<option value="">Select a Branch</option>');
+                            $('#branch').empty();
+                            $('#branch').append('<option value="">Select a Branch</option>');
                             // Add the new options from the response
                             $.each(branches, function(index, branch) {
-                                $('#level2').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
                             });
                             // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#level2'), config);
+                            dselect(document.querySelector('#branch'), config);
 
                         } catch (e) {
                             console.error("Invalid JSON response", response);

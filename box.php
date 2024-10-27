@@ -75,8 +75,16 @@ if ($resultData->num_rows > 0) {
     <!-- Style -->
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Custom CSS to decrease font size of the table */
 
+        /* css for icons */
+        #fontStyleCon{
+            text-shadow: 1px 1px 1px #ccc;
+            font-size: 20px;
+            color: darkgoldenrod;
+            margin-right: 10px;
+        }
+
+        /* Custom CSS to decrease font size of the table */
         /* Basic styling for search bar */
         input.btn.btn-success {
             margin-left: 7px;
@@ -465,17 +473,17 @@ if ($resultData->num_rows > 0) {
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
-                        echo '<table id="box" class="table datatable mt-4">
+                        echo '<table id="box" class="table mt-4">
                     <thead>
                         <tr>
                             
-                            <th scope="col" style="width: 13%;">Account</th>
-                            <th scope="col" style="width: 14%;">Object code</th>
-                            <th scope="col" style="width: 10%;">Barcode No.</th>
-                            <th scope="col" style="width: 10%;">Alt code</th>
-                            <th scope="col" style="width: 10%;">Status</th>
-                            <th scope="col" style="width: 10%;">Creation time</th>';
-                        // Show "Action" column only for admins
+                            <th scope="col" style="width: 20%;">Account</th>
+                            <th scope="col" style="width: 13%;">Object</th>
+                            <th scope="col" style="width: 13%;">Barcode No.</th>
+                            <th scope="col" style="width: 13%;">Status</th>
+                            <th scope="col" style="width: 15%;">Create Date</th>';
+                        
+                            // Show "Action" column only for admins
                         if ($_SESSION['role'] == 'admin') {
                             echo '<th scope="col" style="width: 10%;">Action</th>';
                         }
@@ -504,27 +512,44 @@ if ($resultData->num_rows > 0) {
                                 if ($result7->num_rows > 0) {
                                     $row7 = $result7->fetch_assoc();
                                     $branch_name = $row7['branch_name'];
-                                   
                                 }
 
                             // Show account
                             echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
 
-                            echo '<td>' . ($row["object"]) . '</td>';
+                            echo '<td><i class="';
+                            if ($row["object"] == 'Container') {
+                                echo 'fa-solid fa-box';
+                                echo '" style="color: #007bff; font-size: 1.5rem; </i>"';
+                            } elseif ($row["object"] == 'FileFolder') {
+                                echo 'fa-solid fa-folder';
+                                echo '" style="color: grey; font-size: 1.5rem; </i>"';
+                            }
+                            echo '"></i> ' . '</td>';
+                            
                             echo '<td>' . ($row["barcode"]) . '</td>';
-                            echo '<td>' . ($row["alt_code"]) . '</td>';
+                            
+                        
 
                             echo '<td><i class="';
                             if ($row["status"] == 'In') {
-                                echo 'fas fa-check-circle text-success';
+                                echo 'fa-solid fa-right-to-bracket';
+                                echo '" style="color: green; font-size: 1.5rem; </i>"';
                             } elseif ($row["status"] == 'Out') {
-                                echo 'fas fa-times-circle text-danger';
+                                echo 'fa-solid fa-right-from-bracket';
+                                echo '" style="color: red; font-size: 1.5rem; </i>"';
                             } elseif ($row["status"] == 'Ready for Destroy') {
-                                echo 'fas fa-exclamation-triangle text-warning';
+                                echo 'fa-solid fa-trash-can';
+                                echo '" style="color: red; font-size: 1.5rem; </i>"';
+                                
                             }
 
-                            echo '"></i> ' . $row["status"] . '</td>';
-                            echo '<td>' . ($row["created_at"]) . '</td>';
+                            echo '"></i> ' . '</td>';
+                        
+                            //convert timestamp to only date format
+                            $dateTime = $row["created_at"];
+                            $justDate = date("Y-m-d", strtotime($dateTime));
+                            echo '<td>' . $justDate . '</td>';
 
                             // Show action buttons only for admins
                             if ($_SESSION['role'] == 'admin') {
@@ -552,13 +577,6 @@ if ($resultData->num_rows > 0) {
     </main><!-- End #main -->
 
 
-
-    <script>
-        function filterCompany(comp_id) {
-            window.location.href = "box.php?comp_id=" + comp_id;
-        }
-    </script>
-
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
@@ -570,32 +588,29 @@ if ($resultData->num_rows > 0) {
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
+
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
+
+
     <script>
-        // event listener for search bar 
-        document.getElementById("searchInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault(); // Prevent default form submission
-                document.getElementById("searchForm").submit(); // Manually submit the form
-            }
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize the DataTable
+        let table = new simpleDatatables.DataTable("#box", {
+            perPage: 100, // Set the default page length to 100
+            perPageSelect: [10, 25, 50, 100], // Optional: Customize the dropdown options
         });
-    </script>
-    <script>
-        // $(document).ready(function() {
-        //     $('#box').DataTable({
-                
-        //         "pageLength": 100,
-                
-        //     });
-        // });
-    </script>
+    });
+</script>
+
 </body>
 
 </html>

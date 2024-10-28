@@ -310,7 +310,7 @@
   const datatables = select('.datatable', true);
   datatables.forEach((datatable) => {
     new simpleDatatables.DataTable(datatable, {
-      perPageSelect: [5, 10, 15, ['All', -1]],
+      perPageSelect: [100, 200, ['All', -1]],
       columns: [
         {
           select: 2,
@@ -344,30 +344,30 @@
   }
 })();
 
-//acc_lev_1 ajax
-$(document).ready(function () {
-  $('#account_lev_no').blur(function () {
-    var acc_lev_no = $(this).val();
+// //acc_lev_1 ajax
+// $(document).ready(function () {
+//   $('#account_lev_no').blur(function () {
+//     var acc_lev_no = $(this).val();
 
-    $.ajax({
-      url: 'check_accLev1.php',
-      method: 'POST',
-      data: {
-        acc_lev_no: acc_lev_no,
-      },
-      success: function (response) {
-        if (response === 'Account already exists') {
-          $('#account_lev_no').addClass('is-invalid');
-          $('#accFeedback').text('Account level 1 already exists.');
-        } else {
-          $('#account_lev_no').removeClass('is-invalid');
-          $('#account_lev_no').removeClass('is-valid');
-          $('#accFeedback').text('');
-        }
-      },
-    });
-  });
-});
+//     $.ajax({
+//       url: 'check_accLev1.php',
+//       method: 'POST',
+//       data: {
+//         acc_lev_no: acc_lev_no,
+//       },
+//       success: function (response) {
+//         if (response === 'Account already exists') {
+//           $('#account_lev_no').addClass('is-invalid');
+//           $('#accFeedback').text('Account level 1 already exists.');
+//         } else {
+//           $('#account_lev_no').removeClass('is-invalid');
+//           $('#account_lev_no').removeClass('is-valid');
+//           $('#accFeedback').text('');
+//         }
+//       },
+//     });
+//   });
+// });
 
 //check that requestor is verified or not
 // $(document).ready(function(){
@@ -398,29 +398,29 @@ $(document).ready(function () {
 // )
 // });
 
-//box name ajax
-$(document).ready(function () {
-  $('#box_name').blur(function () {
-    var box_name = $(this).val();
+// //box name ajax
+// $(document).ready(function () {
+//   $('#box_name').blur(function () {
+//     var box_name = $(this).val();
 
-    $.ajax({
-      url: 'box_validation.php',
-      method: 'POST',
-      data: {
-        box_name: box_name,
-      },
-      success: function (response) {
-        if (response === 'exists') {
-          $('#box_name').addClass('is-invalid');
-          $('#boxNameFeedback').text('Box Name already exists');
-        } else {
-          $('#box_name').removeClass('is-invalid');
-          $('#boxNameFeedback').text('');
-        }
-      },
-    });
-  });
-});
+//     $.ajax({
+//       url: 'box_validation.php',
+//       method: 'POST',
+//       data: {
+//         box_name: box_name,
+//       },
+//       success: function (response) {
+//         if (response === 'exists') {
+//           $('#box_name').addClass('is-invalid');
+//           $('#boxNameFeedback').text('Box Name already exists');
+//         } else {
+//           $('#box_name').removeClass('is-invalid');
+//           $('#boxNameFeedback').text('');
+//         }
+//       },
+//     });
+//   });
+// });
 
 window.onload = function () {
   // Get the current date
@@ -529,34 +529,34 @@ window.onload = function() {
   populateStatesAndCities();
 };*/
 
-//for updating image -----------------------------------------------------------
-document.getElementById('currentImage').addEventListener('click', function () {
-  document.getElementById('fileInput').click();
-});
+// //for updating image -----------------------------------------------------------
+// document.getElementById('currentImage').addEventListener('click', function () {
+//   document.getElementById('fileInput').click();
+// });
 
-// JavaScript to handle file input change and upload the image
-document
-  .getElementById('fileInput')
-  .addEventListener('change', function (event) {
-    var file = event.target.files[0];
-    if (file) {
-      var formData = new FormData();
-      formData.append('image', file);
+// // JavaScript to handle file input change and upload the image
+// document
+//   .getElementById('fileInput')
+//   .addEventListener('change', function (event) {
+//     var file = event.target.files[0];
+//     if (file) {
+//       var formData = new FormData();
+//       formData.append('image', file);
 
-      // AJAX request to upload the image
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'upload_image.php', true);
+//       // AJAX request to upload the image
+//       var xhr = new XMLHttpRequest();
+//       xhr.open('POST', 'upload_image.php', true);
 
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          // On successful upload, update the image src with the new image path
-          document.getElementById('currentImage').src = xhr.responseText;
-          alert('Image updated successfully!');
-        } else {
-          alert('Error updating image.');
-        }
-      };
+//       xhr.onload = function () {
+//         if (xhr.status === 200) {
+//           // On successful upload, update the image src with the new image path
+//           document.getElementById('currentImage').src = xhr.responseText;
+//           alert('Image updated successfully!');
+//         } else {
+//           alert('Error updating image.');
+//         }
+//       };
 
-      xhr.send(formData);
-    }
-  });
+//       xhr.send(formData);
+//     }
+//   });

@@ -41,6 +41,7 @@ $rowDept = mysqli_fetch_assoc($resultDept);
 $DeptCount = $rowDept['dept_count'];
 ?>
 <?php
+
 include "sidebar.php";
 
 ?>

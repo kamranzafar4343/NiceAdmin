@@ -131,6 +131,11 @@ $result_emp = $conn->query($emp_sql);
 
     }
 
+    /* css for hover on employee name */
+    .tooltip-emp:hover {
+      cursor: pointer;
+    }
+
     /* css for setting col-4 width of card */
 
     @media (min-width: 768px) {
@@ -899,7 +904,10 @@ $result_emp = $conn->query($emp_sql);
                     while ($row2 = $result_emp->fetch_assoc()) {
                
                       echo "<tr>";
-                      echo "<td>" . $row2["name"] . "</td>";
+
+                      //showing tooltip for email and phone when hover on employee name
+                      echo "<td class='tooltip-emp' title='" . htmlspecialchars($row2["email"]) . "\n" . htmlspecialchars($row2["phone"]) . "'>" . $row2["name"] . "</td>";
+
                       echo '<td>';
                       if ($row2["role"] == 'Branch Manager') {
                           // Display a green badge for "Regular"

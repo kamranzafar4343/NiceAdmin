@@ -482,7 +482,7 @@ $resultShowOrders = $conn->query($showOrders);
                     // Check if there are any results
                     if ($resultShowOrders->num_rows > 0) {
                         // Display table
-                        echo '<table class="table datatable mt-4">
+                        echo '<table id="orderT" class="table datatable mt-4">
                     <thead>
                         <tr>
                         <th scope="col" style="width: 20%;">Account</th>
@@ -512,19 +512,17 @@ $resultShowOrders = $conn->query($showOrders);
                             if ($result3->num_rows > 0) {
                                 $row3 = $result3->fetch_assoc();
                                 $comp_name = $row3['comp_name'];
-                               
                             }
 
-                           
-                                // Get specific branch id
-                                $branch_id = $row['branch_id_fk'];
-                                $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
-                                $result7 = $conn->query($sql7);
-                                if ($result7->num_rows > 0) {
-                                    $row7 = $result7->fetch_assoc();
-                                    $branch_name = $row7['branch_name'];
-                                   
-                                }
+
+                            // Get specific branch id
+                            $branch_id = $row['branch_id_fk'];
+                            $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
+                            $result7 = $conn->query($sql7);
+                            if ($result7->num_rows > 0) {
+                                $row7 = $result7->fetch_assoc();
+                                $branch_name = $row7['branch_name'];
+                            }
 
                             // Show account
                             echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
@@ -616,7 +614,6 @@ $resultShowOrders = $conn->query($showOrders);
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
@@ -624,6 +621,17 @@ $resultShowOrders = $conn->query($showOrders);
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize the DataTable
+            let orderTable = new simpleDatatables.DataTable("#orderT", {
+                perPage: 100, // Set the default page length to 100
+                perPageSelect: [10, 25, 50, 100], // Optional: Customize the dropdown options
+            });
+        });
+    </script>
+
 </body>
+
 
 </html>

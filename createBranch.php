@@ -50,6 +50,8 @@ if (isset($_POST['submit'])) {
   $registration = mysqli_real_escape_string($conn, $_POST['registration']);
   $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
+  $role = mysqli_real_escape_string($conn, $_POST['role']);
+  $auth = mysqli_real_escape_string($conn, $_POST['authority']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
   $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
@@ -63,17 +65,25 @@ if (isset($_POST['submit'])) {
   }
 
   // SQL query to insert the data into the database
-  $sql = "INSERT INTO branches (comp_id_fk, branch_name, account_desc, registration_date, expiry_date, contact_person, contact_phone, address, pickup_address) 
-          VALUES ('$company_id', '$branch_name', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$address', '$pickup_address')";
+  $sql = "INSERT INTO branches (comp_id_fk, branch_name, account_desc, registration_date, expiry_date, contact_person, role, auth, contact_phone, address, pickup_address) 
+          VALUES ('$company_id', '$branch_name', '$account_desc', '$registration', '$expiry', '$contact_person', '$role', '$auth', '$contact_phone', '$address', '$pickup_address')";
 
-  if ($conn->query($sql) === TRUE) {
-    header("Location: Branches.php?id=" . $company_id);
-    exit; // Ensure script ends after redirect
-    echo "success";
-  } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+  if (mysqli_query($conn, $sql)) {
+
+    //get id of newly inserted branch
+    $newBranchId = mysqli_insert_id($conn);
+
+    $addStaff = "INSERT INTO `employee` (`branch_id_fk`, `name`, `phone`, `role`, `Authority`) 
+ VALUES ('$newBranchId', '$contact_person', '$contact_phone', '$role', '$auth') ";
+
+    if (mysqli_query($conn, $addStaff)) {
+      header("Location: Branches.php?id=" . $company_id);
+      exit; // Ensure script ends after redirect
+      echo "success";
+    } else {
+      echo "Error: " . $sql . "<br>" . $conn->error;
+    }
   }
-
   $conn->close();
 }
 ?>
@@ -503,7 +513,27 @@ End Search Bar -->
             <label for="" class="form-label">Contact Person</label>
             <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
           </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">Role</label>
+            <select name="role" id="" class="form-select">
+              <option value="">Select Role of the Employee</option>
+              <option value="Branch Manager">Branch Manager</option>
+              <option value="Department Manager">Department Manager</option>
+              <option value="Junior Employee">Junior Employee</option>
+              <option value="Head of Operations">Head of Operations</option>
+            </select>
+          </div>
 
+          <div class="col-md-6">
+            <label for="phone" class="form-label">Access/Authority</label>
+            <select name="authority" id="" class="form-select">
+              <option value="">Select level of access</option>
+              <option value="can get information about branch boxes">can get information about branch boxes</option>
+              <option value="only retrieve department boxes">only retrieve department boxes</option>
+              <option value="all departments of their branch">all departments of their branch</option>
+              <option value="all departments and all branches of company">all departments and all branches of company</option>
+            </select>
+          </div>
           <div class="col-md-6">
             <label for="phone" class="form-label">Phone</label>
             <input type="text" class="form-control" id="" name="foc_phone" required>
@@ -529,23 +559,23 @@ End Search Bar -->
       </div>
     </div>
   </div>
-<!-- Vendor JS Files -->
-<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js">
-    </script>
-    <!-- Bootstrap JS (Optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js">
+  </script>
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
 
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="assets/js/main.js"></script>

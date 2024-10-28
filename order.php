@@ -485,12 +485,12 @@ $resultShowOrders = $conn->query($showOrders);
                         echo '<table class="table datatable mt-4">
                     <thead>
                         <tr>
-                        <th scope="col" style="width: 20%;">Account Description</th>
-                        <th scope="col" style="width: 13%;">Workorder no</th>
+                        <th scope="col" style="width: 20%;">Account</th>
+                        <th scope="col" style="width: 13%;">WorkOrder No</th>
                         <th scope="col" style="width: 10%;">Create Date</th>
-                        <th scope="col" style="width: 7%;">Priority</th>
+                        <th scope="col" style="width: 7%;">Service Priority</th>
                         <th scope="col" style="width: 12%;">Required By</th>
-                        <th scope="col" style="width: 10%;">WO type Action Code</th>
+                        <th scope="col" style="width: 10%;">WO Type Action</th>
                         <th scope="col" style="width: 17%;">Action</th>
                         </tr>
                     </thead>

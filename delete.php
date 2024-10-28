@@ -15,12 +15,11 @@ include 'config/db.php';
 if (isset($_GET['id'])) {
     $comp_id = intval($_GET['id']); // Ensure ID is an int
 
-
-    // Get the number of branches for the specific box
-    $queryCount = "SELECT COUNT(*) AS Acc2_count FROM branches WHERE comp_id_fk = '$comp_id'";
+    // Get the number of company for the specific box
+    $queryCount = "SELECT COUNT(*) AS comp_count FROM branches WHERE comp_id_fk = '$comp_id'";
     $resultCount = mysqli_query($conn, $queryCount);
     $rowCount = mysqli_fetch_assoc($resultCount);
-    $Count = $rowCount['Acc2_count'];
+    $Count = $rowCount['comp_count'];
 
     if ($Count > 0) {
         echo 'Error: Cannot delete a Company having branches';
@@ -29,7 +28,6 @@ if (isset($_GET['id'])) {
         $sql = "DELETE FROM `compani` WHERE `comp_id`='$comp_id'";
 
         if ($conn->query($sql) === TRUE) {
-
             header('Location: Companies.php');
             exit(); // Make sure no further code is executed after redirect
         } else {

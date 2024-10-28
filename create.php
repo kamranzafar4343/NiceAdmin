@@ -41,8 +41,8 @@ if (isset($_POST['submit'])) {
     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']); //foc means focal person = contact person
-    $role = mysqli_real_escape_string($conn, $_POST['role']); //foc means focal person = contact person
-    $auth = mysqli_real_escape_string($conn, $_POST['authority']); //foc means focal person = contact person
+    $role = mysqli_real_escape_string($conn, $_POST['role']); 
+    $auth = mysqli_real_escape_string($conn, $_POST['authority']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
     $comp_email = mysqli_real_escape_string($conn, $_POST['comp_email']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
@@ -65,7 +65,7 @@ if (isset($_POST['submit'])) {
 
     // Insert the record into the database
     $sql = "INSERT INTO `compani` (`comp_name`, `acc_desc`, `registration`, `expiry`, `foc`, `role`, `auth` , `foc_phone`, `email`, `add_1`) 
-            VALUES ('$comp_name', '$registration', '$desc', '$expiry', '$foc', '$role', '$auth', '$foc_phone', '$comp_email', '$address')";
+            VALUES ('$comp_name', '$desc', '$registration', '$expiry', '$foc', '$role', '$auth', '$foc_phone', '$comp_email', '$address')";
 
 
     //added code to insert data into branch table and redirect to branches table of specific company
@@ -74,7 +74,7 @@ if (isset($_POST['submit'])) {
         // Step 2: Get the ID of the newly inserted company
         $newCompanyId = mysqli_insert_id($conn);
 
-        $insertBranchSql = "INSERT INTO `branches` (`comp_id_fk`, `branch_name`, `account_desc`, `registration_date` , `expiry_date`, `contact_person`,  `contact_phone`, `address`) VALUES ('$newCompanyId', '$comp_name Head Office', '$desc', '$registration', '$expiry', '$foc', '$foc_phone', '$address')";
+        $insertBranchSql = "INSERT INTO `branches` (`comp_id_fk`, `branch_name`, `account_desc`, `registration_date` , `expiry_date`, `contact_person`, `role`, `auth`, `contact_phone`, `address`) VALUES ('$newCompanyId', '$comp_name Head Office', '$desc', '$registration', '$expiry', '$foc', '$role', '$auth','$foc_phone', '$address')";
 
         if (mysqli_query($conn, $insertBranchSql)) {
 

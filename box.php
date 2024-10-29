@@ -75,9 +75,8 @@ if ($resultData->num_rows > 0) {
     <!-- Style -->
     <link rel="stylesheet" href="css/style.css">
     <style>
-
         /* css for icons */
-        #fontStyleCon{
+        #fontStyleCon {
             text-shadow: 1px 1px 1px #ccc;
             font-size: 20px;
             color: darkgoldenrod;
@@ -397,10 +396,33 @@ if ($resultData->num_rows > 0) {
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#forms-nav" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span>
+                        <i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                </li><!-- End Work Orders Nav -->
+                    <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link" href="order.php">
+                                <i class="bi bi-circle"></i><span>Delivery</span>
+                            </a>
+                            <a class="nav-link" href="pickup.php">
+                                <i class="bi bi-circle"></i><span>Pickup</span>
+                            </a>
+                            <a class="nav-link" href="permout.php">
+                                <i class="bi bi-circle"></i><span>Perm Out</span>
+                            </a>
+                            <a class="nav-link" href="destroy.php">
+                                <i class="bi bi-circle"></i><span>Destroy</span>
+                            </a>
+                            <a class="nav-link" href="access.php">
+                                <i class="bi bi-circle"></i><span>Access</span>
+                            </a>
+                            <a class="nav-link" href="supplies.php">
+                                <i class="bi bi-circle"></i><span>Supplies</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
@@ -483,8 +505,8 @@ if ($resultData->num_rows > 0) {
                             <th scope="col" style="width: 13%;">Alt code</th>
                             <th scope="col" style="width: 9%;">Status</th>
                             <th scope="col" style="width: 15%;">Create Date</th>';
-                        
-                            // Show "Action" column only for admins
+
+                        // Show "Action" column only for admins
                         if ($_SESSION['role'] == 'admin') {
                             echo '<th scope="col" style="width: 10%;">Action</th>';
                         }
@@ -502,18 +524,17 @@ if ($resultData->num_rows > 0) {
                             if ($result3->num_rows > 0) {
                                 $row3 = $result3->fetch_assoc();
                                 $comp_name = $row3['comp_name'];
-                               
                             }
 
-                           
-                                // Get specific branch id
-                                $branch_id = $row['branch_id_fk'];
-                                $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
-                                $result7 = $conn->query($sql7);
-                                if ($result7->num_rows > 0) {
-                                    $row7 = $result7->fetch_assoc();
-                                    $branch_name = $row7['branch_name'];
-                                }
+
+                            // Get specific branch id
+                            $branch_id = $row['branch_id_fk'];
+                            $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
+                            $result7 = $conn->query($sql7);
+                            if ($result7->num_rows > 0) {
+                                $row7 = $result7->fetch_assoc();
+                                $branch_name = $row7['branch_name'];
+                            }
 
                             // Show account
                             echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
@@ -527,10 +548,10 @@ if ($resultData->num_rows > 0) {
                                 echo '" style="color: grey; font-size: 1.5rem; </i>"';
                             }
                             echo '"></i> ' . '</td>';
-                            
+
                             echo '<td>' . ($row["barcode"]) . '</td>';
                             echo '<td>' . ($row["alt_code"]) . '</td>';
-                        
+
 
                             echo '<td><i class="';
                             if ($row["status"] == 'In') {
@@ -542,11 +563,10 @@ if ($resultData->num_rows > 0) {
                             } elseif ($row["status"] == 'Ready for Destroy') {
                                 echo 'fa-solid fa-trash-can';
                                 echo '" style="color: red; font-size: 1.5rem; </i>"';
-                                
                             }
 
                             echo '"></i> ' . '</td>';
-                        
+
                             //convert timestamp to only date format
                             $dateTime = $row["created_at"];
                             $justDate = date("Y-m-d", strtotime($dateTime));
@@ -556,7 +576,7 @@ if ($resultData->num_rows > 0) {
                             if ($_SESSION['role'] == 'admin') {
                                 echo '<td>
                                 <div style="display: flex; gap: 10px;">
-                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="boxUpdate.php?id= ' . $row['box_id'] .'"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="boxUpdate.php?id= ' . $row['box_id'] . '"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
  
                                 <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
                                         onclick="return confirm(\'Are you sure you want to delete this record?\');" href="boxDelete.php?id=' . $row['box_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
@@ -593,9 +613,9 @@ if ($resultData->num_rows > 0) {
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
-    
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
@@ -603,14 +623,14 @@ if ($resultData->num_rows > 0) {
 
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Initialize the DataTable
-        let table = new simpleDatatables.DataTable("#box", {
-            perPage: 100, // Set the default page length to 100
-            perPageSelect: [10, 25, 50, 100], // Optional: Customize the dropdown options
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize the DataTable
+            let table = new simpleDatatables.DataTable("#box", {
+                perPage: 100, // Set the default page length to 100
+                perPageSelect: [10, 25, 50, 100], // Optional: Customize the dropdown options
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
 

@@ -521,7 +521,7 @@ $resultShowOrders = $conn->query($showOrders);
 
     <!--form--------------------------------------form--------------------------------------->
     <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-1 add">Create Workorder</button>
+    <button id="" type="button" onclick="window.location.href = 'createAccessWO.php';" class="btn btn-primary mb-1 add">Create Workorder</button>
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
@@ -675,7 +675,7 @@ $resultShowOrders = $conn->query($showOrders);
             // Initialize the DataTable
             let orderTable = new simpleDatatables.DataTable("#orderT", {
                 perPage: 100, // Set the default page length to 100
-                perPageSelect: [10, 25, 50, 100], // Optional: Customize the dropdown options
+                
             });
         });
     </script>

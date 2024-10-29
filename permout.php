@@ -521,7 +521,7 @@ $resultShowOrders = $conn->query($showOrders);
 
     <!--form--------------------------------------form--------------------------------------->
     <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-1 add">Create Workorder</button>
+    <button id="" type="button" onclick="window.location.href = 'createPermoutWO.php';" class="btn btn-primary mb-1 add">Create Workorder</button>
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">

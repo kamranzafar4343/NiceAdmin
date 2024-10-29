@@ -10,3 +10,5 @@ node_modules/
 
 # ignore db connection file
 config/db.php
+
+assets

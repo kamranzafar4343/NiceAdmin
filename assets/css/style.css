@@ -149,6 +149,8 @@ h6 {
   padding: 10px 25px;
 }
 
+
+
 .dropdown-menu .dropdown-footer a {
   color: #444444;
   text-decoration: underline;
@@ -1043,6 +1045,11 @@ input[type=date].form-control {
 
 .dashboard .recent-sales .table thead th {
   border: 0;
+}
+
+// hiding the datatable-selector
+.datatable-dropdown{
+  visibility: hidden !important;
 }
 
 .dashboard .recent-sales .dataTable-top {

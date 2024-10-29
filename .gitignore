@@ -8,8 +8,3 @@ node_modules/
 #igonre .env file
 .env
 
-# ignore db connection file
-config/db.php
-
-#ignore database folder
-databases/catmarketing.sql

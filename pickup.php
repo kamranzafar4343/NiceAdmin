@@ -431,16 +431,15 @@ $resultShowOrders = $conn->query($showOrders);
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="" href="#">
-                        <i class="ri-list-ordered"></i><span>Work Order</span>
-                        <i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="forms-nav" class="nav-content" data-bs-parent="#sidebar-nav">
+                    <ul id="forms-nav" class="nav-content " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a class="nav-link active" href="order.php">
+                            <a class="nav-link collapsed " href="order.php">
                                 <i class="bi bi-circle"></i><span>delivery</span>
                             </a>
-                            <a class="nav-link collapsed" href="pickup.php">
+                            <a class="nav-link active " href="pickup.php">
                                 <i class="bi bi-circle"></i><span>pickup </span>
                             </a>
                             <a class="nav-link collapsed" href="permout.php">

@@ -431,28 +431,27 @@ $resultShowOrders = $conn->query($showOrders);
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="" href="#">
-                        <i class="ri-list-ordered"></i><span>Work Order</span>
-                        <i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link active" data-bs-target="#forms-nav collapse" data-bs-toggle="#forms-nav" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="forms-nav" class="nav-content" data-bs-parent="#sidebar-nav">
+                    <ul id="forms-nav" class="nav-content " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a class="nav-link active" href="order.php">
+                        <a class="nav-link " href="order.php">
                                 <i class="bi bi-circle"></i><span>delivery</span>
                             </a>
-                            <a class="nav-link collapsed" href="pickup.php">
+                            <a class="nav-link " href="pickup.php">
                                 <i class="bi bi-circle"></i><span>pickup </span>
                             </a>
-                            <a class="nav-link collapsed" href="permout.php">
+                            <a class="nav-link" href="permout.php">
                                 <i class="bi bi-circle"></i><span>perm_out </span>
                             </a>
-                            <a class="nav-link collapsed" href="destroy.php">
-                                <i class="bi bi-circle"></i><span>destroy </span>
+                            <a class="nav-link active" href="destroy.php">
+                               <i class="bi bi-circle"></i><span>destroy </span>
                             </a>
-                            <a class="nav-link collapsed" href="access.php">
+                            <a class="nav-link " href="access.php">
                                 <i class="bi bi-circle"></i><span>access </span>
                             </a>
-                            <a class="nav-link collapsed" href="supplies.php">
+                            <a class="nav-link " href="supplies.php">
                                 <i class="bi bi-circle"></i><span>supplies </span>
                             </a>
                         </li>
@@ -521,8 +520,8 @@ $resultShowOrders = $conn->query($showOrders);
 
 
     <!--form--------------------------------------form--------------------------------------->
-    <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-1 add">Create Workorder</button>
+   <!-- Add the buttton for the work order -->
+   <button id="" type="button" onclick="window.location.href = 'createOrder.php';" class="btn btn-primary mb-1 add">Create Workorder</button>
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">

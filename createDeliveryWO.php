@@ -415,7 +415,10 @@ if (isset($_POST['submit'])) {
                     <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
                         <li>
                             <a class="nav-link active" href="order.php">
-                                <i class="bi bi-circle"></i><span>Delivery Workorder</span>
+                                <i class="bi bi-circle"></i><span>Delivery</span>
+                            </a>
+                            <a class="nav-link collapsed" href="pickup.php">
+                                <i class="bi bi-circle"></i><span>Pickup</span>
                             </a>
                         </li>
                     </ul>
@@ -495,11 +498,6 @@ if (isset($_POST['submit'])) {
             <div class="card-body mt-3">
                 <form class="row g-3 needs-validation" action="" method="POST">
 
-
-                    <div class="col-md-4">
-                        <input type="text" style="visibility: hidden;" class="form-control" id="creater" name="creater" value="<?php echo ($_SESSION['role'] == 'admin') ? 'admin' : 'user'; ?>" readonly>
-                    </div>
-
                     <hr style="color: white;">
 
                     <!-- Select Company -->
@@ -559,6 +557,11 @@ if (isset($_POST['submit'])) {
                         <input type="datetime-local" class="form-control" name="date" required>
                     </div>
 
+                    <!-- hidden field -->
+                    <div class="col-md-2">
+                        <input type="text" style="visibility: hidden;" class="form-control" id="creater" name="creater" value="<?php echo ($_SESSION['role'] == 'admin') ? 'admin' : 'user'; ?>" readonly>
+                    </div> 
+
                     <hr style="color: white;">
 
                     <!-- For the FOC -->
@@ -573,9 +576,10 @@ if (isset($_POST['submit'])) {
                     </div>
                     <!-- for the Pickup and delivery Addrss -->
                     <div class="col-md-5">
-                        <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
+                        <label for="pickup_address" class="form-label">Pickup/Delivery Address </label>
                         <input type="text" class="form-control" id="" name="pickup_address" required>
                     </div>
+
 
                     <h2 style="color: #0056b3; margin-top: 45px;">Add Container/Filefolder</h2>
 
@@ -737,7 +741,7 @@ if (isset($_POST['submit'])) {
                 creatable: false, // Disable creatable selection
                 clearable: false, // Disable clearable selection
                 maxHeight: '360px', // Max height for showing scrollbar
-                size: 'sm', // Size of the select, can be 'sm' or 'lg'
+                size: 'lg', // Size of the select, can be 'sm' or 'lg'
             };
 
             // Initialize dselect for the initial dropdowns

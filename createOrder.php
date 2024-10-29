@@ -497,8 +497,7 @@ if (isset($_POST['submit'])) {
 
 
                     <div class="col-md-4">
-                        <label for="creater" class="form-label">Creator</label>
-                        <input type="text" class="form-control" id="creater" name="creater" value="<?php echo ($_SESSION['role'] == 'admin') ? 'admin' : 'user'; ?>" readonly>
+                        <input type="text" style="visibility: hidden;" class="form-control" id="creater" name="creater" value="<?php echo ($_SESSION['role'] == 'admin') ? 'admin' : 'user'; ?>" readonly>
                     </div>
 
                     <hr style="color: white;">
@@ -539,18 +538,11 @@ if (isset($_POST['submit'])) {
 
                             <option value="Urgent">Urgent - Rush Same Day</option>
                             <option value="Regular">Regular - Next Working Day</option>
-                            <option value="Box Pickup">Box Pickup</option>
-                            <option value="Cancel Workorder">Cancel Work Order</option>
-                            <option value="Permanantly out">Permanantly Out Boxes</option>
-                            <option value="Supplies">Supplies - Packing Material</option>
-
-                            <!-- <option value="FileFolder">FileBOX</option>
-                            <option value="FileFolder">Barcode</option> -->
                         </select>
                     </div>
 
-                    <div class="col-md-3">
-                        <label for="purirty" class="form-label">WO Type Action Code</label>
+                    <!-- <div class="col-md-3">
+                        <label for="purirty" class="form-label">Status</label>
                         <select class="form-select" id="" name="wo_typ_action" required>
                             <option value="">Select Status</option>
                             <option value="Delivery">Delivery</option>
@@ -558,12 +550,8 @@ if (isset($_POST['submit'])) {
                             <option value="Picklist">Picklist</option>
                             <option value="Route">Route</option>
                             <option value="Print">Print</option>
-
-
-                            <!-- <option value="FileFolder">FileBOX</option>
-                            <option value="FileFolder">Barcode</option> -->
                         </select>
-                    </div>
+                    </div> -->
 
                     <!-- Required BY -->
                     <div class="col-md-3">
@@ -753,9 +741,9 @@ if (isset($_POST['submit'])) {
             };
 
             // Initialize dselect for the initial dropdowns
-            dselect(document.querySelector('#lev1'), config);
-            dselect(document.querySelector('#lev2'), config);
-            dselect(document.querySelector('#lev3'), config);
+            dselect(document.querySelector('#company'), config);
+            dselect(document.querySelector('#branch'), config);
+            dselect(document.querySelector('#dept'), config);
 
 
             // When company is changed, fetch the branches
@@ -773,14 +761,14 @@ if (isset($_POST['submit'])) {
                         try {
                             var branches = JSON.parse(response); //return the json response as an array
                             // Clear existing branches
-                            $('#lev2').empty();
-                            $('#lev2').append('<option value="">Select Account Level 2</option>');
+                            $('#branch').empty();
+                            $('#branch').append('<option value="">Select branches</option>');
                             // Add the new options from the response
                             $.each(branches, function(index, branch) {
-                                $('#lev2').append('<option value="' + branch.branch_id + '">' + branch.acc_lev_2 + ' - ' + branch.account_desc + '</option>');
+                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
                             });
                             // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#lev2'), config);
+                            dselect(document.querySelector('#branch'), config);
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
@@ -789,7 +777,7 @@ if (isset($_POST['submit'])) {
             });
 
             // When branch is changed, fetch the departments
-            $('#lev2').change(function() {
+            $('#branch').change(function() {
                 var branch_id = $(this).val();
 
                 // AJAX request to get dept's for the selected branch
@@ -803,14 +791,14 @@ if (isset($_POST['submit'])) {
                         try {
                             var departments = JSON.parse(response); //return the json response as an array
                             // Clear existing dept's
-                            $('#lev3').empty();
-                            $('#lev3').append('<option value="">Select Account level 3</option>');
+                            $('#dept').empty();
+                            $('#dept').append('<option value="">Select department</option>');
                             // Add the new options from the response
                             $.each(departments, function(index, department) {
-                                $('#lev3').append('<option value="' + department.dept_id + '">' + department.acc_lev_3 + ' - ' + department.acc_desc + '</option>');
+                                $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
                             });
                             // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#lev3'), config);
+                            dselect(document.querySelector('#dept'), config);
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
@@ -818,46 +806,6 @@ if (isset($_POST['submit'])) {
                 });
 
             });
-
-            //get company, dept, branch
-            var company = getElementById('lev1').value;
-            var branch = getElementById('lev2').value;
-            var dept = getElementById('lev3').value;
-            var barcode = getElementById('barcode_select').value;
-
-            if (company && branch) {
-                // When company is changed, fetch the barcodes
-                $('lev2').change(function() {
-                    var branch_id = $(this).val();
-
-                    // AJAX request to get barcodes for the selected company
-                    $.ajax({
-                        url: 'get_branchBarcode.php',
-                        type: 'POST',
-                        data: {
-                            branch_id: branch_id
-                        },
-                        success: function(response) {
-                            try {
-                                var boxes = JSON.parse(response); //return the json response as an array
-                                // Clear existing branches
-                                $('#barcode_select').empty();
-                                $('#barcode_select').append('<option value="">Select Barcode</option>');
-                                // Add the new options from the response
-                                $.each(boxes, function(index, box) {
-                                    $('#barcode_select').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
-                                });
-
-                            } catch (e) {
-                                console.error("Invalid JSON response", response);
-                            }
-                        }
-                    });
-                });
-
-            } else if (company && branch && dept) {
-
-            }
         });
     </script>
 

@@ -20,7 +20,7 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM orders";
+$showOrders = "Select * FROM orders where flag = 'Delivery'";
 $resultShowOrders = $conn->query($showOrders);
 
 ?>
@@ -503,27 +503,27 @@ $resultShowOrders = $conn->query($showOrders);
 
     <!--form--------------------------------------form--------------------------------------->
     <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add">Create Workorder</button>
+    <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add">Create delivery Workorder</button>
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title">List of Workorders</h5>
+                    <h5 class="card-title">List of Delivery Work Orders</h5>
                     <?php
                     // Check if there are any results
                     if ($resultShowOrders->num_rows > 0) {
                         // Display table
-                        echo '<table id="orderT" class="table mt-4">
+                        echo '<table id="orderT" class="table mt-4 nowrap">
                     <thead>
                         <tr>
-                        <th scope="col" style="width: 20%;">Account</th>
-                        <th scope="col" style="width: 13%;">WorkOrder No</th>
-                        <th scope="col" style="width: 10%;">Create Date</th>
-                        <th scope="col" style="width: 7%;">Service Priority</th>
-                        <th scope="col" style="width: 12%;">Required By</th>
-                        <th scope="col" style="width: 10%;">WO Type Action</th>
-                        <th scope="col" style="width: 17%;">Action</th>
+                        <th scope="col" style="width: 18%;">Account</th>
+                        <th scope="col" style="width: 8%;">WorkOrder No</th>
+                        <th scope="col" style="width: 13%;">Create Date</th>
+                        <th scope="col" style="width: 8%;">Service Priority</th>
+                        <th scope="col" style="width: 10%;">Required By</th>
+                    
+                        <th scope="col" style="width: 15%;">Action</th>
                         </tr>
                     </thead>
                     <tbody>';
@@ -589,7 +589,7 @@ $resultShowOrders = $conn->query($showOrders);
 
 
                             echo '<td>' . ($row["date"]) . '</td>';
-                            echo '<td>' . ($row["WO_typ_action_code"]) . '</td>';
+
                     ?>
                             <td>
                                 <div style="display: flex; gap: 10px;">

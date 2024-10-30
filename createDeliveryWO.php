@@ -29,7 +29,7 @@ if (isset($_POST['submit'])) {
     $creator = mysqli_real_escape_string($conn, $_POST['creater']);
     $comp = mysqli_real_escape_string($conn, $_POST['company']);
     $branch = mysqli_real_escape_string($conn, $_POST['branch']);
-    $dept = mysqli_real_escape_string($conn, $_POST['dept_id_fk']);
+    $dept = mysqli_real_escape_string($conn, $_POST['dept']);
     $priority = mysqli_real_escape_string($conn, $_POST['purirty']);
     $date = mysqli_real_escape_string($conn, $_POST['date']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
@@ -596,7 +596,6 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-3">
                         <label for="object_code" class="form-label">Object Code</label>
                         <select class="form-select" id="object_code" name="object_code" onchange="updateBarcodeInput()">
-                            <option value="">Select object code</option>
                             <option value="Container">Container</option>
                             <option value="FileFolder">FileFolder</option>
                         </select>
@@ -665,6 +664,30 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
+        <!--Function to update the barcode input field on selection of the object type-->
+        <script>
+        function updateBarcodeInput() {
+            const object_type = document.getElementById('object_code');
+            const barcode_input = document.getElementById('barcode_select');
+            const alt_input = document.getElementById('alt_code');
+
+            if (object_type.value === 'Container') {
+                barcode_input.maxLength = 7;
+                alt_input.maxLength = 7;
+                barcode_input.placeholder = "Enter 7 digit Container Barcode";
+                alt_input.placeholder = "Enter 7 digit Container alt code";
+            } else {
+                barcode_input.maxLength = 8;
+                alt_input.maxLength = 8;
+                barcode_input.placeholder = "Enter 8 digit Filefolder Barcode";
+                alt_input.placeholder = "Enter 8 digit Filefolder alt code";
+            }
+            //clear input on type change
+            barcode_input.value = "";
+            alt_input.value = "";
+        }
+    </script>
+
     <!-- Include Bootstrap JS (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -710,7 +733,7 @@ if (isset($_POST['submit'])) {
                 creatable: false, // Disable creatable selection
                 clearable: false, // Disable clearable selection
                 maxHeight: '360px', // Max height for showing scrollbar
-                size: 'lg', // Size of the select, can be 'sm' or 'lg'
+                size: 'sm', // Size of the select, can be 'sm' or 'lg'
             };
 
             // Initialize dselect for the initial dropdowns

@@ -442,7 +442,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <!-- For the Level 1 field -->
                     <div class="col-md-4">
-                        <label for="company">Select Branch:</label>
+                        <label for="company">Select company:</label>
                         <select id="company" class="form-select" name="company" required>
                             <option value="">Select company</option>
                             <?php

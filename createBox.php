@@ -532,7 +532,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script>
         $(document).ready(function() {
-
             //d-search dropdown
             const config = {
                 search: true, // Enable search feature
@@ -606,8 +605,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             searchable: true,
             fixedHeight: true,
         })
+
     </script>
-    <script src="assets/js/main.js"></script>
+
+
+<script src="assets/js/main.js"></script>
 </body>
 
 </html>

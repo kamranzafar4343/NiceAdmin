@@ -42,9 +42,6 @@ if (isset($_POST['submit'])) {
     $role = mysqli_real_escape_string($conn, $_POST['designation']);
     $req_date = mysqli_real_escape_string($conn, $_POST['req_date']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
-    $obj_type = mysqli_real_escape_string($conn, $_POST['object_type']);
-    $quant = mysqli_real_escape_string($conn, $_POST['quantity']);
-
 
     //check if a workorder with barcode already exists
     $checkBarcode = "SELECT * FROM orders WHERE barcode = '$barcode_sel'";
@@ -53,8 +50,8 @@ if (isset($_POST['submit'])) {
         die('Cant make workorder of a barcode. Workorder of given barcode already exists.');
     }
 
-    $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description, obj_typ, quant, supp_requestor, cost_cent, dateTime, comment) 
-     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description', '$obj_type', '$quant', '$supp_req', '$cc', '$confirmDate', '$comment')";
+    $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
+     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description')";
 
     if ($conn->query($sql) === TRUE) {
         header("Location: order.php");

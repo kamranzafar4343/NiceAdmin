@@ -316,7 +316,7 @@ $resultShowOrders = $conn->query($showOrders);
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Create workOrder</title>
+    <title>Delivery Workorders</title>
 
 
 </head>
@@ -671,15 +671,20 @@ $resultShowOrders = $conn->query($showOrders);
     <!--for search panes-->
     <script>
         new DataTable('#orderT', {
-            dom: 'Pfrtip', // Enables SearchPanes in the layout
-            searchPanes: {
-                collapsed: true // Collapses the SearchPanes by default
-            },
+           
+            //show 100 rows by default
+            "pageLength": 100,
+
             layout: {
                 top1: 'searchPanes'
-            }
+            },
+            
+            //collapse by default
+            "searchPanes": { "initCollapsed": true }
         });
     </script>
+
+
 
 </body>
 

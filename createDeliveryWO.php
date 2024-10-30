@@ -35,13 +35,33 @@ if (isset($_POST['submit'])) {
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
     $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']);
-    $object_code = mysqli_real_escape_string($conn, $_POST['object_code']);
     $barcode_sel = mysqli_real_escape_string($conn, $_POST['barcode_select']);
-    $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
-    $requestor = mysqli_real_escape_string($conn, $_POST['requestor']);
-    $role = mysqli_real_escape_string($conn, $_POST['designation']);
-    $req_date = mysqli_real_escape_string($conn, $_POST['req_date']);
-    $description = mysqli_real_escape_string($conn, $_POST['description']);
+
+    // Array fields: Process each by joining values with commas
+    //explanation: processes the object_code field, which is submitted as an array from the HTML form, and prepares it for insertion into a database
+    $object_codes = isset($_POST['object_code']) ? implode(',', array_map(function ($value) use ($conn) {
+        return mysqli_real_escape_string($conn, $value);
+    }, $_POST['object_code'])) : '';
+
+    $barcodes = isset($_POST['barcode_select']) ? implode(',', array_map(function ($value) use ($conn) {
+        return mysqli_real_escape_string($conn, $value);
+    }, $_POST['barcode_select'])) : '';
+
+    $alt_codes = isset($_POST['alt_code']) ? implode(',', array_map(function ($value) use ($conn) {
+        return mysqli_real_escape_string($conn, $value);
+    }, $_POST['alt_code'])) : '';
+
+    $requestor_names = isset($_POST['requestor']) ? implode(',', array_map(function ($value) use ($conn) {
+        return mysqli_real_escape_string($conn, $value);
+    }, $_POST['requestor'])) : '';
+
+    $request_dates = isset($_POST['req_date']) ? implode(',', array_map(function ($value) use ($conn) {
+        return mysqli_real_escape_string($conn, $value);
+    }, $_POST['req_date'])) : '';
+
+    $descriptions = isset($_POST['description']) ? implode(',', array_map(function ($value) use ($conn) {
+        return mysqli_real_escape_string($conn, $value);
+    }, $_POST['description'])) : '';
 
     //check if a workorder with barcode already exists
     $checkBarcode = "SELECT * FROM orders WHERE barcode = '$barcode_sel'";
@@ -588,49 +608,57 @@ if (isset($_POST['submit'])) {
 
 
                     <h2 style="color: #0056b3; margin-top: 45px;">Add Container/Filefolder</h2>
+                    <div id="dynamic_field2">
 
-                    <!-- Object Code -->
-                    <div class="col-md-3">
-                        <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" onchange="updateBarcodeInput()">
-                            <option value="Container">Container</option>
-                            <option value="FileFolder">FileFolder</option>
-                        </select>
-                    </div>
-                    <!-- Select Barcode -->
-                    <div class="col-md-4">
-                        <label for="barcode_select">Enter Barcode:</label>
-                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
-                    </div>
-                    <!-- FOR the alternative code -->
-                    <div class="col-md-4">
-                        <label for="alt_code" class="form-label">Alt Code</label>
-                        <input type="text" class="form-control" id="alt_code" name="alt_code">
-                    </div>
+                        <!-- Object Code -->
+                        <div class="col-md-3">
+                            <label for="object_code" class="form-label">Object Code</label>
+                            <select class="form-select" id="object_code" name="object_code[]" onchange="updateBarcodeInput()" required>
+                                <option value="">Select object</option>
+                                <option value="Container">Container</option>
+                                <option value="FileFolder">FileFolder</option>
+                            </select>
+                        </div>
+                        <!-- Select Barcode -->
+                        <div class="col-md-4">
+                            <label for="barcode_select">Enter Barcode:</label>
+                            <input type="text" class="form-control" id="barcode_select" name="barcode_select[]" required>
+                        </div>
+                        <!-- FOR the alternative code -->
+                        <div class="col-md-4">
+                            <label for="alt_code" class="form-label">Alt Code</label>
+                            <input type="text" class="form-control" id="alt_code" name="alt_code[]" required>
+                        </div>
 
-                    <!-- Select Requestor -->
-                    <div class="col-md-4">
-                        <label for="requestor" class="form-label">Requestor Name</label>
-                        <input type="text" class="form-control" id="requestor" name="requestor">
-                    </div>
-                    <!--  Comments -->
-                    <div class="col-md-4">
-                        <label for="designation" class="form-label">Contact Person Role</label>
-                        <input type="text" class="form-control" id="designation" name="designation">
-                    </div>
+                        <!-- Select Requestor -->
+                        <div class="col-md-4">
+                            <label for="requestor" class="form-label">Requestor Name</label>
+                            <input type="text" class="form-control" id="requestor" name="requestor[]" required>
+                        </div>
+                        <!--  Comments -->
+                        <div class="col-md-4">
+                            <label for="designation" class="form-label">Contact Person Role</label>
+                            <input type="text" class="form-control" id="designation" name="designation[]" required>
+                        </div>
 
 
-                    <div class="col-md-3">
-                        <label class="form-label">request date</label>
-                        <input type="datetime-local" class="form-control" name="req_date">
-                    </div>
-                    <!--  Comments -->
-                    <div class="col-md-5">
-                        <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description">
-                    </div>
-                    <div>
+                        <div class="col-md-3">
+                            <label class="form-label">request date</label>
+                            <input type="datetime-local" class="form-control" name="req_date[]" required>
+                        </div>
+                        <!--  Comments -->
+                        <div class="col-md-5">
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="description" name="description[]" required>
+                        </div>
 
+                        <div class="col">
+                            <button type="button" name="add" id="add2" class="btn btn-success">+</button>
+                        </div>
+
+                        <div>
+
+                        </div>
                     </div>
 
                     <div class="text-center mt-4 mb-2">
@@ -642,27 +670,8 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <!-- Modal for Barcode Error -->
-    <div class="modal fade" id="barcodeErrorModal" tabindex="-1" aria-labelledby="barcodeErrorModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="barcodeErrorModalLabel">Barcode Error</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    The barcode you entered already exists. Please try a different one.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-        <!--Function to update the barcode input field on selection of the object type-->
-        <script>
+    <!--Function to update the barcode input field on selection of the object type-->
+    <script>
         function updateBarcodeInput() {
             const object_type = document.getElementById('object_code');
             const barcode_input = document.getElementById('barcode_select');
@@ -683,6 +692,33 @@ if (isset($_POST['submit'])) {
             barcode_input.value = "";
             alt_input.value = "";
         }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var i = 1;
+
+            // Add new row in container/filefolder
+            $('#add2').click(function() {
+                i++;
+                $('#dynamic_field2').append('<div class="form-row mb-2" id="row2' + i + '"> \
+            <div class="col"><input type="text" class="form-control" name="object_code[]" placeholder="object code" required></div> \
+            <div class="col"><input type="text" class="form-control" name="barcode_select[]" placeholder="barcode" required></div> \
+                <div class="col"><input type="text" class="form-control" name="alt_code[]" placeholder="Alt Code" required></div> \
+                <div class="col"><input type="text" class="form-control" name="requestor[]" placeholder="requestor name" required></div> \
+                <div class="col"><input type="text" class="form-control" name="designation[]" placeholder="role" required></div> \
+                <div class="col"><input type="text" class="form-control" name="req_date[]" placeholder="request date" required></div> \
+                <div class="col"><input type="text" class="form-control" name="description[]" placeholder="description" required></div> \
+                <div class="col"><button type="button" class="btn btn-danger btn_remove2" id="' + i + '">-</button></div> \
+            </div>');
+            });
+
+            // Remove row in Material section
+            $(document).on('click', '.btn_remove2', function() {
+                var button_id = $(this).attr("id");
+                $('#row2' + button_id).remove();
+            });
+        });
     </script>
 
     <!-- Include Bootstrap JS (with Popper) -->
@@ -801,6 +837,9 @@ if (isset($_POST['submit'])) {
             });
         });
     </script>
+
+
+
 
     <script src="assets/js/main.js"></script>
 

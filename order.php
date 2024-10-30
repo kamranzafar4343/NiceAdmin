@@ -671,11 +671,12 @@ $resultShowOrders = $conn->query($showOrders);
     <!--for search panes-->
     <script>
         new DataTable('#orderT', {
+            dom: 'Pfrtip', // Enables SearchPanes in the layout
+            searchPanes: {
+                collapsed: true // Collapses the SearchPanes by default
+            },
             layout: {
                 top1: 'searchPanes'
-            },
-            searchPanes: {
-                collapse: true
             }
         });
     </script>

@@ -27,11 +27,10 @@ $error = false;
 if (isset($_POST['submit'])) {
 
     $creator = mysqli_real_escape_string($conn, $_POST['creater']);
-    $level1 = mysqli_real_escape_string($conn, $_POST['level1']);
-    $level2 = mysqli_real_escape_string($conn, $_POST['level2']);
-    $level3 = mysqli_real_escape_string($conn, $_POST['level3']);
+    $comp = mysqli_real_escape_string($conn, $_POST['company']);
+    $branch = mysqli_real_escape_string($conn, $_POST['branch']);
+    $dept = mysqli_real_escape_string($conn, $_POST['dept_id_fk']);
     $priority = mysqli_real_escape_string($conn, $_POST['purirty']);
-    $type_action = mysqli_real_escape_string($conn, $_POST['wo_typ_action']);
     $date = mysqli_real_escape_string($conn, $_POST['date']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
@@ -45,10 +44,7 @@ if (isset($_POST['submit'])) {
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $obj_type = mysqli_real_escape_string($conn, $_POST['object_type']);
     $quant = mysqli_real_escape_string($conn, $_POST['quantity']);
-    $supp_req = mysqli_real_escape_string($conn, $_POST['supplies_req']);
-    $cc = mysqli_real_escape_string($conn, $_POST['cc']);
-    $confirmDate = mysqli_real_escape_string($conn, $_POST['date_time']);
-    $comment = mysqli_real_escape_string($conn, $_POST['comment']);
+
 
     //check if a workorder with barcode already exists
     $checkBarcode = "SELECT * FROM orders WHERE barcode = '$barcode_sel'";
@@ -57,8 +53,8 @@ if (isset($_POST['submit'])) {
         die('Cant make workorder of a barcode. Workorder of given barcode already exists.');
     }
 
-    $sql = "INSERT INTO orders ( creator, level1, level2, level3, priority, WO_typ_action_code, date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description, obj_typ, quant, supp_requestor, cost_cent, dateTime, comment) 
-     VALUES ( '$creator', '$level1', '$level2', '$level3', '$priority', '$type_action' ,'$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description', '$obj_type', '$quant', '$supp_req', '$cc', '$confirmDate', '$comment')";
+    $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description, obj_typ, quant, supp_requestor, cost_cent, dateTime, comment) 
+     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description', '$obj_type', '$quant', '$supp_req', '$cc', '$confirmDate', '$comment')";
 
     if ($conn->query($sql) === TRUE) {
         header("Location: order.php");
@@ -409,16 +405,29 @@ if (isset($_POST['submit'])) {
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span>
+                        <i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="forms-nav" class="nav-content active" data-bs-parent="#sidebar-nav">
+                    <ul id="forms-nav" class="nav-content" data-bs-parent="#sidebar-nav">
                         <li>
                             <a class="nav-link active" href="order.php">
-                                <i class="bi bi-circle"></i><span>Delivery</span>
+                                <i class="bi bi-circle"></i><span>delivery</span>
                             </a>
                             <a class="nav-link collapsed" href="pickup.php">
-                                <i class="bi bi-circle"></i><span>Pickup</span>
+                                <i class="bi bi-circle"></i><span>pickup </span>
+                            </a>
+                            <a class="nav-link collapsed" href="permout.php">
+                                <i class="bi bi-circle"></i><span>perm_out </span>
+                            </a>
+                            <a class="nav-link collapsed" href="destroy.php">
+                                <i class="bi bi-circle"></i><span>destroy </span>
+                            </a>
+                            <a class="nav-link collapsed" href="access.php">
+                                <i class="bi bi-circle"></i><span>access </span>
+                            </a>
+                            <a class="nav-link collapsed" href="supplies.php">
+                                <i class="bi bi-circle"></i><span>supplies </span>
                             </a>
                         </li>
                     </ul>
@@ -502,7 +511,7 @@ if (isset($_POST['submit'])) {
 
                     <!-- Select Company -->
                     <div class="col-md-4">
-                        <label for="company">Company Company:</label>
+                        <label for="company">Company:</label>
                         <select id="company" class="form-select" name="company" required>
                             <option value="">Select Company</option>
                             <?php
@@ -517,7 +526,7 @@ if (isset($_POST['submit'])) {
 
                     <!-- Select lev 2 of selected account -->
                     <div class="col-md-4">
-                        <label for="branch">Branch Name:</label>
+                        <label for="branch">Branch:</label>
                         <select id="branch" class="form-select" name="branch" required>
                             <option value="">Select branch</option>
                         </select>
@@ -560,7 +569,7 @@ if (isset($_POST['submit'])) {
                     <!-- hidden field -->
                     <div class="col-md-2">
                         <input type="text" style="visibility: hidden;" class="form-control" id="creater" name="creater" value="<?php echo ($_SESSION['role'] == 'admin') ? 'admin' : 'user'; ?>" readonly>
-                    </div> 
+                    </div>
 
                     <hr style="color: white;">
 
@@ -626,46 +635,6 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div>
 
-                    </div>
-
-                    <h2 style="color: #0056b3; margin-top: 35px;">Add Supplies<span style="color:#343a40;">
-                            <h5>(leave empty in case of no supplies)</h5>
-                        </span></h2>
-                    <!--add supplies-->
-                    <div class="col-md-5">
-                        <label for="object-type" class="form-label">Object type</label>
-                        <select class="form-select" id="object_type" name="object_type">
-                            <option value="">Select object type</option>
-                            <option value="Barcode - Boxes Barcode">Barcode - Boxes Barcode</option>
-                            <option value="File Box - Standard Storage Box">File Box - Standard Storage Box</option>
-                            <option value="File Box - Storage Boxes Cap">File Box - Storage Boxes Cap</option>
-                            <option value="Large Box - Large Storage Box">Large Box - Large Storage Box</option>
-                            <option value="Storage Boxes">Storage Boxes</option>
-                            <option value="Tape Storage Boxes">Tape Storage Boxes</option>
-
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="quantity" class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="quantity" name="quantity">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="sup_req" class="form-label">Requestor</label>
-                        <input type="text" class="form-control" id="sup_req" name="supplies_req">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="cc" class="form-label">Cost Center</label>
-                        <input type="text" class="form-control" id="cc" name="cc">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="datetime" class="form-label">Confirm Date/time</label>
-                        <input type="datetime-local" class="form-control" id="date_time" name="date_time">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="comment" class="form-label">Comment</label>
-                        <input type="text" class="form-control" id="comment" name="comment">
                     </div>
 
                     <div class="text-center mt-4 mb-2">

@@ -506,15 +506,27 @@ $resultShowOrders = $conn->query($showOrders);
     <button id="" type="button" onclick="window.location.href = 'createPickupWO.php';" class="btn btn-primary mb-1 add">Create Pickup Workorder</button>
     <!-- Main content -->
     <main id="main" class="main">
-        <div class="col-12">
-            <div class="cardBranch recent-sales overflow-auto">
-                <div class="card-body">
-                    <h5 class="card-title">List of Pickup Work Orders</h5>
-                    <?php
-                    // Check if there are any results
-                    if ($resultShowOrders->num_rows > 0) {
-                        // Display table
-                        echo '<table id="orderT" class="table mt-4 nowrap">
+        <div class="pagetitle">
+
+            <!-- <h1>Breadcrumbs</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Home</a></li>
+                    <li class="breadcrumb-item">Components</li>
+                    <li class="breadcrumb-item active">Breadcrumbs</li>
+                </ol>
+            </nav>
+        </div> -->
+
+            <div class="col-12">
+                <div class="cardBranch recent-sales overflow-auto">
+                    <div class="card-body">
+                        <h5 class="card-title">List of Pickup Work Orders</h5>
+                        <?php
+                        // Check if there are any results
+                        if ($resultShowOrders->num_rows > 0) {
+                            // Display table
+                            echo '<table id="orderT" class="table mt-4 nowrap">
                     <thead>
                         <tr>
                         <th scope="col" style="width: 18%;">Account</th>
@@ -528,98 +540,98 @@ $resultShowOrders = $conn->query($showOrders);
                     </thead>
                     <tbody>';
 
-                        // Counter variable
-                        $counter = 1;
+                            // Counter variable
+                            $counter = 1;
 
-                        // Loop through results
-                        while ($row = $resultShowOrders->fetch_assoc()) {
-                            echo '<tr>';
-
-
-                            // Get specific company id
-                            $comp_id = $row['comp_id_fk'];
-                            $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
-                            $result3 = $conn->query($sql3);
-                            if ($result3->num_rows > 0) {
-                                $row3 = $result3->fetch_assoc();
-                                $comp_name = $row3['comp_name'];
-                            }
+                            // Loop through results
+                            while ($row = $resultShowOrders->fetch_assoc()) {
+                                echo '<tr>';
 
 
-                            // Get specific branch id
-                            $branch_id = $row['branch_id_fk'];
-                            $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
-                            $result7 = $conn->query($sql7);
-                            if ($result7->num_rows > 0) {
-                                $row7 = $result7->fetch_assoc();
-                                $branch_name = $row7['branch_name'];
-                            }
-
-                            // Show account
-                            echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
+                                // Get specific company id
+                                $comp_id = $row['comp_id_fk'];
+                                $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
+                                $result3 = $conn->query($sql3);
+                                if ($result3->num_rows > 0) {
+                                    $row3 = $result3->fetch_assoc();
+                                    $comp_name = $row3['comp_name'];
+                                }
 
 
-                            //workorder_no
-                            echo '<td>' . ($row['order_no']) . '</td>';
+                                // Get specific branch id
+                                $branch_id = $row['branch_id_fk'];
+                                $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
+                                $result7 = $conn->query($sql7);
+                                if ($result7->num_rows > 0) {
+                                    $row7 = $result7->fetch_assoc();
+                                    $branch_name = $row7['branch_name'];
+                                }
+
+                                // Show account
+                                echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
 
 
-                            echo '<td>' . ($row["order_creation_date"]) . '</td>';
-
-                            echo '<td>';
-                            if ($row["priority"] == 'Regular') {
-                                // Display a green badge for "Regular"
-                                echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } elseif ($row["priority"] == 'Urgent') {
-                                // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } elseif ($row["priority"] == 'Box Pickup') {
-                                // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-info" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } elseif ($row["priority"] == 'Cancel Workorder') {
-                                // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } elseif ($row["priority"] == 'Permanantly out') {
-                                // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-danger" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } elseif ($row["priority"] == 'Supplies') {
-                                // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-primary" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            }
-                            echo '</td>';
+                                //workorder_no
+                                echo '<td>' . ($row['order_no']) . '</td>';
 
 
-                            echo '<td>' . ($row["date"]) . '</td>';
+                                echo '<td>' . ($row["order_creation_date"]) . '</td>';
 
-                    ?>
-                            <td>
-                                <div style="display: flex; gap: 10px;">
-                                    <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
-                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="OrderUpdate.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+                                echo '<td>';
+                                if ($row["priority"] == 'Regular') {
+                                    // Display a green badge for "Regular"
+                                    echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["priority"] . '</span>';
+                                } elseif ($row["priority"] == 'Urgent') {
+                                    // Display a red icon for "Urgent"
+                                    echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["priority"] . '</span>';
+                                } elseif ($row["priority"] == 'Box Pickup') {
+                                    // Display a red icon for "Urgent"
+                                    echo '<span class="badge badge-pill badge-info" style="font-size: 12px;">' . $row["priority"] . '</span>';
+                                } elseif ($row["priority"] == 'Cancel Workorder') {
+                                    // Display a red icon for "Urgent"
+                                    echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["priority"] . '</span>';
+                                } elseif ($row["priority"] == 'Permanantly out') {
+                                    // Display a red icon for "Urgent"
+                                    echo '<span class="badge badge-pill badge-danger" style="font-size: 12px;">' . $row["priority"] . '</span>';
+                                } elseif ($row["priority"] == 'Supplies') {
+                                    // Display a red icon for "Urgent"
+                                    echo '<span class="badge badge-pill badge-primary" style="font-size: 12px;">' . $row["priority"] . '</span>';
+                                }
+                                echo '</td>';
 
-                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                        onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                    <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
 
-                                    <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
+                                echo '<td>' . ($row["date"]) . '</td>';
+
+                        ?>
+                                <td>
+                                    <div style="display: flex; gap: 10px;">
+                                        <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
+                                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="OrderUpdate.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
+
+                                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                                            onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                        <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
+
+                                        <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
                     onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=">Access</a> -->
 
 
-                                </div>
-                            </td>
-                    <?php
+                                    </div>
+                                </td>
+                        <?php
 
-                            echo '</tr>';
+                                echo '</tr>';
+                            }
+                            echo '</tbody></table>';
+                        } else {
+                            // Display message if no results
+                            echo '<p>No items found.</p>';
                         }
-                        echo '</tbody></table>';
-                    } else {
-                        // Display message if no results
-                        echo '<p>No items found.</p>';
-                    }
-                    ?>
+                        ?>
+                    </div>
                 </div>
-            </div>
 
-        </div>
+            </div>
     </main>
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -634,10 +646,6 @@ $resultShowOrders = $conn->query($showOrders);
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
 
-    <!-- Additional libraries for exporting (Excel, PDF) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
     <!-- Bootstrap and DataTables styling -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
@@ -651,6 +659,10 @@ $resultShowOrders = $conn->query($showOrders);
     <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap5.js"></script>
     <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
 
+    <!--for icons-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
 
     <!-- Vendor JS Files -->
     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
@@ -671,16 +683,18 @@ $resultShowOrders = $conn->query($showOrders);
     <!--for search panes-->
     <script>
         new DataTable('#orderT', {
-           
+
             //show 100 rows by default
             "pageLength": 100,
 
             layout: {
                 top1: 'searchPanes'
             },
-            
+
             //collapse by default
-            "searchPanes": { "initCollapsed": true }
+            "searchPanes": {
+                "initCollapsed": true
+            }
         });
     </script>
 

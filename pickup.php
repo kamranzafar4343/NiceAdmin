@@ -20,7 +20,7 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM orders where flag = 'Delivery'";
+$showOrders = "Select * FROM orders where flag = 'Pickup'";
 $resultShowOrders = $conn->query($showOrders);
 
 ?>

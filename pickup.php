@@ -20,7 +20,7 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM orders";
+$showOrders = "Select * FROM orders where flag = 'Delivery'";
 $resultShowOrders = $conn->query($showOrders);
 
 ?>
@@ -42,19 +42,9 @@ $resultShowOrders = $conn->query($showOrders);
     <!-- Bootstrap JS (with Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
-
-    <!-- Vendor CSS Files -->
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <!--bootstrap search and select-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.14/css/bootstrap-select.min.css">
@@ -91,18 +81,9 @@ $resultShowOrders = $conn->query($showOrders);
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-    <!-- Vendor CSS Files -->
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
@@ -335,7 +316,7 @@ $resultShowOrders = $conn->query($showOrders);
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Create workOrder</title>
+    <title>Delivery Workorders</title>
 
 
 </head>
@@ -431,15 +412,16 @@ $resultShowOrders = $conn->query($showOrders);
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span>
+                        <i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="forms-nav" class="nav-content " data-bs-parent="#sidebar-nav">
+                    <ul id="forms-nav" class="nav-content" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a class="nav-link collapsed " href="order.php">
+                            <a class="nav-link collapsed" href="order.php">
                                 <i class="bi bi-circle"></i><span>delivery</span>
                             </a>
-                            <a class="nav-link active " href="pickup.php">
+                            <a class="nav-link active" href="pickup.php">
                                 <i class="bi bi-circle"></i><span>pickup </span>
                             </a>
                             <a class="nav-link collapsed" href="permout.php">
@@ -521,27 +503,27 @@ $resultShowOrders = $conn->query($showOrders);
 
     <!--form--------------------------------------form--------------------------------------->
     <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createPickupWO.php';" class="btn btn-primary mb-1 add">Create Workorder</button>
+    <button id="" type="button" onclick="window.location.href = 'createPickupWO.php';" class="btn btn-primary mb-1 add">Create Pickup Workorder</button>
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title">List of Workorders</h5>
+                    <h5 class="card-title">List of Pickup Work Orders</h5>
                     <?php
                     // Check if there are any results
                     if ($resultShowOrders->num_rows > 0) {
                         // Display table
-                        echo '<table id="orderT" class="table datatable mt-4">
+                        echo '<table id="orderT" class="table mt-4 nowrap">
                     <thead>
                         <tr>
-                        <th scope="col" style="width: 20%;">Account</th>
-                        <th scope="col" style="width: 13%;">WorkOrder No</th>
-                        <th scope="col" style="width: 10%;">Create Date</th>
-                        <th scope="col" style="width: 7%;">Service Priority</th>
-                        <th scope="col" style="width: 12%;">Required By</th>
-                        <th scope="col" style="width: 10%;">WO Type Action</th>
-                        <th scope="col" style="width: 17%;">Action</th>
+                        <th scope="col" style="width: 18%;">Account</th>
+                        <th scope="col" style="width: 8%;">WorkOrder No</th>
+                        <th scope="col" style="width: 13%;">Create Date</th>
+                        <th scope="col" style="width: 8%;">Service Priority</th>
+                        <th scope="col" style="width: 10%;">Required By</th>
+                    
+                        <th scope="col" style="width: 15%;">Action</th>
                         </tr>
                     </thead>
                     <tbody>';
@@ -553,7 +535,6 @@ $resultShowOrders = $conn->query($showOrders);
                         while ($row = $resultShowOrders->fetch_assoc()) {
                             echo '<tr>';
 
-                       
 
                             // Get specific company id
                             $comp_id = $row['comp_id_fk'];
@@ -608,7 +589,7 @@ $resultShowOrders = $conn->query($showOrders);
 
 
                             echo '<td>' . ($row["date"]) . '</td>';
-                            echo '<td>' . ($row["WO_typ_action_code"]) . '</td>';
+
                     ?>
                             <td>
                                 <div style="display: flex; gap: 10px;">
@@ -643,16 +624,33 @@ $resultShowOrders = $conn->query($showOrders);
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <!--datatable export buttons-->
+    <!-- jQuery library -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+
+    <!-- DataTables core library and export buttons -->
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+
+    <!-- Additional libraries for exporting (Excel, PDF) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+
+    <!-- Bootstrap and DataTables styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SearchPanes and Select styling and functionality -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap5.css">
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/dataTables.searchPanes.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
+
 
     <!-- Vendor JS Files -->
     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
@@ -670,15 +668,23 @@ $resultShowOrders = $conn->query($showOrders);
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
+    <!--for search panes-->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Initialize the DataTable
-            let orderTable = new simpleDatatables.DataTable("#orderT", {
-                perPage: 100, // Set the default page length to 100
-                perPageSelect: [10, 25, 50, 100], // Optional: Customize the dropdown options
-            });
+        new DataTable('#orderT', {
+           
+            //show 100 rows by default
+            "pageLength": 100,
+
+            layout: {
+                top1: 'searchPanes'
+            },
+            
+            //collapse by default
+            "searchPanes": { "initCollapsed": true }
         });
     </script>
+
+
 
 </body>
 

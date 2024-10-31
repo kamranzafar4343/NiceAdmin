@@ -35,7 +35,7 @@ if (isset($_POST['submit'])) {
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
     $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']);
-    $barcode_sel = mysqli_real_escape_string($conn, $_POST['barcode_select']);
+
 
     // Array fields: Process each by joining values with commas
     //explanation: processes the object_code field, which is submitted as an array from the HTML form, and prepares it for insertion into a database
@@ -55,6 +55,10 @@ if (isset($_POST['submit'])) {
         return mysqli_real_escape_string($conn, $value);
     }, $_POST['requestor'])) : '';
 
+    $designation = isset($_POST['designation']) ? implode(',', array_map(function ($value) use ($conn) {
+        return mysqli_real_escape_string($conn, $value);
+    }, $_POST['designation'])) : '';
+
     $request_dates = isset($_POST['req_date']) ? implode(',', array_map(function ($value) use ($conn) {
         return mysqli_real_escape_string($conn, $value);
     }, $_POST['req_date'])) : '';
@@ -63,15 +67,17 @@ if (isset($_POST['submit'])) {
         return mysqli_real_escape_string($conn, $value);
     }, $_POST['description'])) : '';
 
-    //check if a workorder with barcode already exists
-    $checkBarcode = "SELECT * FROM orders WHERE barcode = '$barcode_sel'";
-    $resultBarcode = mysqli_query($conn, $checkBarcode);
-    if ($resultBarcode->num_rows > 0) {
-        die('Cant make workorder of a barcode. Workorder of given barcode already exists.');
-    }
+    //check duplicate barcode entry in delivery table
+    $check_duplicate_barcode = "SELECT barcode FROM orders WHERE barcode = '$barcodes' AND flag = 'Delivery'";
+    $result_duplicate_barcode = mysqli_query($conn, $check_duplicate_barcode);
 
-    $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
-     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcode_sel', '$alt_code', '$requestor', '$role', '$req_date', '$description')";
+    //show error if finds duplicate barcode
+    if ($result_duplicate_barcode && $result_duplicate_barcode->num_rows > 0) {
+        die("workorder already created against that barcode");
+    } else {
+        $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
+     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcodes', '$alt_codes', '$requestor_names', '$designations', '$req_dates', '$descriptions')";
+    }
 
     if ($conn->query($sql) === TRUE) {
         header("Location: order.php");
@@ -565,18 +571,6 @@ if (isset($_POST['submit'])) {
                         </select>
                     </div>
 
-                    <!-- <div class="col-md-3">
-                        <label for="purirty" class="form-label">Status</label>
-                        <select class="form-select" id="" name="wo_typ_action" required>
-                            <option value="">Select Status</option>
-                            <option value="Delivery">Delivery</option>
-                            <option value="Open">Open</option>
-                            <option value="Picklist">Picklist</option>
-                            <option value="Route">Route</option>
-                            <option value="Print">Print</option>
-                        </select>
-                    </div> -->
-
                     <!-- Required BY -->
                     <div class="col-md-3">
                         <label class="form-label">Required By</label>
@@ -609,55 +603,57 @@ if (isset($_POST['submit'])) {
 
                     <h2 style="color: #0056b3; margin-top: 45px;">Add Container/Filefolder</h2>
                     <div id="dynamic_field2">
+                        <div class="form-row mb-2" id="row2">
 
-                        <!-- Object Code -->
-                        <div class="col-md-3">
-                            <label for="object_code" class="form-label">Object Code</label>
-                            <select class="form-select" id="object_code" name="object_code[]" onchange="updateBarcodeInput()" required>
-                                <option value="">Select object</option>
-                                <option value="Container">Container</option>
-                                <option value="FileFolder">FileFolder</option>
-                            </select>
-                        </div>
-                        <!-- Select Barcode -->
-                        <div class="col-md-4">
-                            <label for="barcode_select">Enter Barcode:</label>
-                            <input type="text" class="form-control" id="barcode_select" name="barcode_select[]" required>
-                        </div>
-                        <!-- FOR the alternative code -->
-                        <div class="col-md-4">
-                            <label for="alt_code" class="form-label">Alt Code</label>
-                            <input type="text" class="form-control" id="alt_code" name="alt_code[]" required>
-                        </div>
+                            <!-- Object Code -->
+                            <div class="col-md-3">
+                                <label for="object_code" class="form-label">Object Code</label>
+                                <select class="form-select" id="object_code" name="object_code[]" onchange="updateBarcodeInput()" required>
+                                    <option value="">Select object</option>
+                                    <option value="Container">Container</option>
+                                    <option value="FileFolder">FileFolder</option>
+                                </select>
+                            </div>
+                            <!-- Select Barcode -->
+                            <div class="col-md-4">
+                                <label for="barcode_select">Enter Barcode:</label>
+                                <input type="text" class="form-control" id="barcode_select" name="barcode_select[]" required>
+                            </div>
+                            <!-- FOR the alternative code -->
+                            <div class="col-md-4">
+                                <label for="alt_code" class="form-label">Alt Code</label>
+                                <input type="text" class="form-control" id="alt_code" name="alt_code[]" required>
+                            </div>
 
-                        <!-- Select Requestor -->
-                        <div class="col-md-4">
-                            <label for="requestor" class="form-label">Requestor Name</label>
-                            <input type="text" class="form-control" id="requestor" name="requestor[]" required>
-                        </div>
-                        <!--  Comments -->
-                        <div class="col-md-4">
-                            <label for="designation" class="form-label">Contact Person Role</label>
-                            <input type="text" class="form-control" id="designation" name="designation[]" required>
-                        </div>
+                            <!-- Select Requestor -->
+                            <div class="col-md-4">
+                                <label for="requestor" class="form-label">Requestor Name</label>
+                                <input type="text" class="form-control" id="requestor" name="requestor[]" required>
+                            </div>
+                            <!--  Comments -->
+                            <div class="col-md-4">
+                                <label for="designation" class="form-label">Contact Person Role</label>
+                                <input type="text" class="form-control" id="designation" name="designation[]" required>
+                            </div>
 
 
-                        <div class="col-md-3">
-                            <label class="form-label">request date</label>
-                            <input type="datetime-local" class="form-control" name="req_date[]" required>
-                        </div>
-                        <!--  Comments -->
-                        <div class="col-md-5">
-                            <label for="description" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="description" name="description[]" required>
-                        </div>
+                            <div class="col-md-3">
+                                <label class="form-label">request date</label>
+                                <input type="datetime-local" class="form-control" name="req_date[]" required>
+                            </div>
+                            <!--  Comments -->
+                            <div class="col-md-5">
+                                <label for="description" class="form-label">Description</label>
+                                <input type="text" class="form-control" id="description" name="description[]" required>
+                            </div>
 
-                        <div class="col">
-                            <button type="button" name="add" id="add2" class="btn btn-success">+</button>
-                        </div>
+                            <div class="text-center mt-4 mb-2 ml-2">
+                                <button type="button" name="add" id="add2" class="btn btn-success">Add more</button>
+                            </div>
 
-                        <div>
+                            <div>
 
+                            </div>
                         </div>
                     </div>
 
@@ -702,14 +698,14 @@ if (isset($_POST['submit'])) {
             $('#add2').click(function() {
                 i++;
                 $('#dynamic_field2').append('<div class="form-row mb-2" id="row2' + i + '"> \
-            <div class="col"><input type="text" class="form-control" name="object_code[]" placeholder="object code" required></div> \
-            <div class="col"><input type="text" class="form-control" name="barcode_select[]" placeholder="barcode" required></div> \
-                <div class="col"><input type="text" class="form-control" name="alt_code[]" placeholder="Alt Code" required></div> \
-                <div class="col"><input type="text" class="form-control" name="requestor[]" placeholder="requestor name" required></div> \
-                <div class="col"><input type="text" class="form-control" name="designation[]" placeholder="role" required></div> \
-                <div class="col"><input type="text" class="form-control" name="req_date[]" placeholder="request date" required></div> \
-                <div class="col"><input type="text" class="form-control" name="description[]" placeholder="description" required></div> \
-                <div class="col"><button type="button" class="btn btn-danger btn_remove2" id="' + i + '">-</button></div> \
+            <div class="col-md-4"><input type="text" class="form-control" name="object_code[]" placeholder="object code" required></div> \
+            <div class="col-md-4"><input type="text" class="form-control" name="barcode_select[]" placeholder="barcode" required></div> \
+                <div class="col-md-4"><input type="text" class="form-control" name="alt_code[]" placeholder="Alt Code" required></div> \
+                <div class="col-md-4"><input type="text" class="form-control" name="requestor[]" placeholder="requestor name" required></div> \
+                <div class="col-md-4"><input type="text" class="form-control" name="designation[]" placeholder="role" required></div> \
+                <div class="col-md-4"><input type="text" class="form-control" name="req_date[]" placeholder="request date" required></div> \
+                <div class="col-md-4"><input type="text" class="form-control" name="description[]" placeholder="description" required></div> \
+                <div class="col-md-4 mb-2"><button type="button" class="btn btn-danger btn_remove2 " id="' + i + '">-</button></div> \
             </div>');
             });
 

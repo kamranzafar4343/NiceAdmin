@@ -521,7 +521,7 @@ date_default_timezone_set('Asia/Karachi');
 
     <main id="main" class="main">
         <!-- Print Button -->
-        <button class="btn btn-primary mt-3" onclick="window.print()">Print</button>
+        <button class="btn btn-primary mt-3" onclick="$('#workorder').print();">Print</button>
         <div class="headerbox">
         </div><!-- End Page Title -->
         <div class="pagetitleinside mt-1">
@@ -671,6 +671,35 @@ date_default_timezone_set('Asia/Karachi');
         </div>
         <!-- End d-flex container -->
     </main><!-- End #main -->
+
+    <!-- added jquery code for printing specific part of page -->
+     <script>
+$.fn.extend({
+    print: function() {
+        var frameName = 'printIframe';
+        var doc = window.frames[frameName];
+        if (!doc) {
+            $('<iframe>')
+                .hide()
+                .attr('name', frameName)
+                .appendTo(document.body);
+            doc = window.frames[frameName];
+        }
+
+        var content = this.html();
+        var styles = $('head').html(); // Get the content of the <head>, including stylesheets and inline styles
+
+        // Write the content and styles into the iframe's document
+        doc.document.open();
+        doc.document.write('<!DOCTYPE html><html><head>' + styles + '</head><body>' + content + '</body></html>');
+        doc.document.close();
+
+        doc.window.print();
+        return this;
+    }
+});
+
+</script>
 
 
     <!-- Vendor JS Files -->

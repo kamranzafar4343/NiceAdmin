@@ -22,37 +22,77 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$result = [];
-$box_data = null;
+
 // Get order ID from query string
 $order_no = $_GET['id'];
 
 // Fetch company details
-$sql = "SELECT * FROM orders WHERE order_no = $order_no";
+$sql = "SELECT * FROM `orders` WHERE `order_no` = '$order_no'";
 $result = $conn->query($sql);
 
-// if($result && $result->num_rows>0){
-//         $row3 = $result->fetch_assoc();
-//         $ = $row3['name'];
-//         $ = $row3['email'];
-//         $ = $row3['name'];
-//         $ = $row3['email'];
-//         $ = $row3['name'];
-//         $ = $row3['email'];
-//         $ = $row3['name'];
-//         $ = $row3['email'];
-//         $ = $row3['name'];
-//         $ = $row3['email'];
-//         $ = $row3['name'];
-//         $ = $row3['email'];
-//         $ = $row3['name'];
-//         $ = $row3['email'];
-//         $ = $row3['name'];
-//         $ = $row3['email'];
-//         $ = $row3['name'];
-//         $ = $row3['email'];
-//     }
+if ($result && $result->num_rows > 0) {
+    $row3 = $result->fetch_assoc();
+    $order_no = $row3['order_no'];
+    $creator = $row3['creator'];
 
+    $comp_id_fk = $row3['comp_id_fk'];
+
+    //get company name from compani table
+    $compName = "SELECT * FROM compani WHERE comp_id = $comp_id_fk";
+    $compNameResult = $conn->query($compName);
+    if ($compNameResult && $compNameResult->num_rows > 0) {
+        $row4 = $compNameResult->fetch_assoc();
+
+        $comp_name = $row4['comp_name'];
+    }
+
+    $branch_id_fk = $row3['branch_id_fk'];
+
+    //get branch name from branch table
+    $branchName = "SELECT * FROM branches WHERE branch_id = $branch_id_fk";
+    $branchNameResult = $conn->query($branchName);
+    if ($branchNameResult && $branchNameResult->num_rows > 0) {
+        $row5 = $branchNameResult->fetch_assoc();
+
+        $branch_name = $row5['branch_name'];
+    }
+
+    // $dept_id_fk = $row3['dept_id_fk'];
+    // //get dept name from dept table
+    // $deptName = "SELECT * FROM departments WHERE dept_id = $dept_id_fk";
+    // $deptNameResult = $conn->query($deptName);
+    // if ($deptNameResult && $deptNameResult->num_rows > 0) {
+    //     $row6 = $deptNameResult->fetch_assoc();
+
+    //     $branch_name = $row6['dept_name'];
+    // }
+
+    $priority = $row3['priority'];
+    $flag = $row3['flag'];
+    $date = $row3['date'];
+    $foc = $row3['foc'];
+    $phone = $row3['foc_phone'];
+    $pickup_add = $row3['pickup_address'];
+    $object = $row3['object_code'];
+    $barcode = $row3['barcode'];
+    $alt = $row3['alt'];
+    $requestor = $row3['requestor'];
+    $role = $row3['role'];
+    $req_date = $row3['req_date'];
+    $description = $row3['description'];
+    $create_date = $row3['order_creation_date'];
+    $obj_type = $row3['obj_typ'];
+    $quant = $row3['quant'];
+    $supp_req = $row3['supp_requestor'];
+    $cost_center = $row3['cost_cent'];
+    $dateTime = $row3['dateTime'];
+    $comment = $row3['comment'];
+} else {
+    echo "No order found";
+}
+
+// Set the default timezone to Pakistan Standard Time
+date_default_timezone_set('Asia/Karachi');
 
 ?>
 
@@ -297,26 +337,31 @@ $result = $conn->query($sql);
             position: relative;
             left: -38px;
         }
+
         body {
             font-family: "Times New Roman", Times, serif;
             font-size: 20px;
         }
+
         .invoice-container {
             margin: 20px auto;
             padding: 20px;
             max-width: 900px;
             background-color: #fff;
         }
+
         .header-section {
             border-bottom: 1px solid #000;
             padding-bottom: 10px;
             margin-bottom: 10px;
         }
+
         .section-title {
             font-weight: bold;
             text-align: center;
-            
+
         }
+
         .signature-area {
             margin-top: 50px;
             text-align: center;
@@ -475,6 +520,8 @@ $result = $conn->query($sql);
 
 
     <main id="main" class="main">
+        <!-- Print Button -->
+        <button class="btn btn-primary mt-3" onclick="window.print()">Print</button>
         <div class="headerbox">
         </div><!-- End Page Title -->
         <div class="pagetitleinside mt-1">
@@ -484,93 +531,147 @@ $result = $conn->query($sql);
         <!-- Main content container -->
         <div class="">
 
-        <!-- Invoice container -->
-    <div class="invoice-container">
-        <div class="header-section">
-        <div class="row mt-5">
-            <div class="col-4">
-                <p>Data Technologies</p>
-            </div>
-            <div class="col-3 text-right">
-                <p>MCB - Vault </p>
-            </div>
-            <div class="col-3 text-right">
-                <p>MCB - Vault </p>
-            </div>
-            <div class="col-12 text-center">
-                <p>MCB - Vault </p>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <p>MCB - Vault Record Room<br>
-                    Archival Unit Operation Department<br>
-                    14-A Shahrah-e-Aiwan Tijari, Race Course Road Lahore, Pakistan<br>
-                    CONTACT OPERATION MANAGER<br>
-                    PHONE: 042 - 38353077
-                    </p>
+            <!-- Invoice container -->
+            <div class="invoice-container" id="workorder">
+                <div class="header-section">
+                    <div class="row mt-5">
+                        <div class="col-4">
+                            <p>
+                                <?php
+                                date_default_timezone_set("Asia/Karachi");
+                                echo date("Y/m/d h:i:s A");
+                                ?>
+                            </p>
+                        </div>
+                        <div class="col-4 text-center">
+                            <p style="text-transform: uppercase;"><?php echo $flag . " WORKORDER" ?></p><br>
+                            <br>
+                            <p>
+                                <?php echo $priority; ?>
+                            </p>
+                            <br>
+                        </div>
+                        <div class="col-4 text-right">
+                            <?php echo  '<img class="barcode" alt="' . $order_no . '" src="barcode.php?text=' . $order_no . '&codetype=code128&orientation=horizontal&size=20&print=false"/>'; ?>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <p>
+                                    <?php echo $comp_name ?><br>
+                                    <?php echo $branch_name ?><br>
+                                    <?php echo $pickup_add ?><br>
+                                    CONTACT: <?php echo $foc ?><br>
+                                    PHONE: <?php echo $phone ?><br>
+                                </p>
+                            </div>
+
+                            <!-- convert create date to local format -->
+                            <?php ?>
+                            <div class="col-6">
+
+                                <!-- convert date into pk timezone -->
+                                <?php
+
+                                if (!empty($create_date)) {
+                                    // Create a DateTime object
+                                    $date = new DateTime($create_date, new DateTimeZone('UTC')); // Assuming the original date is in UTC
+
+                                    // Set the timezone to Pakistan Standard Time (PKT)
+                                    $date->setTimezone(new DateTimeZone('Asia/Karachi'));
+
+                                    // Format the date as needed
+                                    $formattedDate = $date->format("Y/m/d h:i:s A");
+                                ?>
+                                    <p><?php echo "No. " . $order_no . "  " . $formattedDate;
+                                    } ?><br>
+
+                                    Service Date: <?php echo date(" Y/m/d h:i:s A") ?><br>
+                                    </p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3">
+                            <p>Location:<br>
+                                ???<br>
+                            </p>
+                        </div>
+                        <div class="col-3 text-center">
+                            <p>Containers: <br>
+                                ???<br>
+                            </p>
+
+                        </div>
+                        <div class="col-3 text-left">
+                            <p>Alternate Code: <br>
+                                ???<br>
+                            </p>
+                        </div>
+                        <div class="col-3 text-left">
+                            <p>Requestor: <br>
+                                ????<br>
+                            </p>
+                        </div>
+
+                        
+                        <div class="section-title mb-2 mt-3">WORKORDER SUMMARY</div>
+                        
+                        <p>Total <?php echo $flag; ?> Items
+                        <br></p>
+                        
+                        <div class="row">
+                        
+                        <div class="col-4">
+                        
+                                <p>Containers:<br>
+                                    ???<br>
+                                </p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Filefolders:<br>
+                                    ???<br>
+                                </p>
+
+                            </div>
+                        </div>
+                        
+                        <br><br><br><br><br>
+                        <br><br><br><br>
+                        <br><br><br><br>
+                        <br><br><br><br><br>
+
+                        <div class="row mt-5">
+                            <div class="col-6 text-center">
+
+                                ----------------------------
+                                <br> Signature
+
+                            </div>
+                            <br>
+                            <div class="col-6 text-center">
+                                ----------------------------
+                                <br> Signature
+
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="col-6 text-right">
-                    <p>Date: 5/2024 10:03 AM<br>
-                    DELIVERY WORKORDER<br>
-                    REGULAR - Next Working Day<br>
-                    </p>
-    
-                </div>
+
+
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-6">
-                <p>Location: A-H01-C-08<br>
-                Container: 4003042<br>
-                ID: 9970768 Complete Box<br>
-                </p>
-            </div>
-            <div class="col-6 text-right">
-                <p>Work Order No: 00069096<br>
-                Account: 40394011<br>
-                Acct PIC:<br>
-                Service Date: 9/5/2024 10:02 AM<br>
-                </p>
-            </div>
         </div>
-
-        <div class="section-title">WORKORDER SUMMARY</div>
-        <div class="row">
-            <div class="col-6">
-                <p>Total Delivery Items:<br>
-                Containers: 1<br>
-                </p>
-            </div>
-            <div class="col-6 text-right">
-                <p>Filefolders: 0<br>
-                Tapes: 0<br>
-                </p>
-            </div>
-        </div>
-
-        <div class="signature-area">
-            <p>___________________________<br>
-            Signature</p>
-        </div>
-
-        
-        </div>
-    </div>
-
-            <!-- Print Button -->
-            <button class="btn btn-primary mt-3" onclick="window.print()">Print</button>
-        </div>
-    </div>
-</div>
 
         </div>
         </div>
         <!-- End d-flex container -->
     </main><!-- End #main -->
 
-    <!-- End #main -->
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
@@ -581,21 +682,10 @@ $result = $conn->query($sql);
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script>
-        const dataTable = new simpleDatatables.DataTable("#myTable2", {
-            searchable: false,
-            fixedHeight: true,
-        })
-    </script>
 
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js">
-    </script>
-
-    <!-- Template Main JS File -->
-    <script src="assets/js/main.js"></script>
 
 </body>
 

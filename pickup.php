@@ -574,8 +574,10 @@ $resultShowOrders = $conn->query($showOrders);
                                 //workorder_no
                                 echo '<td>' . ($row['order_no']) . '</td>';
 
-
-                                echo '<td>' . ($row["order_creation_date"]) . '</td>';
+                                //convert timestamp to only date format
+                                $dateTimeCreate = $row["order_creation_date"];
+                                $justDateCreate = date("Y-m-d", strtotime($dateTimeCreate));
+                                echo '<td>' . $justDateCreate . '</td>';
 
                                 echo '<td>';
                                 if ($row["priority"] == 'Regular') {
@@ -600,7 +602,10 @@ $resultShowOrders = $conn->query($showOrders);
                                 echo '</td>';
 
 
-                                echo '<td>' . ($row["date"]) . '</td>';
+                                //convert timestamp to only date format
+                                $dateTimeRequired = $row["date"];
+                                $justDateRequired = date("Y-m-d", strtotime($dateTimeRequired));
+                                echo '<td>' . $justDateRequired . '</td>';
 
                         ?>
                                 <td>
@@ -637,7 +642,7 @@ $resultShowOrders = $conn->query($showOrders);
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- jQuery library -->
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- DataTables core library and export buttons -->
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>

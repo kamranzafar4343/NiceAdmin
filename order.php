@@ -562,8 +562,10 @@ $resultShowOrders = $conn->query($showOrders);
                             //workorder_no
                             echo '<td>' . ($row['order_no']) . '</td>';
 
-
-                            echo '<td>' . ($row["order_creation_date"]) . '</td>';
+                            //convert timestamp to only date format
+                            $dateTimeCreate = $row["order_creation_date"];
+                            $justDateCreate = date("Y-m-d", strtotime($dateTimeCreate));
+                            echo '<td>' . $justDateCreate . '</td>';
 
                             echo '<td>';
                             if ($row["priority"] == 'Regular') {
@@ -587,8 +589,11 @@ $resultShowOrders = $conn->query($showOrders);
                             }
                             echo '</td>';
 
+                            //convert timestamp to only date format
+                            $dateTime = $row["date"];
+                            $justDate = date("Y-m-d", strtotime($dateTime));
+                            echo '<td>' . $justDate . '</td>';
 
-                            echo '<td>' . ($row["date"]) . '</td>';
 
                     ?>
                             <td>
@@ -651,8 +656,8 @@ $resultShowOrders = $conn->query($showOrders);
     <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap5.js"></script>
     <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
 
-        <!--for icons-->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <!--for icons-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
 
@@ -676,16 +681,18 @@ $resultShowOrders = $conn->query($showOrders);
     <!--for search panes-->
     <script>
         new DataTable('#orderT', {
-           
+
             //show 100 rows by default
             "pageLength": 100,
 
             layout: {
                 top1: 'searchPanes'
             },
-            
+
             //collapse by default
-            "searchPanes": { "initCollapsed": true }
+            "searchPanes": {
+                "initCollapsed": true
+            }
         });
     </script>
 

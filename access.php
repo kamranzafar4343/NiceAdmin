@@ -553,8 +553,6 @@ $resultShowOrders = $conn->query($showOrders);
                         while ($row = $resultShowOrders->fetch_assoc()) {
                             echo '<tr>';
 
-
-
                             // Get specific company id
                             $comp_id = $row['comp_id_fk'];
                             $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";

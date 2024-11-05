@@ -332,15 +332,15 @@ date_default_timezone_set('Asia/Karachi');
         }
 
         .barcode {
-            height: 55px;
-            width: 250px;
+            height: 30px;
+            width: 230px;
             position: relative;
             left: -38px;
         }
 
         body {
-            font-family: "Times New Roman", Times, serif;
-            font-size: 20px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 16px;
         }
 
         .invoice-container {
@@ -544,12 +544,20 @@ date_default_timezone_set('Asia/Karachi');
                             </p>
                         </div>
                         <div class="col-4 text-center">
-                            <p style="text-transform: uppercase;"><?php echo $flag . " WORKORDER" ?></p><br>
-                            <br>
-                            <p>
-                                <?php echo $priority; ?>
+                            <p style="text-transform: uppercase;"><?php echo $flag . " WORKORDER"; ?></p>
+                            
+                            <p class="mb-4">
+                                <?php 
+                                if($priority == "Regular"){
+                                    
+                                    echo "REGULAR - Next Working Day"; 
+                                }
+                                else{
+                                    echo "Urgent - Rush Same Day"; 
+                                }
+                                ?>
                             </p>
-                            <br>
+                       
                         </div>
                         <div class="col-4 text-right">
                             <?php echo  '<img class="barcode" alt="' . $order_no . '" src="barcode.php?text=' . $order_no . '&codetype=code128&orientation=horizontal&size=20&print=false"/>'; ?>

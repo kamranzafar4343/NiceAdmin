@@ -79,11 +79,19 @@ if (isset($_POST['submit'])) {
      VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcodes', '$alt_codes', '$requestor_names', '$designations', '$req_dates', '$descriptions')";
     }
 
-    if ($conn->query($sql) === TRUE) {
+    if($conn->query($sql) === TRUE){
+        $sqlAudit = "INSERT INTO orders_audit ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
+     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcodes', '$alt_codes', '$requestor_names', '$designations', '$req_dates', '$descriptions')";
+    }
+    else{
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    if ($conn->query($sqlAudit) === TRUE) {
         header("Location: order.php");
         exit();
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $sqlAudit . "<br>" . $conn->error;
     }
 }
 

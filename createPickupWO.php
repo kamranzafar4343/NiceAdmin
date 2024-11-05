@@ -80,7 +80,7 @@ if (isset($_POST['submit'])) {
     }
 
     if ($conn->query($sql) === TRUE) {
-        header("Location: order.php");
+        header("Location: pickup.php");
         exit();
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;

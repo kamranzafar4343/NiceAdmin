@@ -103,7 +103,7 @@ $resultShowOrders = $conn->query($showOrders);
 
         .add {
             /* cursor: pointer; */
-            width: 144px;
+          
             margin-left: 1144px;
             margin-top: 89px;
             margin-bottom: 103px;
@@ -316,7 +316,7 @@ $resultShowOrders = $conn->query($showOrders);
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Delivery Workorders</title>
+    <title>Pickup Workorders</title>
 
 
 </head>
@@ -466,7 +466,6 @@ $resultShowOrders = $conn->query($showOrders);
                     </a>
 
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -503,7 +502,7 @@ $resultShowOrders = $conn->query($showOrders);
 
     <!--form--------------------------------------form--------------------------------------->
     <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createPickupWO.php';" class="btn btn-primary mb-1 add">Create Pickup Workorder</button>
+    <button id="" type="button" onclick="window.location.href = 'createPickupWO.php';" class="btn btn-primary mb-1 add">+</button>
     <!-- Main content -->
     <main id="main" class="main">
         <div class="pagetitle">
@@ -611,8 +610,7 @@ $resultShowOrders = $conn->query($showOrders);
                                 <td>
                                     <div style="display: flex; gap: 10px;">
                                         <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
-                                        <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="OrderUpdate.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-
+                               
                                         <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
                                             onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                                         <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->

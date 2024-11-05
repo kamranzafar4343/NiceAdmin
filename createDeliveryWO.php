@@ -76,15 +76,19 @@ if (isset($_POST['submit'])) {
         die("workorder already created against that barcode");
     } else {
         $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
-     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcodes', '$alt_codes', '$requestor_names', '$designations', '$req_dates', '$descriptions')";
+     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_names', '$designation', '$request_dates', '$descriptions')";
     }
 
-    if($conn->query($sql) === TRUE){
-        $sqlAudit = "INSERT INTO orders_audit ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
-     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcodes', '$alt_codes', '$requestor_names', '$designations', '$req_dates', '$descriptions')";
-    }
-    else{
+    if ($conn->query($sql) === TRUE) {
+
+        // Get the last inserted order_no from the orders table
+        $last_id = $conn->insert_id;
+
+        echo $sqlAudit = "INSERT INTO orders_audit (order_no, creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
+     VALUES ( '$last_id', '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_names', '$designation', '$request_dates', '$descriptions')";
+    } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
+        exit();
     }
 
     if ($conn->query($sqlAudit) === TRUE) {
@@ -92,6 +96,7 @@ if (isset($_POST['submit'])) {
         exit();
     } else {
         echo "Error: " . $sqlAudit . "<br>" . $conn->error;
+        exit();
     }
 }
 
@@ -536,7 +541,7 @@ if (isset($_POST['submit'])) {
     <div class="container d-flex justify-content-center">
         <div class="card custom-card shadow-lg mt-3">
             <div class="card-body mt-3">
-                <form class="row g-3 needs-validation" action="" method="POST">
+                <form class="row g-3 needs-validation" id="orderForm" action="" method="POST">
 
                     <hr style="color: white;">
 
@@ -841,9 +846,6 @@ if (isset($_POST['submit'])) {
             });
         });
     </script>
-
-
-
 
     <script src="assets/js/main.js"></script>
 

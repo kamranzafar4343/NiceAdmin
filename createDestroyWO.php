@@ -76,17 +76,29 @@ if (isset($_POST['submit'])) {
         die("workorder already created against that barcode");
     } else {
         $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
-     VALUES ( '$creator', 'Destroy', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_code', '$barcodes', '$alt_codes', '$requestor_names', '$designations', '$req_dates', '$descriptions')";
+     VALUES ( '$creator', 'Destroy', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_names', '$designation', '$request_dates', '$descriptions')";
     }
 
     if ($conn->query($sql) === TRUE) {
+
+        // Get the last inserted order_no from the orders table
+        $last_id = $conn->insert_id;
+
+        echo $sqlAudit = "INSERT INTO orders_audit (order_no, creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
+     VALUES ( '$last_id','$creator', 'Destroy', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_names', '$designation', '$request_dates', '$descriptions')";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+        exit();
+    }
+
+    if ($conn->query($sqlAudit) === TRUE) {
         header("Location: destroy.php");
         exit();
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $sqlAudit . "<br>" . $conn->error;
+        exit();
     }
 }
-
 
 ?>
 

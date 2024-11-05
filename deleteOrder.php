@@ -18,7 +18,11 @@ if (isset($_GET['id'])) {
     // Now, perform the delete operation
     $delete_sql = "DELETE FROM `orders` WHERE `order_no` = $order_id";
 
-    if($conn->query($delete_sql) === TRUE) {
+    //insert delete time into order audit table
+    if ($conn->query($delete_sql) === TRUE) {
+        $updateDelTime = "UPDATE `orders_audit` SET `deleted_at` = NOW(), `deleted_by` = '".$_SESSION['email']."' WHERE `order_no` = $order_id";
+    }
+    if ($conn->query($updateDelTime) === TRUE) {
         // Redirect to the referring page
         if (isset($_SERVER['HTTP_REFERER'])) {
             header("Location: " . $_SERVER['HTTP_REFERER']);
@@ -27,7 +31,6 @@ if (isset($_GET['id'])) {
         }
         exit();
     }
-
 } else {
     echo "Error: No company found for this branch.";
 }

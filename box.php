@@ -647,20 +647,37 @@ if ($resultData->num_rows > 0) {
 
     <!--for search panes-->
     <script>
+         $(document).ready(function() {
         new DataTable('#box', {
-
-            //show 100 rows by default
+            // Show 100 rows by default
             "pageLength": 100,
 
-            layout: {
-                top1: 'searchPanes'
+            // Layout configuration
+            dom: 'Pfrtip', // 'P' indicates the SearchPanes
+
+            // SearchPanes settings
+            "searchPanes": {
+                "initCollapsed": true, // Collapse panes by default
+                "columns": [0, 2, 5] // Specify the columns to include in the SearchPanes
             },
 
-            //collapse by default
-            "searchPanes": {
-                "initCollapsed": true
-            }
+            // Columns configuration
+            "columnDefs": [
+                {
+                    searchPanes: {
+                        show: true // Enable SearchPane for the specific column
+                    },
+                    targets: [0, 2, 5] // Index of the column for which SearchPane is enabled
+                },
+                {
+                    searchPanes: {
+                        show: false // Disable SearchPane for all other columns
+                    },
+                    targets: '_all' // Applies to all columns except the one specified
+                }
+            ]
         });
+    });
     </script>
 </body>
 

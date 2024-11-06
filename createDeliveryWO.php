@@ -597,16 +597,19 @@ if (isset($_POST['submit'])) {
 
                     <hr style="color: white;">
 
-                    <!-- For the FOC -->
-                    <div class="col-md-3">
-                        <label for="" class="form-label">Contact Person Name</label>
-                        <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
+                    <div class="col-md-4">
+                        <label for="">Contact Person:</label>
+                        <select id="emp" class="form-select" name="foc">
+                            <option value="">Select contact person</option>
+                        </select>
                     </div>
+
                     <!-- For the FOC phone -->
                     <div class="col-md-3">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="" name="foc_phone" required>
+                        <input type="text" class="form-control" id="foc_phone" name="foc_phone" value="" readonly>
                     </div>
+
                     <!-- for the Pickup and delivery Addrss -->
                     <div class="col-md-5">
                         <label for="pickup_address" class="form-label">Pickup/Delivery Address </label>
@@ -627,11 +630,13 @@ if (isset($_POST['submit'])) {
                                     <option value="FileFolder">FileFolder</option>
                                 </select>
                             </div>
+
                             <!-- Select Barcode -->
                             <div class="col-md-4">
                                 <label for="barcode_select">Enter Barcode:</label>
                                 <input type="text" class="form-control" id="barcode_select" name="barcode_select[]" required>
                             </div>
+
                             <!-- FOR the alternative code -->
                             <div class="col-md-4">
                                 <label for="alt_code" class="form-label">Alt Code</label>
@@ -649,7 +654,6 @@ if (isset($_POST['submit'])) {
                                 <input type="text" class="form-control" id="designation" name="designation[]" required>
                             </div>
 
-
                             <div class="col-md-3">
                                 <label class="form-label">request date</label>
                                 <input type="datetime-local" class="form-control" name="req_date[]" required>
@@ -663,9 +667,7 @@ if (isset($_POST['submit'])) {
                             <div class="text-center mt-4 mb-2 ml-2">
                                 <button type="button" name="add" id="add2" class="btn btn-success">Add more</button>
                             </div>
-
                             <div>
-
                             </div>
                         </div>
                     </div>
@@ -733,15 +735,6 @@ if (isset($_POST['submit'])) {
     <!-- Include Bootstrap JS (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Script to show modal when barcode already exists -->
-    <?php if ($error): ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var barcodeErrorModal = new bootstrap.Modal(document.getElementById('barcodeErrorModal'));
-                barcodeErrorModal.show();
-            });
-        </script>
-    <?php endif; ?>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
@@ -782,6 +775,7 @@ if (isset($_POST['submit'])) {
             dselect(document.querySelector('#company'), config);
             dselect(document.querySelector('#branch'), config);
             dselect(document.querySelector('#dept'), config);
+            dselect(document.querySelector('#emp'), config);
 
 
             // When company is changed, fetch the branches
@@ -831,6 +825,7 @@ if (isset($_POST['submit'])) {
                             // Clear existing dept's
                             $('#dept').empty();
                             $('#dept').append('<option value="">Select department</option>');
+
                             // Add the new options from the response
                             $.each(departments, function(index, department) {
                                 $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
@@ -842,8 +837,72 @@ if (isset($_POST['submit'])) {
                         }
                     }
                 });
-
             });
+
+            // When branch is changed, fetch the employees
+            $('#branch').change(function() {
+                var branch_id = $(this).val();
+
+                console.log(branch_id);
+
+                // AJAX request to get emp's for the selected branch
+                $.ajax({
+                    url: 'get_employees.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var employees = JSON.parse(response); //return the json response as an array
+                            // Clear existing employees
+                            $('#emp').empty();
+                            $('#emp').append('<option value="">Select contact person</option>');
+
+                            // Add the new options from the response
+                            $.each(employees, function(index, employe) {
+                                $('#emp').append('<option value="' + employe.emp_id + '">' + employe.name + '</option>');
+                            });
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#emp'), config);
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+
+            //error code ; it is getting branch id instead of emp_id
+          // When employee is changed, fetch the phone number
+$('#emp').change(function() {
+    var emp_id = $(this).val();
+
+    // AJAX request to get phone number for the selected employee
+    $.ajax({
+        url: 'get_employee_phone.php', // Backend script to fetch phone
+        type: 'POST',
+        data: {
+            emp_id: emp_id
+        },
+        success: function(response) {
+            try {
+                // Parse the JSON response to get the phone number
+                var data = JSON.parse(response);
+                var phone = data.phone || "No phone number available"; // Fallback if phone is missing
+
+                // Set the phone number in the #foc_phone input field
+                $('#foc_phone').val(phone);
+            } catch (e) {
+                console.error("Invalid JSON response for phone", response);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX request failed:", error);
+        }
+    });
+});
+
+
         });
     </script>
 

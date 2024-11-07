@@ -508,10 +508,10 @@ if ($resultData->num_rows > 0) {
                             
                             <th scope="col" style="width: 20%;">Account</th>
                             <th scope="col" style="width: 9%;">Object</th>
-                            <th scope="col" style="width: 13%;">Barcode No.</th>
-                            <th scope="col" style="width: 13%;">Alt code</th>
+                            <th scope="col" style="width: 8%;">Barcode No.</th>
+                            <th scope="col" style="width: 8%;">Alt code</th>
                             <th scope="col" style="width: 9%;">Status</th>
-                            <th scope="col" style="width: 15%;">Create Date</th>';
+                            <th scope="col" style="width: 10%;">Create Date</th>';
 
                         // Show "Action" column only for admins
                         if ($_SESSION['role'] == 'admin') {
@@ -590,10 +590,8 @@ if ($resultData->num_rows > 0) {
                                 </div>
                             </td>';
                             }
-
                             echo '</tr>';
                         }
-
                         echo '</tbody></table>';
                     } else {
                         echo '<p>No boxes found.</p>';

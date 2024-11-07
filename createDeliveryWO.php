@@ -560,7 +560,7 @@ if (isset($_POST['submit'])) {
                         </select>
                     </div>
 
-                    <!-- Select lev 2 of selected account -->
+                
                     <div class="col-md-4">
                         <label for="branch">Branch:</label>
                         <select id="branch" class="form-select" name="branch" required>

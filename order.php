@@ -455,15 +455,37 @@ $resultShowOrders = $conn->query($showOrders);
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span>
+                        <i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-
+                    <ul id="forms-nav" class="nav-content" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link active" href="order.php">
+                                <i class="bi bi-circle"></i><span>delivery</span>
+                            </a>
+                            <a class="nav-link collapsed" href="pickup.php">
+                                <i class="bi bi-circle"></i><span>pickup </span>
+                            </a>
+                            <a class="nav-link collapsed" href="permout.php">
+                                <i class="bi bi-circle"></i><span>perm_out </span>
+                            </a>
+                            <a class="nav-link collapsed" href="destroy.php">
+                                <i class="bi bi-circle"></i><span>destroy </span>
+                            </a>
+                            <a class="nav-link collapsed" href="access.php">
+                                <i class="bi bi-circle"></i><span>access </span>
+                            </a>
+                            <a class="nav-link collapsed" href="supplies.php">
+                                <i class="bi bi-circle"></i><span>supplies </span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="nav-item">
@@ -518,8 +540,10 @@ $resultShowOrders = $conn->query($showOrders);
                         <tr>
                         <th scope="col" style="width: 18%;">Account</th>
                         <th scope="col" style="width: 8%;">WorkOrder No</th>
+                        <th scope="col" style="width: 8%;">Status</th>
                         <th scope="col" style="width: 13%;">Create Date</th>
                         <th scope="col" style="width: 8%;">Service Priority</th>
+                        
                         <th scope="col" style="width: 10%;">Required By</th>
                     
                         <th scope="col" style="width: 15%;">Action</th>
@@ -557,9 +581,24 @@ $resultShowOrders = $conn->query($showOrders);
                             // Show account
                             echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
 
-
                             //workorder_no
                             echo '<td>' . ($row['order_no']) . '</td>';
+
+
+                            echo '<td>';
+                            if ($row["status"] == 'Completed') {
+                                echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["status"] . '</span>';
+                            } elseif ($row["status"] == 'In progress') {
+                                echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["status"] . '</span>';
+                            } elseif ($row["status"] == 'Pending') {
+                                echo '<span class="badge badge-pill badge-info" style="font-size: 12px;">' . $row["status"] . '</span>';
+                            } elseif ($row["status"] == 'Cancelled') {
+                                echo '<span class="badge badge-pill badge-danger" style="font-size: 12px;">' . $row["status"] . '</span>';
+                            }
+                            elseif ($row["status"] == 'Dispute') {
+                                echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["status"] . '</span>';
+                            }
+                            echo '</td>';
 
                             //convert timestamp to only date format
                             $dateTimeCreate = $row["order_creation_date"];
@@ -573,19 +612,7 @@ $resultShowOrders = $conn->query($showOrders);
                             } elseif ($row["priority"] == 'Urgent') {
                                 // Display a red icon for "Urgent"
                                 echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } elseif ($row["priority"] == 'Box Pickup') {
-                                // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-info" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } elseif ($row["priority"] == 'Cancel Workorder') {
-                                // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } elseif ($row["priority"] == 'Permanantly out') {
-                                // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-danger" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } elseif ($row["priority"] == 'Supplies') {
-                                // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-primary" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            }
+                            } 
                             echo '</td>';
 
                             //convert timestamp to only date format

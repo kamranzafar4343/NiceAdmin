@@ -153,9 +153,9 @@ if (isset($_POST['register'])) {
                                             <div class="invalid-feedback">Please select a role!</div>
                                         </div>
 
-                                        <div class="col-12 d-flex justify-content-between">
+                                        <div class="col-12 d-flex justify-content-center">
                                             <button class="btn btn-outline-primary" type="submit" name="register" value="register">Register</button>
-                                            <button class="btn btn-outline-secondary" type="reset">Reset</button>
+                                           
                                         </div>
                                     </form>
                                 </div>

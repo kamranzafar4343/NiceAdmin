@@ -21,9 +21,8 @@ if ($resultData->num_rows > 0) {
 }
 if (isset($_POST['submit'])) {
     // Collect form data
-    $level1 = $conn->real_escape_string($_POST['level1']);
-    $level2 = $conn->real_escape_string($_POST['level2']);
-    $level3 = $conn->real_escape_string($_POST['level3']);
+    $comp = mysqli_real_escape_string($conn, $_POST['company']);
+    $branch = mysqli_real_escape_string($conn, $_POST['branch']);
     $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
     $alt_code = $conn->real_escape_string($_POST['alt_code']);
     $description = $conn->real_escape_string($_POST['description']);
@@ -51,8 +50,8 @@ if (isset($_POST['submit'])) {
             echo "<script>alert('This rack already contains 9 boxes. Please select another rack.'); window.location.href = 'storedata.php';</script>";
         } else {
             // SQL query to insert data into the database
-            $sql = "INSERT INTO store (level1, level2, level3, barcode_select, alt_code, description, rack_select, object_code, status, add_date, destroy_date)
-                    VALUES ('$level1', '$level2', '$level3', '$barcode_select', '$alt_code', '$description', '$rack_select', '$object_code', '$status', '$add_date', '$destroy_date')";
+            $sql = "INSERT INTO store (comp_id_fk, branch_id_fk, barcode_select, alt_code, description, rack_select, object_code, status, add_date, destroy_date)
+                    VALUES ('$comp', '$branch', '$barcode_select', '$alt_code', '$description', '$rack_select', '$object_code', '$status', '$add_date', '$destroy_date')";
 
             if ($conn->query($sql) === TRUE) {
                 echo "<script>window.location.href = 'store.php';</script>";
@@ -465,22 +464,33 @@ if (isset($_POST['submit'])) {
             <div class="card-body">
                 <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
 
-                    <!-- For the Level 1 field -->
-                    <div class="col-md-4">
-                        <label for="level1">Account Level 1:</label>
-                        <input type="text" id="level1" class="form-control" name="level1" required>
+                   <!-- Select Company -->
+                   <div class="col-md-4">
+                        <label for="company">Company:</label>
+                        <select id="company" class="form-select" name="company" required>
+                            <option value="">Select Company</option>
+                            <?php
+                            // Fetch the account levels from the database
+                            $result = $conn->query("SELECT comp_id, comp_name FROM compani");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['comp_id']}'>{$row['comp_name']}</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
 
-                    <!-- For the Level 2 field -->
+                
                     <div class="col-md-4">
-                        <label for="level2">Level 2:</label>
-                        <input type="text" id="level2" class="form-control" name="level2" required>
+                        <label for="branch">Branch:</label>
+                        <select id="branch" class="form-select" name="branch" required>
+                            <option value="">Select branch</option>
+                        </select>
                     </div>
-
-                    <!-- For the Level 3 field -->
                     <div class="col-md-4">
-                        <label for="level3">Level 3:</label>
-                        <input type="text" id="level3" class="form-control" name="level3" required>
+                        <label for="dept">Department:</label>
+                        <select id="dept" class="form-select" name="dept">
+                            <option value="">Select Department</option>
+                        </select>
                     </div>
 
                     <!-- Select Barcode -->
@@ -604,6 +614,69 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
+<script>
+    // When company is changed, fetch the branches
+    $('#company').change(function() {
+                var company_id = $(this).val();
+
+                // AJAX request to get branches for the selected company
+                $.ajax({
+                    url: 'get_branches.php',
+                    type: 'POST',
+                    data: {
+                        company_id: company_id
+                    },
+                    success: function(response) {
+                        try {
+                            var branches = JSON.parse(response); //return the json response as an array
+                            // Clear existing branches
+                            $('#branch').empty();
+                            $('#branch').append('<option value="">Select branches</option>');
+                            // Add the new options from the response
+                            $.each(branches, function(index, branch) {
+                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                            });
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#branch'), config);
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+
+            // When branch is changed, fetch the departments
+            $('#branch').change(function() {
+                var branch_id = $(this).val();
+
+                // AJAX request to get dept's for the selected branch
+                $.ajax({
+                    url: 'get_departments.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var departments = JSON.parse(response); //return the json response as an array
+                            // Clear existing dept's
+                            $('#dept').empty();
+                            $('#dept').append('<option value="">Select department</option>');
+
+                            // Add the new options from the response
+                            $.each(departments, function(index, department) {
+                                $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
+                            });
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#dept'), config);
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+</script>
+    
     <!-- JavaScript to prevent form submission when duplicate detected -->
     <script>
         document.getElementById('rackForm').addEventListener('submit', function(event) {

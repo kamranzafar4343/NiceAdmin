@@ -455,7 +455,6 @@ date_default_timezone_set('Asia/Karachi');
                 </a>
             </li><!-- End Dashboard Nav -->
 
-
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
                     <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>

@@ -576,16 +576,14 @@ $conn->close();
                         <table class="table datatable mt-4" style="table-layout: fixed;">
                             <thead>
                                 <tr>
-                                    <th scope="col" style="width: 5%;">#</th>
+
                                     <th scope="col" style="width: 15%;">Box Barcode</th>
+                                    <th scope="col" style="width: 10%;">Object</th>
                                     <th scope="col" style="width: 15%;">Location</th>
-                                    <th scope="col" style="width: 10%;">Level 1</th>
-                                    <th scope="col" style="width: 10%;">Level 2</th>
-                                    <th scope="col" style="width: 10%;">Level 3</th>
-                                    <th scope="col" style="width: 10%;">Alt Code</th>
-                                    <th scope="col" style="width: 15%;">Description</th>
-                                    <th scope="col" style="width: 10%;">Object Code</th>
+                                    <th scope="col" style="width: 13%;">Account</th>
+                                    <!-- <th scope="col" style="width: 10%;">Alt Code</th> -->
                                     <th scope="col" style="width: 10%;">Status</th>
+                                    <th scope="col" style="width: 15%;">Description</th>
                                     <th scope="col" style="width: 15%;">Add Date</th>
                                     <th scope="col" style="width: 15%;">Destroy Date</th>
 
@@ -602,43 +600,74 @@ $conn->close();
                                 <!-- Loop through the results and display each row -->
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
-                                        <td><?= $counter++ ?></td>
-                                        <td><a href="storeinfo.php?barcode=<?= urlencode($row['barcode_select']) ?>"><strong><?= htmlspecialchars($row['barcode_select']) ?></strong></a></td>
-                                        <td><a href="storeinfo.php?rack=<?= urlencode($row['rack_select']) ?>"><strong><?= htmlspecialchars($row['rack_select']) ?></strong></a></td>
+                                        <td><strong><?= htmlspecialchars($row['barcode_select']) ?></strong></a></td>
+                                        
+                                        <td><i class="';
+                                        <?php if ($row["object_code"] == 'Container') {
+                                            echo 'fa-solid fa-box';
+                                            echo '" style="color: #007bff; font-size: 1.5rem; </i>"';
+                                        } elseif ($row["object_code"] == 'FileFolder') {
+                                            echo 'fa-solid fa-folder';
+                                            echo '" style="color: grey; font-size: 1.5rem; </i>"';
+                                        }
+                                        echo '"></i> ' . '</td>'; ?> 
+                                        
+                                        <td><strong><?= htmlspecialchars($row['rack_select']) ?></strong></a></td>
 
-                                        <td><?= htmlspecialchars($row["level1"]) ?></td>
-                                        <td><?= htmlspecialchars($row["level2"]) ?></td>
-                                        <td><?= htmlspecialchars($row["level3"]) ?></td>
-                                        <td><?= htmlspecialchars($row["alt_code"]) ?></td>
-                                        <td><?= htmlspecialchars($row["description"]) ?></td>
-                                        <td><?= htmlspecialchars($row["object_code"]) ?></td>
-                                        <td><?= htmlspecialchars($row["status"]) ?></td>
-                                        <td><?= htmlspecialchars($row["add_date"]) ?></td>
+                                        <?php
+
+                                        ?>
+
+                                        <td><?= htmlspecialchars($row["comp_id_fk"]) . " / " . htmlspecialchars($row["branch_id_fk"]) ?></td>
+                                        <!-- <td><?= htmlspecialchars($row["alt_code"]) ?></td> -->
+                                        
+
+
+
+<?php
+                                    echo '<td><i class="';
+                                    if ($row["status"] == 'In') {
+                                        echo 'fa-solid fa-right-to-bracket';
+                                        echo '" style="color: green; font-size: 1.5rem; </i>"';
+                                    } elseif ($row["status"] == 'Out') {
+                                        echo 'fa-solid fa-right-from-bracket';
+                                        echo '" style="color: red; font-size: 1.5rem; </i>"';
+                                    } elseif ($row["status"] == 'Ready for Destroy') {
+                                        echo 'fa-solid fa-trash-can';
+                                        echo '" style="color: red; font-size: 1.5rem; </i>"';
+                                    }
+
+                                    echo '"></i> ' . '</td>';
+?>
+                                    
+                                    <td><?= htmlspecialchars($row["description"]) ?></td>
+
+                            <td><?= htmlspecialchars($row["add_date"]) ?></td>
                                         <td><?= htmlspecialchars($row["destroy_date"]) ?></td>
 
                                         <!-- Show actions only if user is admin -->
                                         <?php if ($_SESSION['role'] == 'admin'): ?>
                                             <td>
-                                                <div class="action-buttons" style="display: flex; gap: 10px;">
-                                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center"
-                                                        style="width:25px; height:28px"
-                                                        data-mdb-ripple-init
-                                                        onclick="return confirm('Are you sure you want to delete this rack?');"
-                                                        href="deleteStore.php?id=<?= $row['id'] ?>">
-                                                        <i class="fa-solid fa-trash" style="width: 15px;"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        <?php endif; ?>
-                                    </tr>
-                                <?php endwhile; ?>
-                            </tbody>
-                        </table>
-                    <?php else: ?>
-                        <p>No box and rack data found.</p>
-                    <?php endif; ?>
+                                                <div class=" action-buttons" style="display: flex; gap: 10px;">
+                                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center"
+                                                    style="width:25px; height:28px"
+                                                    data-mdb-ripple-init
+                                                    onclick="return confirm('Are you sure you want to delete this rack?');"
+                                                    href="deleteStore.php?id=<?= $row['id'] ?>">
+                                                    <i class="fa-solid fa-trash" style="width: 15px;"></i>
+                                                </a>
                 </div>
+                </td>
+            <?php endif; ?>
+            </tr>
+        <?php endwhile; ?>
+        </tbody>
+        </table>
+    <?php else: ?>
+        <p>No box and rack data found.</p>
+    <?php endif; ?>
             </div>
+        </div>
         </div>
     </main>
 

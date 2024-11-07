@@ -503,7 +503,7 @@ if (isset($_GET['comp_id'])) {
                 </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="showItems.php">
+                    <a class="nav-link collapsed" href="showItems.php">
                         <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Items Nav -->

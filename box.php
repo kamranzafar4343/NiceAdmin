@@ -396,6 +396,13 @@ if ($resultData->num_rows > 0) {
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
+
+
+                <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#forms-nav" href="#">
                         <i class="ri-list-ordered"></i><span>Work Order</span>
                         <i class="bi bi-chevron-down ms-auto"></i>

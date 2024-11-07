@@ -578,7 +578,6 @@ if (isset($_POST['submit'])) {
                         <label for="purirty" class="form-label">Service Priority</label>
                         <select class="form-select" id="purirty" name="purirty" required>
                             <option value="">Select Service Priority</option>
-
                             <option value="Urgent">Urgent - Rush Same Day</option>
                             <option value="Regular">Regular - Next Working Day</option>
                         </select>
@@ -607,7 +606,7 @@ if (isset($_POST['submit'])) {
                     <!-- For the FOC phone -->
                     <div class="col-md-3">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="foc_phone" name="foc_phone" value="" readonly>
+                        <input type="text" class="form-control" id="foc_phone" name="foc_phone" value="">
                     </div>
 
                     <!-- for the Pickup and delivery Addrss -->
@@ -615,7 +614,6 @@ if (isset($_POST['submit'])) {
                         <label for="pickup_address" class="form-label">Pickup/Delivery Address </label>
                         <input type="text" class="form-control" id="" name="pickup_address" required>
                     </div>
-
 
                     <h2 style="color: #0056b3; margin-top: 45px;">Add Container/Filefolder</h2>
                     <div id="dynamic_field2">

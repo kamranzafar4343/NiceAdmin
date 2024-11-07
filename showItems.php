@@ -477,8 +477,8 @@ $result = $conn->query($sql);
     $role = $_SESSION['role'];
     ?>
 
-    <!-- ======= Sidebar ======= -->
-    <aside id="sidebar" class="sidebar">
+ <!-- ======= Sidebar ======= -->
+ <aside id="sidebar" class="sidebar">
         <ul class="sidebar-nav" id="sidebar-nav">
 
             <!-- Dashboard Link (Visible to all users) -->
@@ -493,13 +493,13 @@ $result = $conn->query($sql);
                 <!-- Admin-only Links -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="Companies.php">
-                        <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Companies Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
@@ -510,10 +510,33 @@ $result = $conn->query($sql);
                 </li><!-- End Items Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#forms-nav" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span>
+                        <i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                </li><!-- End Work Orders Nav -->
+                    <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link" href="order.php">
+                                <i class="bi bi-circle"></i><span>Delivery</span>
+                            </a>
+                            <a class="nav-link" href="pickup.php">
+                                <i class="bi bi-circle"></i><span>Pickup</span>
+                            </a>
+                            <a class="nav-link" href="permout.php">
+                                <i class="bi bi-circle"></i><span>Perm Out</span>
+                            </a>
+                            <a class="nav-link" href="destroy.php">
+                                <i class="bi bi-circle"></i><span>Destroy</span>
+                            </a>
+                            <a class="nav-link" href="access.php">
+                                <i class="bi bi-circle"></i><span>Access</span>
+                            </a>
+                            <a class="nav-link" href="supplies.php">
+                                <i class="bi bi-circle"></i><span>Supplies</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
@@ -531,22 +554,15 @@ $result = $conn->query($sql);
                 <!-- User-only Links -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link active" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
-
                 <li class="nav-item">
                     <a class="nav-link active" href="showItems.php">
                         <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Items Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="order.php">
-                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
@@ -565,12 +581,6 @@ $result = $conn->query($sql);
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i><span>Profile</span>
-                </a>
-            </li><!-- End Profile Nav -->
-
-            <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
                     <i class="bi bi-box-arrow-right"></i><span>Login</span>
                 </a>
@@ -582,12 +592,15 @@ $result = $conn->query($sql);
                 </a>
             </li><!-- End Logout Nav -->
 
-
         </ul>
     </aside>
     <!--------------- End sidebar ------------------>
 
-    <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
+
+
+    <!--------------- End sidebar ------------------>
+
+    <!-- ---------------------------------------------------End Sidebar------------------------->
 
     <!--new table design-->
     <!-- Button to add new item -->
@@ -636,7 +649,7 @@ $result = $conn->query($sql);
                             echo '<tr>';
                             echo '<td>' . $counter++ . '</td>';
                             echo '<td><a class="text-primary fw-bold" href="itemInfo.php?id=' . $row['item_id'] . '">' . $row['barcode'] . '</a></td>';
-                            echo '<td>' . ($row["timestamp"]) . '</td>';
+                            echo '<td>' . ($row["creation_date"]) . '</td>';
                             echo '<td><img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/></td>';
 
                             // Show "Actions" only if the user is an admin

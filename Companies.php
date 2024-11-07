@@ -221,6 +221,11 @@ $result = $conn->query($sql);
           </a>
         </li><!-- End Boxes Nav -->
 
+        <li class="nav-item">
+                    <a class="nav-link collapsed" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
 
         <li class="nav-item">
           <a class="nav-link collapsed" href="order.php">
@@ -248,8 +253,6 @@ $result = $conn->query($sql);
             <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
           </a>
         </li><!-- End Boxes Nav -->
-
-
 
         <li class="nav-item">
           <a class="nav-link collapsed" href="order.php">

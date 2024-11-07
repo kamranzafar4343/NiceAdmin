@@ -436,8 +436,6 @@ if ($result2->num_rows > 0) {
                 </a>
             </li>
 
-
-
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
                     <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>

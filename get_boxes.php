@@ -5,7 +5,7 @@ if (isset($_POST['branch_id'])) {
     $branch_id = $_POST['branch_id'];
     
     // Simple SQL query to get branches for the selected company
-    $result = $conn->query("SELECT * FROM box WHERE branchID_FK = '$branch_id'");
+    $result = $conn->query("SELECT * FROM box WHERE branch_id_fk = '$branch_id'");
     
     $boxes = array();
     while ($row = $result->fetch_assoc()) {

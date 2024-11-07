@@ -648,7 +648,7 @@ $result = $conn->query($sql);
                         while ($row = $result->fetch_assoc()) {
                             echo '<tr>';
                             echo '<td>' . $counter++ . '</td>';
-                            echo '<td><a class="text-primary fw-bold" href="itemInfo.php?id=' . $row['item_id'] . '">' . $row['barcode'] . '</a></td>';
+                            echo '<td> '. $row['barcode'] . '</a></td>';
                             echo '<td>' . ($row["creation_date"]) . '</td>';
                             echo '<td><img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/></td>';
 

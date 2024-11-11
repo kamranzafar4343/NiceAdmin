@@ -24,40 +24,6 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
-$error = false;
-
-// Fetch data from the store table and join with boxes and racks
-// $sql = "
-//    SELECT 
-//     store.id AS store_id, store.level1, store.level2, store.level3, box.barcode AS select_barcode, 
-//     store.alt_code, store.description, racks.rack_location AS select_rack, 
-//     store.object_code, store.status, store.add_date, store.destroy_date
-// FROM store
-// JOIN box ON store.barcode_select = box.barcode 
-// JOIN racks ON store.rack_select = racks.id
-
-// ";
-// if ($result = $conn->query($sql)) {
-//     // Process the result
-// } else {
-//     echo "Error: " . $conn->error;
-// }
-
-
-//select all columns of boxes 
-// $sql = "SELECT * FROM store";
-// $result = $conn->query($sql);
-// $sql = "SELECT store.store_id, box.barcode AS select_barcode, store.select_rack, store.level1, store.level2, store.level3, store.alt_code, store.description, store.object_code, store.status, store.add_date, store.destroy_date 
-//         FROM store
-//         INNER JOIN box ON store.select_barcode = box.box_id"; // Assuming box_id is the primary key in the box table
-// $result = $conn->query($sql);
-// Close the connection
-// SQL query to fetch data from the store table and join with the box table to get the select_barcode
-$sql = "SELECT store.*, box.barcode AS barcode_select, racks.rack_location AS rack_select
-        FROM store
-        INNER JOIN box ON store.barcode_select = box.box_id
-        INNER JOIN racks ON store.rack_select = racks.id";
-$result = $conn->query($sql);
 
 
 $conn->close();
@@ -510,7 +476,7 @@ $conn->close();
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
@@ -519,7 +485,11 @@ $conn->close();
                         <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Work Orders Nav -->
-
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -572,7 +542,12 @@ $conn->close();
                 <div class="card-body">
                     <h5 class="card-title">List of Boxes and Rack Details</h5>
 
-                    <?php if ($result->num_rows > 0): ?>
+                    <?php
+
+                    $sql = "SELECT * FROM store";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0): ?>
                         <table class="table datatable mt-4" style="table-layout: fixed;">
                             <thead>
                                 <tr>
@@ -600,8 +575,9 @@ $conn->close();
                                 <!-- Loop through the results and display each row -->
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
+
                                         <td><strong><?= htmlspecialchars($row['barcode_select']) ?></strong></a></td>
-                                        
+
                                         <td><i class="';
                                         <?php if ($row["object_code"] == 'Container') {
                                             echo 'fa-solid fa-box';
@@ -612,18 +588,38 @@ $conn->close();
                                         }
                                         echo '"></i> ' . '</td>'; ?> 
                                         
-                                        <td><strong><?= htmlspecialchars($row['rack_select']) ?></strong></a></td>
-
                                         <?php
+                                        $rack_id = $row['rack_select'];
+                                        $sqlRack = "SELECT * FROM racks WHERE id= '$rack_id'";
+                                        $resultRack = $conn->query($sqlRack);
+                                        if ($resultRack->num_rows > 0) {
+                                            $rowRack = $resultRack->fetch_assoc();
+                                            $rack = $rowRack['rack_location'];
+                                        }
+                                        ?>
+                                        <td><strong><?= htmlspecialchars($rack) ?></strong></a></td>
 
+                                      <?php
+                                        $comp_ide = $row['comp_id_fk'];
+                                        $sql12 = "SELECT * FROM compani WHERE comp_id= '$comp_ide'";
+                                        $result12 = $conn->query($sql12);
+                                        if ($result12->num_rows > 0) {
+                                            $row12 = $result12->fetch_assoc();
+                                            $comp_name = $row12['comp_name'];
+                                        }
+
+                                        $branch_id = $row['branch_id_fk'];
+                                        $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
+                                        $result7 = $conn->query($sql7);
+                                        if ($result7->num_rows > 0) {
+                                            $row7 = $result7->fetch_assoc();
+                                            $branch_name = $row7['branch_name'];
+                                        }
                                         ?>
 
-                                        <td><?= htmlspecialchars($row["comp_id_fk"]) . " / " . htmlspecialchars($row["branch_id_fk"]) ?></td>
+                                        <td><?= $comp_name . " / " . $branch_name ?></td>
                                         <!-- <td><?= htmlspecialchars($row["alt_code"]) ?></td> -->
                                         
-
-
-
 <?php
                                     echo '<td><i class="';
                                     if ($row["status"] == 'In') {
@@ -670,18 +666,6 @@ $conn->close();
         </div>
         </div>
     </main>
-
-
-
-
-
-
-
-    <script>
-        function filterCompany(comp_id) {
-            window.location.href = "box.php?comp_id=" + comp_id;
-        }
-    </script>
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

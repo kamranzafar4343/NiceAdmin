@@ -33,7 +33,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 }
 
 // SQL query to get company details
-$sql = "SELECT * FROM compani";
+$sql = "SELECT * FROM compani ORDER BY comp_id DESC";
 $result = $conn->query($sql);
 
 ?>

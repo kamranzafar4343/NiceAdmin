@@ -444,13 +444,47 @@ if ($resultData->num_rows > 0) {
                 </li><!-- End Store Nav -->
 
             <?php } else { ?>
-                <!-- User-only Links -->
-
                 <li class="nav-item">
                     <a class="nav-link active" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
+
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#forms-nav" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span>
+                        <i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link" href="order.php">
+                                <i class="bi bi-circle"></i><span>Delivery</span>
+                            </a>
+                            <a class="nav-link" href="pickup.php">
+                                <i class="bi bi-circle"></i><span>Pickup</span>
+                            </a>
+                            <a class="nav-link" href="permout.php">
+                                <i class="bi bi-circle"></i><span>Perm Out</span>
+                            </a>
+                            <a class="nav-link" href="destroy.php">
+                                <i class="bi bi-circle"></i><span>Destroy</span>
+                            </a>
+                            <a class="nav-link" href="access.php">
+                                <i class="bi bi-circle"></i><span>Access</span>
+                            </a>
+                            <a class="nav-link" href="supplies.php">
+                                <i class="bi bi-circle"></i><span>Supplies</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
@@ -463,6 +497,7 @@ if ($resultData->num_rows > 0) {
                         <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Store Nav -->
+
             <?php } ?>
 
 
@@ -498,14 +533,13 @@ if ($resultData->num_rows > 0) {
 
                     <?php
                     // Default query
-                    $sql = "SELECT * FROM box";
+                    $sql = "SELECT * FROM box ORDER BY box_id DESC";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
                         echo '<table id="box" class="table mt-4">
                     <thead>
                         <tr>
-                            
                             <th scope="col" style="width: 20%;">Account</th>
                             <th scope="col" style="width: 9%;">Object</th>
                             <th scope="col" style="width: 8%;">Barcode No.</th>
@@ -526,25 +560,25 @@ if ($resultData->num_rows > 0) {
 
                             // Get specific company id
                             $comp_id = $row['comp_id_fk'];
-                            $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
-                            $result3 = $conn->query($sql3);
-                            if ($result3->num_rows > 0) {
-                                $row3 = $result3->fetch_assoc();
-                                $comp_name = $row3['comp_name'];
+                            $sql30 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
+                            $result30 = $conn->query($sql30);
+                            if ($result30->num_rows > 0) {
+                                $row30 = $result30->fetch_assoc();
+                                $comp_name = $row30['comp_name'];
                             }
 
 
                             // Get specific branch id
                             $branch_id = $row['branch_id_fk'];
-                            $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
-                            $result7 = $conn->query($sql7);
-                            if ($result7->num_rows > 0) {
-                                $row7 = $result7->fetch_assoc();
-                                $branch_name = $row7['branch_name'];
+                            $sql70 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
+                            $result70 = $conn->query($sql70);
+                            if ($result70->num_rows > 0) {
+                                $row70 = $result70->fetch_assoc();
+                                $branch_name = $row70['branch_name'];
                             }
-
                             // Show account
                             echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
+
 
                             echo '<td><i class="';
                             if ($row["object"] == 'Container') {

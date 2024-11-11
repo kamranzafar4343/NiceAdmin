@@ -17,7 +17,7 @@ include 'config/db.php';
 $email = $_SESSION['email'];
 
 // Get user name and email from register table
-$getAdminData = "SELECT * FROM register WHERE email = '$email'";
+$getAdminData = "SELECT * FROM register WHERE email = '$email' ORDER BY id DESC";
 $resultData = mysqli_query($conn, $getAdminData);
 if ($resultData->num_rows > 0) {
     $row2 = $resultData->fetch_assoc();
@@ -475,7 +475,7 @@ if (isset($_GET['comp_id'])) {
 
                 <li class="nav-item">
                     <a class="nav-link active" href="racks.php">
-                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="bi bi-box"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Racks Nav -->
 
@@ -492,7 +492,7 @@ if (isset($_GET['comp_id'])) {
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 

@@ -30,7 +30,7 @@ if (isset($_GET['query']) && !empty($_GET['query'])) {
     $result = $conn->query($sql);
 } else {
     // Default query if no search is performed
-    $sql = "SELECT * FROM item";
+    $sql = "SELECT * FROM item ORDER BY item_id DESC";
     $result = $conn->query($sql);
 }
 
@@ -554,15 +554,45 @@ $result = $conn->query($sql);
                 <!-- User-only Links -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="box.php">
+                    <a class="nav-link collapsed" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
+
                 <li class="nav-item">
                     <a class="nav-link active" href="showItems.php">
                         <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Items Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#forms-nav" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span>
+                        <i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link" href="order.php">
+                                <i class="bi bi-circle"></i><span>Delivery</span>
+                            </a>
+                            <a class="nav-link" href="pickup.php">
+                                <i class="bi bi-circle"></i><span>Pickup</span>
+                            </a>
+                            <a class="nav-link" href="permout.php">
+                                <i class="bi bi-circle"></i><span>Perm Out</span>
+                            </a>
+                            <a class="nav-link" href="destroy.php">
+                                <i class="bi bi-circle"></i><span>Destroy</span>
+                            </a>
+                            <a class="nav-link" href="access.php">
+                                <i class="bi bi-circle"></i><span>Access</span>
+                            </a>
+                            <a class="nav-link" href="supplies.php">
+                                <i class="bi bi-circle"></i><span>Supplies</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
@@ -628,9 +658,10 @@ $result = $conn->query($sql);
                 <thead>
                     <tr>
                         <th scope="col" style="width: 5%;">#</th>
-                        <th scope="col" style="width: 15%;">Barcode</th>
+                        <th scope="col" style="width: 15%;">Box barcode</th>
+                        <th scope="col" style="width: 15%;">Item barcode</th>
                         <th scope="col" style="width: 20%;">Created at</th>
-                        <th scope="col" style="width: 25%;">Barcode Image</th>';
+                        <th scope="col" style="width: 15%;">Status</th>';
 
                         // Show "Actions" column only if the user is an admin
                         if ($_SESSION['role'] == 'admin') {
@@ -648,9 +679,34 @@ $result = $conn->query($sql);
                         while ($row = $result->fetch_assoc()) {
                             echo '<tr>';
                             echo '<td>' . $counter++ . '</td>';
+                            
+                            // Get specific company id
+                            $box_id = $row['box_id_fk'];
+                            $sql3 = "SELECT * FROM box WHERE box_id= '$box_id'";
+                            $result3 = $conn->query($sql3);
+                            if ($result3->num_rows > 0) {
+                                $row3 = $result3->fetch_assoc();
+                                $box_barcode = $row3['barcode'];
+                            }
+
+                            echo '<td>' . $box_barcode . '</td>';
+                            
                             echo '<td> '. $row['barcode'] . '</a></td>';
                             echo '<td>' . ($row["creation_date"]) . '</td>';
-                            echo '<td><img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/></td>';
+
+                            
+
+                            echo '<td><i class="';
+                            if ($row["status"] == 'In') {
+                                echo 'fa-solid fa-right-to-bracket';
+                                echo '" style="color: green; font-size: 1.5rem; </i>"';
+                            } elseif ($row["status"] == 'Out') {
+                                echo 'fa-solid fa-right-from-bracket';
+                                echo '" style="color: red; font-size: 1.5rem; </i>"';
+                            }
+
+                            echo '"></i> ' . '</td>';
+                            // echo '<td><img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/></td>';
 
                             // Show "Actions" only if the user is an admin
                             if ($_SESSION['role'] == 'admin') {

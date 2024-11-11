@@ -38,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($nameCheckResult->num_rows > 0) {
         $error = true; // Set error to true if barcode exists
     } else {
-        $sql = "INSERT INTO item (comp_fk_item, box_id_fk, branch_id_fk, barcode) 
-                VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode')";
+        $sql = "INSERT INTO item (comp_fk_item, box_id_fk, branch_id_fk, barcode, status) 
+                VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode', 'In')";
 
         if ($conn->query($sql) === TRUE) {
             header("Location: createitem.php");
@@ -509,25 +509,6 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
         </div>
     </div>
 
-    <!-- Modal for Barcode Error -->
-    <div class="modal fade" id="barcodeErrorModal" tabindex="-1" aria-labelledby="barcodeErrorModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="barcodeErrorModalLabel">Barcode Error</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    The barcode you entered already exists. Please try a different one.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Include Bootstrap JS (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -593,7 +574,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 });
             });
 
-            // When company is changed, fetch the box
+            // When branch is changed, fetch the box
             $('#branch').change(function() {
                 var branch_id = $(this).val();
 
@@ -627,7 +608,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
         document.addEventListener('DOMContentLoaded', function() {
             const companySelect = document.getElementById('company');
             const branchSelect = document.getElementById('branch');
-            // const boxSelect = document.getElementById('box');
+            const boxSelect = document.getElementById('box');
 
             // Retrieve the previously selected company from localStorage
             const selectedCompany = localStorage.getItem('selectedCompany');

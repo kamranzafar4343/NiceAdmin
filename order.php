@@ -20,7 +20,7 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM orders where flag = 'Delivery'";
+$showOrders = "Select * FROM orders where flag = 'Delivery' ORDER BY order_creation_date DESC";
 $resultShowOrders = $conn->query($showOrders);
 
 ?>
@@ -532,10 +532,10 @@ $resultShowOrders = $conn->query($showOrders);
                 <div class="card-body">
                     <h5 class="card-title">List of Delivery Work Orders</h5>
                     <?php
-                    // Check if there are any results
-                    if ($resultShowOrders->num_rows > 0) {
-                        // Display table
-                        echo '<table id="orderT" class="table mt-4 nowrap">
+                // Check if there are any results
+                if ($resultShowOrders->num_rows > 0) {
+                    // Display table
+                    echo '<table id="orderT" class="table mt-4 nowrap">
                     <thead>
                         <tr>
                         <th scope="col" style="width: 18%;">Account</th>
@@ -543,11 +543,13 @@ $resultShowOrders = $conn->query($showOrders);
                         <th scope="col" style="width: 8%;">Status</th>
                         <th scope="col" style="width: 13%;">Create Date</th>
                         <th scope="col" style="width: 8%;">Service Priority</th>
-                        
-                        <th scope="col" style="width: 10%;">Required By</th>
-                    
-                        <th scope="col" style="width: 15%;">Action</th>
-                        </tr>
+                        <th scope="col" style="width: 10%;">Required By</th>';
+
+                    // Only display the Action column if the user is an admin
+                    if ($_SESSION['role'] == 'admin') {
+                        echo '<th scope="col" style="width: 15%;">Action</th>';
+                    }
+                    echo '</tr>
                     </thead>
                     <tbody>';
 
@@ -594,8 +596,7 @@ $resultShowOrders = $conn->query($showOrders);
                                 echo '<span class="badge badge-pill badge-info" style="font-size: 12px;">' . $row["status"] . '</span>';
                             } elseif ($row["status"] == 'Cancelled') {
                                 echo '<span class="badge badge-pill badge-danger" style="font-size: 12px;">' . $row["status"] . '</span>';
-                            }
-                            elseif ($row["status"] == 'Dispute') {
+                            } elseif ($row["status"] == 'Dispute') {
                                 echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["status"] . '</span>';
                             }
                             echo '</td>';
@@ -612,7 +613,7 @@ $resultShowOrders = $conn->query($showOrders);
                             } elseif ($row["priority"] == 'Urgent') {
                                 // Display a red icon for "Urgent"
                                 echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } 
+                            }
                             echo '</td>';
 
                             //convert timestamp to only date format
@@ -620,23 +621,23 @@ $resultShowOrders = $conn->query($showOrders);
                             $justDate = date("Y-m-d", strtotime($dateTime));
                             echo '<td>' . $justDate . '</td>';
 
-
+                            if ($_SESSION['role'] == 'admin') {
                     ?>
-                            <td>
-                                <div style="display: flex; gap: 10px;">
-                                    <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
-                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                        onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                    <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
+                                <td>
+                                    <div style="display: flex; gap: 10px;">
+                                        <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
+                                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                                            onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                        <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
 
-                                    <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
+                                        <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
                     onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=">Access</a> -->
 
 
-                                </div>
-                            </td>
+                                    </div>
+                                </td>
                     <?php
-
+                            }
                             echo '</tr>';
                         }
                         echo '</tbody></table>';
@@ -715,8 +716,9 @@ $resultShowOrders = $conn->query($showOrders);
 
             //collapse by default
             "searchPanes": {
-                "initCollapsed": true
+                "initCollapsed": true,
             }
+
         });
     </script>
 

@@ -74,8 +74,8 @@ if (isset($_POST['submit'])) {
     if ($result_duplicate_barcode && $result_duplicate_barcode->num_rows > 0) {
         die("workorder already created against that barcode");
     } else {
-        $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
-     VALUES ( '$creator', 'Permout', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_names', '$designation', '$request_dates', '$descriptions')";
+        $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status,priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
+     VALUES ( '$creator', 'Permout', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_names', '$designation', '$request_dates', '$descriptions')";
     }
 
     if ($conn->query($sql) === TRUE) {

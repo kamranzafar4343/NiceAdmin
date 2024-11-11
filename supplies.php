@@ -20,7 +20,7 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM orders where flag = 'Supplies'";
+$showOrders = "Select * FROM orders where flag = 'Supplies' ORDER BY order_creation_date DESC";
 $resultShowOrders = $conn->query($showOrders);
 
 ?>
@@ -535,18 +535,22 @@ $resultShowOrders = $conn->query($showOrders);
                     if ($resultShowOrders->num_rows > 0) {
                         // Display table
                         echo '<table id="supplies" class="table mt-4 nowrap">
-                    <thead>
-                        <tr>
-                        <th scope="col" style="width: 18%;">Account</th>
-                        <th scope="col" style="width: 8%;">WorkOrder No</th>
-                        <th scope="col" style="width: 13%;">Create Date</th>
-                        <th scope="col" style="width: 8%;">Service Priority</th>
-                        <th scope="col" style="width: 10%;">Required By</th>
-                    
-                        <th scope="col" style="width: 15%;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>';
+        <thead>
+            <tr>
+                <th scope="col" style="width: 18%;">Account</th>
+                <th scope="col" style="width: 8%;">WorkOrder No</th>
+                <th scope="col" style="width: 13%;">Create Date</th>
+                <th scope="col" style="width: 8%;">Service Priority</th>
+                <th scope="col" style="width: 10%;">Required By</th>';
+
+                        // Only display the "Action" column if the user is an admin
+                        if ($_SESSION['role'] == 'admin') {
+                            echo '<th scope="col" style="width: 15%;">Action</th>';
+                        }
+
+                        echo '</tr>
+        </thead>
+        <tbody>';
 
                         // Counter variable
                         $counter = 1;
@@ -612,6 +616,8 @@ $resultShowOrders = $conn->query($showOrders);
                             $dateTime = $row["date"];
                             $justDate = date("Y-m-d", strtotime($dateTime));
                             echo '<td>' . $justDate . '</td>';
+                    
+                            if ($_SESSION['role'] == 'admin') {
                     ?>
                             <td>
                                 <div style="display: flex; gap: 10px;">
@@ -628,6 +634,7 @@ $resultShowOrders = $conn->query($showOrders);
                                 </div>
                             </td>
                     <?php
+                            }
 
                             echo '</tr>';
                         }

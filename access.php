@@ -20,7 +20,7 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM orders where flag = 'Access'";
+$showOrders = "Select * FROM orders where flag = 'Access' ORDER BY order_creation_date DESC";
 $resultShowOrders = $conn->query($showOrders);
 
 ?>
@@ -456,17 +456,38 @@ $resultShowOrders = $conn->query($showOrders);
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Boxes Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                        <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span>
+                        <i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-
+                    <ul id="forms-nav" class="nav-content" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link collapsed" href="order.php">
+                                <i class="bi bi-circle"></i><span>delivery</span>
+                            </a>
+                            <a class="nav-link collapsed" href="pickup.php">
+                                <i class="bi bi-circle"></i><span>pickup </span>
+                            </a>
+                            <a class="nav-link collapsed" href="permout.php">
+                                <i class="bi bi-circle"></i><span>perm_out </span>
+                            </a>
+                            <a class="nav-link collapsed" href="destroy.php">
+                                <i class="bi bi-circle"></i><span>destroy </span>
+                            </a>
+                            <a class="nav-link active" href="access.php">
+                                <i class="bi bi-circle"></i><span>access </span>
+                            </a>
+                            <a class="nav-link collapsed" href="supplies.php">
+                                <i class="bi bi-circle"></i><span>supplies </span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -515,18 +536,22 @@ $resultShowOrders = $conn->query($showOrders);
                     if ($resultShowOrders->num_rows > 0) {
                         // Display table
                         echo '<table id="orderT" class="table mt-4 nowrap">
-                    <thead>
-                        <tr>
-                        <th scope="col" style="width: 18%;">Account</th>
-                        <th scope="col" style="width: 8%;">WorkOrder No</th>
-                        <th scope="col" style="width: 13%;">Create Date</th>
-                        <th scope="col" style="width: 8%;">Service Priority</th>
-                        <th scope="col" style="width: 10%;">Required By</th>
-                    
-                        <th scope="col" style="width: 15%;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>';
+                     <thead>
+                         <tr>
+                             <th scope="col" style="width: 18%;">Account</th>
+                             <th scope="col" style="width: 8%;">WorkOrder No</th>
+                             <th scope="col" style="width: 13%;">Create Date</th>
+                             <th scope="col" style="width: 8%;">Service Priority</th>
+                             <th scope="col" style="width: 10%;">Required By</th>';
+
+                        // Display the "Action" column only if the user is an admin
+                        if ($_SESSION['role'] == 'admin') {
+                            echo '<th scope="col" style="width: 15%;">Action</th>';
+                        }
+
+                        echo '</tr>
+                     </thead>
+                     <tbody>';
 
                         // Counter variable
                         $counter = 1;
@@ -558,7 +583,7 @@ $resultShowOrders = $conn->query($showOrders);
                             // Show account
                             echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
 
-                            
+
                             //workorder_no
                             echo '<td>' . ($row['order_no']) . '</td>';
 
@@ -594,12 +619,12 @@ $resultShowOrders = $conn->query($showOrders);
                             $justDate = date("Y-m-d", strtotime($dateTime));
                             echo '<td>' . $justDate . '</td>';
 
-
+                            if ($_SESSION['role'] == 'admin') {
                     ?>
                             <td>
                                 <div style="display: flex; gap: 10px;">
                                     <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
-                                   
+
                                     <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
                                         onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
                                     <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
@@ -611,6 +636,7 @@ $resultShowOrders = $conn->query($showOrders);
                                 </div>
                             </td>
                     <?php
+                            }
 
                             echo '</tr>';
                         }

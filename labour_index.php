@@ -9,6 +9,7 @@ if (!isset($_SESSION['email'])) {
   exit();
 }
 
+
 include 'config/db.php';
 
 //get email from session 
@@ -23,11 +24,11 @@ if ($resultData->num_rows > 0) {
 }
 
 // Check if the user is labour
-if ($_SESSION['role'] == 'Labour' && $_SESSION['role'] == 'Labour') {
-  //redirect to  page
-  header("Location: labour_index.php");
-  exit();
-}
+// if ($_SESSION['role'] == 'Labour' && $_SESSION['role'] == 'Labour') {
+//   //redirect to  page
+//   header("Location: labour_index.php");
+//   exit();
+// }
 
 //get total no of companies for compani card
 $query = "SELECT COUNT(*) AS count FROM compani";
@@ -287,87 +288,10 @@ include "sidebar.php";
 </div>
 
 </div><!-- End Customers Card -->
-<?php 
-// Check if the user is labour
-if ($_SESSION['role'] == 'Labour' && $_SESSION['role'] == 'Labour') {
- ?>
-  <!-- Revenue Card -->
-     <div class="col-xxl-4 col-md-4">
-              <div class="card info-card sales-card">
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
+            
 
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title-indexphp">Assigned Tasks</h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <img src="assets/img/Task-List-Assign--Streamline-Freehand (2).png" alt="">
-                    </div>
-                    <div class="ps-3">
-                      <h6><?php echo "20"; ?></h6>
-
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div><!-- End Revenue Card -->
-
-             <!-- Customers Card -->
-             <div class="col-xxl-4 col-xl-4">
-
-<div class="card info-card revenue-card">
-
-  <div class="filter">
-    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-      <li class="dropdown-header text-start">
-        <h6>Filter</h6>
-      </li>
-
-      <li><a class="dropdown-item" href="#">Today</a></li>
-      <li><a class="dropdown-item" href="#">This Month</a></li>
-      <li><a class="dropdown-item" href="#">This Year</a></li>
-    </ul>
-  </div>
-
-  <div class="card-body">
-    <h5 class="card-title-indexphp">Completed Tasks</h5>
-
-    <div class="d-flex align-items-center">
-      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-      <img src="assets/img/complete.png" alt="">
-      </div>
-      <div class="ps-3">
-        <h6><?php echo "10"; ?></h6>
-
-
-      </div>
-    </div>
-
-  </div>
-</div>
-
-</div><!-- End Customers Card -->         
- <?php           
-}
-?>
-
-
-     
+            
     </section>
 
   </main><!-- End #main -->

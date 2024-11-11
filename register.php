@@ -148,7 +148,8 @@ if (isset($_POST['register'])) {
                                             <select class="form-select" id="role" name="role" required>
                                                 <option value="">Select Role</option>
                                                 <option value="admin">Admin</option>
-                                                <option value="user">User</option>
+                                                <option value="Clerk">Clerk</option>
+                                                <option value="Labour">Labour</option>
                                             </select>
                                             <div class="invalid-feedback">Please select a role!</div>
                                         </div>

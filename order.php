@@ -527,29 +527,29 @@ $resultShowOrders = $conn->query($showOrders);
     <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add"> + </button>
     <!-- Main content -->
     <main id="main" class="main">
-        <div class="col-12">
+        <div class="col-14">
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
                     <h5 class="card-title">List of Delivery Work Orders</h5>
                     <?php
-                // Check if there are any results
-                if ($resultShowOrders->num_rows > 0) {
-                    // Display table
-                    echo '<table id="orderT" class="table mt-4 nowrap">
+                    // Check if there are any results
+                    if ($resultShowOrders->num_rows > 0) {
+                        // Display table
+                        echo '<table id="orderT" class="table mt-4 nowrap">
                     <thead>
                         <tr>
-                        <th scope="col" style="width: 18%;">Account</th>
-                        <th scope="col" style="width: 8%;">WorkOrder No</th>
+                        <th scope="col" style="width: 14%;">Account</th>
+                        <th scope="col" style="width: 6%;">WorkOrder No</th>
                         <th scope="col" style="width: 8%;">Status</th>
-                        <th scope="col" style="width: 13%;">Create Date</th>
+                        <th scope="col" style="width: 10%;">Create Date</th>
                         <th scope="col" style="width: 8%;">Service Priority</th>
-                        <th scope="col" style="width: 10%;">Required By</th>';
+                        <th scope="col" style="width: 7%;">Required By</th>';
 
-                    // Only display the Action column if the user is an admin
-                    if ($_SESSION['role'] == 'admin') {
-                        echo '<th scope="col" style="width: 15%;">Action</th>';
-                    }
-                    echo '</tr>
+                        // Only display the Action column if the user is an admin
+                        if ($_SESSION['role'] == 'admin') {
+                            echo '<th scope="col" style="width: 18%;">Action</th>';
+                        }
+                        echo '</tr>
                     </thead>
                     <tbody>';
 
@@ -626,16 +626,19 @@ $resultShowOrders = $conn->query($showOrders);
                                 <td>
                                     <div style="display: flex; gap: 10px;">
                                         <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
-                                       
+
                                         <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
                                             onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                           
-                                            <a type="button" class="btn btn-secondary btn-secondary d-flex justify-content-center" style="width:25px; height: 27px;" href="viewWO.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-eye" target="_blank"></i></a>
-                                            <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
 
-                                        <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
-                    onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=">Access</a> -->
+                                        <a type="button" class="btn btn-secondary btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewWO.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-eye" target="_blank"></i></a>
 
+                                        <a type="button"
+                                            class=""
+                                            style="height: 26px; width: 25px;"
+                                            href="assignTaskForm.php?id=<?php echo $row['order_no']; ?>"
+                                            target="_blank">
+                                            <img src="assets/img/Gartoon-Team-Gartoon-Misc-Stock-Task-Assigned.32.png" alt="View">
+                                        </a>
 
                                     </div>
                                 </td>

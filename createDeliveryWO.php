@@ -679,29 +679,6 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <!--Function to update the barcode input field on selection of the object type-->
-    <script>
-        function updateBarcodeInput() {
-            const object_type = document.getElementById('object_code');
-            const barcode_input = document.getElementById('barcode_select');
-            const alt_input = document.getElementById('alt_code');
-
-            if (object_type.value === 'Container') {
-                barcode_input.maxLength = 7;
-                alt_input.maxLength = 7;
-                barcode_input.placeholder = "Enter 7 digit Container Barcode";
-                alt_input.placeholder = "Enter 7 digit Container alt code";
-            } else {
-                barcode_input.maxLength = 8;
-                alt_input.maxLength = 8;
-                barcode_input.placeholder = "Enter 8 digit Filefolder Barcode";
-                alt_input.placeholder = "Enter 8 digit Filefolder alt code";
-            }
-            //clear input on type change
-            barcode_input.value = "";
-            alt_input.value = "";
-        }
-    </script>
 
     <script>
         $(document).ready(function() {
@@ -722,7 +699,7 @@ if (isset($_POST['submit'])) {
             </div>');
             });
 
-            // Remove row in Material section
+            // Remove row in container/filefolder
             $(document).on('click', '.btn_remove2', function() {
                 var button_id = $(this).attr("id");
                 $('#row2' + button_id).remove();

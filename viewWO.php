@@ -618,23 +618,26 @@ date_default_timezone_set('Asia/Karachi');
                             <div class="card-body">
                                 <?php
 
-                                $showOrders = "Select * FROM orders";
+                                $showOrders = "Select * FROM orders WHERE order_no = '$order_no'";
                                 $resultShowOrders = $conn->query($showOrders);
 
                                 // Check if there are any results
                                 if ($resultShowOrders->num_rows > 0) {
 
                                     // Display table
-                                    echo '<table id="orderT" class="table mt-4 nowrap" style="font-size: 13px;">
+                                    echo '<table id="orderT" class="table mt-4 nowrap" style="font-size: 12px;">
                     <thead>
-                        <tr>
-                        <th scope="col" style="width: 18%;">Object</th>
+                        <tr >
+                        <th scope="col" style="width: 8%;">Object</th>
                         <th scope="col" style="width: 8%;">Barcode</th>
                         <th scope="col" style="width: 8%;">Alt code</th>
-                        <th scope="col" style="width: 13%;">Requestor</th>
-                        <th scope="col" style="width: 8%;">Role</th>
+                        <th scope="col" style="width: 11%;">Requestor</th>
+                        <th scope="col" style="width: 10%;">Role</th>
                         <th scope="col" style="width: 10%;">Request date</th>
+                        <th scope="col" style="width: 10%;">Create Date</th>
+                        
                         <th scope="col" style="width: 8%;">Description</th>';
+
                                     echo '</tr>
                     </thead>
                     <tbody>';
@@ -643,19 +646,61 @@ date_default_timezone_set('Asia/Karachi');
                                     while ($row = $resultShowOrders->fetch_assoc()) {
                                         echo '<tr>';
 
-                                        //workorder_no
-                                        echo '<td>' . ($row['order_no']) . '</td>';
+                                        //1st: show array values of object_code in list 
+                                        echo '<td>';
+                                        $objectCodes = explode(',', $row['object_code']); // Split comma-separated values into an array
+                                        echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
+                                        foreach ($objectCodes as $code) {
+                                            echo '<li>' . htmlspecialchars($code) . '</li>'; // Escape HTML for safety
+                                        }
+                                        echo '</ul>'; // End unordered list
+                                        echo '</td>';
+
+                                        echo '<td>';
+                                        $barcodes = explode(',', $row['barcode']); // Split comma-separated values into an array
+                                        echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
+                                        foreach ($barcodes as $barcode) {
+                                            echo '<li>' . htmlspecialchars($barcode) . '</li>'; // Escape HTML for safety
+                                        }
+                                        echo '</ul>'; // End unordered list
+                                        echo '</td>';
+
+                                        echo '<td>';
+                                        $alts = explode(',', $row['alt']); // Split comma-separated values into an array
+                                        echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
+                                        foreach ($alts as $alt) {
+                                            echo '<li>' . htmlspecialchars($alt) . '</li>'; // Escape HTML for safety
+                                        }
+                                        echo '</ul>'; // End unordered list
+                                        echo '</td>';
+
+                                        echo '<td>' .
+                                            ($row['requestor']) .
+                                            '</td>';
+
+
+                                        echo '<td>' .
+                                            ($row['role']) .
+                                            '</td>';
+                                        //convert timestamp to only date format
+                                        $dateTimeCreate1 = $row["req_date"];
+                                        $justDateCreate1 = date("Y-m-d", strtotime($dateTimeCreate1));
+                                        echo '<td>' . $justDateCreate1 . '</td>';
+
 
                                         //convert timestamp to only date format
                                         $dateTimeCreate = $row["order_creation_date"];
                                         $justDateCreate = date("Y-m-d", strtotime($dateTimeCreate));
                                         echo '<td>' . $justDateCreate . '</td>';
+
+                                        echo '<td>' . ($row['description']) . '</td>';
                                     }
                                     echo '</tbody></table>';
                                 } else {
                                     // Display message if no results
                                     echo '<p>No items found.</p>';
                                 }
+
                                 ?>
                             </div>
                         </div>

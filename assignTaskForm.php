@@ -273,7 +273,8 @@ if ($resultData->num_rows > 0) {
 
 </head>
 
-<body> <!-- ======= Header ======= -->
+<body> 
+    <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
@@ -482,16 +483,7 @@ if ($resultData->num_rows > 0) {
                         </select>
                     </div>
 
-                    <div class="col-md-5">
-                        <label for="purirty" class="form-label">Service Priority</label>
-                        <select class="form-select" id="purirty" name="purirty" required>
-                            <option value="">Select Service Priority</option>
-                            <option value="Urgent">Urgent - Rush Same Day</option>
-                            <option value="Regular">Regular - Next Working Day</option>
-                        </select>
-                    </div>
-
-                    <!-- for the Pickup and delivery Addrss -->
+                    <!-- for the Pickup and delivery Address -->
                     <div class="col-md-5">
                         <label for="pickup_address" class="form-label">Pickup/Delivery Address </label>
                         <input type="text" class="form-control" id="" name="pickup_address" required>

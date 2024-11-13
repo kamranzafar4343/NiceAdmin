@@ -551,7 +551,7 @@ $resultShowOrders = $conn->query($showOrders);
                         }
                         echo '</tr>
                     </thead>
-                    <tbody>';
+                    <tbody style="font-size: 11px; text-align: left;">';
 
                         // Counter variable
                         $counter = 1;

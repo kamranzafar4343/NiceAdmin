@@ -481,6 +481,7 @@ if (isset($_POST['submit'])) {
                             <option value="Department Manager">Department Manager</option>
                             <option value="Junior Employee">Junior Employee</option>
                             <option value="Head of Operations">Head of Operations</option>
+                            <option value="Labour">Labour</option>
                         </select>
                     </div>
 
@@ -492,6 +493,7 @@ if (isset($_POST['submit'])) {
                             <option value="only retrieve department boxes">only retrieve department boxes</option>
                             <option value="all departments of their branch">all departments of their branch</option>
                             <option value="all departments and all branches of company">all departments and all branches of company</option>
+                            <option value="retrieve boxes only when admin assigns task">retrieve boxes only when admin assigns task - only for labour</option>
                         </select>
                     </div>
 

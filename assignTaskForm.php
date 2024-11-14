@@ -13,8 +13,8 @@ include 'config/db.php';
 
 $email = $_SESSION['email'];
 
-
-
+//get workorder_no
+$workorder_no = $_GET['id'];
 
 // Get user name and email from the register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
@@ -24,6 +24,42 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
+
+// Get workorder details from the workorder table
+$sql = "SELECT * FROM `orders` WHERE `order_no` = '$workorder_no'";
+$result = $conn->query($sql);
+
+if ($result && $result->num_rows > 0) {
+    $row3 = $result->fetch_assoc();
+
+    $priority = $row3['priority'];
+    $flag = $row3['flag'];
+    $date = $row3['date'];
+    $foc = $row3['foc'];
+    $phone = $row3['foc_phone'];
+    $pickup_add = $row3['pickup_address'];
+    $object = $row3['object_code'];
+    $barcode = $row3['barcode'];
+
+    echo $barcode;
+    die();
+
+    $alt = $row3['alt'];
+    $requestor = $row3['requestor'];
+    $role = $row3['role'];
+    $req_date = $row3['req_date'];
+    $description = $row3['description'];
+    $create_date = $row3['order_creation_date'];
+    $obj_type = $row3['obj_typ'];
+    $quant = $row3['quant'];
+    $supp_req = $row3['supp_requestor'];
+    $cost_center = $row3['cost_cent'];
+    $dateTime = $row3['dateTime'];
+    $comment = $row3['comment'];
+} else {
+    echo "No order found";
+}
+
 ?>
 
 
@@ -268,12 +304,12 @@ if ($resultData->num_rows > 0) {
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Create workOrder</title>
+    <title>Assign Work Order</title>
 
 
 </head>
 
-<body> 
+<body>
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -457,7 +493,7 @@ if ($resultData->num_rows > 0) {
     <!--form--------------------------------------form--------------------------------------->
     <!-- Start Header form -->
     <div class="headerimg text-center">
-        <h2>Assign Workorder</h2>
+        <h2>Assign Workorder to staff</h2>
     </div>
     <!-- End Header form -->
 
@@ -468,60 +504,39 @@ if ($resultData->num_rows > 0) {
 
                     <hr style="color: white;">
 
-                    <!-- Select workorder no -->
+
+                    <div class="col-md-3">
+                        <label for="" class="form-label">Workorder No.</label>
+                        <input type="workorder_no" class="form-control" id="" name="workorder_no" value="<?php echo $workorder_no; ?>" readonly>
+                    </div>
+
+                    <!-- Select labour -->
                     <div class="col-md-4">
-                        <label for="company">Workorder No:</label>
-                        <select id="workorder_no" class="form-select" name="workorder_no" required>
-                            <option value="">Select Workorder No</option>
+                        <label for="labour">Assign to:</label>
+                        <select id="labour" class="form-select" name="labour" required>
+                            <option value="">Select labour</option>
                             <?php
-                            // Fetch the account levels from the database
-                            $result = $conn->query("SELECT order_no FROM orders");
+
+                            $result = $conn->query("SELECT id, name, phone FROM register WHERE role = 'Labour'");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['order_no']}'>{$row['order_no']}</option>";
+                                echo "<option value='{$row['id']}'>{$row['name']} -> {$row['phone']}</option>";
                             }
                             ?>
                         </select>
                     </div>
 
-                    <!-- for the Pickup and delivery Address -->
-                    <div class="col-md-5">
-                        <label for="pickup_address" class="form-label">Pickup/Delivery Address </label>
-                        <input type="text" class="form-control" id="" name="pickup_address" required>
+                    <hr style="visibility: hidden;" class="mt-0 mb-0">
+                    
+                    <div class="col-md-3">
+                        <label for="" class="form-label">Container/Filefolder</label>
+                        <textarea type="text" class="form-control" id="" name="boxes" value="<?php echo $workorder_no; ?>" readonly>
                     </div>
 
-                    <h2 style="color: #0056b3; margin-top: 45px;">Add Container/Filefolder</h2>
-                    <div id="dynamic_field2">
-                        <div class="form-row mb-2" id="row2">
-
-                            <!-- Object Code -->
-                            <div class="col-md-3">
-                                <label for="object_code" class="form-label">Object Code</label>
-                                <select class="form-select" id="object_code" name="object_code[]" onchange="updateBarcodeInput()" required>
-                                    <option value="">Select object</option>
-                                    <option value="Container">Container</option>
-                                    <option value="FileFolder">FileFolder</option>
-                                </select>
-                            </div>
-
-                            <!-- Select Barcode -->
-                            <div class="col-md-4">
-                                <label for="barcode_select">Enter Barcode:</label>
-                                <input type="text" class="form-control" id="barcode_select" name="barcode_select[]" required>
-                            </div>
-
-                            <!--  Comments -->
-                            <div class="col-md-5">
-                                <label for="description" class="form-label">Description</label>
-                                <input type="text" class="form-control" id="description" name="description[]" required>
-                            </div>
-
-                            <div class="text-center mt-4 mb-2 ml-2">
-                                <button type="button" name="add" id="add2" class="btn btn-success">Add more</button>
-                            </div>
-                            <div>
-                            </div>
-                        </div>
+                    <div class="col-md-3">
+                        <label for="" class="form-label"></label>
+                        <input type="workorder_no" class="form-control" id="" name="workorder_no" value="<?php echo $workorder_no; ?>" readonly>
                     </div>
+
 
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>

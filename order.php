@@ -538,8 +538,8 @@ $resultShowOrders = $conn->query($showOrders);
                         echo '<table id="orderT" class="table mt-4 nowrap">
                     <thead>
                         <tr>
-                        <th scope="col" style="width: 14%;">Account</th>
                         <th scope="col" style="width: 6%;">WorkOrder No</th>
+                        <th scope="col" style="width: 14%;">Account</th>
                         <th scope="col" style="width: 8%;">Status</th>
                         <th scope="col" style="width: 10%;">Create Date</th>
                         <th scope="col" style="width: 8%;">Service Priority</th>
@@ -550,16 +550,18 @@ $resultShowOrders = $conn->query($showOrders);
                             echo '<th scope="col" style="width: 18%;">Action</th>';
                         }
                         echo '</tr>
-                    </thead>
-                    <tbody style="font-size: 11px; text-align: left;">';
-
+                        </thead>
+                        <tbody style="font-size: 11px; text-align: left;">';
+                        
                         // Counter variable
                         $counter = 1;
 
                         // Loop through results
                         while ($row = $resultShowOrders->fetch_assoc()) {
                             echo '<tr>';
-
+                            
+                            //workorder_no
+                            echo '<td>' . ($row['order_no']) . '</td>';
 
                             // Get specific company id
                             $comp_id = $row['comp_id_fk'];
@@ -569,7 +571,6 @@ $resultShowOrders = $conn->query($showOrders);
                                 $row3 = $result3->fetch_assoc();
                                 $comp_name = $row3['comp_name'];
                             }
-
 
                             // Get specific branch id
                             $branch_id = $row['branch_id_fk'];
@@ -582,10 +583,7 @@ $resultShowOrders = $conn->query($showOrders);
 
                             // Show account
                             echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
-
-                            //workorder_no
-                            echo '<td>' . ($row['order_no']) . '</td>';
-
+                            
 
                             echo '<td>';
                             if ($row["status"] == 'Completed') {

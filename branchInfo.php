@@ -921,7 +921,10 @@ $result_emp = $conn->query($emp_sql);
                       } elseif ($row2["role"] == 'Head of Operations') {
                           // Display a red icon for "Urgent"
                           echo '<span class="badge badge-pill badge-info" style="font-size: 10px; padding:3px;">' . $row2["role"] . '</span>';
-                      } 
+                      } elseif ($row2["role"] == 'Labour') {
+                        // Display a red icon for "Urgent"
+                        echo '<span class="badge badge-pill badge-info" style="font-size: 10px; padding:3px;">' . $row2["role"] . '</span>';
+                    } 
                       echo '</td>';
                       echo "<td style='font-size: 12px; color: #666666;'> <b>" . $row2["Authority"] . "</b> </td>";
                     ?>

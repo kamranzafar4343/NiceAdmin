@@ -68,15 +68,15 @@ if (isset($_POST['submit'])) {
     $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
      VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_name', '$role', '$request_date', '$description')";
     // }
-    
+
 
     if ($conn->query($sql) === TRUE) {
 
         // Get the last inserted order_no from the orders table
         $last_id = $conn->insert_id;
 
-        echo $sqlAudit = "INSERT INTO orders_audit (order_no, creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
-     VALUES ( '$last_id', '$creator', 'Delivery', '$comp', '$branch', '$dept', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_name', '$role', '$request_date', '$description')";
+        echo $sqlAudit = "INSERT INTO orders_audit ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
+     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_name', '$role', '$request_date', '$description')";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
         exit();
@@ -90,8 +90,6 @@ if (isset($_POST['submit'])) {
         exit();
     }
 }
-
-
 ?>
 
 
@@ -619,19 +617,38 @@ if (isset($_POST['submit'])) {
                                     <option value="FileFolder">FileFolder</option>
                                 </select>
                             </div>
-                            <!-- Select Barcode -->
+                            <!-- Select barcode -->
                             <div class="col-md-4">
                                 <label for="barcode_select">Enter Barcode:</label>
-                                <input type="text" class="form-control" id="barcode_select" name="barcode_select[]" maxlength="8" required>
+                                <select  id="barcode_select" class="form-select" name="barcode_select[]" maxlength="8" required>
+                                    <option value="">Select barcode</option>
+                                    <?php
+                                    // Fetch the account levels from the database
+                                    $result2 = $conn->query("SELECT * FROM box WHERE branch_id_fk = '$branch'");
+                                    while ($row2 = $result2->fetch_assoc()) {
+                                        echo "<option value='{$row2['box_id']}'>{$row2['barcode']}</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <!-- FOR the alternative code -->
                             <div class="col-md-4">
                                 <label for="alt_code" class="form-label">Alt Code</label>
                                 <input type="text" class="form-control" id="alt_code" name="alt_code[]" maxlength="8" required>
                             </div>
+                            <!-- for adding items -->
+                            <div class="col-md-3">
+                                <label for="object_code" class="form-label">Object Code</label>
+                                <select class="form-select" id="object_code" name="object_code[]" required>
+                                    <option value="">Select object</option>
+                                    <option value="Container">Container</option>
+                                    <option value="FileFolder">FileFolder</option>
+                                </select>
+                            </div>
                             <button type="button" name="add" id="add2" style="height: 36px;" class="btn btn-success mt-4">+</button>
                         </div>
                     </div>
+                    <!-- end of box barcode -->
 
                     <!-- Select Requestor -->
                     <div class="col-md-4">
@@ -853,6 +870,38 @@ if (isset($_POST['submit'])) {
                     }
                 });
             });
+
+            // When branch is changed, fetch the barcodes
+            $('#branch').change(function() {
+                var branch_id = $(this).val();
+
+                // AJAX request to get dept's for the selected branch
+                $.ajax({
+                    url: 'get_departments.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var departments = JSON.parse(response); //return the json response as an array
+                            // Clear existing dept's
+                            $('#dept').empty();
+                            $('#dept').append('<option value="">Select department</option>');
+
+                            // Add the new options from the response
+                            $.each(departments, function(index, department) {
+                                $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
+                            });
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#dept'), config);
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+
 
         });
     </script>

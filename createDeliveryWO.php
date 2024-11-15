@@ -40,12 +40,12 @@ if (isset($_POST['submit'])) {
     $role = mysqli_real_escape_string($conn, $_POST['role']);
     $request_date = mysqli_real_escape_string($conn, $_POST['req_date']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
-
+    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
     // Array fields: Process each by joining values with commas
     //explanation: processes the object_code field, which is submitted as an array from the HTML form, and prepares it for insertion into a database
-    $object_codes = isset($_POST['object_code']) ? implode(',', array_map(function ($value) use ($conn) {
-        return mysqli_real_escape_string($conn, $value);
-    }, $_POST['object_code'])) : '';
+    // $object_codes = isset($_POST['object_code']) ? implode(',', array_map(function ($value) use ($conn) {
+    //     return mysqli_real_escape_string($conn, $value);
+    // }, $_POST['object_code'])) : '';
 
 
     //check duplicate barcode entry in delivery table
@@ -56,8 +56,8 @@ if (isset($_POST['submit'])) {
     // if ($result_duplicate_barcode && $result_duplicate_barcode->num_rows > 0) {
     //     die("Workorder already created against that barcode");
     // } else {
-    $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
-     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_name', '$role', '$request_date', '$description')";
+    $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, requestor, role, req_date, description) 
+     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$requestor_name', '$role', '$request_date', '$description')";
     // }
 
 
@@ -66,8 +66,8 @@ if (isset($_POST['submit'])) {
         // Get the last inserted order_no from the orders table
         $last_id = $conn->insert_id;
 
-        echo $sqlAudit = "INSERT INTO orders_audit ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, object_code, barcode, alt, requestor, role, req_date, description) 
-     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$object_codes', '$barcodes', '$alt_codes', '$requestor_name', '$role', '$request_date', '$description')";
+        echo $sqlAudit = "INSERT INTO orders_audit ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, requestor, role, req_date, description) 
+     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$requestor_name', '$role', '$request_date', '$description')";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
         exit();
@@ -623,7 +623,7 @@ if (isset($_POST['submit'])) {
                                 <label for="alt_code" class="form-label">Alt Code</label>
                                 <input type="text" class="form-control" id="alt_code" name="alt_code[]" maxlength="8" required>
                             </div> -->
-                            
+
                             <!-- for adding items -->
                             <div class="col-md-3">
                                 <label for="object_code" class="form-label">Object Code</label>
@@ -633,7 +633,7 @@ if (isset($_POST['submit'])) {
                                     <option value="FileFolder">FileFolder</option>
                                 </select>
                             </div>
-                            <button type="button" name="add" id="add2" style="height: 36px;" class="btn btn-success mt-4">+</button>
+                            <!-- <button type="button" name="add" id="add2" style="height: 36px;" class="btn btn-success mt-4">+</button> -->
                         </div>
                     </div>
                     <!-- end of box barcode -->
@@ -673,26 +673,26 @@ if (isset($_POST['submit'])) {
     </div>
 
     <script>
-        $(document).ready(function() {
-            var i = 1;
+        // $(document).ready(function() {
+        //     var i = 1;
 
-            // Add new row in container/filefolder
-            $('#add2').click(function() {
-                i++;
-                $('#dynamic_field2').append('<div class="form-row mb-2" id="row2' + i + '"> \
-            <div class="col-md-4"><input type="text" class="form-control" name="object_code[]" placeholder="object code" required></div> \
-            <div class="col-md-4"><input type="text" class="form-control" name="barcode_select[]" placeholder="barcode" required></div> \
-                <div class="col-md-4"><input type="text" class="form-control" name="alt_code[]" placeholder="Alt Code" required></div> \
-                <div class="col-md-4 mb-2"><button type="button" class="btn btn-danger btn_remove2 " id="' + i + '">-</button></div> \
-            </div>');
-            });
+        //     // Add new row in container/filefolder
+        //     $('#add2').click(function() {
+        //         i++;
+        //         $('#dynamic_field2').append('<div class="form-row mb-2" id="row2' + i + '"> \
+        //     <div class="col-md-4"><input type="text" class="form-control" name="object_code[]" placeholder="object code" required></div> \
+        //     <div class="col-md-4"><input type="text" class="form-control" name="barcode_select[]" placeholder="barcode" required></div> \
+        //         <div class="col-md-4"><input type="text" class="form-control" name="alt_code[]" placeholder="Alt Code" required></div> \
+        //         <div class="col-md-4 mb-2"><button type="button" class="btn btn-danger btn_remove2 " id="' + i + '">-</button></div> \
+        //     </div>');
+        //     });
 
-            // Remove row in container/filefolder
-            $(document).on('click', '.btn_remove2', function() {
-                var button_id = $(this).attr("id");
-                $('#row2' + button_id).remove();
-            });
-        });
+        //     // Remove row in container/filefolder
+        //     $(document).on('click', '.btn_remove2', function() {
+        //         var button_id = $(this).attr("id");
+        //         $('#row2' + button_id).remove();
+        //     });
+        // });
     </script>
 
     <!--Function to update the barcode input field on selection of the object type-->

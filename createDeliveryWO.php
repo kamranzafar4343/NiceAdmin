@@ -47,15 +47,6 @@ if (isset($_POST['submit'])) {
         return mysqli_real_escape_string($conn, $value);
     }, $_POST['object_code'])) : '';
 
-    $barcodes = isset($_POST['barcode_select']) ? implode(',', array_map(function ($value) use ($conn) {
-        return mysqli_real_escape_string($conn, $value);
-    }, $_POST['barcode_select'])) : '';
-
-    $alt_codes = isset($_POST['alt_code']) ? implode(',', array_map(function ($value) use ($conn) {
-        return mysqli_real_escape_string($conn, $value);
-    }, $_POST['alt_code'])) : '';
-
-
 
     //check duplicate barcode entry in delivery table
     // $check_duplicate_barcode = "SELECT barcode FROM orders WHERE barcode = '$barcodes' AND flag = 'Delivery'";
@@ -609,33 +600,30 @@ if (isset($_POST['submit'])) {
                         <div class="form-row mb-2" id="row2">
 
                             <!-- Object Code -->
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <label for="object_code" class="form-label">Object Code</label>
                                 <select class="form-select" id="object_code" name="object_code[]" required>
                                     <option value="">Select object</option>
                                     <option value="Container">Container</option>
                                     <option value="FileFolder">FileFolder</option>
                                 </select>
-                            </div>
+                            </div> -->
+
                             <!-- Select barcode -->
                             <div class="col-md-4">
-                                <label for="barcode_select">Enter Barcode:</label>
-                                <select  id="barcode_select" class="form-select" name="barcode_select[]" maxlength="8" required>
+                                <label for="barcodes">Select Container/Filefolder:</label>`
+                                <select id="barcode" class="form-select" name="barcode" required>
                                     <option value="">Select barcode</option>
-                                    <?php
-                                    // Fetch the account levels from the database
-                                    $result2 = $conn->query("SELECT * FROM box WHERE branch_id_fk = '$branch'");
-                                    while ($row2 = $result2->fetch_assoc()) {
-                                        echo "<option value='{$row2['box_id']}'>{$row2['barcode']}</option>";
-                                    }
-                                    ?>
+                                    <!-- dynamically populate with ajax -->
                                 </select>
                             </div>
+
                             <!-- FOR the alternative code -->
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label for="alt_code" class="form-label">Alt Code</label>
                                 <input type="text" class="form-control" id="alt_code" name="alt_code[]" maxlength="8" required>
-                            </div>
+                            </div> -->
+                            
                             <!-- for adding items -->
                             <div class="col-md-3">
                                 <label for="object_code" class="form-label">Object Code</label>
@@ -875,16 +863,16 @@ if (isset($_POST['submit'])) {
             $('#branch').change(function() {
                 var branch_id = $(this).val();
 
-                // AJAX request to get dept's for the selected branch
+                // AJAX request to get barcodes for the selected branch
                 $.ajax({
-                    url: 'get_departments.php',
+                    url: 'getBarcodes.php',
                     type: 'POST',
                     data: {
                         branch_id: branch_id
                     },
                     success: function(response) {
                         try {
-                            var departments = JSON.parse(response); //return the json response as an array
+                            var boxess = JSON.parse(response); //return the json response as an array
                             // Clear existing dept's
                             $('#dept').empty();
                             $('#dept').append('<option value="">Select department</option>');

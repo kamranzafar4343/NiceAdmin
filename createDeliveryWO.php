@@ -41,16 +41,7 @@ if (isset($_POST['submit'])) {
     $request_date = mysqli_real_escape_string($conn, $_POST['req_date']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
-    // Array fields: Process each by joining values with commas
-    //explanation: processes the object_code field, which is submitted as an array from the HTML form, and prepares it for insertion into a database
-    // $object_codes = isset($_POST['object_code']) ? implode(',', array_map(function ($value) use ($conn) {
-    //     return mysqli_real_escape_string($conn, $value);
-    // }, $_POST['object_code'])) : '';
-
-
-    //check duplicate barcode entry in delivery table
-    // $check_duplicate_barcode = "SELECT barcode FROM orders WHERE barcode = '$barcodes' AND flag = 'Delivery'";
-    // $result_duplicate_barcode = mysqli_query($conn, $check_duplicate_barcode);
+    $itemBarcode = mysqli_real_escape_string($conn, $_POST['itemBarcode']);
 
     // //show error if finds duplicate barcode
     // if ($result_duplicate_barcode && $result_duplicate_barcode->num_rows > 0) {
@@ -123,7 +114,6 @@ if (isset($_POST['submit'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
@@ -596,47 +586,24 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <h2 style="color: #0056b3; margin-top: 45px;">Add Container/Filefolder</h2>
-                    <div id="dynamic_field2">
-                        <div class="form-row mb-2" id="row2">
-
-                            <!-- Object Code -->
-                            <!-- <div class="col-md-3">
-                                <label for="object_code" class="form-label">Object Code</label>
-                                <select class="form-select" id="object_code" name="object_code[]" required>
-                                    <option value="">Select object</option>
-                                    <option value="Container">Container</option>
-                                    <option value="FileFolder">FileFolder</option>
-                                </select>
-                            </div> -->
-
-                            <!-- Select barcode -->
-                            <div class="col-md-4">
-                                <label for="barcodes">Select Container/Filefolder:</label>`
-                                <select id="barcode" class="form-select" name="barcode" required>
-                                    <option value="">Select barcode</option>
-                                    <!-- dynamically populate with ajax -->
-                                </select>
-                            </div>
-
-                            <!-- FOR the alternative code -->
-                            <!-- <div class="col-md-4">
-                                <label for="alt_code" class="form-label">Alt Code</label>
-                                <input type="text" class="form-control" id="alt_code" name="alt_code[]" maxlength="8" required>
-                            </div> -->
-
-                            <!-- for adding items -->
-                            <div class="col-md-3">
-                                <label for="object_code" class="form-label">Object Code</label>
-                                <select class="form-select" id="object_code" name="object_code[]" required>
-                                    <option value="">Select object</option>
-                                    <option value="Container">Container</option>
-                                    <option value="FileFolder">FileFolder</option>
-                                </select>
-                            </div>
-                            <!-- <button type="button" name="add" id="add2" style="height: 36px;" class="btn btn-success mt-4">+</button> -->
-                        </div>
+                   
+                    <!-- Select barcode -->
+                    <div class="col-md-4">
+                        <label for="barcodes">Select Container/Filefolder:</label>
+                        <select id="barcode" class="form-select" name="barcode" required>
+                            <option value="">Select barcode</option>
+                            <!-- dynamically populate with ajax -->
+                        </select>
                     </div>
-                    <!-- end of box barcode -->
+
+                    <!-- Select barcode -->
+                    <div class="col-md-4">
+                        <label for="items">Select Item Barcode:</label>
+                        <select id="items" class="form-select" name="items" required>
+                            <option value="">Select barcode</option>
+                            <!-- dynamically populate with ajax -->
+                        </select>
+                    </div>
 
                     <!-- Select Requestor -->
                     <div class="col-md-4">
@@ -648,7 +615,6 @@ if (isset($_POST['submit'])) {
                         <label for="designation" class="form-label">Contact Person Role</label>
                         <input type="text" class="form-control" id="designation" name="role" required>
                     </div>
-
 
                     <div class="col-md-3">
                         <label class="form-label">request date</label>
@@ -672,53 +638,6 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <script>
-        // $(document).ready(function() {
-        //     var i = 1;
-
-        //     // Add new row in container/filefolder
-        //     $('#add2').click(function() {
-        //         i++;
-        //         $('#dynamic_field2').append('<div class="form-row mb-2" id="row2' + i + '"> \
-        //     <div class="col-md-4"><input type="text" class="form-control" name="object_code[]" placeholder="object code" required></div> \
-        //     <div class="col-md-4"><input type="text" class="form-control" name="barcode_select[]" placeholder="barcode" required></div> \
-        //         <div class="col-md-4"><input type="text" class="form-control" name="alt_code[]" placeholder="Alt Code" required></div> \
-        //         <div class="col-md-4 mb-2"><button type="button" class="btn btn-danger btn_remove2 " id="' + i + '">-</button></div> \
-        //     </div>');
-        //     });
-
-        //     // Remove row in container/filefolder
-        //     $(document).on('click', '.btn_remove2', function() {
-        //         var button_id = $(this).attr("id");
-        //         $('#row2' + button_id).remove();
-        //     });
-        // });
-    </script>
-
-    <!--Function to update the barcode input field on selection of the object type-->
-    <!-- <script>
-        function updateBarcodeInput() {
-            const object_type = document.getElementById('object_code');
-            const barcode_input = document.getElementById('barcode_select');
-            const alt_input = document.getElementById('alt_code');
-
-            if (object_type.value === 'Container') {
-                barcode_input.maxLength = 7;
-                alt_input.maxLength = 7;
-                barcode_input.placeholder = "Enter 7 digit Container Barcode";
-                alt_input.placeholder = "Enter 7 digit Container alt code";
-            } else {
-                barcode_input.maxLength = 8;
-                alt_input.maxLength = 8;
-                barcode_input.placeholder = "Enter 8 digit Filefolder Barcode";
-                alt_input.placeholder = "Enter 8 digit Filefolder alt code";
-            }
-            //clear input on type change
-            barcode_input.value = "";
-            alt_input.value = "";
-        }
-    </script> -->
-
     <!-- Include Bootstrap JS (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -733,7 +652,7 @@ if (isset($_POST['submit'])) {
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
+
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js">
@@ -745,8 +664,6 @@ if (isset($_POST['submit'])) {
     <!-- Updated JavaScript with proper lev2Select selection -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-
-
     <script>
         $(document).ready(function() {
 
@@ -754,7 +671,7 @@ if (isset($_POST['submit'])) {
                 search: true, // Enable search feature
                 creatable: false, // Disable creatable selection
                 clearable: false, // Disable clearable selection
-                maxHeight: '360px', // Max height for showing scrollbar
+                maxHeight: '360px', // Max height for showings scrollbar
                 size: 'sm', // Size of the select, can be 'sm' or 'lg'
             };
 
@@ -763,7 +680,11 @@ if (isset($_POST['submit'])) {
             dselect(document.querySelector('#branch'), config);
             dselect(document.querySelector('#dept'), config);
             dselect(document.querySelector('#emp'), config);
-
+            dselect(document.querySelector('#barcode'), config);
+            dselect(document.querySelector('#items'), config);
+            
+    
+            
 
             // When company is changed, fetch the branches
             $('#company').change(function() {
@@ -862,6 +783,7 @@ if (isset($_POST['submit'])) {
             // When branch is changed, fetch the barcodes
             $('#branch').change(function() {
                 var branch_id = $(this).val();
+                // console.log(branch_id);
 
                 // AJAX request to get barcodes for the selected branch
                 $.ajax({
@@ -872,17 +794,18 @@ if (isset($_POST['submit'])) {
                     },
                     success: function(response) {
                         try {
-                            var boxess = JSON.parse(response); //return the json response as an array
+                            var boxes = JSON.parse(response); //return the json response as an array
                             // Clear existing dept's
-                            $('#dept').empty();
-                            $('#dept').append('<option value="">Select department</option>');
+                            $('#barcode').empty();
+                            $('#barcode').append('<option value="">Select barcode</option>');
 
                             // Add the new options from the response
-                            $.each(departments, function(index, department) {
-                                $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
+                            $.each(boxes, function(index, box) {
+                                $('#barcode').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
+                                
                             });
                             // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#dept'), config);
+                            dselect(document.querySelector('#barcode'), config);
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
@@ -890,6 +813,35 @@ if (isset($_POST['submit'])) {
                 });
             });
 
+            // When barcode is changed, fetch the items
+            $('#barcode').change(function() {
+                var barcode = $(this).val();
+        //    console.log(barcode);
+
+                // AJAX request to get barcodes for the selected box
+                $.ajax({
+                    url: 'getItems.php',
+                    type: 'POST',
+                    data: {
+                        barcode: barcode
+                    },
+                    success: function(response) {
+                     
+                            var items = JSON.parse(response); //return the json response as an array
+
+                             // Clear existing items
+                             $('#items').empty();
+                            $('#items').append('<option value="">Select barcode</option>');
+
+                            // Add the new options from the response
+                            $.each(items, function(index, item) {
+                               $('#items').append('<option value="'+item.item_id+'">'+item.barcode+'</option>');
+                                // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#items'), config);
+                            });
+                    }
+                });
+            });
 
         });
     </script>

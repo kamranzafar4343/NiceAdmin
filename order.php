@@ -721,6 +721,7 @@ $resultShowOrders = $conn->query($showOrders);
             //collapse by default
             "searchPanes": {
                 "initCollapsed": true,
+                columns: [1, 3, 4]   // Enable filters for columns 1, 3, and 5 only
             }
 
         });

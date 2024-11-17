@@ -42,18 +42,19 @@ if (isset($_POST['submit'])) {
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
-    
-    $itemBarcode = mysqli_real_escape_string($conn, $_POST['items']);
-    
-    echo "Selected Values: " . implode(", ", $selectedValues) . "<br>";
-    
+    // Handle multiple selected values for "items"
+    $itemBarcodes =  $_POST['items']; // Retrieve as an array
+    $itemBarcodesString = implode(", ", array_map(function ($value) use ($conn) {
+        return mysqli_real_escape_string($conn, $value); // Sanitize each value
+    }, $itemBarcodes)); // Convert to a comma-separated string
+
     // //show error if finds duplicate barcode
     // if ($result_duplicate_barcode && $result_duplicate_barcode->num_rows > 0) {
     //     die("Workorder already created against that barcode");
     // } else {
     
-    $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, requestor, role, req_date, description) 
-     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$requestor_name', '$role', '$request_date', '$description')";
+    $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, item_barcode, requestor, role, req_date, description) 
+     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$itemBarcodesString', '$requestor_name', '$role', '$request_date', '$description')";
     // }
 
 
@@ -62,9 +63,9 @@ if (isset($_POST['submit'])) {
         // Get the last inserted order_no from the orders table
         $last_id = $conn->insert_id;
 
-        echo $sqlAudit = "INSERT INTO orders_audit ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, requestor, role, req_date, description) 
-     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$requestor_name', '$role', '$request_date', '$description')";
-    } else {
+        $sqlAudit = "INSERT INTO orders_audit ( order_no, creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, item_barcode, requestor, role, req_date, description) 
+     VALUES ('$last_id', '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$itemBarcodes', '$requestor_name', '$role', '$request_date', '$description')";
+ } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
         exit();
     }
@@ -774,7 +775,7 @@ if (isset($_POST['submit'])) {
 
                             // Add the new options from the response
                             $.each(employees, function(index, employe) {
-                                $('#emp').append('<option value="' + employe.emp_id + '">' + employe.name + '</option>');
+                                $('#emp').append('<option value="' + employe.name + '">' + employe.name + '</option>');
                             });
                             // Refresh or reinitialize dselect
                             dselect(document.querySelector('#emp'), config);

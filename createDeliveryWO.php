@@ -41,12 +41,17 @@ if (isset($_POST['submit'])) {
     $request_date = mysqli_real_escape_string($conn, $_POST['req_date']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
-    $itemBarcode = mysqli_real_escape_string($conn, $_POST['itemBarcode']);
 
+    
+    $itemBarcode = mysqli_real_escape_string($conn, $_POST['items']);
+    
+    echo "Selected Values: " . implode(", ", $selectedValues) . "<br>";
+    
     // //show error if finds duplicate barcode
     // if ($result_duplicate_barcode && $result_duplicate_barcode->num_rows > 0) {
     //     die("Workorder already created against that barcode");
     // } else {
+    
     $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, requestor, role, req_date, description) 
      VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$requestor_name', '$role', '$request_date', '$description')";
     // }
@@ -586,7 +591,7 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <h2 style="color: #0056b3; margin-top: 45px;">Add Container/Filefolder</h2>
-                   
+
                     <!-- Select barcode -->
                     <div class="col-md-4">
                         <label for="barcodes">Select Container/Filefolder:</label>
@@ -599,7 +604,7 @@ if (isset($_POST['submit'])) {
                     <!-- Select barcode -->
                     <div class="col-md-4">
                         <label for="items">Select Item Barcode:</label>
-                        <select id="items" class="form-select" name="items" required>
+                        <select id="items" class="form-select" name="items[]" required multiple>
                             <option value="">Select barcode</option>
                             <!-- dynamically populate with ajax -->
                         </select>
@@ -682,9 +687,9 @@ if (isset($_POST['submit'])) {
             dselect(document.querySelector('#emp'), config);
             dselect(document.querySelector('#barcode'), config);
             dselect(document.querySelector('#items'), config);
-            
-    
-            
+
+
+
 
             // When company is changed, fetch the branches
             $('#company').change(function() {
@@ -802,7 +807,7 @@ if (isset($_POST['submit'])) {
                             // Add the new options from the response
                             $.each(boxes, function(index, box) {
                                 $('#barcode').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
-                                
+
                             });
                             // Refresh or reinitialize dselect
                             dselect(document.querySelector('#barcode'), config);
@@ -816,7 +821,7 @@ if (isset($_POST['submit'])) {
             // When barcode is changed, fetch the items
             $('#barcode').change(function() {
                 var barcode = $(this).val();
-        //    console.log(barcode);
+                //    console.log(barcode);
 
                 // AJAX request to get barcodes for the selected box
                 $.ajax({
@@ -826,25 +831,34 @@ if (isset($_POST['submit'])) {
                         barcode: barcode
                     },
                     success: function(response) {
-                     
-                            var items = JSON.parse(response); //return the json response as an array
 
-                             // Clear existing items
-                             $('#items').empty();
-                            $('#items').append('<option value="">Select barcode</option>');
+                        var items = JSON.parse(response); //return the json response as an array
 
-                            // Add the new options from the response
-                            $.each(items, function(index, item) {
-                               $('#items').append('<option value="'+item.item_id+'">'+item.barcode+'</option>');
-                                // Refresh or reinitialize dselect
+                        // Clear existing items
+                        $('#items').empty();
+                        $('#items').append('<option value="">Select barcode</option>');
+
+                        // Add the new options from the response
+                        $.each(items, function(index, item) {
+                            $('#items').append('<option value="' + item.item_id + '">' + item.barcode + '</option>');
+                            // Refresh or reinitialize dselect
+                            const config = {
+                                search: true, // Toggle search feature. Default: false
+                                creatable: false, // Creatable selection. Default: false
+                                clearable: false, // Clearable selection. Default: false
+                                maxHeight: '360px', // Max height for showing scrollbar. Default: 360px
+                                size: '', // Can be "sm" or "lg". Default ''
+                            }
                             dselect(document.querySelector('#items'), config);
-                            });
+                        });
                     }
                 });
             });
 
         });
     </script>
+
+
 
     <script src="assets/js/main.js"></script>
 

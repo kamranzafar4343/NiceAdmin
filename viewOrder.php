@@ -26,7 +26,6 @@ if ($resultData->num_rows > 0) {
 // Get order ID from query string
 $order_no = $_GET['id'];
 
-// Fetch company details
 $sql = "SELECT * FROM `orders` WHERE `order_no` = '$order_no'";
 $result = $conn->query($sql);
 

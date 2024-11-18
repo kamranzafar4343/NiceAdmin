@@ -821,7 +821,7 @@ if (isset($_POST['submit'])) {
 
                             // Add the new options from the response
                             $.each(boxes, function(index, box) {
-                                $('#barcode').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
+                                $('#barcode').append('<option value="' + box.barcode + '">' + box.barcode + '</option>');
 
                             });
                             // Refresh or reinitialize dselect
@@ -855,8 +855,8 @@ if (isset($_POST['submit'])) {
 
                         // Add the new options from the response
                         $.each(items, function(index, item) {
-                            $('#items2').append('<option value="' + item.item_id + '">' + item.barcode + '</option>');
-                            console.log(item.barcode);
+                            $('#items2').append('<option value="' + item.barcode + '">' + item.barcode + '</option>');
+                            // console.log(item.barcode);
 
                             dselect(document.querySelector('#items2'), config);
                         });

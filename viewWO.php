@@ -75,7 +75,17 @@ if ($result && $result->num_rows > 0) {
     $pickup_add = $row3['pickup_address'];
     $object = $row3['object_code'];
     $barcode = $row3['barcode'];
-    $alt = $row3['alt'];
+
+    //get barcode alt
+    // $altQue = "SELECT * FROM branches WHERE branch_id = $branch_id_fk";
+    // $branchNameResult = $conn->query($branchName);
+    // if ($branchNameResult && $branchNameResult->num_rows > 0) {
+    //     $row5 = $branchNameResult->fetch_assoc();
+
+    //     $branch_name = $row5['branch_name'];
+    // }
+    // $alt = $row3['alt'];
+
     $requestor = $row3['requestor'];
     $role = $row3['role'];
     $status = $row3['status'];
@@ -630,12 +640,10 @@ date_default_timezone_set('Asia/Karachi');
                         <tr >
                         <th scope="col" style="width: 8%;">Object</th>
                         <th scope="col" style="width: 8%;">Barcode</th>
-                        <th scope="col" style="width: 8%;">Alt code</th>
                         <th scope="col" style="width: 11%;">Requestor</th>
                         <th scope="col" style="width: 10%;">Role</th>
                         <th scope="col" style="width: 10%;">Request date</th>
                         <th scope="col" style="width: 10%;">Create Date</th>
-                        
                         <th scope="col" style="width: 8%;">Description</th>';
 
                                     echo '</tr>
@@ -665,12 +673,8 @@ date_default_timezone_set('Asia/Karachi');
                                         echo '</ul>'; // End unordered list
                                         echo '</td>';
 
-                                        echo '<td>';
-                                        $alts = explode(',', $row['alt']); // Split comma-separated values into an array
-                                        echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
-                                        foreach ($alts as $alt) {
-                                            echo '<li>' . htmlspecialchars($alt) . '</li>'; // Escape HTML for safety
-                                        }
+                                      
+
                                         echo '</ul>'; // End unordered list
                                         echo '</td>';
 

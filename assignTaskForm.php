@@ -16,6 +16,9 @@ $email = $_SESSION['email'];
 //get workorder_no
 $workorder_no = $_GET['id'];
 
+$sql = "SELECT * FROM `orders` WHERE `order_no` = '$workorder_no'";
+$result = $conn->query($sql);
+
 // Get user name and email from the register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
@@ -25,12 +28,42 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-// Get workorder details from the workorder table
-$sql = "SELECT * FROM `orders` WHERE `order_no` = '$workorder_no'";
-$result = $conn->query($sql);
-
 if ($result && $result->num_rows > 0) {
     $row3 = $result->fetch_assoc();
+    $order_no = $row3['order_no'];
+    $creator = $row3['creator'];
+
+    $comp_id_fk = $row3['comp_id_fk'];
+
+    //get company name from compani table
+    $compName = "SELECT * FROM compani WHERE comp_id = $comp_id_fk";
+    $compNameResult = $conn->query($compName);
+    if ($compNameResult && $compNameResult->num_rows > 0) {
+        $row4 = $compNameResult->fetch_assoc();
+
+        $comp_name = $row4['comp_name'];
+    }
+
+    $branch_id_fk = $row3['branch_id_fk'];
+
+    //get branch name from branch table
+    $branchName = "SELECT * FROM branches WHERE branch_id = $branch_id_fk";
+    $branchNameResult = $conn->query($branchName);
+    if ($branchNameResult && $branchNameResult->num_rows > 0) {
+        $row5 = $branchNameResult->fetch_assoc();
+
+        $branch_name = $row5['branch_name'];
+    }
+
+    // $dept_id_fk = $row3['dept_id_fk'];
+    // //get dept name from dept table
+    // $deptName = "SELECT * FROM departments WHERE dept_id = $dept_id_fk";
+    // $deptNameResult = $conn->query($deptName);
+    // if ($deptNameResult && $deptNameResult->num_rows > 0) {
+    //     $row6 = $deptNameResult->fetch_assoc();
+
+    //     $branch_name = $row6['dept_name'];
+    // }
 
     $priority = $row3['priority'];
     $flag = $row3['flag'];
@@ -39,12 +72,24 @@ if ($result && $result->num_rows > 0) {
     $phone = $row3['foc_phone'];
     $pickup_add = $row3['pickup_address'];
     $object = $row3['object_code'];
+
     $barcode = $row3['barcode'];
 
-    echo $barcode;
-    die();
+    // Handle item barcodes
+    $item_barcodes = [];
+    if (!empty($row3['item_barcode'])) {
+        // Assume barcodes are comma-separated
+        $item_barcodes = explode(',', $row3['item_barcode']);
 
-    $alt = $row3['alt'];
+        //convert item_barcode id's 
+    }
+
+    // Loop through item_barcodes
+    foreach ($item_barcodes as $item_barcode) {
+        echo "Item Barcode: " . trim($item_barcode) . "<br>";
+    }
+
+    // $alt = $row3['alt'];
     $requestor = $row3['requestor'];
     $role = $row3['role'];
     $req_date = $row3['req_date'];
@@ -502,13 +547,11 @@ if ($result && $result->num_rows > 0) {
             <div class="card-body mt-3">
                 <form class="row g-3 needs-validation" id="orderForm" action="" method="POST">
 
-                    <hr style="color: white;">
-
-
                     <div class="col-md-3">
                         <label for="" class="form-label">Workorder No.</label>
                         <input type="workorder_no" class="form-control" id="" name="workorder_no" value="<?php echo $workorder_no; ?>" readonly>
                     </div>
+
 
                     <!-- Select labour -->
                     <div class="col-md-4">
@@ -525,18 +568,78 @@ if ($result && $result->num_rows > 0) {
                         </select>
                     </div>
 
-                    <hr style="visibility: hidden;" class="mt-0 mb-0">
-                    
                     <div class="col-md-3">
-                        <label for="" class="form-label">Container/Filefolder</label>
-                        <textarea type="text" class="form-control" id="" name="boxes" value="<?php echo $workorder_no; ?>" readonly>
+                        <label for="" class="form-label">Description</label>
+                        <textarea type="desc" class="form-control" id="" name="description"><?php echo $description; ?></textarea>
+                    </div>
+
+                    <!-- Select labour -->
+                    <div class="col-md-4">
+                        <label for="loc">Location:</label>
+                        <select id="loc" class="form-select" name="location" required>
+                            <option value="">Select location of box</option>
+
+                            <!-- <?php
+
+                                    $result = $conn->query("SELECT id, name, phone FROM register WHERE role = 'Labour'");
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<option value='{$row['id']}'>{$row['name']} -> {$row['phone']}</option>";
+                                    }
+                                    ?> -->
+                        </select>
                     </div>
 
                     <div class="col-md-3">
-                        <label for="" class="form-label"></label>
-                        <input type="workorder_no" class="form-control" id="" name="workorder_no" value="<?php echo $workorder_no; ?>" readonly>
+                        <label for="" class="form-label">Instuctions by Admin</label>
+                        <textarea type="desc" class="form-control" id="" name="description"><?php ?></textarea>
                     </div>
 
+                    <!-- Nested card -->
+                    <div class="row-6">
+                        <div class="card bg-light mt-4">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-dark">Order Details</h6>
+                                <p class="card-text">
+
+                                    <strong>Container/Filefolder:</strong> 
+                                    <?php
+
+                                   //convert 'barcode'(it is box_id) to barcode(it is container barcode)
+                                   $getBox = "SELECT * FROM box WHERE box_id = $barcode";
+                                   $boxResult = $conn->query($getBox);
+                                   if ($boxResult && $boxResult->num_rows > 0) {
+                                       $row5 = $boxResult->fetch_assoc();
+                                       $box_barcode = $row5['barcode'];
+                                   }
+                                   echo $box_barcode;
+                                   ?>
+
+
+                                    <strong class="ml-5">Items:</strong>
+                                    <?php
+                                   
+                                   $getItem = "SELECT * FROM item WHERE item_id = $item_barcode";
+                                    $itemResult = $conn->query($getItem);
+                                    if ($itemResult && $itemResult->num_rows > 0) {
+                                        $row5 = $itemResult->fetch_assoc();
+                                        $itemBarcode = $row5['barcode'];
+                                    }
+
+                                    //get array data
+                                    $itemBarcodes = explode(',', $itemBarcode);
+                                    foreach ($itemBarcodes as $itemBarcode) {
+                                        //show item barcodes
+                                        echo $itemBarcode;
+                                    }
+
+
+
+
+                                    ?>
+
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
@@ -546,30 +649,6 @@ if ($result && $result->num_rows > 0) {
             </div>
         </div>
     </div>
-
-    <!--Function to update the barcode input field on selection of the object type-->
-    <script>
-        function updateBarcodeInput() {
-            const object_type = document.getElementById('object_code');
-            const barcode_input = document.getElementById('barcode_select');
-            const alt_input = document.getElementById('alt_code');
-
-            if (object_type.value === 'Container') {
-                barcode_input.maxLength = 7;
-                alt_input.maxLength = 7;
-                barcode_input.placeholder = "Enter 7 digit Container Barcode";
-                alt_input.placeholder = "Enter 7 digit Container alt code";
-            } else {
-                barcode_input.maxLength = 8;
-                alt_input.maxLength = 8;
-                barcode_input.placeholder = "Enter 8 digit Filefolder Barcode";
-                alt_input.placeholder = "Enter 8 digit Filefolder alt code";
-            }
-            //clear input on type change
-            barcode_input.value = "";
-            alt_input.value = "";
-        }
-    </script>
 
     <script>
         $(document).ready(function() {
@@ -623,154 +702,6 @@ if ($result && $result->num_rows > 0) {
     <!-- Template Main JS File -->
     <!-- Updated JavaScript with proper lev2Select selection -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-
-
-    <script>
-        $(document).ready(function() {
-
-            const config = {
-                search: true, // Enable search feature
-                creatable: false, // Disable creatable selection
-                clearable: false, // Disable clearable selection
-                maxHeight: '360px', // Max height for showing scrollbar
-                size: 'sm', // Size of the select, can be 'sm' or 'lg'
-            };
-
-            // Initialize dselect for the initial dropdowns
-            dselect(document.querySelector('#company'), config);
-            dselect(document.querySelector('#branch'), config);
-            dselect(document.querySelector('#dept'), config);
-            dselect(document.querySelector('#emp'), config);
-
-
-            // When company is changed, fetch the branches
-            $('#company').change(function() {
-                var company_id = $(this).val();
-
-                // AJAX request to get branches for the selected company
-                $.ajax({
-                    url: 'get_branches.php',
-                    type: 'POST',
-                    data: {
-                        company_id: company_id
-                    },
-                    success: function(response) {
-                        try {
-                            var branches = JSON.parse(response); //return the json response as an array
-                            // Clear existing branches
-                            $('#branch').empty();
-                            $('#branch').append('<option value="">Select branches</option>');
-                            // Add the new options from the response
-                            $.each(branches, function(index, branch) {
-                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
-                            });
-                            // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#branch'), config);
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            });
-
-            // When branch is changed, fetch the departments
-            $('#branch').change(function() {
-                var branch_id = $(this).val();
-
-                // AJAX request to get dept's for the selected branch
-                $.ajax({
-                    url: 'get_departments.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            var departments = JSON.parse(response); //return the json response as an array
-                            // Clear existing dept's
-                            $('#dept').empty();
-                            $('#dept').append('<option value="">Select department</option>');
-
-                            // Add the new options from the response
-                            $.each(departments, function(index, department) {
-                                $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
-                            });
-                            // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#dept'), config);
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            });
-
-            // When branch is changed, fetch the employees
-            $('#branch').change(function() {
-                var branch_id = $(this).val();
-
-                console.log(branch_id);
-
-                // AJAX request to get emp's for the selected branch
-                $.ajax({
-                    url: 'get_employees.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            var employees = JSON.parse(response); //return the json response as an array
-                            // Clear existing employees
-                            $('#emp').empty();
-                            $('#emp').append('<option value="">Select contact person</option>');
-
-                            // Add the new options from the response
-                            $.each(employees, function(index, employe) {
-                                $('#emp').append('<option value="' + employe.emp_id + '">' + employe.name + '</option>');
-                            });
-                            // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#emp'), config);
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            });
-
-            //error code ; it is getting branch id instead of emp_id
-            // When employee is changed, fetch the phone number
-            $('#emp').change(function() {
-                var emp_id = $(this).val();
-
-                // AJAX request to get phone number for the selected employee
-                $.ajax({
-                    url: 'get_employee_phone.php', // Backend script to fetch phone
-                    type: 'POST',
-                    data: {
-                        emp_id: emp_id
-                    },
-                    success: function(response) {
-                        try {
-                            // Parse the JSON response to get the phone number
-                            var data = JSON.parse(response);
-                            var phone = data.phone || "No phone number available"; // Fallback if phone is missing
-
-                            // Set the phone number in the #foc_phone input field
-                            $('#foc_phone').val(phone);
-                        } catch (e) {
-                            console.error("Invalid JSON response for phone", response);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX request failed:", error);
-                    }
-                });
-            });
-
-
-        });
-    </script>
 
     <script src="assets/js/main.js"></script>
 

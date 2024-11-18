@@ -461,7 +461,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 <form class="row g-3 needs-validation" action="" method="POST">
                     <div class="col-md-6">
                         <label class="form-label">Item Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="item_barcode" pattern="[a-zA-Z0-9]{8}"
+                        <input type="text" class="form-control" name="barcode" id="item_barcode" maxlength="8" pattern="[a-zA-Z0-9]{8}"
                             title="Input must be exactly 8 characters long" autofocus required>
                     </div>
 
@@ -666,7 +666,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
             // Function to load boxes via AJAX
             function loadBoxes(branch_id) {
                 $.ajax({
-                    url: 'get_boxes.php',
+                    url: 'getBarcodes.php',
                     type: 'POST',
                     data: {
                         branch_id: branch_id

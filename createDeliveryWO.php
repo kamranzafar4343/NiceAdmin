@@ -600,7 +600,7 @@ if (isset($_POST['submit'])) {
                     <!-- Select barcode -->
                     <div class="col-md-4">
                         <label for="items">Select Item Barcode:</label>
-                        <select id="items2" class="form-select" name="items2[]" required>
+                        <select id="items2" class="form-select" name="items2[]" required multiple>
                             <option value="">Select barcode</option>
                             <!-- dynamically populate with ajax -->
                         </select>

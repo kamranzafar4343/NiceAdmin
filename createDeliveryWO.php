@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
     // Handle multiple selected values for "items"
-    $itemBarcodes =  $_POST['items']; // Retrieve as an array
+    $itemBarcodes =  $_POST['items2']; // Retrieve as an array
     $itemBarcodesString = implode(", ", array_map(function ($value) use ($conn) {
         return mysqli_real_escape_string($conn, $value); // Sanitize each value
     }, $itemBarcodes)); // Convert to a comma-separated string
@@ -52,7 +52,7 @@ if (isset($_POST['submit'])) {
     // if ($result_duplicate_barcode && $result_duplicate_barcode->num_rows > 0) {
     //     die("Workorder already created against that barcode");
     // } else {
-    
+
     $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, item_barcode, requestor, role, req_date, description) 
      VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$itemBarcodesString', '$requestor_name', '$role', '$request_date', '$description')";
     // }
@@ -65,7 +65,7 @@ if (isset($_POST['submit'])) {
 
         $sqlAudit = "INSERT INTO orders_audit ( order_no, creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, item_barcode, requestor, role, req_date, description) 
      VALUES ('$last_id', '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$itemBarcodes', '$requestor_name', '$role', '$request_date', '$description')";
- } else {
+    } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
         exit();
     }
@@ -98,7 +98,6 @@ if (isset($_POST['submit'])) {
 
     <!-- Bootstrap JS (with Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -157,10 +156,6 @@ if (isset($_POST['submit'])) {
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery/3.7.1/jquery.min.js"></script>
-    <!--choosen-js css-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
-    <!--choosen js-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
 
     <!-- dselect -->
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
@@ -562,7 +557,7 @@ if (isset($_POST['submit'])) {
                     <!-- Required BY -->
                     <div class="col-md-3">
                         <label class="form-label">Required By</label>
-                        <input type="datetime-local" class="form-control" name="date" required>
+                        <input type="datetime-local" class="form-control" name="date" id="dateField" required>
                     </div>
 
                     <!-- hidden field -->
@@ -605,7 +600,7 @@ if (isset($_POST['submit'])) {
                     <!-- Select barcode -->
                     <div class="col-md-4">
                         <label for="items">Select Item Barcode:</label>
-                        <select id="items" class="form-select" name="items[]" required multiple>
+                        <select id="items2" class="form-select" name="items2[]" required>
                             <option value="">Select barcode</option>
                             <!-- dynamically populate with ajax -->
                         </select>
@@ -644,6 +639,7 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
+
     <!-- Include Bootstrap JS (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -671,6 +667,24 @@ if (isset($_POST['submit'])) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script>
+        $(document).ready(function () {
+            // Get today's date in the format yyyy-mm-dd
+            const today = new Date().toISOString().split('T')[0];
+
+            // Set the minimum attribute to today's date
+            $('#dateField').attr('min', today);
+
+            // Optional: You can also reset the value if it's less than today
+            $('#dateField').on('change', function () {
+                if ($(this).val() < today) {
+                    alert('Select a date greater than or equal to today.');
+                    $(this).val(''); // Clear the invalid selection
+                }
+            });
+        });
+    </script>
+
+    <script>
         $(document).ready(function() {
 
             const config = {
@@ -687,7 +701,7 @@ if (isset($_POST['submit'])) {
             dselect(document.querySelector('#dept'), config);
             dselect(document.querySelector('#emp'), config);
             dselect(document.querySelector('#barcode'), config);
-            dselect(document.querySelector('#items'), config);
+            dselect(document.querySelector('#items2'), config);
 
 
 
@@ -822,7 +836,7 @@ if (isset($_POST['submit'])) {
             // When barcode is changed, fetch the items
             $('#barcode').change(function() {
                 var barcode = $(this).val();
-                //    console.log(barcode);
+                console.log(barcode);
 
                 // AJAX request to get barcodes for the selected box
                 $.ajax({
@@ -836,21 +850,15 @@ if (isset($_POST['submit'])) {
                         var items = JSON.parse(response); //return the json response as an array
 
                         // Clear existing items
-                        $('#items').empty();
-                        $('#items').append('<option value="">Select barcode</option>');
+                        $('#items2').empty();
+                        $('#items2').append('<option value="">Select barcode</option>');
 
                         // Add the new options from the response
                         $.each(items, function(index, item) {
-                            $('#items').append('<option value="' + item.item_id + '">' + item.barcode + '</option>');
-                            // Refresh or reinitialize dselect
-                            const config = {
-                                search: true, // Toggle search feature. Default: false
-                                creatable: false, // Creatable selection. Default: false
-                                clearable: false, // Clearable selection. Default: false
-                                maxHeight: '360px', // Max height for showing scrollbar. Default: 360px
-                                size: '', // Can be "sm" or "lg". Default ''
-                            }
-                            dselect(document.querySelector('#items'), config);
+                            $('#items2').append('<option value="' + item.item_id + '">' + item.barcode + '</option>');
+                            console.log(item.barcode);
+
+                            dselect(document.querySelector('#items2'), config);
                         });
                     }
                 });

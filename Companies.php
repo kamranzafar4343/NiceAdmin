@@ -392,38 +392,6 @@ $result = $conn->query($sql);
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 
-  <script>
-    //click on the picture to update with ajax
-    $(document).on('click', 'img', function() {
-      $(this).next('input[type="file"]').click();
-    });
-
-    function uploadImage(comp_id) {
-      var fileInput = document.getElementById('file-' + comp_id);
-      var file = fileInput.files[0];
-      var formData = new FormData();
-      formData.append('image', file);
-      formData.append('comp_id', comp_id);
-
-      $.ajax({
-        url: 'update_image.php',
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-          // Update the image source with the new image path
-          $('#image-' + comp_id).attr('src', response);
-        },
-        error: function() {
-          alert('Image upload failed. Please try again.');
-        }
-      });
-    }
-  </script>
-
-
-
   <!--datatable export buttons-->
   <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
   <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>

@@ -1,5 +1,8 @@
 <?php
 
+// file which converts numbers into barcodes
+//for more information visit pages(viewOrder.php etc.) where barcodes are used, it is very simple
+
 /*
  *  Author	David S. Tufts
  *  Company	davidscotttufts.com

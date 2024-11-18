@@ -573,7 +573,7 @@ if ($result && $result->num_rows > 0) {
                         <textarea type="desc" class="form-control" id="" name="description"><?php echo $description; ?></textarea>
                     </div>
 
-                    <!-- Select labour -->
+                    <!-- Select location -->
                     <div class="col-md-4">
                         <label for="loc">Location:</label>
                         <select id="loc" class="form-select" name="location" required>

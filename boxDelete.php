@@ -30,12 +30,12 @@ if (isset($_GET['id'])) {
     $box_id = intval($_GET['id']); // Ensure box ID is an integer
 
     // Fetch the branch ID associated with the box from the branchID_FK column
-    $sql = "SELECT `level2` FROM `box` WHERE `box_id` = $box_id";
+    $sql = "SELECT `branch_id_fk` FROM `box` WHERE `box_id` = $box_id";
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $branch_id = $row['level2'];
+        $branch_id = $row['branch_id_fk'];
 
         // Check if the user is an admin
         if ($userRole == 'admin') {
@@ -47,7 +47,7 @@ if (isset($_GET['id'])) {
                 exit;
             }
         } else {
-            // If the user is not an admin, show a pop-up
+            // If the user is not an admin, show a alert
             echo "<script>alert('Only admins can delete a box.'); window.location.href='box.php?id=" . $branch_id . "';</script>";
         }
     } else {

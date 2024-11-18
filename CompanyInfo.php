@@ -53,14 +53,6 @@ if ($result->num_rows > 0) {
   $address = $company_data['add_1'];
 }
 
-
-
-//fetch employee table
-// $emp_sql = "Select * from employee where comp_FK_emp = $company_id";
-// $result_emp = $conn->query($emp_sql);
-// $emp_data = $result_emp->fetch_assoc();
-
-
 ?>
 
 

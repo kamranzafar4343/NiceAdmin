@@ -21,6 +21,7 @@ if (isset($_GET['id'])) {
     $rowCount = mysqli_fetch_assoc($resultCount);
     $Count = $rowCount['comp_count'];
 
+    //if record exists in branches table, then it cannot be deleted
     if ($Count > 0) {
         echo 'Error: Cannot delete a Company having branches';
     } else {

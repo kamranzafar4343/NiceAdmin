@@ -582,15 +582,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-4">
                         <label for="loc">Location:</label>
                         <select id="loc" class="form-select" name="location" required>
-                            <option value="">Select location of box</option>
-
-                            <!-- <?php
-
-                                    $result = $conn->query("SELECT id, name, phone FROM register WHERE role = 'Labour'");
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<option value='{$row['id']}'>{$row['name']} -> {$row['phone']}</option>";
-                                    }
-                                    ?> -->
+                            <option value="">Select location</option>
+                            <option value="L2-H-08-B-09">L2-H-08-B-09</option>
+                            <option value="L4-H-02-G-05">L4-H-02-G-05</option>
+                            <option value="L2-H-08-B-09">L2-H-08-B-09</option>
                         </select>
                     </div>
 

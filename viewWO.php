@@ -639,13 +639,13 @@ date_default_timezone_set('Asia/Karachi');
                     <thead>
                         <tr >
                         <th scope="col" style="width: 8%;">Object</th>
-                        <th scope="col" style="width: 8%;">Barcode</th>
+                        <th scope="col" style="width: 8%;">Box</th>
+                        <th scope="col" style="width: 8%;">Items</th>
                         <th scope="col" style="width: 11%;">Requestor</th>
                         <th scope="col" style="width: 10%;">Role</th>
                         <th scope="col" style="width: 10%;">Request date</th>
                         <th scope="col" style="width: 10%;">Create Date</th>
                         <th scope="col" style="width: 8%;">Description</th>';
-
                                     echo '</tr>
                     </thead>
                     <tbody>';
@@ -673,7 +673,15 @@ date_default_timezone_set('Asia/Karachi');
                                         echo '</ul>'; // End unordered list
                                         echo '</td>';
 
-                                      
+                                        echo '<td>';
+                                        $item_barcodes = explode(',', $row['item_barcode']); // Split comma-separated values into an array
+                                        echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
+                                        foreach ($item_barcodes as $item_barcode) {
+                                            echo '<li>' . htmlspecialchars($item_barcode) . '</li>'; // Escape HTML for safety
+                                        }
+                                        echo '</ul>'; // End unordered list
+                                        echo '</td>';
+
 
                                         echo '</ul>'; // End unordered list
                                         echo '</td>';

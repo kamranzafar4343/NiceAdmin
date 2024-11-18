@@ -39,8 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-
-
     // Insert data into box table
     $sql = "INSERT INTO box (comp_id_fk, branch_id_fk, object, barcode, alt_code, box_desc, status) 
             VALUES ('$company', '$branch', '$object_code', '$barcode', '$alt_code', '$description', 'In')";
@@ -575,6 +573,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                 });
             });
+            
         });
     </script>
 

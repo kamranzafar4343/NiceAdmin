@@ -838,7 +838,7 @@ if (isset($_POST['submit'])) {
                 var barcode = $(this).val();
                 console.log(barcode);
 
-                // AJAX request to get barcodes for the selected box
+                // AJAX request to get item barcodes for the selected box
                 $.ajax({
                     url: 'getItems.php',
                     type: 'POST',
@@ -864,11 +864,34 @@ if (isset($_POST['submit'])) {
                 });
             });
 
+    //            When company is changed, populate phone
+    // $('#company').change(function() {
+    //     var company_id = $(this).val();
+ 
+        // AJAX request to get phone no delivery address
+    //     $.ajax({
+    //         url: 'get_company_details.php', // Replace with your server-side script
+    //         type: 'POST',
+    //         data: { company_id: company_id },
+    //         success: function(response) {
+    //             try {
+    //                 var companyDetails = JSON.parse(response); // Expect JSON data from server
+    //                 // Populate the input fields with the data
+    //                 $('#company_name').val(companyDetails.name); // Input field for company name
+    //                 $('#company_address').val(companyDetails.address); // Input field for company address
+    //             } catch (e) {
+    //                 console.error("Invalid JSON response", response);
+    //             }
+    //         },
+    //         error: function(xhr, status, error) {
+    //             console.error("AJAX Error: " + error);
+    //         }
+    //     });
+    // });
+
         });
     </script>
-
-
-
+    
     <script src="assets/js/main.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

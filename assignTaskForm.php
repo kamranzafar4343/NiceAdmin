@@ -13,12 +13,6 @@ include 'config/db.php';
 
 $email = $_SESSION['email'];
 
-//get workorder_no
-$workorder_no = $_GET['id'];
-
-$sql = "SELECT * FROM `orders` WHERE `order_no` = '$workorder_no'";
-$result = $conn->query($sql);
-
 // Get user name and email from the register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
@@ -26,6 +20,14 @@ if ($resultData->num_rows > 0) {
     $row2 = $resultData->fetch_assoc();
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
+
+
+
+    //get workorder_no
+    $workorder_no = $_GET['id'];
+
+    $sql = "SELECT * FROM `orders` WHERE `order_no` = '$workorder_no'";
+    $result = $conn->query($sql);
 }
 
 if ($result && $result->num_rows > 0) {
@@ -55,16 +57,6 @@ if ($result && $result->num_rows > 0) {
         $branch_name = $row5['branch_name'];
     }
 
-    // $dept_id_fk = $row3['dept_id_fk'];
-    // //get dept name from dept table
-    // $deptName = "SELECT * FROM departments WHERE dept_id = $dept_id_fk";
-    // $deptNameResult = $conn->query($deptName);
-    // if ($deptNameResult && $deptNameResult->num_rows > 0) {
-    //     $row6 = $deptNameResult->fetch_assoc();
-
-    //     $branch_name = $row6['dept_name'];
-    // }
-
     $priority = $row3['priority'];
     $flag = $row3['flag'];
     $date = $row3['date'];
@@ -75,18 +67,11 @@ if ($result && $result->num_rows > 0) {
 
     $barcode = $row3['barcode'];
 
-    // Handle item barcodes
+    // for showing values
     $item_barcodes = [];
     if (!empty($row3['item_barcode'])) {
         // Assume barcodes are comma-separated
         $item_barcodes = explode(',', $row3['item_barcode']);
-
-        //convert item_barcode id's 
-    }
-
-    // Loop through item_barcodes
-    foreach ($item_barcodes as $item_barcode) {
-        echo "Item Barcode: " . trim($item_barcode) . "<br>";
     }
 
     // $alt = $row3['alt'];
@@ -105,7 +90,32 @@ if ($result && $result->num_rows > 0) {
     echo "No order found";
 }
 
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //get workorder from url
+    $assign_to = mysqli_real_escape_string($conn, $_POST['labour']);
+    $location = mysqli_real_escape_string($conn, $_POST['location']);
+    //get box barcode from workorder table
+    //same as items
+    $bankInstructions = mysqli_real_escape_string($conn, $_POST['bank_instruction']);
+    $adminInstructions = mysqli_real_escape_string($conn, $_POST['admin_instruction']);
+
+    // Insert data into box table
+    $sql = "INSERT INTO assign_task (order_fk_no, assign_to, location, bank_instruction, admin_instruction, box, items, is_read) 
+            VALUES ('$workorder_no', '$assign_to', '$location', '$bankInstructions', '$adminInstructions', '$barcode', '$item_barcodes', '0')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "New record created successfully";
+        // header("location: .php");
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    $conn->close();
+}
+
 ?>
+
 
 
 <!doctype html>
@@ -568,11 +578,6 @@ if ($result && $result->num_rows > 0) {
                         </select>
                     </div>
 
-                    <div class="col-md-3">
-                        <label for="" class="form-label">Description</label>
-                        <textarea type="desc" class="form-control" id="" name="description"><?php echo $description; ?></textarea>
-                    </div>
-
                     <!-- Select location -->
                     <div class="col-md-4">
                         <label for="loc">Location:</label>
@@ -589,52 +594,36 @@ if ($result && $result->num_rows > 0) {
                         </select>
                     </div>
 
-                    <div class="col-md-3">
-                        <label for="" class="form-label">Instuctions by Admin</label>
-                        <textarea type="desc" class="form-control" id="" name="description"><?php ?></textarea>
+                    <div class="col-md-5">
+                        <label for="" class="form-label">Instructions by Bank</label>
+                        <textarea type="desc" class="form-control" id="" rows="3" name="bank_instruction"><?php echo $description; ?></textarea>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label for="" class="form-label">Instructions by Admin</label>
+                        <textarea type="desc" class="form-control" id="" rows="3" name="admin_instruction"><?php ?></textarea>
                     </div>
 
                     <!-- Nested card -->
-                    <div class="row-6">
+                    <div class="col-6">
                         <div class="card bg-light mt-4">
                             <div class="card-body">
                                 <h6 class="card-subtitle mb-2 text-dark">Order Details</h6>
                                 <p class="card-text">
 
-                                    <strong>Container/Filefolder:</strong> 
+                                    <strong>Container/Filefolder:</strong>
+                                    <?php
+                                    echo $barcode;
+                                    ?>
+                                    <br>
+
+                                    <strong>Items:</strong>
                                     <?php
 
-                                   //convert 'barcode'(it is box_id) to barcode(it is container barcode)
-                                   $getBox = "SELECT * FROM box WHERE box_id = $barcode";
-                                   $boxResult = $conn->query($getBox);
-                                   if ($boxResult && $boxResult->num_rows > 0) {
-                                       $row5 = $boxResult->fetch_assoc();
-                                       $box_barcode = $row5['barcode'];
-                                   }
-                                   echo $box_barcode;
-                                   ?>
-
-
-                                    <strong class="ml-5">Items:</strong>
-                                    <?php
-                                   
-                                   $getItem = "SELECT * FROM item WHERE item_id = $item_barcode";
-                                    $itemResult = $conn->query($getItem);
-                                    if ($itemResult && $itemResult->num_rows > 0) {
-                                        $row5 = $itemResult->fetch_assoc();
-                                        $itemBarcode = $row5['barcode'];
+                                    // Loop through item_barcodes
+                                    foreach ($item_barcodes as $item_barcode) {
+                                        echo trim($item_barcode) . "<br>";
                                     }
-
-                                    //get array data
-                                    $itemBarcodes = explode(',', $itemBarcode);
-                                    foreach ($itemBarcodes as $itemBarcode) {
-                                        //show item barcodes
-                                        echo $itemBarcode;
-                                    }
-
-
-
-
                                     ?>
 
                             </div>

@@ -98,14 +98,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $adminInstructions = mysqli_real_escape_string($conn, $_POST['admin_instruction']);
 
     // Insert data into box table
-    echo $sql = "INSERT INTO assign_task (order_no_fk, assign_to, location, bank_instruction, admin_instruction, box, items, is_read) 
+    $sql = "INSERT INTO assign_task (order_no_fk, assign_to, location, bank_instruction, admin_instruction, box, items, is_read) 
             VALUES ('$workorder_no', '$assign_to', '$location', '$bankInstructions', '$adminInstructions', '$barcode', '$json_items', '0')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully";
-        // header("location: .php");
+        // Set success message in session
+        $_SESSION['success_message'] = "Task assigned successfully!";
+        header("location: assignTaskForm.php?id=$workorder_no");
+        exit;
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        // Set error message in session
+        $_SESSION['error_message'] = "Failed to assign the task: " . $conn->error;
+        header("location: assignTaskForm.php?id=$workorder_no");
+        exit;
     }
 
     $conn->close();
@@ -200,6 +205,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- dselect -->
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+
+    <!-- ALERTIFY CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css" />
 
     <style>
         /* form text sizing */
@@ -600,17 +609,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-6">
                         <div class="card bg-light mt-4">
                             <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-dark">Order Details</h6>
+                                <h5 class="card-subtitle text-dark">Order Details</h5>
                                 <p class="card-text">
                                     <br>
                                     <strong>Container/Filefolder:</strong>
                                     <?php
-
-                                    echo $barcode;
-                                    
+                                    echo "<ul>";
+                                    echo "<li>" . htmlspecialchars($barcode) . "</li>";
+                                    echo "</ul>";
                                     ?>
-                                    <br>
-
 
                                     <?php
                                     //in this case data is csv
@@ -624,9 +631,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     // Trim whitespace from each value
                                     $show_items_array = array_map('trim', $show_items_array);
 
-                                    echo '</br>';
 
-                                    echo '<b> Items: </b>';
+
+                                    echo '<b> Items for (' . htmlspecialchars($barcode) . '): </b>';
                                     // Display each value
                                     echo "<ul>";
                                     foreach ($show_items_array as $item) {
@@ -678,6 +685,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="assets/js/main.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- ALERTIFY JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+
+    <?php
+    if (isset($_SESSION['success_message'])):
+    ?>
+        <script>
+            // Set Alertify to display notifications at the top of the page
+            alertify.set('notifier', 'position', 'top-center');
+            alertify.error("<?= 'success_message' ?>");
+        </script>
+    <?php
+        //unset message after displaying it to the user
+        unset($_SESSION['success_message']); // Clear the message
+    endif; 
+    ?>
+
 
     <!--datatable export buttons-->
     <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>

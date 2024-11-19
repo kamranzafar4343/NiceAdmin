@@ -67,12 +67,9 @@ if ($result && $result->num_rows > 0) {
 
     $barcode = $row3['barcode'];
 
-    // for showing values
-    $item_barcodes = [];
-    if (!empty($row3['item_barcode'])) {
-        // Assume barcodes are comma-separated
-        $item_barcodes = explode(',', $row3['item_barcode']);
-    }
+    //convert array into json
+    $raw_items = $row3['item_barcode'];
+    $json_items = json_encode($raw_items);
 
     // $alt = $row3['alt'];
     $requestor = $row3['requestor'];
@@ -101,8 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $adminInstructions = mysqli_real_escape_string($conn, $_POST['admin_instruction']);
 
     // Insert data into box table
-    $sql = "INSERT INTO assign_task (order_fk_no, assign_to, location, bank_instruction, admin_instruction, box, items, is_read) 
-            VALUES ('$workorder_no', '$assign_to', '$location', '$bankInstructions', '$adminInstructions', '$barcode', '$item_barcodes', '0')";
+    echo $sql = "INSERT INTO assign_task (order_no_fk, assign_to, location, bank_instruction, admin_instruction, box, items, is_read) 
+            VALUES ('$workorder_no', '$assign_to', '$location', '$bankInstructions', '$adminInstructions', '$barcode', '$json_items', '0')";
 
     if ($conn->query($sql) === TRUE) {
         echo "New record created successfully";
@@ -572,7 +569,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             $result = $conn->query("SELECT id, name, phone FROM register WHERE role = 'Labour'");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['id']}'>{$row['name']} -> {$row['phone']}</option>";
+                                echo "<option value='{$row['name']} -> {$row['phone']}'>{$row['name']} -> {$row['phone']}</option>";
                             }
                             ?>
                         </select>
@@ -605,20 +602,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="card-body">
                                 <h6 class="card-subtitle mb-2 text-dark">Order Details</h6>
                                 <p class="card-text">
-
+                                    <br>
                                     <strong>Container/Filefolder:</strong>
                                     <?php
+
                                     echo $barcode;
+                                    
                                     ?>
                                     <br>
 
-                                    <strong>Items:</strong>
-                                    <?php
 
-                                    // Loop through item_barcodes
-                                    foreach ($item_barcodes as $item_barcode) {
-                                        echo trim($item_barcode) . "<br>";
+                                    <?php
+                                    //in this case data is csv
+
+                                    // Remove double quotes if they exist
+                                    $json_items = trim($json_items, '"');
+
+                                    // Convert the comma-separated string into an array
+                                    $show_items_array = explode(',', $json_items);
+
+                                    // Trim whitespace from each value
+                                    $show_items_array = array_map('trim', $show_items_array);
+
+                                    echo '</br>';
+
+                                    echo '<b> Items: </b>';
+                                    // Display each value
+                                    echo "<ul>";
+                                    foreach ($show_items_array as $item) {
+                                        echo "<li>" . htmlspecialchars($item) . "</li>";
                                     }
+                                    echo "</ul>";
                                     ?>
 
                             </div>
@@ -634,32 +648,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            var i = 1;
-
-            // Add new row in container/filefolder
-            $('#add2').click(function() {
-                i++;
-                $('#dynamic_field2').append('<div class="form-row mb-2" id="row2' + i + '"> \
-            <div class="col-md-4"><input type="text" class="form-control" name="object_code[]" placeholder="object code" required></div> \
-            <div class="col-md-4"><input type="text" class="form-control" name="barcode_select[]" placeholder="barcode" required></div> \
-                <div class="col-md-4"><input type="text" class="form-control" name="alt_code[]" placeholder="Alt Code" required></div> \
-                <div class="col-md-4"><input type="text" class="form-control" name="requestor[]" placeholder="requestor name" required></div> \
-                <div class="col-md-4"><input type="text" class="form-control" name="designation[]" placeholder="role" required></div> \
-                <div class="col-md-4"><input type="text" class="form-control" name="req_date[]" placeholder="request date" required></div> \
-                <div class="col-md-4"><input type="text" class="form-control" name="description[]" placeholder="description" required></div> \
-                <div class="col-md-4 mb-2"><button type="button" class="btn btn-danger btn_remove2 " id="' + i + '">-</button></div> \
-            </div>');
-            });
-
-            // Remove row in Material section
-            $(document).on('click', '.btn_remove2', function() {
-                var button_id = $(this).attr("id");
-                $('#row2' + button_id).remove();
-            });
-        });
-    </script>
 
     <!-- Include Bootstrap JS (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

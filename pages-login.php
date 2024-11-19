@@ -14,13 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // If a match is found, set session and redirect based on role
   if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
-    
+
     // Set session variables
     $_SESSION['email'] = $email;
     $_SESSION['role'] = $user['role'];  // Store the role (admin or user)
 
     // Redirect to index.php
-    header("Location: index.php"); 
+    header("Location: index.php");
     exit();
   } else {
     // Error message for invalid login
@@ -90,17 +90,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   <form class="row g-3 needs-validation" method="POST" action="">
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>
-                      <input type="email" name="email" class="form-control" id="yourEmail" required>
+                      <input type="email" name="email" class="form-control" id="yourEmail" placeholder="Enter your Email" style="font-size: 13px;" required>
                       <div class="invalid-feedback">Please enter a valid Email address!</div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <input type="password" name="password" class="form-control" id="yourPassword" placeholder="........" style="font-size: 13px;" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
-                    <div class="g-recaptcha" data-sitekey="6Lf4QEsqAAAAAPRiGiTg5AF0FsZ-Q6d7dAuAptOb"></div>
-                    <div class="col-6 d-flex">
+
+                    <div class="col-12">
+                      <label for="" class="mb-2">Login Type:</label>
+                      <select id="" class="form-select" name="login_type" style="font-size: 13px;">
+                        <option value="">Select</option>
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                        <option value="Labour">Labour</option>
+                      </select>
+                    </div>
+
+                    <p>Create an account? <a href="register.php">Sign Up</a></p>
+
+                    <div class="col-8 d-flex mt-0">
                       <button class="btn btn-outline-primary w-100" type="submit" name="submit" value="submit">Login</button>
                     </div>
                   </form>

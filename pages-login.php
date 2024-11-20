@@ -20,23 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['email'] = $email;
     $_SESSION['role'] = $user['role'];  // Store the role (admin or user)
 
-    // Check if the user is a labour and redirect to the labour dashboard
-    if ($_SESSION['role'] == 'Labour') {
-      header("Location: labour_index.php");
-      exit();
-    }
-    elseif($_SESSION['role'] == 'admin'){
-      // Redirect to index.php
-      header("Location: index.php");
-      exit();
-    }
-    else {
     // Redirect to index.php
     header("Location: index.php");
     exit();
-    
-    }
-    
   } else {
     // Error message for invalid login
     $error_message = "Invalid email or password!";

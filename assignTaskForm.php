@@ -496,6 +496,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </li><!-- End Racks Nav -->
 
                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="assignTaskForm.php">
+                        <i class="bi bi-list-task"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="store.php">
                         <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
@@ -514,7 +520,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                         <i class="ri-list-ordered"></i><span>Work Order</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-
                 </li>
 
                 <li class="nav-item">
@@ -522,6 +527,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="assignTaskForm.php">
+                        <i class="bi bi-list-task"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="store.php">

@@ -7,9 +7,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // Get user input and escape for security
   $email = $conn->real_escape_string($_POST['email']);
   $password = $conn->real_escape_string($_POST['password']);
+  $login_type = $conn->real_escape_string($_POST['role']);
 
   // Query to check if the email and password are correct and retrieve the role
-  $result = $conn->query("SELECT * FROM register WHERE email='$email' AND password='$password'");
+  $result = $conn->query("SELECT * FROM register WHERE email='$email' AND password='$password' AND role='$login_type'");
 
   // If a match is found, set session and redirect based on role
   if ($result->num_rows > 0) {
@@ -19,19 +20,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['email'] = $email;
     $_SESSION['role'] = $user['role'];  // Store the role (admin or user)
 
+    // Check if the user is a labour and redirect to the labour dashboard
+    if ($_SESSION['role'] == 'Labour') {
+      header("Location: labour_index.php");
+      exit();
+    }
+    elseif($_SESSION['role'] == 'admin'){
+      // Redirect to index.php
+      header("Location: index.php");
+      exit();
+    }
+    else {
     // Redirect to index.php
     header("Location: index.php");
     exit();
+    
+    }
+    
   } else {
     // Error message for invalid login
     $error_message = "Invalid email or password!";
   }
 }
 ?>
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -102,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="col-12">
                       <label for="" class="mb-2">Login Type:</label>
-                      <select id="" class="form-select" name="login_type" style="font-size: 13px;">
+                      <select id="" class="form-select" name="role" style="font-size: 13px;" required>
                         <option value="">Select</option>
                         <option value="admin">Admin</option>
                         <option value="user">User</option>

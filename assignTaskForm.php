@@ -616,12 +616,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <textarea type="desc" class="form-control" id="" rows="3" name="admin_instruction"><?php ?></textarea>
                     </div>
 
-                    <!-- Nested card -->
-                    <div class="col-6">
-                        <div class="card bg-light mt-4">
-                            <div class="card-body">
-                                <h5 class="card-subtitle text-dark">Order Details</h5>
-                                <p class="card-text">
+                    <div>
+                                <h5>Details</h5>
+                                <p>
                                     <br>
                                     <strong>Container/Filefolder:</strong>
                                     <?php
@@ -652,10 +649,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     }
                                     echo "</ul>";
                                     ?>
-
-                            </div>
-                        </div>
-                    </div>
+</div>
 
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>

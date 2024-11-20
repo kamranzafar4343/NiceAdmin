@@ -213,11 +213,19 @@ $DeptCount = $rowDept['dept_count'];
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="tasks.php">
-          <i class="bi bi-shop"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
+          <i class="bi bi-list-task"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li><!-- End Store Nav -->
 
       <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.php">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-login.php">
@@ -246,16 +254,20 @@ $DeptCount = $rowDept['dept_count'];
       </nav>
     </div><!-- End Page Title -->
 
+
     <section class="section dashboard">
+
+
+
       <div class="row">
 
         <!-- Left side columns -->
         <div class="col-lg-12">
           <div class="row">
 
-                        <!-- Sales Card -->
-                        <div class="col-xxl-4 col-md-4">
-              <div class="card info-card sales-card">
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-md-4">
+              <div class="card info-card sales-card card bg-info">
 
                 <div class="filter">
                   <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -271,7 +283,7 @@ $DeptCount = $rowDept['dept_count'];
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title-indexphp">Pending Tasks </h5>
+                  <h5 class="card-title-indexphp" style="color: azure;">Pending Tasks </h5>
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <img src="assets/img/pending.png" alt="">
@@ -288,7 +300,7 @@ $DeptCount = $rowDept['dept_count'];
             <!-- Customers Card -->
             <div class="col-xxl-4 col-xl-4">
 
-              <div class="card info-card revenue-card">
+              <div class="card info-card revenue-card card bg-success">
 
                 <div class="filter">
                   <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -304,7 +316,7 @@ $DeptCount = $rowDept['dept_count'];
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title-indexphp">Completed Tasks</h5>
+                  <h5 class="card-title-indexphp" style="color: azure;">Completed Tasks</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -320,8 +332,7 @@ $DeptCount = $rowDept['dept_count'];
                 </div>
               </div>
 
-            </div><!-- End Customers Card -->
-    </section>
+          </section>
 
   </main><!-- End #main -->
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

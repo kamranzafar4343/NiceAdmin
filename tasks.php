@@ -92,6 +92,11 @@ if ($resultData->num_rows > 0) {
             margin-right: 10px;
         }
 
+        /* added styles for tasks table */
+        .tasks-container {
+            margin-left: 83px;
+        }
+
         /* Custom CSS to decrease font size of the table */
         /* Basic styling for search bar */
         input.btn.btn-success {
@@ -401,6 +406,14 @@ if ($resultData->num_rows > 0) {
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
+                <a class="nav-link collapsed" href="users-profile.php">
+                    <i class="bi bi-person"></i>
+                    <span>Profile</span>
+                </a>
+            </li><!-- End Profile Page Nav -->
+
+
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-login.php">
                     <i class="bi bi-box-arrow-right"></i><span>Login</span>
                 </a>
@@ -451,7 +464,7 @@ if ($resultData->num_rows > 0) {
 
                             echo '<td>';
                             if ($row["is_read"] == '1') {
-                                echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' ."completed". '</span>';
+                                echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . "completed" . '</span>';
                             } elseif ($row["is_read"] == '0') {
                                 echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . "pending" . '</span>';
                             }
@@ -465,13 +478,13 @@ if ($resultData->num_rows > 0) {
 
                             echo '<td>
                             <div style="display: flex;">
-                                <a type="button" class="btn btn-secondary btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewWO.php?id=' . $row['order_no_fk'] . '" target="_blank">
+                                <a type="button" class="btn btn-secondary btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="taskView.php?id=' . $row['task_id'] . '" target="_blank">
                                     <i style="width: 20px;" class="fa-solid fa-eye"></i>
                                 </a>
                             </div>
                           </td>';
-                    echo '</tr>';
-                     }
+                            echo '</tr>';
+                        }
                         echo '</tbody></table>';
                     } else {
                         echo '<p>No tasks found.</p>';

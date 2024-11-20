@@ -9,6 +9,12 @@ if (!isset($_SESSION['email'])) {
   exit();
 }
 
+// restict user access to labour dashoard
+if ($_SESSION['role'] == 'user') {
+  // If not logged in, redirect to login page
+  header("Location: pages-login.php");
+  exit();
+}
 
 include 'config/db.php';
 
@@ -22,13 +28,6 @@ if ($resultData->num_rows > 0) {
   $adminName = $row2['name'];
   $adminEmail = $row2['email'];
 }
-
-// Check if the user is labour
-// if ($_SESSION['role'] == 'Labour' && $_SESSION['role'] == 'Labour') {
-//   //redirect to  page
-//   header("Location: labour_index.php");
-//   exit();
-// }
 
 //get total no of companies for compani card
 $query = "SELECT COUNT(*) AS count FROM compani";
@@ -48,11 +47,193 @@ $resultDept = mysqli_query($conn, $queryDept);
 $rowDept = mysqli_fetch_assoc($resultDept);
 $DeptCount = $rowDept['dept_count'];
 ?>
-<?php
+<!DOCTYPE html>
+<html lang="en">
 
-include "sidebar.php";
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-?>
+  <title>Dashboard</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- Datatable css for export buttons -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css">
+
+  <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+
+  <link rel="stylesheet" href="css/owl.carousel.min.css">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  <!-- Style -->
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Custom CSS to decrease font size of the table */
+
+    .add {
+      cursor: pointer;
+      width: 143px;
+      margin-left: 844px;
+      margin-top: 26px;
+    }
+  </style>
+
+  <style>
+    .profileimage {
+      margin-right: 24px;
+    }
+
+    .navbar-image {
+      width: 50px;
+      height: 50px;
+      margin-right: 7px;
+    }
+  </style>
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+
+
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <img class="navbar-image" src="assets/img/logo3.png" alt="">
+      <a href="index.php" class="logo d-flex align-items-center">
+
+        <span class="d-none d-lg-block">FingerLog</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+
+        <li class="nav-item profileimage dropdown pe-3 mr-4">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="image/admin-png.png" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName ?></span>
+          </a><!-- End Profile Image Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6><?php echo $adminName ?></h6>
+              <span><?php echo $adminEmail ?></span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+        </li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="logout.php">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Sign Out</span>
+          </a>
+        </li>
+
+      </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <?php
+  include "config/db.php";
+  $role = $_SESSION['role'];
+  ?>
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link active" href="labour_index.php">
+          <i class="ri-home-8-line"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="tasks.php">
+          <i class="bi bi-shop"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
+        </a>
+      </li><!-- End Store Nav -->
+
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-login.php">
+          <i class="bi bi-box-arrow-right"></i><span>Login</span>
+        </a>
+      </li><!-- End Login Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="logout.php">
+          <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+        </a>
+      </li><!-- End Logout Nav -->
+
+    </ul>
+  </aside>
+  <!--------------- End sidebar ------------------>
   <main id="main" class="main">
 
     <div class="pagetitle mt-4">
@@ -72,8 +253,8 @@ include "sidebar.php";
         <div class="col-lg-12">
           <div class="row">
 
-            <!-- Sales Card -->
-            <div class="col-xxl-4 col-md-4">
+                        <!-- Sales Card -->
+                        <div class="col-xxl-4 col-md-4">
               <div class="card info-card sales-card">
 
                 <div class="filter">
@@ -90,7 +271,7 @@ include "sidebar.php";
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title-indexphp">Pending Workorders </h5>
+                  <h5 class="card-title-indexphp">Pending Tasks </h5>
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <img src="assets/img/pending.png" alt="">
@@ -103,41 +284,6 @@ include "sidebar.php";
 
               </div>
             </div><!-- End Sales Card -->
-
-            <!-- Revenue Card -->
-            <div class="col-xxl-4 col-md-4">
-              <div class="card info-card revenue-card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title-indexphp">Completed Workorder</h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <img src="assets/img/complete.png" alt="">
-                    </div>
-                    <div class="ps-3">
-                      <h6><?php echo "12"; ?></h6>
-
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div><!-- End Revenue Card -->
 
             <!-- Customers Card -->
             <div class="col-xxl-4 col-xl-4">
@@ -158,14 +304,14 @@ include "sidebar.php";
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title-indexphp">Total Workorders</h5>
+                  <h5 class="card-title-indexphp">Completed Tasks</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <img src="assets/img/icons8-order-27.png" alt="">
+                      <img src="assets/img/complete.png" alt="">
                     </div>
                     <div class="ps-3">
-                      <h6><?php echo "32"; ?></h6>
+                      <h6><?php echo "10"; ?></h6>
 
 
                     </div>
@@ -175,123 +321,6 @@ include "sidebar.php";
               </div>
 
             </div><!-- End Customers Card -->
-           
-           
-
-
-            <div class="row">
-
-        <!-- Left side columns -->
-        <div class="col-lg-12">
-          <div class="row">
-
-            <!-- Sales Card -->
-            <div class="col-xxl-4 col-md-4">
-              <div class="card info-card customers-card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title-indexphp">Cancelled Workorders </h5>
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <img src="assets/img/icons8-cancel-26.png" alt="">
-                    </div>
-                    <div class="ps-3">
-                      <h6><?php echo "2"; ?></h6>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div><!-- End Sales Card -->
-
-            <!-- Revenue Card -->
-            <div class="col-xxl-4 col-md-4">
-              <div class="card info-card revenue-card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title-indexphp">Regular Workorder</h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <img src="assets/img/icons8-regular-document-27 (1).png" alt="">
-                    </div>
-                    <div class="ps-3">
-                      <h6><?php echo "20"; ?></h6>
-
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div><!-- End Revenue Card -->
-
-             <!-- Customers Card -->
-             <div class="col-xxl-4 col-xl-4">
-
-<div class="card info-card customers-card">
-
-  <div class="filter">
-    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-      <li class="dropdown-header text-start">
-        <h6>Filter</h6>
-      </li>
-
-      <li><a class="dropdown-item" href="#">Today</a></li>
-      <li><a class="dropdown-item" href="#">This Month</a></li>
-      <li><a class="dropdown-item" href="#">This Year</a></li>
-    </ul>
-  </div>
-
-  <div class="card-body">
-    <h5 class="card-title-indexphp">Urgent Workorders</h5>
-
-    <div class="d-flex align-items-center">
-      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-      <img src="assets/img/Time-Clock-Fire--Streamline-Ultimate.png" alt="">
-      </div>
-      <div class="ps-3">
-        <h6><?php echo "10"; ?></h6>
-
-
-      </div>
-    </div>
-
-  </div>
-</div>
-
-</div><!-- End Customers Card -->
-
-            
-
-            
     </section>
 
   </main><!-- End #main -->

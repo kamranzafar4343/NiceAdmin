@@ -21,6 +21,28 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
+
+//get order id from url
+$order_no = $_GET['id'];
+
+//handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $rec_name = mysqli_real_escape_string($conn, $_POST['rec_name']);
+    $rec_phone = mysqli_real_escape_string($conn, $_POST['rec_phone']);
+    $rec_cnic = mysqli_real_escape_string($conn, $_POST['rec_cnic']);
+    $proof = mysqli_real_escape_string($conn, $_POST['proof']);
+    $any_detail = mysqli_real_escape_string($conn, $_POST['detail']);
+    $cross_check = mysqli_real_escape_string($conn, $_POST['checkbox1']);
+    $verification = mysqli_real_escape_string($conn, $_POST['checkbox2']);
+
+$insertData = "UPDATE assign_task SET receiver_name = '$rec_name', receiver_phone = '$rec_phone', receiver_cnic = '$rec_cnic', proof = '$proof', any_comments ='$any_detail', cross_check='$cross_check', verification='$verification' WHERE order_no_fk = '$order_no'";
+if ($conn->query($insertData) === TRUE) {
+    $_SESSION['success'] = "Task Completed";
+header("Location: taskView.php?id=$order_no");
+} else {
+echo "Error: ". $insertData . "<br>". $conn->error;
+}
+}
 ?>
 
 <!doctype html>
@@ -413,62 +435,52 @@ if ($resultData->num_rows > 0) {
                             <h6><strong>Instructions by admin:</strong></h6>
                             <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                         </div>
-                        <div class="row-md-4">
-                            <h6><b>Location:</b></h6>
-                            <p>L4-B-02-C-01</p>
-                        </div>
-                        <div class="row-md-4">
-                            <h6><b>Box:</b></h6>
-                            <ul>
-                                <li>34234234</li>
-                            </ul>
-                        </div>
-                        <div class="row-md-4">
-                            <h6><b>Items:</b></h6>
-                            <ul>
-                                <li>11134234</li>
-                                <li>99234234</li>
-                            </ul>
-                        </div>
-                        <div class="row-md-4">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6><b>Box:</b></h6>
 
+                                34234234
+
+                            </div>
+                            <div class="col-md-3">
+                                <h6><b>Items:</b></h6>
+                                <ul class="" style="font-size: 10px; text-align: left;">
+                                    <li>11134234</li>
+                                    <li>99234234</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-3">
+                                <h6><b>Location:</b></h6>
+                                <p>L4-B-02-C-01</p>
+                            </div>
                         </div>
 
                     </div>
                     <div class="col-md-6">
                         <h4 class="mb-4 text-bg-success" style="padding: 8px;">Fill the following details</h4>
-                        <div class="row-md-4 mb-2">
-                            <label for="" class="form-label"><b>Handed over to</b></label>
-                            <select name="role" id="" class="form-select">
-                                <option value="courier">courier</option>
-                                <option value="Data Tech's Delivery Service">Data Tech's Delivery Service</option>
-                                <option value="Authorized person from Bank who is receiving">Authorized person from Bank who is receiving</option>
-                                <option value="Handed over to Admin">Handed over to Admin</option>
-                            </select>
-                        </div>
-                        
+
                         <div class="row-md-4 mb-2">
                             <label for="" class="form-label"><b>Enter Receiver's information</b></label>
-                            <input type="text" class="form-control mb-1" id="comp_name" name="comp_name" placeholder="Receiver's Name" required>
-                            <input type="text" class="form-control mb-1" id="comp_name" name="comp_name" placeholder="Receiver's Phone Number" required>
-                            <input type="text" class="form-control mb-2" id="comp_name" name="comp_name" placeholder="Recevier's CNIC" required>
+                            <input type="text" class="form-control mb-1" id="" name="rec_name" placeholder="Receiver's Name" required>
+                            <input type="text" class="form-control mb-1" id="" name="rec_phone" placeholder="Receiver's Phone Number" required>
+                            <input type="text" class="form-control mb-2" id="" name="rec_cnic" placeholder="Recevier's CNIC" required>
                         </div>
                         <div class="row-md-4 mb-2">
                             <label for="" class="form-label"><b>Attach receipt or any proof:</b></label>
-                            <input type="img" class="form-control" id="comp_name" name="comp_name" required>
+                            <input type="img" class="form-control" id="proof" name="proof" required>
                         </div>
                         <div class="row-md-4 mb-2">
                             <label for="" class="form-label"><b>Anything else to note?</b></label><br>
-                            <textarea name="details"  class="form-control mb-1" id=""></textarea>
+                            <textarea name="details" class="form-control mb-1" id=""></textarea>
                         </div>
                         <div class="row-md-4 mb-2 ml-4">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" value="1" name="checkbox1">
                             <label class="form-check-label" for="flexCheckDefault">
                                 <strong>Cross checked</strong>
                             </label>
                         </div>
                         <div class="row-md-4 mb-2 ml-4">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" value="1" name="checkbox2">
                             <label class="form-check-label" for="flexCheckDefault">
                                 <strong>Verified information</strong>
                             </label>
@@ -523,16 +535,16 @@ if ($resultData->num_rows > 0) {
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
 
     <?php
-    if (isset($_SESSION['success_message'])):
+    if (isset($_SESSION['success'])):
     ?>
         <script>
             // Set Alertify to display notifications at the top of the page
-            alertify.set('notifier', 'position', 'top-center');
-            alertify.error("<?= 'success_message' ?>");
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.error("<?= $_SESSION['success']; ?>");
         </script>
     <?php
         //unset message after displaying it to the user
-        unset($_SESSION['success_message']); // Clear the message
+        unset($_SESSION['success']); // Clear the message
     endif;
     ?>
 

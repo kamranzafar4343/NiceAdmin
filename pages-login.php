@@ -103,13 +103,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="">Select</option>
                         <option value="admin">Admin</option>
                         <option value="user">User</option>
-                        <option value="Labour">Labour</option>
+                        <option value="Labour">Warehouse Staff</option>
                       </select>
                     </div>
 
-                    <p>Create an account? <a href="register.php">Sign Up</a></p>
-
-                    <div class="col-8 d-flex mt-0">
+                    <div class="col-8 d-flex mt-3">
                       <button class="btn btn-outline-primary w-100" type="submit" name="submit" value="submit">Login</button>
                     </div>
                   </form>

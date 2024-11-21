@@ -478,7 +478,7 @@ if ($resultData->num_rows > 0) {
 
                             echo '<td>
                             <div style="display: flex;">
-                                <a type="button" class="btn btn-secondary btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="taskView.php?id=' . $row['task_id'] . '" target="_blank">
+                                <a type="button" class="btn btn-secondary btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="taskView.php?id=' . $row['order_no_fk'] . '" target="_blank">
                                     <i style="width: 20px;" class="fa-solid fa-eye"></i>
                                 </a>
                             </div>

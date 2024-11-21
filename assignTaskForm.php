@@ -96,20 +96,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //same as items
     $bankInstructions = mysqli_real_escape_string($conn, $_POST['bank_instruction']);
     $adminInstructions = mysqli_real_escape_string($conn, $_POST['admin_instruction']);
+    $handover_to = mysqli_real_escape_string($conn, $_POST['handover_to']);
 
     // Insert data into box table
-    $sql = "INSERT INTO assign_task (order_no_fk, assign_to, location, bank_instruction, admin_instruction, box, items, is_read) 
-            VALUES ('$workorder_no', '$assign_to', '$location', '$bankInstructions', '$adminInstructions', '$barcode', '$json_items', '0')";
+    $sql = "INSERT INTO assign_task (order_no_fk, assign_to, location, bank_instruction, admin_instruction, box, items, is_read, handover_to) 
+            VALUES ('$workorder_no', '$assign_to', '$location', '$bankInstructions', '$adminInstructions', '$barcode', '$json_items', '0', '$handover_to')";
 
     if ($conn->query($sql) === TRUE) {
         // Set success message in session
         $_SESSION['success_message'] = "Task assigned successfully!";
-        header("location: assignTaskForm.php?id=$workorder_no");
+header("Location: assignTaskForm.php?id=$workorder_no");
         exit;
     } else {
-        // Set error message in session
-        $_SESSION['error_message'] = "Failed to assign the task: " . $conn->error;
-        header("location: assignTaskForm.php?id=$workorder_no");
+        echo "Failed to assign the task: " . $conn->error;
         exit;
     }
 
@@ -579,9 +578,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="workorder_no" class="form-control" id="" name="workorder_no" value="<?php echo $workorder_no; ?>" readonly>
                     </div>
 
-
                     <!-- Select labour -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="labour">Assign to:</label>
                         <select id="labour" class="form-select" name="labour" required>
                             <option value="">Select labour</option>
@@ -596,8 +594,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
 
                     <!-- Select location -->
-                    <div class="col-md-4">
-                        <label for="loc">Location:</label>
+                    <div class="col-md-3">
+                        <label for="loc">Pickup Location:</label>
                         <select id="loc" class="form-select" name="location" required>
                             <option value="">Select location</option>
                             <option value="L2-H-08-B-09">L2-H-08-B-09</option>
@@ -606,50 +604,74 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </select>
                     </div>
 
-                    <div class="col-md-5">
-                        <label for="" class="form-label">Instructions by Bank</label>
-                        <textarea type="desc" class="form-control" id="" rows="3" name="bank_instruction"><?php echo $description; ?></textarea>
+                    <!-- Select location -->
+                    <div class="col-md-3">
+                        <label for="">Hand over to:</label>
+                        <select id="" class="form-select" name="handover_to" required>
+                            <option value="">Select</option>
+                            <option value="Data Tech's driver">Data Tech's driver</option>
+                            <option value="Courier">Courier</option>
+                            <option value="Authorized person from bank">Authorized person from bank</option>
+                            <option value="Handed over to admin">Handed over to admin</option>
+                        </select>
                     </div>
 
-                    <div class="col-md-5">
+                    <div class="col-md-6">
+                        <label for="" class="form-label">Instructions by Client</label>
+                        <textarea type="desc" class="form-control" id="" rows="3" name="bank_instruction"><?php ?></textarea>
+                    </div>
+
+                    <div class="col-md-6">
                         <label for="" class="form-label">Instructions by Admin</label>
-                        <textarea type="desc" class="form-control" id="" rows="3" name="admin_instruction"><?php ?></textarea>
+                        <textarea type="desc" class="form-control" id="" rows="3" name="admin_instruction"><?php  ?></textarea>
+                    </div>
+
+
+                    <div class="container">
+                        <div class="row">
+                            
+                            <h5 class="mt-4">Details:</h5>
+                            <div class="col-md-4">
+                                <strong>Container/Filefolder:</strong>
+                                <?php
+                                echo "<ul>";
+                                echo "<li>" . htmlspecialchars($barcode) . "</li>";
+                                echo "</ul>";
+                                ?>
+                            </div>
+                            <div class="col-md-4">
+                            <?php
+                            //in this case data is csv
+
+                            // Remove double quotes if they exist
+                            $json_items = trim($json_items, '"');
+
+                            // Convert the comma-separated string into an array
+                            $show_items_array = explode(',', $json_items);
+
+                            // Trim whitespace from each value
+                            $show_items_array = array_map('trim', $show_items_array);
+
+
+
+                            echo '<b> Items for (' . htmlspecialchars($barcode) . '): </b>';
+                            // Display each value
+                            echo "<ul>";
+                            foreach ($show_items_array as $item) {
+                                echo "<li>" . htmlspecialchars($item) . "</li>";
+                            }
+                            echo "</ul>";
+                            ?>
+                            </div>
+                        </div>
                     </div>
 
                     <div>
-                                <h5>Details</h5>
-                                <p>
-                                    <br>
-                                    <strong>Container/Filefolder:</strong>
-                                    <?php
-                                    echo "<ul>";
-                                    echo "<li>" . htmlspecialchars($barcode) . "</li>";
-                                    echo "</ul>";
-                                    ?>
-
-                                    <?php
-                                    //in this case data is csv
-
-                                    // Remove double quotes if they exist
-                                    $json_items = trim($json_items, '"');
-
-                                    // Convert the comma-separated string into an array
-                                    $show_items_array = explode(',', $json_items);
-
-                                    // Trim whitespace from each value
-                                    $show_items_array = array_map('trim', $show_items_array);
+                        <p>
 
 
-
-                                    echo '<b> Items for (' . htmlspecialchars($barcode) . '): </b>';
-                                    // Display each value
-                                    echo "<ul>";
-                                    foreach ($show_items_array as $item) {
-                                        echo "<li>" . htmlspecialchars($item) . "</li>";
-                                    }
-                                    echo "</ul>";
-                                    ?>
-</div>
+                            
+                    </div>
 
                     <div class="text-center mt-4 mb-2">
                         <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
@@ -699,13 +721,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ?>
         <script>
             // Set Alertify to display notifications at the top of the page
-            alertify.set('notifier', 'position', 'top-center');
-            alertify.error("<?= 'success_message' ?>");
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success("<?= 'Task assigned successfully' ?>");
         </script>
     <?php
         //unset message after displaying it to the user
         unset($_SESSION['success_message']); // Clear the message
-    endif; 
+    endif;
     ?>
 
 

@@ -267,7 +267,7 @@ $DeptCount = $rowDept['dept_count'];
 
             <!-- Sales Card -->
             <div class="col-xxl-4 col-md-4">
-              <div class="card info-card sales-card card bg-info">
+              <div class="card info-card sales-card">
 
                 <div class="filter">
                   <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -283,7 +283,7 @@ $DeptCount = $rowDept['dept_count'];
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title-indexphp" style="color: azure;">Pending Tasks </h5>
+                  <h5 class="card-title-indexphp">Pending Tasks </h5>
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <img src="assets/img/pending.png" alt="">
@@ -300,7 +300,7 @@ $DeptCount = $rowDept['dept_count'];
             <!-- Customers Card -->
             <div class="col-xxl-4 col-xl-4">
 
-              <div class="card info-card revenue-card card bg-success">
+              <div class="card info-card revenue-card card">
 
                 <div class="filter">
                   <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -316,7 +316,7 @@ $DeptCount = $rowDept['dept_count'];
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title-indexphp" style="color: azure;">Completed Tasks</h5>
+                  <h5 class="card-title-indexphp">Completed Tasks</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">

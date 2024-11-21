@@ -29,16 +29,54 @@ $order_no = $_GET['id'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rec_name = mysqli_real_escape_string($conn, $_POST['rec_name']);
     $rec_phone = mysqli_real_escape_string($conn, $_POST['rec_phone']);
+
+     //---------------------------set image variable------------------------ and its validation
+//ensure file is uploaded
+     if (!isset($_FILES['image']) || $_FILES['image']['error'] == UPLOAD_ERR_NO_FILE) {
+        die("No file was uploaded.");
+    }
+
+    // Check for maximum file size (5MB)
+    $maxFileSize = 5 * 1024 * 1024; // 5 MB
+    if ($_FILES['image']['size'] > $maxFileSize) {
+        die("File size exceeds the 5 MB limit.");
+    }
+
+    // Check allowed MIME types
+    $allowedTypes = ['image/jpeg', 'image/png'];
+    $fileType = $_FILES['image']['type'];
+    if (!in_array($fileType, $allowedTypes)) {
+        die("Invalid file type. Only JPEG and PNG files are allowed.");
+    }
+
+    // Check allowed file extensions
+    $allowedExtensions = ['jpg', 'jpeg', 'png'];
+    $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+    if (!in_array($fileExtension, $allowedExtensions)) {
+        die("Invalid file extension. Only .jpg, .jpeg, and .png files are allowed.");
+    }
+
+    // Sanitize and set the file name and destination
+    $img_name = preg_replace("/[^a-zA-Z0-9.]/", "_", basename($_FILES['image']['name']));
+    $img_des = "image/" . $img_name;
+
+    // Move the uploaded file to the destination directory
+    if (!move_uploaded_file($_FILES['image']['tmp_name'], $img_des)) {
+        die("Failed to upload image.");
+    }
+
+    //------------------end---------------------------------- of image variable and its validation
+
     $rec_cnic = mysqli_real_escape_string($conn, $_POST['rec_cnic']);
-    $proof = mysqli_real_escape_string($conn, $_POST['proof']);
-    $any_detail = mysqli_real_escape_string($conn, $_POST['detail']);
+    $any_detail = mysqli_real_escape_string($conn, $_POST['details']);
     $cross_check = mysqli_real_escape_string($conn, $_POST['checkbox1']);
     $verification = mysqli_real_escape_string($conn, $_POST['checkbox2']);
 
-$insertData = "UPDATE assign_task SET receiver_name = '$rec_name', receiver_phone = '$rec_phone', receiver_cnic = '$rec_cnic', proof = '$proof', any_comments ='$any_detail', cross_check='$cross_check', verification='$verification' WHERE order_no_fk = '$order_no'";
+//insert into db
+$insertData = "UPDATE assign_task SET receiver_name = '$rec_name', receiver_phone = '$rec_phone', receiver_cnic = '$rec_cnic', proof = '$img_des', any_comments ='$any_detail', cross_check='$cross_check', verification='$verification' WHERE order_no_fk = '$order_no'";
 if ($conn->query($insertData) === TRUE) {
     $_SESSION['success'] = "Task Completed";
-header("Location: taskView.php?id=$order_no");
+header("Location: tasks.php");
 } else {
 echo "Error: ". $insertData . "<br>". $conn->error;
 }
@@ -420,7 +458,7 @@ echo "Error: ". $insertData . "<br>". $conn->error;
             <div class="card-body">
                 <br>
                 <!-- Multi Columns Form -->
-                <form class="row g-3 needs-validation" action="" method="POST">
+                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
 
                     <div class="col-md-6">
                         <h4 class="mb-4 text-bg-success" style="padding: 8px;">Task Details</h4>
@@ -465,14 +503,22 @@ echo "Error: ". $insertData . "<br>". $conn->error;
                             <input type="text" class="form-control mb-1" id="" name="rec_phone" placeholder="Receiver's Phone Number" required>
                             <input type="text" class="form-control mb-2" id="" name="rec_cnic" placeholder="Recevier's CNIC" required>
                         </div>
+                        
                         <div class="row-md-4 mb-2">
-                            <label for="" class="form-label"><b>Attach receipt or any proof:</b></label>
-                            <input type="img" class="form-control" id="proof" name="proof" required>
-                        </div>
+                        <label for="image" class="form-label" style="font-size: 0.8rem;">Attach (receipt image):</label>
+                        <input type="file" style="font-size: 0.9rem;" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
+                        <!-- Error messages -->
+                        <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
+                        <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
+                        <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
+                    </div>
+
+
                         <div class="row-md-4 mb-2">
                             <label for="" class="form-label"><b>Anything else to note?</b></label><br>
                             <textarea name="details" class="form-control mb-1" id=""></textarea>
                         </div>
+
                         <div class="row-md-4 mb-2 ml-4">
                             <input class="form-check-input" type="checkbox" value="1" name="checkbox1">
                             <label class="form-check-label" for="flexCheckDefault">
@@ -548,6 +594,71 @@ echo "Error: ". $insertData . "<br>". $conn->error;
     endif;
     ?>
 
+<!-- Validation Script of the header and the size of the image -->
+<script>
+        document.getElementById('image').addEventListener('change', function() {
+            const file = this.files[0];
+            const imageError = document.getElementById('image-error');
+            const sizeError = document.getElementById('size-error');
+            const dimensionError = document.getElementById('dimension-error');
+
+            // Reset error messages
+            imageError.style.display = 'none';
+            sizeError.style.display = 'none';
+            dimensionError.style.display = 'none';
+
+            if (file) {
+                const reader = new FileReader();
+
+                // Validate file size (2 MB limit)
+                const maxSize = 2 * 1024 * 1024; // 2MB
+                if (file.size > maxSize) {
+                    sizeError.style.display = 'block';
+                    this.value = ''; // Clear the file input
+                    return;
+                }
+
+                // Validate file header (magic number)
+                reader.onload = function(e) {
+                    const header = new Uint8Array(e.target.result).subarray(0, 4);
+                    let valid = false;
+
+                    const jpg = header[0] === 0xFF && header[1] === 0xD8 && header[2] === 0xFF;
+                    const png = header[0] === 0x89 && header[1] === 0x50 && header[2] === 0x4E && header[3] === 0x47;
+
+                    if (jpg || png) {
+                        valid = true;
+                    }
+
+                    if (!valid) {
+                        imageError.style.display = 'block';
+                        document.getElementById('image').value = ''; // Clear the file input
+                        return;
+                    } else {
+                        imageError.style.display = 'none';
+
+                        // Validate image dimensions
+                        const img = new Image();
+                        img.src = URL.createObjectURL(file);
+
+                        img.onload = function() {
+                            const maxWidth = 1024; // Example standard width
+                            const maxHeight = 768; // Example standard height
+
+                            if (img.width > maxWidth || img.height > maxHeight) {
+                                dimensionError.style.display = 'block';
+                                document.getElementById('image').value = ''; // Clear the file input
+                            } else {
+                                dimensionError.style.display = 'none';
+                            }
+                        };
+                    }
+                };
+
+                reader.readAsArrayBuffer(file);
+            }
+        });
+    </script>
 
     <!--datatable export buttons-->
     <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>

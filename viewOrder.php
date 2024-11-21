@@ -74,7 +74,7 @@ if ($result && $result->num_rows > 0) {
     $pickup_add = $row3['pickup_address'];
     $object = $row3['object_code'];
     $barcode = $row3['barcode'];
-    $alt = $row3['alt'];
+    // $alt = $row3['alt'];
     $requestor = $row3['requestor'];
     $role = $row3['role'];
     $req_date = $row3['req_date'];

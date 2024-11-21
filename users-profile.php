@@ -399,7 +399,7 @@ if ($resultData->num_rows > 0) {
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="tasks.php">
-          <i class="bi bi-list-collapsed"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
+          <i class="bi bi-list-task"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
         </a>
       </li>
 

@@ -98,6 +98,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $adminInstructions = mysqli_real_escape_string($conn, $_POST['admin_instruction']);
     $handover_to = mysqli_real_escape_string($conn, $_POST['handover_to']);
 
+
+    //check for duplicate task
+    $checkTask = "SELECT * FROM assign_task WHERE order_no_fk = '$workorder_no'";
+    $resultCheck = mysqli_query($conn, $checkTask);
+    if ($resultCheck->num_rows > 0) {
+        // If task already exists, redirect to assignTaskForm.php with error message
+        $_SESSION['error_message'] = "Task already assigned!";
+        header("Location: assignTaskForm.php?id=$workorder_no");
+        exit;
+        }
+
     // Insert data into box table
     $sql = "INSERT INTO assign_task (order_no_fk, assign_to, location, bank_instruction, admin_instruction, box, items, is_read, handover_to) 
             VALUES ('$workorder_no', '$assign_to', '$location', '$bankInstructions', '$adminInstructions', '$barcode', '$json_items', '0', '$handover_to')";

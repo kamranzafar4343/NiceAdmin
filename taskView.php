@@ -30,9 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rec_name = mysqli_real_escape_string($conn, $_POST['rec_name']);
     $rec_phone = mysqli_real_escape_string($conn, $_POST['rec_phone']);
 
-     //---------------------------set image variable------------------------ and its validation
-//ensure file is uploaded
-     if (!isset($_FILES['image']) || $_FILES['image']['error'] == UPLOAD_ERR_NO_FILE) {
+    //---------------------------set image variable------------------------ and its validation
+    //ensure file is uploaded
+    if (!isset($_FILES['image']) || $_FILES['image']['error'] == UPLOAD_ERR_NO_FILE) {
         die("No file was uploaded.");
     }
 
@@ -72,14 +72,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $cross_check = mysqli_real_escape_string($conn, $_POST['checkbox1']);
     $verification = mysqli_real_escape_string($conn, $_POST['checkbox2']);
 
-//insert into db
-$insertData = "UPDATE assign_task SET receiver_name = '$rec_name', receiver_phone = '$rec_phone', receiver_cnic = '$rec_cnic', proof = '$img_des', any_comments ='$any_detail', cross_check='$cross_check', verification='$verification' WHERE order_no_fk = '$order_no'";
-if ($conn->query($insertData) === TRUE) {
-    $_SESSION['success'] = "Task Completed";
-header("Location: tasks.php");
-} else {
-echo "Error: ". $insertData . "<br>". $conn->error;
-}
+
+    //insert into db
+    $insertData = "UPDATE assign_task SET receiver_name = '$rec_name', receiver_phone = '$rec_phone', receiver_cnic = '$rec_cnic', proof = '$img_des', any_comments ='$any_detail', cross_check='$cross_check', verification='$verification' WHERE order_no_fk = '$order_no'";
+
+    if ($conn->query($insertData) === TRUE) {
+        // update status to 1
+        $updateStatus = "UPDATE assign_task SET is_read = '1' WHERE order_no_fk = '$order_no'";
+    } else {
+        echo "Error: " . $insertData . "<br>" . $conn->error;
+    }
+
+    if ($conn->query($updateStatus) === TRUE) {
+        //set success message and redirect to tasks page
+        $_SESSION['success'] = "Task Completed";
+        header("Location: tasks.php");
+    } else {
+        echo "Error: " . $insertData . "<br>" . $conn->error;
+    }
 }
 ?>
 
@@ -473,6 +483,85 @@ echo "Error: ". $insertData . "<br>". $conn->error;
                             <h6><strong>Instructions by admin:</strong></h6>
                             <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                         </div>
+
+                        <div class="row">
+                            <!-- start table of delivery items -->
+                            <div class="cardBranch recent-sales overflow-auto">
+                                <div class="card-body">
+                                    <?php
+                                    //get data from`assign_tasks` table
+                                    $assign_tasks = "Select * FROM assign_task WHERE order_no_fk = '$order_no'";
+                                    $result_assign_tasks = $conn->query($assign_tasks);
+                                    if ($result_assign_tasks->num_rows > 0) {
+                                        $row121 = $result_assign_tasks->fetch_assoc();
+                                        $handover_to = $row121['handover_to'];
+                                    }
+
+                                    $showOrders = "Select * FROM orders WHERE order_no = '$order_no'";
+                                    $resultShowOrders = $conn->query($showOrders);
+
+                                    // Check if there are any results
+                                    if ($resultShowOrders->num_rows > 0) {
+
+                                        // Display table
+                                        echo '<table id="orderT" class="table mt-4 nowrap" style="font-size: 12px;">
+                    <thead>
+                        <tr >
+                        <th scope="col" style="width: 8%;">Box</th>
+                        <th scope="col" style="width: 8%;">Items</th>
+                        <th scope="col" style="width: 8%;">Location</th>
+                        <th scope="col" style="width: 8%;">Hand over to</th>';
+                                        echo '</tr>
+                    </thead>
+                    <tbody>';
+
+                                        // Loop through results
+                                        while ($row = $resultShowOrders->fetch_assoc()) {
+                                            echo '<tr>';
+
+                                            echo '<td>';
+                                            $barcodes = explode(',', $row['barcode']); // Split comma-separated values into an array
+                                            echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
+                                            foreach ($barcodes as $barcode) {
+                                                echo '<li>' . htmlspecialchars($barcode) . '</li>'; // Escape HTML for safety
+                                            }
+                                            echo '</ul>'; // End unordered list
+                                            echo '</td>';
+
+                                            echo '<td>';
+                                            $item_barcodes = explode(',', $row['item_barcode']); // Split comma-separated values into an array
+                                            echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
+                                            foreach ($item_barcodes as $item_barcode) {
+                                                echo '<li>' . htmlspecialchars($item_barcode) . '</li>'; // Escape HTML for safety
+                                            }
+                                            echo '</ul>'; // End unordered list
+                                            echo '</td>';
+
+
+                                            echo '</ul>'; // End unordered list
+                                            echo '</td>';
+
+                                            echo '<td>' .
+                                                "L4-B-02-C-01" .
+                                                '</td>';
+
+
+                                            echo '<td>' .
+                                                $handover_to .
+                                                '</td>';
+                                        }
+                                        echo '</tbody></table>';
+                                    } else {
+                                        // Display message if no results
+                                        echo '<p>No items found.</p>';
+                                    }
+
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- start row -->
                         <div class="row">
                             <div class="col-md-3">
                                 <h6><b>Box:</b></h6>
@@ -491,6 +580,10 @@ echo "Error: ". $insertData . "<br>". $conn->error;
                                 <h6><b>Location:</b></h6>
                                 <p>L4-B-02-C-01</p>
                             </div>
+                            <div class="col-md-3">
+                                <h6><b>Handover to:</b></h6>
+                                <p>Courier</p>
+                            </div>
                         </div>
 
                     </div>
@@ -503,15 +596,15 @@ echo "Error: ". $insertData . "<br>". $conn->error;
                             <input type="text" class="form-control mb-1" id="" name="rec_phone" placeholder="Receiver's Phone Number" required>
                             <input type="text" class="form-control mb-2" id="" name="rec_cnic" placeholder="Recevier's CNIC" required>
                         </div>
-                        
+
                         <div class="row-md-4 mb-2">
-                        <label for="image" class="form-label" style="font-size: 0.8rem;">Attach (receipt image):</label>
-                        <input type="file" style="font-size: 0.9rem;" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
-                        <!-- Error messages -->
-                        <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
-                        <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
-                        <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
-                    </div>
+                            <label for="image" class="form-label" style="font-size: 0.8rem;">Attach (receipt image):</label>
+                            <input type="file" style="font-size: 0.9rem;" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
+                            <!-- Error messages -->
+                            <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
+                            <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
+                            <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
+                        </div>
 
 
                         <div class="row-md-4 mb-2">
@@ -533,9 +626,8 @@ echo "Error: ". $insertData . "<br>". $conn->error;
                         </div>
                     </div>
 
-
                     <div class="text-center mt-4 mb-2">
-                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
+                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" disabled onclick="showMessage()" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>
                     </div>
                 </form>
@@ -594,8 +686,8 @@ echo "Error: ". $insertData . "<br>". $conn->error;
     endif;
     ?>
 
-<!-- Validation Script of the header and the size of the image -->
-<script>
+    <!-- Validation Script of the header and the size of the image -->
+    <script>
         document.getElementById('image').addEventListener('change', function() {
             const file = this.files[0];
             const imageError = document.getElementById('image-error');

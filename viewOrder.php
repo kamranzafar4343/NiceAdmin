@@ -1,5 +1,4 @@
 <?php
-
 // session_start(); // Start the session
 session_start();
 
@@ -21,7 +20,6 @@ if ($resultData->num_rows > 0) {
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
 }
-
 
 // Get order ID from query string
 $order_no = $_GET['id'];
@@ -709,7 +707,6 @@ date_default_timezone_set('Asia/Karachi');
                 doc.document.open();
                 doc.document.write('<!DOCTYPE html><html><head>' + styles + '</head><body>' + content + '</body></html>');
                 doc.document.close();
-
                 doc.window.print();
                 return this;
             }

@@ -532,6 +532,7 @@ $resultShowOrders = $conn->query($showOrders);
                 <div class="card-body">
                     <h5 class="card-title">List of Delivery Work Orders</h5>
                     <?php
+
                     // Check if there are any results
                     if ($resultShowOrders->num_rows > 0) {
                         // Display table
@@ -552,16 +553,26 @@ $resultShowOrders = $conn->query($showOrders);
                         echo '</tr>
                         </thead>
                         <tbody style="font-size: 11px; text-align: left;">';
-                        
+
                         // Counter variable
                         $counter = 1;
 
+                        //fetch is_read status from assign_task table
+                        $getStatus = "SELECT is_read FROM assign_task WHERE order_no_fk = '$order_no'";
+                        $resultStatus = mysqli_query($conn, $getStatus);
+                        if ($resultStatus->num_rows > 0) {
+                            $rowStatus = $resultStatus->fetch_assoc();
+                            $theStatus = $rowStatus['is_read'];
+                        }
                         // Loop through results
                         while ($row = $resultShowOrders->fetch_assoc()) {
                             echo '<tr>';
-                            
+
+
+
                             //workorder_no
-                            echo '<td>' . ($row['order_no']) . '</td>';
+                            echo '<td>' . $theStatus . '</td>';
+
 
                             // Get specific company id
                             $comp_id = $row['comp_id_fk'];
@@ -583,7 +594,7 @@ $resultShowOrders = $conn->query($showOrders);
 
                             // Show account
                             echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
-                            
+
 
                             echo '<td>';
                             if ($row["status"] == 'Completed') {
@@ -632,12 +643,11 @@ $resultShowOrders = $conn->query($showOrders);
 
                                         <a type="button"
                                             class=""
-                                            style="height: 26px; width: 25px;"
+                                            style="height: 30px; width: 30px;"
                                             href="assignTaskForm.php?id=<?php echo $row['order_no']; ?>"
                                             target="_blank">
                                             <img src="assets/img/Gartoon-Team-Gartoon-Misc-Stock-Task-Assigned.32.png" alt="View">
                                         </a>
-
                                     </div>
                                 </td>
                     <?php
@@ -721,7 +731,7 @@ $resultShowOrders = $conn->query($showOrders);
             //collapse by default
             "searchPanes": {
                 "initCollapsed": true,
-                columns: [1, 3, 4]   // Enable filters for columns 1, 3, and 5 only
+                columns: [1, 3, 4] // Enable filters for columns 1, 3, and 5 only
             }
 
         });

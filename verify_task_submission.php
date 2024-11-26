@@ -25,71 +25,38 @@ if ($resultData->num_rows > 0) {
 //get order id from url
 $order_no = $_GET['id'];
 
-//handle form submission
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $rec_name = mysqli_real_escape_string($conn, $_POST['rec_name']);
-    $rec_phone = mysqli_real_escape_string($conn, $_POST['rec_phone']);
-    
-    //---------------------------set image variable------------------------ and its validation
-    //ensure file is uploaded
-    if (!isset($_FILES['image']) || $_FILES['image']['error'] == UPLOAD_ERR_NO_FILE) {
-        die("No file was uploaded.");
-    }
+// Get info from the assign_task table
+$getTaskData = "SELECT * FROM assign_task WHERE order_no_fk = '$order_no'";
+$resultDataTask = mysqli_query($conn, $getTaskData);
+if ($resultDataTask->num_rows > 0) {
+    $row41 = $resultDataTask->fetch_assoc();
 
-    // Check for maximum file size (5MB)
-    $maxFileSize = 5 * 1024 * 1024; // 5 MB
-    if ($_FILES['image']['size'] > $maxFileSize) {
-        die("File size exceeds the 5 MB limit.");
-    }
+    $receiver_name = $row41['receiver_name'];
+    $receiver_phone = $row41['receiver_phone'];
+    $receiver_cnic = $row41['receiver_cnic'];
+    $attachment = $row41['proof'];
+    $details = $row41['any_comments'];
+    $cross_check = $row41['cross_check'];
+    $verification = $row41['verification'];
 
-    // Check allowed MIME types
-    $allowedTypes = ['image/jpeg', 'image/png'];
-    $fileType = $_FILES['image']['type'];
-    if (!in_array($fileType, $allowedTypes)) {
-        die("Invalid file type. Only JPEG and PNG files are allowed.");
-    }
+}
 
-    // Check allowed file extensions
-    $allowedExtensions = ['jpg', 'jpeg', 'png'];
-    $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-    if (!in_array($fileExtension, $allowedExtensions)) {
-        die("Invalid file extension. Only .jpg, .jpeg, and .png files are allowed.");
-    }
+        //update status to completed
+        $updateData = "UPDATE orders SET status = 'Completed' WHERE order_no = '$order_no'";
+        if ($conn->query($updateData) === TRUE) {
+            $_SESSION['success'] = "Task Verified Successfully"; 
+            header("Location: order.php");
+        } else {
+            echo "<p>Error verifying information: " . $conn->error . "</p>";
+            exit();
+        }
 
-    // Sanitize and set the file name and destination
-    $img_name = preg_replace("/[^a-zA-Z0-9.]/", "_", basename($_FILES['image']['name']));
-    $img_des = "image/" . $img_name;
-
-    // Move the uploaded file to the destination directory
-    if (!move_uploaded_file($_FILES['image']['tmp_name'], $img_des)) {
-        die("Failed to upload image.");
-    }
-
-    //------------------end---------------------------------- of image variable and its validation
-
-    $rec_cnic = mysqli_real_escape_string($conn, $_POST['rec_cnic']);
-    $any_detail = mysqli_real_escape_string($conn, $_POST['details']);
-    $cross_check = mysqli_real_escape_string($conn, $_POST['checkbox1']);
-    $verification = mysqli_real_escape_string($conn, $_POST['checkbox2']);
-
-
-    //insert into db
-    $insertData = "UPDATE assign_task SET receiver_name = '$rec_name', receiver_phone = '$rec_phone', receiver_cnic = '$rec_cnic', proof = '$img_des', any_comments ='$any_detail', cross_check='$cross_check', verification='$verification' WHERE order_no_fk = '$order_no'";
-
-    if ($conn->query($insertData) === TRUE) {
-        // update status to 1
-        $updateStatus = "UPDATE assign_task SET is_read = '1' WHERE order_no_fk = '$order_no'";
-    } else {
-        echo "Error: " . $insertData . "<br>" . $conn->error;
-    }
-
-    if ($conn->query($updateStatus) === TRUE) {
-        //set success message and redirect to tasks page
-        $_SESSION['success'] = "Task Completed";
-        header("Location: tasks.php");
-    } else {
-        echo "Error: " . $insertData . "<br>" . $conn->error;
-    }
+if ($conn->query($updateStatus) === TRUE) {
+    //set success message and redirect to tasks page
+    $_SESSION['success'] = "Task Completed";
+    header("Location: tasks.php");
+} else {
+    echo "Error: " . $insertData . "<br>" . $conn->error;
 }
 ?>
 
@@ -338,7 +305,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>complete task</title>
+    <title>verify completed task</title>
 
 
 </head>
@@ -497,6 +464,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                         $row121 = $result_assign_tasks->fetch_assoc();
                                         $handover_to = $row121['handover_to'];
                                     }
+
                                     $showOrders = "Select * FROM orders WHERE order_no = '$order_no'";
                                     $resultShowOrders = $conn->query($showOrders);
 
@@ -592,9 +560,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
                         <div class="row-md-4 mb-2">
                             <label for="" class="form-label"><b>Enter Receiver's information</b></label>
-                            <input type="text" class="form-control mb-1" id="" name="rec_name" placeholder="Receiver's Name" required>
-                            <input type="text" class="form-control mb-1" id="" name="rec_phone" placeholder="Receiver's Phone Number" required>
-                            <input type="text" class="form-control mb-2" id="" name="rec_cnic" placeholder="Recevier's CNIC" required>
+                            <input type="text" class="form-control mb-1" id="" name="rec_name" placeholder="Receiver's Name" value="<?php echo $receiver_name; ?>" required>
+                            <input type="text" class="form-control mb-1" id="" name="rec_phone" placeholder="Receiver's Phone Number" value="<?php echo $receiver_phone; ?>" required>
+                            <input type="text" class="form-control mb-2" id="" name="rec_cnic" placeholder="Recevier's CNIC" value="<?php echo $receiver_cnic; ?>" required>
                         </div>
 
                         <div class="row-md-4 mb-2">
@@ -609,17 +577,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
                         <div class="row-md-4 mb-2">
                             <label for="" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Anything else to note?</b></label><br>
-                            <textarea name="details" class="form-control mb-1" id=""></textarea>
+                            <textarea name="details" class="form-control mb-1" id=""><?php echo $details; ?></textarea>
                         </div>
 
                         <div class="row-md-4 mb-2 ml-4">
-                            <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox1">
+                            <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="<?php echo $cross_check; ?>" name="checkbox1">
                             <label class="form-check-label" for="flexCheckDefault">
                                 <strong>Cross checked</strong>
                             </label>
                         </div>
                         <div class="row-md-4 mb-2 ml-4">
-                            <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox2">
+                            <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="<?php echo $verification; ?>" name="checkbox2">
                             <label class="form-check-label" for="flexCheckDefault">
                                 <strong>Verified information</strong>
                             </label>
@@ -631,7 +599,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>
                     </div>
                 </form>
+
                 <!------------------------  Form end ---------------------->
+
             </div>
         </div>
     </div>
@@ -676,7 +646,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <script>
             // Set Alertify to display notifications at the top of the page
             alertify.set('notifier', 'position', 'top-right');
-            alertify.error("<?= $_SESSION['success']; ?>");
+            alertify.alert("<?= $_SESSION['success']; ?>");
         </script>
     <?php
         //unset message after displaying it to the user

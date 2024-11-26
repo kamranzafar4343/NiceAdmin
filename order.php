@@ -20,8 +20,6 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM orders where flag = 'Delivery' ORDER BY order_creation_date DESC";
-$resultShowOrders = $conn->query($showOrders);
 
 ?>
 <!doctype html>
@@ -36,12 +34,6 @@ $resultShowOrders = $conn->query($showOrders);
     <link href="assets/img/favicon.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap JS (with Popper.js) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
@@ -51,7 +43,6 @@ $resultShowOrders = $conn->query($showOrders);
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -62,15 +53,8 @@ $resultShowOrders = $conn->query($showOrders);
 
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="fonts/icomoon/style.css">
-
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-
     <!-- Style -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
@@ -93,19 +77,14 @@ $resultShowOrders = $conn->query($showOrders);
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-
-    <!-- dselect -->
-    <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
-    <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
-
     <style>
         /* Custom CSS to decrease font size of the table */
 
         .add {
-            /* cursor: pointer; */
-            margin-left: 1144px;
-            margin-top: 89px;
-            margin-bottom: 103px;
+            position: relative;
+            top: 109px;
+            left: 938px;
+
         }
 
         /* Basic styling for search bar */
@@ -285,7 +264,7 @@ $resultShowOrders = $conn->query($showOrders);
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
-
+            margin-top: 51px;
         }
 
         .company-name:active {
@@ -311,9 +290,6 @@ $resultShowOrders = $conn->query($showOrders);
             font-size: 10px;
         }
     </style>
-
-    <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
 
     <title>Delivery Workorders</title>
 
@@ -523,15 +499,42 @@ $resultShowOrders = $conn->query($showOrders);
 
 
     <!--form--------------------------------------form--------------------------------------->
-    <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add"> + </button>
+
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-14">
+            <!-- Add the buttton for the work order -->
+            <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add">Add</button>
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
+
                     <h5 class="card-title">List of Delivery Work Orders</h5>
                     <?php
+                    // SQL query to fetch orders with is_read status
+                    //o is given as alias for orders table
+                    //a is given as alias for assign_tasks table
+                    $showOrders = "
+                            SELECT 
+                                    o.order_no, 
+                                    o.comp_id_fk, 
+                                    o.branch_id_fk, 
+                                    o.status, 
+                                    o.order_creation_date, 
+                                    o.priority, 
+                                    o.date, 
+                                    a.is_read
+                                    FROM 
+                                    orders o  
+                                 LEFT JOIN 
+                                assign_task a
+                                ON 
+                                o.order_no = a.order_no_fk
+                                ORDER BY 
+o.order_creation_date ASC
+LIMIT 100;
+                                ";
+                    $resultShowOrders = $conn->query($showOrders);
+
 
                     // Check if there are any results
                     if ($resultShowOrders->num_rows > 0) {
@@ -539,7 +542,7 @@ $resultShowOrders = $conn->query($showOrders);
                         echo '<table id="orderT" class="table mt-4 nowrap">
                     <thead>
                         <tr>
-                        <th scope="col" style="width: 6%;">WorkOrder No</th>
+                        <th scope="col" style="width: 6%;">WorkOrder#</th>
                         <th scope="col" style="width: 14%;">Account</th>
                         <th scope="col" style="width: 8%;">Status</th>
                         <th scope="col" style="width: 10%;">Create Date</th>
@@ -552,27 +555,40 @@ $resultShowOrders = $conn->query($showOrders);
                         }
                         echo '</tr>
                         </thead>
-                        <tbody style="font-size: 11px; text-align: left;">';
+                        <tbody style="font-size: 11px; ">';
 
                         // Counter variable
                         $counter = 1;
 
-                        //fetch is_read status from assign_task table
-                        $getStatus = "SELECT is_read FROM assign_task WHERE order_no_fk = '$order_no'";
-                        $resultStatus = mysqli_query($conn, $getStatus);
-                        if ($resultStatus->num_rows > 0) {
-                            $rowStatus = $resultStatus->fetch_assoc();
-                            $theStatus = $rowStatus['is_read'];
-                        }
                         // Loop through results
                         while ($row = $resultShowOrders->fetch_assoc()) {
                             echo '<tr>';
+                    ?>
+                            <td>
+                                <div>
+                                    <!-- Is Read with GIF -->
+                                    <?php
 
+                                    // if status is completed then do not show the icon
+                                    if (($row['status'] != 'Completed') && $row['is_read'] == 1) {
+                                    ?>
+                                            <a
+                                                href="verify_task_submission.php?id=<?php echo $row["order_no"]; ?>">
+                                                <img src="assets/img/new-icon-gif-2.jpg" style="height: 30px; width: 30px; margin-right: 15px" alt="gif">
+                                            </a>
+                                    <?php
+                                        } else {
+                                            echo '';
+                                        }
+                                    
+                                
+                                    // Workorder_no
+                                    echo $row["order_no"];
+                                    ?>
+                                </div>
+                            </td>
 
-
-                            //workorder_no
-                            echo '<td>' . $theStatus . '</td>';
-
+                            <?php
 
                             // Get specific company id
                             $comp_id = $row['comp_id_fk'];
@@ -596,10 +612,18 @@ $resultShowOrders = $conn->query($showOrders);
                             echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
 
 
+                            // Change the status to "In Progress"
+                            if ($row['is_read'] == '1') {
+                                if ($row["status"] == 'Pending') {
+                                    $updateQuery = "UPDATE orders SET status = 'In Progress' WHERE order_no = " . $row['order_no'];
+                                    $conn->query($updateQuery);
+                                }
+                            }
                             echo '<td>';
+
                             if ($row["status"] == 'Completed') {
                                 echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["status"] . '</span>';
-                            } elseif ($row["status"] == 'In progress') {
+                            } elseif ($row["status"] == 'In Progress') {
                                 echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["status"] . '</span>';
                             } elseif ($row["status"] == 'Pending') {
                                 echo '<span class="badge badge-pill badge-info" style="font-size: 12px;">' . $row["status"] . '</span>';
@@ -608,14 +632,16 @@ $resultShowOrders = $conn->query($showOrders);
                             } elseif ($row["status"] == 'Dispute') {
                                 echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["status"] . '</span>';
                             }
+
                             echo '</td>';
+
 
                             //convert timestamp to only date format
                             $dateTimeCreate = $row["order_creation_date"];
                             $justDateCreate = date("Y-m-d", strtotime($dateTimeCreate));
-                            echo '<td>' . $justDateCreate . '</td>';
+                            echo '<td style="text-align: center;">' . $justDateCreate . '</td>';
 
-                            echo '<td>';
+                            echo '<td style="text-align: center;">';
                             if ($row["priority"] == 'Regular') {
                                 // Display a green badge for "Regular"
                                 echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["priority"] . '</span>';
@@ -628,10 +654,10 @@ $resultShowOrders = $conn->query($showOrders);
                             //convert timestamp to only date format
                             $dateTime = $row["date"];
                             $justDate = date("Y-m-d", strtotime($dateTime));
-                            echo '<td>' . $justDate . '</td>';
+                            echo '<td style="text-align: center;">' . $justDate . '</td>';
 
                             if ($_SESSION['role'] == 'admin') {
-                    ?>
+                            ?>
                                 <td>
                                     <div style="display: flex; gap: 10px;">
                                         <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
@@ -710,9 +736,6 @@ $resultShowOrders = $conn->query($showOrders);
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
@@ -720,6 +743,11 @@ $resultShowOrders = $conn->query($showOrders);
     <!--for search panes-->
     <script>
         new DataTable('#orderT', {
+
+            //show the rows in descending order by the date
+            "order": [
+                [3, "desc"]
+            ],
 
             //show 100 rows by default
             "pageLength": 100,
@@ -731,7 +759,7 @@ $resultShowOrders = $conn->query($showOrders);
             //collapse by default
             "searchPanes": {
                 "initCollapsed": true,
-                columns: [1, 3, 4] // Enable filters for columns 1, 3, and 5 only
+                columns: []
             }
 
         });

@@ -586,7 +586,7 @@ if ($resultData->num_rows > 0) {
                         echo '</tr>
                         </thead>
                         <tbody style="font-size: 11px; ">';
-                        <tbody style="font-size: 11px; ">';
+
 
                         // Counter variable
                         $counter = 1;
@@ -811,7 +811,6 @@ if ($resultData->num_rows > 0) {
             //collapse by default
             "searchPanes": {
                 "initCollapsed": true,
-                columns: []
                 columns: []
             }
 

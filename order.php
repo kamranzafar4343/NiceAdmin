@@ -507,12 +507,8 @@ if ($resultData->num_rows > 0) {
         <div class="col-14">
             <!-- Add the buttton for the work order -->
             <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add">Add</button>
-            <!-- Add the buttton for the work order -->
-            <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add">Add</button>
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
-
-
                     <h5 class="card-title">List of Delivery Work Orders</h5>
                     <?php
                     // SQL query to fetch orders with is_read status
@@ -677,15 +673,11 @@ if ($resultData->num_rows > 0) {
 
                             echo '</td>';
 
-
-
                             //convert timestamp to only date format
                             $dateTimeCreate = $row["order_creation_date"];
                             $justDateCreate = date("Y-m-d", strtotime($dateTimeCreate));
                             echo '<td style="text-align: center;">' . $justDateCreate . '</td>';
-                            echo '<td style="text-align: center;">' . $justDateCreate . '</td>';
 
-                            echo '<td style="text-align: center;">';
                             echo '<td style="text-align: center;">';
                             if ($row["priority"] == 'Regular') {
                                 // Display a green badge for "Regular"
@@ -700,12 +692,11 @@ if ($resultData->num_rows > 0) {
                             $dateTime = $row["date"];
                             $justDate = date("Y-m-d", strtotime($dateTime));
                             echo '<td style="text-align: center;">' . $justDate . '</td>';
-                            echo '<td style="text-align: center;">' . $justDate . '</td>';
+                            
 
                             if ($_SESSION['role'] == 'admin') {
                             ?>
-                            ?>
-                                <td>
+                         <td>
                                     <div style="display: flex; gap: 10px;">
                                         <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
 

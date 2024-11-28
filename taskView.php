@@ -596,6 +596,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <th scope="col" style="width: 7%;">Items</th>
                         <th scope="col" style="width: 9%;">Location</th>
                         <th scope="col" style="width: 15%;">Hand over to</th>';
+                        
                                         echo '</tr>
                     </thead>
                     <tbody>';
@@ -633,6 +634,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                                             echo '<td style="font-size: 11px;">' .
+                                       
                                                 $handover_to .
                                                 '</td>';
                                         }
@@ -648,6 +650,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
 
                         <!-- start row -->
+                        <!-- <div class="row">
                         <!-- <div class="row">
                             <div class="col-md-3">
                                 <h6><b>Box:</b></h6>
@@ -671,6 +674,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <p>Courier</p>
                             </div>
                         </div> -->
+                        </div> -->
 
                     </div>
                     <div class="col-md-6">
@@ -686,6 +690,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="row-md-4 mb-2">
                             <label for="image" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Attach (receipt image):</b></label>
                             <input type="file" style="font-size: 0.7rem; height: 1.9rem;" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
+                            <label for="image" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Attach (receipt image):</b></label>
+                            <input type="file" style="font-size: 0.7rem; height: 1.9rem;" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
                             <!-- Error messages -->
                             <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
                             <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
@@ -695,16 +701,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <div class="row-md-4 mb-2">
                             <label for="" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Anything else to note?</b></label><br>
+                            <label for="" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Anything else to note?</b></label><br>
                             <textarea name="details" class="form-control mb-1" id=""></textarea>
                         </div>
 
                         <div class="row-md-4 mb-2 ml-4">
+                            <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox1">
                             <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox1">
                             <label class="form-check-label" for="flexCheckDefault">
                                 <strong>Cross checked</strong>
                             </label>
                         </div>
                         <div class="row-md-4 mb-2 ml-4">
+                            <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox2">
                             <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox2">
                             <label class="form-check-label" for="flexCheckDefault">
                                 <strong>Verified information</strong>
@@ -713,6 +722,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
 
                     <div class="text-center mt-4 mb-2">
+                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
                         <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary ">Reset</button>
                     </div>

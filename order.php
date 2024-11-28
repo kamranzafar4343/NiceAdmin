@@ -55,6 +55,7 @@ if ($resultData->num_rows > 0) {
 
     <!-- Style -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
@@ -500,16 +501,45 @@ if ($resultData->num_rows > 0) {
 
     <!--form--------------------------------------form--------------------------------------->
 
+
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-14">
             <!-- Add the buttton for the work order -->
             <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add">Add</button>
+            <!-- Add the buttton for the work order -->
+            <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add">Add</button>
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
 
+
                     <h5 class="card-title">List of Delivery Work Orders</h5>
                     <?php
+                    // SQL query to fetch orders with is_read status
+                    //o is given as alias for orders table
+                    //a is given as alias for assign_tasks table
+                    $showOrders = "
+                            SELECT 
+                                    o.order_no, 
+                                    o.comp_id_fk, 
+                                    o.branch_id_fk, 
+                                    o.status, 
+                                    o.order_creation_date, 
+                                    o.priority, 
+                                    o.date, 
+                                    a.is_read
+                                    FROM 
+                                    orders o  
+                                 LEFT JOIN 
+                                assign_task a
+                                ON 
+                                o.order_no = a.order_no_fk
+                                ORDER BY 
+                                o.order_creation_date ASC
+                                LIMIT 100;
+                                ";
+                    $resultShowOrders = $conn->query($showOrders);
+
                     // SQL query to fetch orders with is_read status
                     //o is given as alias for orders table
                     //a is given as alias for assign_tasks table
@@ -555,6 +585,7 @@ if ($resultData->num_rows > 0) {
                         }
                         echo '</tr>
                         </thead>
+                        <tbody style="font-size: 11px; ">';
                         <tbody style="font-size: 11px; ">';
 
                         // Counter variable
@@ -620,10 +651,19 @@ if ($resultData->num_rows > 0) {
                                     $conn->query($updateQuery);
                                 }
                             }
+                            // Change the status to "In Progress"
+                            if ($row['is_read'] == '1') {
+                                if ($row["status"] == 'Pending') {
+                                    $updateQuery = "UPDATE orders SET status = 'In Progress' WHERE order_no = " . $row['order_no'];
+                                    $conn->query($updateQuery);
+                                }
+                            }
                             echo '<td>';
+
 
                             if ($row["status"] == 'Completed') {
                                 echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["status"] . '</span>';
+                            } elseif ($row["status"] == 'In Progress') {
                             } elseif ($row["status"] == 'In Progress') {
                                 echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["status"] . '</span>';
                             } elseif ($row["status"] == 'Pending') {
@@ -634,14 +674,18 @@ if ($resultData->num_rows > 0) {
                                 echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["status"] . '</span>';
                             }
 
+
                             echo '</td>';
+
 
 
                             //convert timestamp to only date format
                             $dateTimeCreate = $row["order_creation_date"];
                             $justDateCreate = date("Y-m-d", strtotime($dateTimeCreate));
                             echo '<td style="text-align: center;">' . $justDateCreate . '</td>';
+                            echo '<td style="text-align: center;">' . $justDateCreate . '</td>';
 
+                            echo '<td style="text-align: center;">';
                             echo '<td style="text-align: center;">';
                             if ($row["priority"] == 'Regular') {
                                 // Display a green badge for "Regular"
@@ -656,8 +700,10 @@ if ($resultData->num_rows > 0) {
                             $dateTime = $row["date"];
                             $justDate = date("Y-m-d", strtotime($dateTime));
                             echo '<td style="text-align: center;">' . $justDate . '</td>';
+                            echo '<td style="text-align: center;">' . $justDate . '</td>';
 
                             if ($_SESSION['role'] == 'admin') {
+                            ?>
                             ?>
                                 <td>
                                     <div style="display: flex; gap: 10px;">
@@ -750,6 +796,11 @@ if ($resultData->num_rows > 0) {
                 [3, "desc"]
             ],
 
+            //show the rows in descending order by the date
+            "order": [
+                [3, "desc"]
+            ],
+
             //show 100 rows by default
             "pageLength": 100,
 
@@ -760,6 +811,7 @@ if ($resultData->num_rows > 0) {
             //collapse by default
             "searchPanes": {
                 "initCollapsed": true,
+                columns: []
                 columns: []
             }
 

@@ -67,6 +67,23 @@ if ($result && $result->num_rows > 0) {
 
     $barcode = $row3['barcode'];
 
+    //show location of the barcode
+    $location = "SELECT * FROM store WHERE box = '$barcode'";
+    $locationResult = $conn->query($location);
+    if ($locationResult && $locationResult->num_rows > 0) {
+        $row6 = $locationResult->fetch_assoc();
+        $rack_location = $row6['rack_select'];
+    } else {
+        $rack_location = "Selected Box is not stored in the Warehouse";
+?>
+        <script>
+            // JavaScript to show the alert
+            alert("<?php echo $rack_location; ?>");
+        </script>
+<?php
+die();
+    }
+
     //convert array into json
     $raw_items = $row3['item_barcode'];
     $json_items = json_encode($raw_items);
@@ -91,7 +108,7 @@ if ($result && $result->num_rows > 0) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //get workorder from url
     $assign_to = mysqli_real_escape_string($conn, $_POST['labour']);
-    $location = mysqli_real_escape_string($conn, $_POST['location']);
+    // $location = mysqli_real_escape_string($conn, $_POST['location']);
     //get box barcode from workorder table
     //same as items
     $bankInstructions = mysqli_real_escape_string($conn, $_POST['bank_instruction']);
@@ -105,24 +122,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($resultCheck->num_rows > 0) {
         // If task already exists, redirect to assignTaskForm.php with error message
         $_SESSION['error_message'] = "Task already assigned!";
-        header("Location: assignTaskForm.php?id=$workorder_no");
+        header("Location: order.php");
         exit;
-        }
+    }
 
     // Insert data into box table
     $sql = "INSERT INTO assign_task (order_no_fk, assign_to, location, bank_instruction, admin_instruction, box, items, is_read, handover_to) 
-            VALUES ('$workorder_no', '$assign_to', '$location', '$bankInstructions', '$adminInstructions', '$barcode', '$json_items', '0', '$handover_to')";
+            VALUES ('$workorder_no', '$assign_to', '$rack_location', '$bankInstructions', '$adminInstructions', '$barcode', '$json_items', '0', '$handover_to')";
 
     if ($conn->query($sql) === TRUE) {
         // Set success message in session
         $_SESSION['success_message'] = "Task assigned successfully!";
-header("Location: assignTaskForm.php?id=$workorder_no");
+        header("Location: assignTaskForm.php?id=$workorder_no");
         exit;
     } else {
         echo "Failed to assign the task: " . $conn->error;
         exit;
     }
-
     $conn->close();
 }
 
@@ -184,7 +200,6 @@ header("Location: assignTaskForm.php?id=$workorder_no");
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-
     <!-- Style -->
     <link rel="stylesheet" href="css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -582,6 +597,8 @@ header("Location: assignTaskForm.php?id=$workorder_no");
     <div class="container d-flex justify-content-center">
         <div class="card custom-card shadow-lg mt-3">
             <div class="card-body mt-3">
+
+                <h2 style="margin-bottom: 20px;"><strong><u><?php echo $comp_name . "/" . $branch_name ?></u></strong></h2>
                 <form class="row g-3 needs-validation" id="orderForm" action="" method="POST">
 
                     <div class="col-md-3">
@@ -598,22 +615,19 @@ header("Location: assignTaskForm.php?id=$workorder_no");
 
                             $result = $conn->query("SELECT id, name, phone FROM register WHERE role = 'Labour'");
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='{$row['name']} -> {$row['phone']}'>{$row['name']} -> {$row['phone']}</option>";
+                                echo "<option value='{$row['name']}'>{$row['name']}</option>";
                             }
                             ?>
                         </select>
                     </div>
 
-                    <!-- Select location -->
+                    <!-- Select location
                     <div class="col-md-3">
                         <label for="loc">Pickup Location:</label>
                         <select id="loc" class="form-select" name="location" required>
-                            <option value="">Select location</option>
-                            <option value="L2-H-08-B-09">L2-H-08-B-09</option>
-                            <option value="L4-H-02-G-05">L4-H-02-G-05</option>
-                            <option value="L2-H-08-B-09">L2-H-08-B-09</option>
+                            <option value="">Select location</option>       
                         </select>
-                    </div>
+                    </div> -->
 
                     <!-- Select location -->
                     <div class="col-md-3">
@@ -629,20 +643,19 @@ header("Location: assignTaskForm.php?id=$workorder_no");
 
                     <div class="col-md-6">
                         <label for="" class="form-label">Instructions by Client</label>
-                        <textarea type="desc" class="form-control" id="" rows="3" name="bank_instruction"><?php ?></textarea>
+                        <textarea type="desc" class="form-control" id="" rows="3" name="bank_instruction" readonly><?php echo $description ?></textarea>
                     </div>
 
                     <div class="col-md-6">
                         <label for="" class="form-label">Instructions by Admin</label>
                         <textarea type="desc" class="form-control" id="" rows="3" name="admin_instruction"><?php  ?></textarea>
                     </div>
-
-
+                    
                     <div class="container">
                         <div class="row">
-                            
+
                             <h5 class="mt-4">Details:</h5>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <strong>Container/Filefolder:</strong>
                                 <?php
                                 echo "<ul>";
@@ -650,38 +663,39 @@ header("Location: assignTaskForm.php?id=$workorder_no");
                                 echo "</ul>";
                                 ?>
                             </div>
-                            <div class="col-md-4">
-                            <?php
-                            //in this case data is csv
+                            <div class="col-md-3">
+                                <?php
+                                //in this case data is csv
 
-                            // Remove double quotes if they exist
-                            $json_items = trim($json_items, '"');
+                                // Remove double quotes if they exist
+                                $json_items = trim($json_items, '"');
 
-                            // Convert the comma-separated string into an array
-                            $show_items_array = explode(',', $json_items);
+                                // Convert the comma-separated string into an array
+                                $show_items_array = explode(',', $json_items);
 
-                            // Trim whitespace from each value
-                            $show_items_array = array_map('trim', $show_items_array);
+                                // Trim whitespace from each value
+                                $show_items_array = array_map('trim', $show_items_array);
 
 
 
-                            echo '<b> Items for (' . htmlspecialchars($barcode) . '): </b>';
-                            // Display each value
-                            echo "<ul>";
-                            foreach ($show_items_array as $item) {
-                                echo "<li>" . htmlspecialchars($item) . "</li>";
-                            }
-                            echo "</ul>";
-                            ?>
+                                echo '<b> Items for (' . htmlspecialchars($barcode) . '): </b>';
+                                // Display each value
+                                echo "<ul>";
+                                foreach ($show_items_array as $item) {
+                                    echo "<li>" . htmlspecialchars($item) . "</li>";
+                                }
+                                echo "</ul>";
+                                ?>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Location:</strong>
+                                <?php
+                                echo "<ul>";
+                                echo "<li>" . $rack_location . "</li>";
+                                echo "</ul>";
+                                ?>
                             </div>
                         </div>
-                    </div>
-
-                    <div>
-                        <p>
-
-
-                            
                     </div>
 
                     <div class="text-center mt-4 mb-2">

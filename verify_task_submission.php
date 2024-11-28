@@ -22,8 +22,9 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-//get order id from url
 $order_no = $_GET['id'];
+
+//get order id from url
 
 // Get info from the assign_task table
 $getTaskData = "SELECT * FROM assign_task WHERE order_no_fk = '$order_no'";
@@ -38,25 +39,39 @@ if ($resultDataTask->num_rows > 0) {
     $details = $row41['any_comments'];
     $cross_check = $row41['cross_check'];
     $verification = $row41['verification'];
-
+    $admin_instructions = $row41['admin_instruction'];
+    $bank_instructions = $row41['bank_instruction'];
+    $location = $row41['location'];
 }
+if (isset($_POST['submit'])) {
 
-        //update status to completed
-        $updateData = "UPDATE orders SET status = 'Completed' WHERE order_no = '$order_no'";
-        if ($conn->query($updateData) === TRUE) {
-            $_SESSION['success'] = "Task Verified Successfully"; 
-            header("Location: order.php");
-        } else {
-            echo "<p>Error verifying information: " . $conn->error . "</p>";
-            exit();
-        }
+    //update status to completed
+    $updateData = "UPDATE orders SET status = 'Completed' WHERE order_no = '$order_no'";
+    if ($conn->query($updateData) === TRUE) {
+        $_SESSION['success'] = "Task Verified Successfully";
+        header("Location: order.php");
+    } else {
+        echo "<p>Error verifying information: " . $conn->error . "</p>";
+        exit();
+    }
 
-if ($conn->query($updateStatus) === TRUE) {
-    //set success message and redirect to tasks page
-    $_SESSION['success'] = "Task Completed";
-    header("Location: tasks.php");
-} else {
-    echo "Error: " . $insertData . "<br>" . $conn->error;
+    //update box status to out
+    $updateBox = "UPDATE  SET status = 'Completed' WHERE order_no = '$order_no'";
+    if ($conn->query($updateData) === TRUE) {
+        $_SESSION['success'] = "Task Verified Successfully";
+        header("Location: order.php");
+    } else {
+        echo "<p>Error verifying information: " . $conn->error . "</p>";
+        exit();
+    }
+
+    if ($conn->query($updateStatus) === TRUE) {
+        //set success message and redirect to tasks page
+        $_SESSION['success'] = "Task Verified Successfully";
+        header("Location: verify_task_submission.php?id=$order_no");
+    } else {
+        echo "Error: " . $insertData . "<br>" . $conn->error;
+    }
 }
 ?>
 
@@ -440,16 +455,16 @@ if ($conn->query($updateStatus) === TRUE) {
                     <div class="col-md-6">
                         <h4 class="mb-4 text-bg-success" style="padding: 8px;">Task Details</h4>
                         <div class="row-md-4">
-                            <h6>Work Order No:<strong> #3423432</strong></h6>
+                            <h6>Work Order No:<strong> <?php echo "#" . $order_no; ?></strong></h6>
                             <hr>
                         </div>
                         <div class="row-md-4">
-                            <h6><strong>Instructions by bank:</strong></h6>
-                            <p> labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            <h6><strong>Instructions by client:</strong></h6>
+                            <p><?php echo $bank_instructions; ?></p>
                         </div>
                         <div class="row-md-4">
                             <h6><strong>Instructions by admin:</strong></h6>
-                            <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            <p> <?php echo $admin_instructions; ?></p>
                         </div>
 
                         <div class="row">
@@ -510,7 +525,7 @@ if ($conn->query($updateStatus) === TRUE) {
                                             echo '</td>';
 
                                             echo '<td>' .
-                                                "L4-B-02-C-01" .
+                                                $location .
                                                 '</td>';
 
 
@@ -556,28 +571,27 @@ if ($conn->query($updateStatus) === TRUE) {
 
                     </div>
                     <div class="col-md-6">
-                        <h4 class="mb-4 text-bg-success" style="padding: 8px;">Fill the following details</h4>
+                        <h4 class="mb-4 text-bg-success" style="padding: 8px;">Verify the following details</h4>
 
                         <div class="row-md-4 mb-2">
-                            <label for="" class="form-label"><b>Enter Receiver's information</b></label>
-                            <input type="text" class="form-control mb-1" id="" name="rec_name" placeholder="Receiver's Name" value="<?php echo $receiver_name; ?>" required>
-                            <input type="text" class="form-control mb-1" id="" name="rec_phone" placeholder="Receiver's Phone Number" value="<?php echo $receiver_phone; ?>" required>
-                            <input type="text" class="form-control mb-2" id="" name="rec_cnic" placeholder="Recevier's CNIC" value="<?php echo $receiver_cnic; ?>" required>
+                            <strong>Enter Receiver's information:</strong><br>
+                            <p>Receiver's Name: <?php echo htmlspecialchars($receiver_name); ?></p>
+                            <p>Receiver's Phone Number: <?php echo htmlspecialchars($receiver_phone); ?></p>
+                            <p>Receiver's CNIC: <?php echo htmlspecialchars($receiver_cnic); ?></p>
+                        </div>
+
+                        <div class="mb-3 mt-3">
+                            <!-- Button to send the order number -->
+                            <button type="button" class="btn btn-info"
+                                style="font-size: 12px; padding:4px; opacity:0.8;"
+                                onclick="window.location.href='downloadImage.php?id=<?php echo $order_no; ?>'">
+                                Download Receipt <i class="bi bi-download"></i>
+                            </button>
                         </div>
 
                         <div class="row-md-4 mb-2">
-                            <label for="image" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Attach (receipt image):</b></label>
-                            <input type="file" style="font-size: 0.7rem; height: 1.9rem;" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
-                            <!-- Error messages -->
-                            <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
-                            <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
-                            <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
-                        </div>
-
-
-                        <div class="row-md-4 mb-2">
-                            <label for="" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Anything else to note?</b></label><br>
-                            <textarea name="details" class="form-control mb-1" id=""><?php echo $details; ?></textarea>
+                            <strong>Task description:</strong><br>
+                            <p><?php echo nl2br(htmlspecialchars($details)); ?></p>
                         </div>
 
                         <div class="row-md-4 mb-2 ml-4">

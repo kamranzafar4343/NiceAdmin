@@ -44,9 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES ('$company', '$branch', '$object_code', '$barcode', '$alt_code', '$description', 'In')";
 
     if ($conn->query($sql) === TRUE) {
+        $_SESSION['success_message_box'] = "Container/Box added successfully.";
         header("location: createBox.php");
+        exit;
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
+        exit;
     }
 
     $conn->close();
@@ -120,7 +123,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- dselect -->
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
-
+    <!-- ALERTIFY CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css" />
     <style>
         /* Custom CSS to decrease font size of the table */
         .custom {
@@ -355,11 +360,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </a>
                 </li><!-- End Companies Nav -->
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="account.php">
-                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
+
 
                 <li class="nav-item">
                     <a class="nav-link active" href="box.php">
@@ -367,29 +368,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </a>
                 </li><!-- End Boxes Nav -->
 
-  
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="showItems.php">
+                        <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Items Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="racks.php">
-                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    <a class="nav-link collapsed" href="order.php">
+                        <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
-                </li><!-- End Racks Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="store.php">
-                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Store Nav -->
-
-            <?php } else { ?>
-                <!-- User-only Links -->
-
-                <li class="nav-item">
-                    <a class="nav-link active" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
-
+                </li><!-- End Work Orders Nav -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
@@ -496,7 +485,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-    
+
 
     <!--Function to update the barcode input field on selection of the object type-->
     <script>
@@ -522,7 +511,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </script>
 
-   
+
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 
@@ -573,7 +562,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                 });
             });
-            
+
         });
     </script>
 
@@ -594,7 +583,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         tinymce.init({
             selector: '#summernotelib', // Replace with your textarea ID
             menubar: false,
-            width: 600 // Optional: Remove the menu bar if you want
+            width: 600, // Optional: Remove the menu bar if you want
+            height: 180
         });
     </script>
 
@@ -604,11 +594,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             searchable: true,
             fixedHeight: true,
         })
-
     </script>
 
+    <!-- ALERTIFY JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
 
-<script src="assets/js/main.js"></script>
+    <?php
+    if (isset($_SESSION['success_message_box'])):
+    ?>
+        <script>
+            // Set Alertify to display notifications at the top of the page
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success("<?= $_SESSION['success_message_box']; ?>");
+        </script>
+    <?php
+        //unset message after displaying it to the user
+        unset($_SESSION['success_message_box']); // Clear the message
+    endif;
+    ?>
+
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

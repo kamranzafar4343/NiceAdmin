@@ -615,7 +615,6 @@ date_default_timezone_set('Asia/Karachi');
                                     <br>
                                     Created By: <?php echo $creator ?><br>
                                     </p>
-
                             </div>
                         </div>
                     </div>
@@ -649,7 +648,6 @@ date_default_timezone_set('Asia/Karachi');
                                     echo '</tr>
                     </thead>
                     <tbody>';
-
                                     // Loop through results
                                     while ($row = $resultShowOrders->fetch_assoc()) {
                                         echo '<tr>';
@@ -670,9 +668,9 @@ date_default_timezone_set('Asia/Karachi');
                                         foreach ($barcodes as $barcode) {
                                             echo '<li>' . htmlspecialchars($barcode) . '</li>'; // Escape HTML for safety
                                         }
+                                        
                                         echo '</ul>'; // End unordered list
                                         echo '</td>';
-
                                         echo '<td>';
                                         $item_barcodes = explode(',', $row['item_barcode']); // Split comma-separated values into an array
                                         echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list

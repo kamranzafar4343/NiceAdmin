@@ -24,42 +24,35 @@ if (isset($_POST['submit'])) {
     $comp = mysqli_real_escape_string($conn, $_POST['company']);
     $branch = mysqli_real_escape_string($conn, $_POST['branch']);
     $barcode_select = $conn->real_escape_string($_POST['barcode_select']);
-    $alt_code = $conn->real_escape_string($_POST['alt_code']);
     $description = $conn->real_escape_string($_POST['description']);
     $rack_select = $conn->real_escape_string($_POST['rack_select']);
-    $object_code = $conn->real_escape_string($_POST['object_code']);
-    $status = $conn->real_escape_string($_POST['status']);
-    $add_date = $conn->real_escape_string($_POST['date']);
-    $destroy_date = $conn->real_escape_string($_POST['future_date']);
 
     // Check if the barcode is already used (no duplicates allowed)
-    $duplicate_check_sql = "SELECT * FROM store WHERE barcode_select = '$barcode_select'";
-    $duplicate_check_result = $conn->query($duplicate_check_sql);
-
-    if ($duplicate_check_result->num_rows > 0) {
+    // $duplicate_check_sql = "SELECT * FROM store WHERE barcode_select = '$barcode_select'";
+    // if ($duplicate_check_result-> num_rows > 0) {
         // Barcode already exists, show error
-        echo "<script>alert('Duplicate barcode detected. Please use a unique barcode.'); window.location.href = 'storedata.php';</script>";
-    } else {
+    //     echo "<script>alert('Duplicate barcode detected. Please use a unique barcode.'); window.location.href = 'storedata.php';</script>";
+    // } else {
         // Check if the selected rack already contains 9 boxes (max limit for each rack)
-        $rack_limit_check_sql = "SELECT COUNT(*) as total_boxes FROM store WHERE rack_select = '$rack_select'";
-        $rack_limit_check_result = $conn->query($rack_limit_check_sql);
-        $rack_data = $rack_limit_check_result->fetch_assoc();
+        // $rack_limit_check_sql = "SELECT COUNT(*) as total_boxes FROM store WHERE rack_select = '$rack_select'";
+        // $rack_limit_check_result = $conn->query($rack_limit_check_sql);
+        // $rack_data = $rack_limit_check_result->fetch_assoc();
 
-        if ($rack_data['total_boxes'] >= 9) {
+        // if ($rack_data['total_boxes'] >= 9) {
             // Rack already contains 9 boxes, show error
-            echo "<script>alert('This rack already contains 9 boxes. Please select another rack.'); window.location.href = 'storedata.php';</script>";
-        } else {
+        //     echo "<script>alert('This rack already contains 9 boxes. Please select another rack.'); window.location.href = 'storedata.php';</script>";
+        // } else {
             // SQL query to insert data into the database
-            $sql = "INSERT INTO store (comp_id_fk, branch_id_fk, barcode_select, alt_code, description, rack_select, object_code, status, add_date, destroy_date)
-                    VALUES ('$comp', '$branch', '$barcode_select', '$alt_code', '$description', '$rack_select', '$object_code', '$status', '$add_date', '$destroy_date')";
+            $sql = "INSERT INTO store (comp_id_fk, branch_id_fk, box, description, rack_select, status)
+                    VALUES ('$comp', '$branch', '$barcode_select','$description', '$rack_select', 'In')";
 
             if ($conn->query($sql) === TRUE) {
                 echo "<script>window.location.href = 'store.php';</script>";
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
-        }
-    }
+        // }
+    // }
 
     // Close the connection
     $conn->close();
@@ -367,7 +360,7 @@ if (isset($_POST['submit'])) {
                     </a>
                 </li><!-- End Companies Nav -->
 
-                
+
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="box.php">
                         <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
@@ -464,8 +457,8 @@ if (isset($_POST['submit'])) {
             <div class="card-body">
                 <form class="row g-3 needs-validation" action="" method="POST" id="rackForm">
 
-                   <!-- Select Company -->
-                   <div class="col-md-4">
+                    <!-- Select Company -->
+                    <div class="col-md-4">
                         <label for="company">Company:</label>
                         <select id="company" class="form-select" name="company" required>
                             <option value="">Select Company</option>
@@ -479,7 +472,7 @@ if (isset($_POST['submit'])) {
                         </select>
                     </div>
 
-                
+
                     <div class="col-md-4">
                         <label for="branch">Branch:</label>
                         <select id="branch" class="form-select" name="branch" required>
@@ -493,22 +486,14 @@ if (isset($_POST['submit'])) {
                         </select>
                     </div>
 
-                    <!-- Select Barcode -->
+                    <!-- Select barcode -->
                     <div class="col-md-6">
-                        <label for="barcode_select" class="form-label">Select Box Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" name="barcode_select">
+                        <label for="barcodes">Select Container/Filefolder:</label>
+                        <select id="barcode" class="form-select" id="barcode_select" name="barcode_select" required>
+                            <option value="">Select barcode</option>
+                            <!-- dynamically populate with ajax -->
+                        </select>
                     </div>
-                    <!-- FOR the alternative code -->
-                    <div class="col-md-6">
-                        <label for="alt_code" class="form-label">Alt Code </label>
-                        <input type="text" class="form-control" id="alt_code" name="alt_code">
-                    </div>
-                    <!--  Description -->
-                    <div class="col-md-6">
-                        <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
-                    </div>
-
 
                     <!-- Select Rack -->
                     <div class="col-md-6">
@@ -516,47 +501,20 @@ if (isset($_POST['submit'])) {
                         <select class="form-select" id="rack_select" name="rack_select" required>
                             <option value="" disabled selected>Select a rack Location</option>
                             <?php
-                            // Fetch rack details from the racks table
-                            $query = "SELECT id, rack_location  FROM racks";
-                            $result = $conn->query($query);
-
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $display_text = $row['rack_location'];
-                                    echo "<option value='" . $row['id'] . "'>$display_text</option>";
-                                }
+                            // Fetch the account levels from the database
+                            $result = $conn->query("SELECT id, rack_location FROM racks");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['rack_location']}'>{$row['rack_location']}</option>";
                             }
                             ?>
                         </select>
                     </div>
-                    <!-- Object Code -->
-                    <div class="col-md-6">
-                        <label for="object_code" class="form-label">Object Code</label>
-                        <select class="form-select" id="object_code" name="object_code" required>
-                            <option value="Container">Container</option>
-                            <option value="FileFolder">FileFolder</option>
-                        </select>
-                    </div>
-                    <!-- For thr status -->
-                    <div class="col-md-6">
-                        <label for="status">Status:</label>
-                        <select id="status" class="form-select" name="status" required>
-                            <option value="">Select Status</option>
-                            <option value="In" selected>In</option>
-                        </select>
-                    </div>
-                    <!-- For the current date -->
-                    <div class="col-md-6">
-                        <label for="date">Add Date:</label>
-                        <input type="date" id="current-date" class="form-control" name="date" required>
-                    </div>
 
-                    <!-- For the date 10 years from today -->
-                    <div class="col-md-6">
-                        <label for="future-date">Destroy:</label>
-                        <input type="date" id="future-date" class="form-control" name="future_date" required>
+                     <!--  Description -->
+                     <div class="col-md-8">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea type="text" class="form-control" id="description" name="description"></textarea>
                     </div>
-
 
                     <script>
                         // Get today's date
@@ -584,10 +542,10 @@ if (isset($_POST['submit'])) {
                     <!-- Form Buttons -->
                     <div class="text-center mt-4 mb-2">
                         <button type="reset" class="btn btn-outline-info mr-1" onclick="window.location.href = 'store.php';">Cancel</button>
-                        <button type="submit" class="btn btn-outline-primary mr-1"  name="submit" value="submit">Submit</button>
+                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
                         <button type="reset" class="btn btn-outline-secondary">Reset</button>
                     </div>
-                </form> 
+                </form>
             </div>
         </div>
     </div>
@@ -614,79 +572,82 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-<script>
-    // When company is changed, fetch the branches
-    $('#company').change(function() {
-                var company_id = $(this).val();
+    <script>
+        // When company is changed, fetch the branches
+        $('#company').change(function() {
+            var company_id = $(this).val();
 
-                // AJAX request to get branches for the selected company
-                $.ajax({
-                    url: 'get_branches.php',
-                    type: 'POST',
-                    data: {
-                        company_id: company_id
-                    },
-                    success: function(response) {
-                        try {
-                            var branches = JSON.parse(response); //return the json response as an array
-                            // Clear existing branches
-                            $('#branch').empty();
-                            $('#branch').append('<option value="">Select branches</option>');
-                            // Add the new options from the response
-                            $.each(branches, function(index, branch) {
-                                $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
-                            });
-                            // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#branch'), config);
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
+            // AJAX request to get branches for the selected company
+            $.ajax({
+                url: 'get_branches.php',
+                type: 'POST',
+                data: {
+                    company_id: company_id
+                },
+                success: function(response) {
+                    try {
+                        var branches = JSON.parse(response); //return the json response as an array
+                        // Clear existing branches
+                        $('#branch').empty();
+                        $('#branch').append('<option value="">Select branches</option>');
+                        // Add the new options from the response
+                        $.each(branches, function(index, branch) {
+                            $('#branch').append('<option value="' + branch.branch_id + '">' + branch.branch_name + '</option>');
+                        });
+                        // Refresh or reinitialize dselect
+                        dselect(document.querySelector('#branch'), config);
+                    } catch (e) {
+                        console.error("Invalid JSON response", response);
                     }
-                });
+                }
             });
+        });
 
-            // When branch is changed, fetch the departments
-            $('#branch').change(function() {
+
+        // When branch is changed, fetch the barcodes
+        $('#branch').change(function() {
                 var branch_id = $(this).val();
+                // console.log(branch_id);
 
-                // AJAX request to get dept's for the selected branch
+                // AJAX request to get barcodes for the selected branch
                 $.ajax({
-                    url: 'get_departments.php',
+                    url: 'getBarcodes.php',
                     type: 'POST',
                     data: {
                         branch_id: branch_id
                     },
                     success: function(response) {
                         try {
-                            var departments = JSON.parse(response); //return the json response as an array
+                            var boxes = JSON.parse(response); //return the json response as an array
                             // Clear existing dept's
-                            $('#dept').empty();
-                            $('#dept').append('<option value="">Select department</option>');
+                            $('#barcode').empty();
+                            $('#barcode').append('<option value="">Select barcode</option>');
 
                             // Add the new options from the response
-                            $.each(departments, function(index, department) {
-                                $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
+                            $.each(boxes, function(index, box) {
+                                $('#barcode').append('<option value="' + box.barcode + '">' + box.barcode + '</option>');
+
                             });
                             // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#dept'), config);
+                            dselect(document.querySelector('#barcode'), config);
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
                     }
                 });
             });
-</script>
-    
-    <!-- JavaScript to prevent form submission when duplicate detected -->
+    </script>
+
+    <!-- JavaScript to prevent form submission when duplicate detected
     <script>
         document.getElementById('rackForm').addEventListener('submit', function(event) {
             if (document.querySelector('#duplicateErrorModal').classList.contains('show')) {
                 event.preventDefault();
             }
         });
-    </script>
+    </script> -->
 
-   
+
 </body>
 
 </html>

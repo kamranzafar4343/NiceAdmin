@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 $HOSTNAME = 'localhost';
 $USERNAME = 'root';
 $PASSWORD = '';
-$DATABASE = 'datatech1_test';
+$DATABASE = 'catmarketing';
 
 
 $conn = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $DATABASE);

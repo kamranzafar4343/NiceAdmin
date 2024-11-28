@@ -35,7 +35,6 @@ if (isset($_POST['submit'])) {
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
     $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']);
-
     $requestor_name = mysqli_real_escape_string($conn, $_POST['requestor_name']);
     $role = mysqli_real_escape_string($conn, $_POST['role']);
     $request_date = mysqli_real_escape_string($conn, $_POST['req_date']);
@@ -48,14 +47,22 @@ if (isset($_POST['submit'])) {
         return mysqli_real_escape_string($conn, $value); // Sanitize each value
     }, $itemBarcodes)); // Convert to a comma-separated string
 
-    // //show error if finds duplicate barcode
-    // if ($result_duplicate_barcode && $result_duplicate_barcode->num_rows > 0) {
-    //     die("Workorder already created against that barcode");
-    // } else {
+    //if box barcode already exists, show alert
+    $checkBarcode = "SELECT * FROM orders WHERE barcode = '$barcode'";
+    $barcodeResult = mysqli_query($conn, $checkBarcode);
+    if ($barcodeResult->num_rows > 0) {
+?>
+        <script>
+            // JavaScript to show the alert
+            alert("<?php echo "Workorder already exist with the selected barcode" ?>");
+            window.location.href = "order.php";
+        </script>
+<?php
+        die();
+    }
 
     $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, item_barcode, requestor, role, req_date, description) 
      VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$itemBarcodesString', '$requestor_name', '$role', '$request_date', '$description')";
-    // }
 
 
     if ($conn->query($sql) === TRUE) {
@@ -667,7 +674,7 @@ if (isset($_POST['submit'])) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Get today's date in the format yyyy-mm-dd
             const today = new Date().toISOString().split('T')[0];
 
@@ -675,7 +682,7 @@ if (isset($_POST['submit'])) {
             $('#dateField').attr('min', today);
 
             // Optional: You can also reset the value if it's less than today
-            $('#dateField').on('change', function () {
+            $('#dateField').on('change', function() {
                 if ($(this).val() < today) {
                     alert('Select a date greater than or equal to today.');
                     $(this).val(''); // Clear the invalid selection
@@ -864,34 +871,34 @@ if (isset($_POST['submit'])) {
                 });
             });
 
-    //            When company is changed, populate phone
-    // $('#company').change(function() {
-    //     var company_id = $(this).val();
- 
-        // AJAX request to get phone no delivery address
-    //     $.ajax({
-    //         url: 'get_company_details.php', // Replace with your server-side script
-    //         type: 'POST',
-    //         data: { company_id: company_id },
-    //         success: function(response) {
-    //             try {
-    //                 var companyDetails = JSON.parse(response); // Expect JSON data from server
-    //                 // Populate the input fields with the data
-    //                 $('#company_name').val(companyDetails.name); // Input field for company name
-    //                 $('#company_address').val(companyDetails.address); // Input field for company address
-    //             } catch (e) {
-    //                 console.error("Invalid JSON response", response);
-    //             }
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.error("AJAX Error: " + error);
-    //         }
-    //     });
-    // });
+            //            When company is changed, populate phone
+            // $('#company').change(function() {
+            //     var company_id = $(this).val();
+
+            // AJAX request to get phone no delivery address
+            //     $.ajax({
+            //         url: 'get_company_details.php', // Replace with your server-side script
+            //         type: 'POST',
+            //         data: { company_id: company_id },
+            //         success: function(response) {
+            //             try {
+            //                 var companyDetails = JSON.parse(response); // Expect JSON data from server
+            //                 // Populate the input fields with the data
+            //                 $('#company_name').val(companyDetails.name); // Input field for company name
+            //                 $('#company_address').val(companyDetails.address); // Input field for company address
+            //             } catch (e) {
+            //                 console.error("Invalid JSON response", response);
+            //             }
+            //         },
+            //         error: function(xhr, status, error) {
+            //             console.error("AJAX Error: " + error);
+            //         }
+            //     });
+            // });
 
         });
     </script>
-    
+
     <script src="assets/js/main.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

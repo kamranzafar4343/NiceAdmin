@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
-    // Check if the barcode already exists
+    // Check if the item barcode already exists
     $nameCheck = "SELECT * FROM `item` WHERE `barcode`='$barcode'";
     $nameCheckResult = $conn->query($nameCheck);
 
@@ -42,8 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode', 'In')";
 
         if ($conn->query($sql) === TRUE) {
+           // Set success message in session
+        $_SESSION['success_message_item'] = "Item added successfully!";
             header("Location: createitem.php");
-            exit();
+            exit;
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
@@ -51,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
-
 ?>
 
 
@@ -120,6 +121,10 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <!-- ALERTIFY CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css" />
 
     <style>
         /* Custom CSS to decrease font size of the table */
@@ -502,7 +507,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                         <button type="reset" class="btn btn-outline-info mr-1"
                             onclick="window.location.href = 'showItems.php';">Go back</button>
                         <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary">Finalize</button>
+                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
                     </div>
                 </form>
             </div>
@@ -693,6 +698,26 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
 
         });
     </script>
+
+       <!-- ALERTIFY JavaScript -->
+       <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+
+
+        <?php
+    if (isset($_SESSION['success_message_item'])):
+    ?>
+        <script>
+            // Set Alertify to display notifications at the top of the page
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success("<?= 'Item added successfully' ?>");
+        </script>
+    <?php
+        //unset message after displaying it to the user
+        unset($_SESSION['success_message_item']); // Clear the message
+    endif;
+    ?>
+    
+
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {
             searchable: false,

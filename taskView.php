@@ -25,11 +25,84 @@ if ($resultData->num_rows > 0) {
 //get order id from url
 $order_no = $_GET['id'];
 
+
+//get workorder_no
+$workorder_no = $_GET['id'];
+
+//get order details
+$sql = "SELECT * FROM `orders` WHERE `order_no` = '$workorder_no'";
+$result = $conn->query($sql);
+
+if ($result && $result->num_rows > 0) {
+    $row3 = $result->fetch_assoc();
+    $order_no = $row3['order_no'];
+    $creator = $row3['creator'];
+
+    $comp_id_fk = $row3['comp_id_fk'];
+
+    //get company name from compani table
+    $compName = "SELECT * FROM compani WHERE comp_id = $comp_id_fk";
+    $compNameResult = $conn->query($compName);
+    if ($compNameResult && $compNameResult->num_rows > 0) {
+        $row4 = $compNameResult->fetch_assoc();
+
+        $comp_name = $row4['comp_name'];
+    }
+
+    $branch_id_fk = $row3['branch_id_fk'];
+
+    //get branch name from branch table
+    $branchName = "SELECT * FROM branches WHERE branch_id = $branch_id_fk";
+    $branchNameResult = $conn->query($branchName);
+    if ($branchNameResult && $branchNameResult->num_rows > 0) {
+        $row5 = $branchNameResult->fetch_assoc();
+
+        $branch_name = $row5['branch_name'];
+    }
+
+    $priority = $row3['priority'];
+    $flag = $row3['flag'];
+    $date = $row3['date'];
+    $foc = $row3['foc'];
+    $phone = $row3['foc_phone'];
+    $pickup_add = $row3['pickup_address'];
+    $object = $row3['object_code'];
+
+    $barcode = $row3['barcode'];
+
+    //show location of the barcode
+    $location = "SELECT * FROM store WHERE box = '$barcode'";
+    $locationResult = $conn->query($location);
+    if ($locationResult && $locationResult->num_rows > 0) {
+        $row6 = $locationResult->fetch_assoc();
+        $rack_location = $row6['rack_select'];
+    }
+
+    //convert array into json
+    // $raw_items = $row3['item_barcode'];
+    // $json_items = json_encode($raw_items);
+
+    // $alt = $row3['alt'];
+    // $requestor = $row3['requestor'];
+    // $role = $row3['role'];
+    // $req_date = $row3['req_date'];
+    // $description = $row3['description'];
+    // $create_date = $row3['order_creation_date'];
+    // $obj_type = $row3['obj_typ'];
+    // $quant = $row3['quant'];
+    // $supp_req = $row3['supp_requestor'];
+    // $cost_center = $row3['cost_cent'];
+    // $dateTime = $row3['dateTime'];
+    // $comment = $row3['comment'];
+} else {
+    echo "No order found";
+}
+
 //handle form submission
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rec_name = mysqli_real_escape_string($conn, $_POST['rec_name']);
     $rec_phone = mysqli_real_escape_string($conn, $_POST['rec_phone']);
-    
+
     //---------------------------set image variable------------------------ and its validation
     //ensure file is uploaded
     if (!isset($_FILES['image']) || $_FILES['image']['error'] == UPLOAD_ERR_NO_FILE) {
@@ -469,20 +542,32 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
+                    
+                    <?php
+                    //get data from`assign_tasks` table
+                    $assign_tasks = "Select * FROM assign_task WHERE order_no_fk = '$order_no'";
+                    $result_assign_tasks = $conn->query($assign_tasks);
+                    if ($result_assign_tasks->num_rows > 0) {
+                        $row121 = $result_assign_tasks->fetch_assoc();
+                        $handover_to = $row121['handover_to'];
+                        $admin_instructions = $row121['admin_instruction'];
+                        $bank_instructions = $row121['bank_instruction'];
+                        $box_location = $row121['location'];
+                    } ?>
 
                     <div class="col-md-6">
                         <h4 class="mb-4 text-bg-success" style="padding: 8px;">Task Details</h4>
                         <div class="row-md-4">
-                            <h6>Work Order No:<strong> #3423432</strong></h6>
+                            <h6>Work Order No:<strong><?php echo "#" . $order_no ?> </strong></h6>
                             <hr>
                         </div>
                         <div class="row-md-4">
-                            <h6><strong>Instructions by bank:</strong></h6>
-                            <p> labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            <h6><strong>Instructions by Client:</strong></h6>
+                            <p> <?php echo $bank_instructions ?> </p>
                         </div>
                         <div class="row-md-4">
                             <h6><strong>Instructions by admin:</strong></h6>
-                            <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            <p> <?php echo $admin_instructions ?> </p>
                         </div>
 
                         <div class="row">
@@ -541,8 +626,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                             echo '</ul>'; // End unordered list
                                             echo '</td>';
 
+
                                             echo '<td>' .
-                                                "L4-B-02-C-01" .
+                                                $box_location.
                                                 '</td>';
 
 

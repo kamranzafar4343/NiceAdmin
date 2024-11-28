@@ -26,7 +26,6 @@ if ($resultData->num_rows > 0) {
 }
 
 
-$conn->close();
 ?>
 
 
@@ -543,8 +542,8 @@ $conn->close();
                     <h5 class="card-title">List of Boxes and Rack Details</h5>
 
                     <?php
-
-                    $sql = "SELECT * FROM store";
+                    // SQL query to get company details
+                    $sql = "SELECT * FROM store ORDER BY add_date DESC";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0): ?>
@@ -552,15 +551,11 @@ $conn->close();
                             <thead>
                                 <tr>
 
-                                    <th scope="col" style="width: 15%;">Box Barcode</th>
-                                    <th scope="col" style="width: 10%;">Object</th>
-                                    <th scope="col" style="width: 15%;">Location</th>
                                     <th scope="col" style="width: 13%;">Account</th>
-                                    <!-- <th scope="col" style="width: 10%;">Alt Code</th> -->
+                                    <th scope="col" style="width: 10%;">Box Barcode</th>
+                                    <th scope="col" style="width: 10%;">Location</th>
                                     <th scope="col" style="width: 10%;">Status</th>
-                                    <th scope="col" style="width: 15%;">Description</th>
-                                    <th scope="col" style="width: 15%;">Add Date</th>
-                                    <th scope="col" style="width: 15%;">Destroy Date</th>
+
 
                                     <!-- Show "Actions" column only if the user is an admin -->
                                     <?php if ($_SESSION['role'] == 'admin'): ?>
@@ -576,30 +571,8 @@ $conn->close();
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
 
-                                        <td><strong><?= htmlspecialchars($row['barcode_select']) ?></strong></a></td>
 
-                                        <td><i class="';
-                                        <?php if ($row["object_code"] == 'Container') {
-                                            echo 'fa-solid fa-box';
-                                            echo '" style="color: #007bff; font-size: 1.5rem; </i>"';
-                                        } elseif ($row["object_code"] == 'FileFolder') {
-                                            echo 'fa-solid fa-folder';
-                                            echo '" style="color: grey; font-size: 1.5rem; </i>"';
-                                        }
-                                        echo '"></i> ' . '</td>'; ?> 
-                                        
                                         <?php
-                                        $rack_id = $row['rack_select'];
-                                        $sqlRack = "SELECT * FROM racks WHERE id= '$rack_id'";
-                                        $resultRack = $conn->query($sqlRack);
-                                        if ($resultRack->num_rows > 0) {
-                                            $rowRack = $resultRack->fetch_assoc();
-                                            $rack = $rowRack['rack_location'];
-                                        }
-                                        ?>
-                                        <td><strong><?= htmlspecialchars($rack) ?></strong></a></td>
-
-                                      <?php
                                         $comp_ide = $row['comp_id_fk'];
                                         $sql12 = "SELECT * FROM compani WHERE comp_id= '$comp_ide'";
                                         $result12 = $conn->query($sql12);
@@ -619,51 +592,51 @@ $conn->close();
 
                                         <td><?= $comp_name . " / " . $branch_name ?></td>
                                         <!-- <td><?= htmlspecialchars($row["alt_code"]) ?></td> -->
-                                        
-<?php
-                                    echo '<td><i class="';
-                                    if ($row["status"] == 'In') {
-                                        echo 'fa-solid fa-right-to-bracket';
-                                        echo '" style="color: green; font-size: 1.5rem; </i>"';
-                                    } elseif ($row["status"] == 'Out') {
-                                        echo 'fa-solid fa-right-from-bracket';
-                                        echo '" style="color: red; font-size: 1.5rem; </i>"';
-                                    } elseif ($row["status"] == 'Ready for Destroy') {
-                                        echo 'fa-solid fa-trash-can';
-                                        echo '" style="color: red; font-size: 1.5rem; </i>"';
-                                    }
 
-                                    echo '"></i> ' . '</td>';
-?>
-                                    
-                                    <td><?= htmlspecialchars($row["description"]) ?></td>
 
-                            <td><?= htmlspecialchars($row["add_date"]) ?></td>
-                                        <td><?= htmlspecialchars($row["destroy_date"]) ?></td>
+                                        <td><strong><?= htmlspecialchars($row['box']) ?></strong></a></td>
+
+                                        <td><strong><?= htmlspecialchars($row['rack_select']) ?></strong></a></td>
+
+                                        <?php
+                                        echo '<td><i class="';
+                                        if ($row["status"] == 'In') {
+                                            echo 'fa-solid fa-right-to-bracket';
+                                            echo '" style="color: green; font-size: 1.5rem; </i>"';
+                                        } elseif ($row["status"] == 'Out') {
+                                            echo 'fa-solid fa-right-from-bracket';
+                                            echo '" style="color: red; font-size: 1.5rem; </i>"';
+                                        } elseif ($row["status"] == 'Ready for Destroy') {
+                                            echo 'fa-solid fa-trash-can';
+                                            echo '" style="color: red; font-size: 1.5rem; </i>"';
+                                        }
+
+                                        echo '"></i> ' . '</td>';
+                                        ?>
 
                                         <!-- Show actions only if user is admin -->
                                         <?php if ($_SESSION['role'] == 'admin'): ?>
                                             <td>
                                                 <div class=" action-buttons" style="display: flex; gap: 10px;">
-                                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center"
-                                                    style="width:25px; height:28px"
-                                                    data-mdb-ripple-init
-                                                    onclick="return confirm('Are you sure you want to delete this rack?');"
-                                                    href="deleteStore.php?id=<?= $row['id'] ?>">
-                                                    <i class="fa-solid fa-trash" style="width: 15px;"></i>
-                                                </a>
+                                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center"
+                                                        style="width:25px; height:28px"
+                                                        data-mdb-ripple-init
+                                                        onclick="return confirm('Are you sure you want to delete this rack?');"
+                                                        href="deleteStore.php?id=<?= $row['id'] ?>">
+                                                        <i class="fa-solid fa-trash" style="width: 15px;"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        <?php endif; ?>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        </table>
+                    <?php else: ?>
+                        <p>No box and rack data found.</p>
+                    <?php endif; ?>
                 </div>
-                </td>
-            <?php endif; ?>
-            </tr>
-        <?php endwhile; ?>
-        </tbody>
-        </table>
-    <?php else: ?>
-        <p>No box and rack data found.</p>
-    <?php endif; ?>
             </div>
-        </div>
         </div>
     </main>
 

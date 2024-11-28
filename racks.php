@@ -173,7 +173,7 @@ if (isset($_GET['comp_id'])) {
 
         #fixedButtonBranch {
             position: relative;
-            top: 110px;
+            top: 28px;
             left: 1187px;
         }
 
@@ -544,15 +544,8 @@ if (isset($_GET['comp_id'])) {
     <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
     <!-- Button to add a new rack -->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php';" class="btn btn-primary mb-3">Add Rack</button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php';" class="btn btn-primary mt-5 mb-3">Add Rack</button>
 
-    < <!-- Search bar for racks -->
-        <div class="search-container">
-            <form id="searchForm" action="" method="GET">
-                <input type="text" id="searchInput" name="query" placeholder="Search by rack ..." autofocus>
-                <input type="submit" value="Search" class="btn btn-success btn-success">
-            </form>
-        </div>
         <!-- Main content -->
         <main id="main" class="main">
             <div class="col-12">

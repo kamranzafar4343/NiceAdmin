@@ -81,10 +81,10 @@ if ($resultData->num_rows > 0) {
         /* Custom CSS to decrease font size of the table */
 
         .add {
-            position: relative;
-            top: 109px;
-            left: 938px;
-
+            /* cursor: pointer; */
+            margin-left: 976px;
+            margin-top: 85px;
+            margin-bottom: 103px;
         }
 
         /* Basic styling for search bar */
@@ -264,7 +264,7 @@ if ($resultData->num_rows > 0) {
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
-            margin-top: 51px;
+            margin-top: 7px;
         }
 
         .company-name:active {
@@ -530,8 +530,8 @@ if ($resultData->num_rows > 0) {
                                 ON 
                                 o.order_no = a.order_no_fk
                                 ORDER BY 
-o.order_creation_date ASC
-LIMIT 100;
+                                o.order_creation_date ASC
+                                LIMIT 100;
                                 ";
                     $resultShowOrders = $conn->query($showOrders);
 
@@ -567,21 +567,22 @@ LIMIT 100;
                             <td>
                                 <div>
                                     <!-- Is Read with GIF -->
-                                    <?php
 
-                                    // if status is completed then do not show the icon
-                                    if (($row['status'] != 'Completed') && $row['is_read'] == 1) {
-                                    ?>
+                                    <?php
+                                    //check if the status is completed then hide the image
+
+                                  
+                                        if ($row['is_read'] == 1) {
+                                        ?>
                                             <a
                                                 href="verify_task_submission.php?id=<?php echo $row["order_no"]; ?>">
-                                                <img src="assets/img/new-icon-gif-2.jpg" style="height: 30px; width: 30px; margin-right: 15px" alt="gif">
+                                                <img src="assets/img/new-icon-gif-2.jpg" id="gifImage" style="height: 30px; width: 30px; margin-right: 15px; visibility: visible;" alt="gif">
                                             </a>
                                     <?php
                                         } else {
                                             echo '';
                                         }
                                     
-                                
                                     // Workorder_no
                                     echo $row["order_no"];
                                     ?>

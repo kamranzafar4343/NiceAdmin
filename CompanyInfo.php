@@ -51,11 +51,11 @@ if ($result->num_rows > 0) {
   $contact_person = $company_data['foc'];
   $phone = $company_data['foc_phone'];
   $address = $company_data['add_1'];
+  $e_role = $company_data['role'];
+  $e_auth = $company_data['auth'];
 }
 
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -832,6 +832,8 @@ if ($result->num_rows > 0) {
                 <br>
                 <label for="" class="h6"><em>Contact Person Info:</em></label> <br>
                 <strong>Contact Person:</strong> <?php echo $contact_person; ?><br>
+                <strong>Designation:</strong> <?php echo $e_role; ?><br>
+                <strong>Designation:</strong> <?php echo $e_auth; ?><br>
                 <strong>Email:</strong> <?php echo $email; ?><br>
                 <strong>Phone:</strong> <?php echo $phone; ?><br>
                 <strong>Address:</strong> <?php echo $address ?> <br>

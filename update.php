@@ -40,17 +40,20 @@ if (isset($_GET['id'])) {
 
   // Check if the company exists
   if ($result && $result->num_rows > 0) {
-    
+
     // Fetch company data into variables
     $row = $result->fetch_assoc();
     $comp_name = $row['comp_name'];
+    $description = $row['acc_desc'];
     $registration_date = $row['registration'];
     $expiry_date = $row['expiry'];
     $contact_person = $row['foc'];
     $contact_phone = $row['foc_phone'];
     $address = $row['add_1'];
     $comp_email = $row['email'];
-    } else {
+    $e_auth = $row['auth'];
+    $e_role = $row['role'];
+  } else {
     // If no company found, display an error message
     echo "Company not found!";
     exit;
@@ -62,21 +65,27 @@ if (isset($_POST['update'])) {
   // Sanitize and retrieve form data
 
   $comp_name = mysqli_real_escape_string($conn, $_POST['comp_name']);
+  $get_description = mysqli_real_escape_string($conn, $_POST['desc']);
   $registration_date = mysqli_real_escape_string($conn, $_POST['registration']);
   $expiry_date = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
-  
+  $input_auth = mysqli_real_escape_string($conn, $_POST['authority']);
+  $input_role = mysqli_real_escape_string($conn, $_POST['role']);
+
   // SQL query to update the company record
-  $sql = "UPDATE `compani` SET 
+ $sql = "UPDATE `compani` SET 
             
             `comp_name` = '$comp_name',
+`acc_desc` = '$get_description',
             `registration` = '$registration_date',
             `expiry` = '$expiry_date',
             `foc` = '$contact_person',
             `foc_phone` = '$contact_phone',
-            `add_1` = '$address'
+            `add_1` = '$address',
+            `auth` = '$input_auth',
+            `role` = '$input_role'
           WHERE `comp_id` = '$comp_id'";
 
   // Execute the query and check for success or error
@@ -635,10 +644,10 @@ End Search Bar -->
         </li><!-- End Companies Nav -->
 
         <li class="nav-item">
-                    <a class="nav-link collapsed" href="account.php">
-                        <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
+          <a class="nav-link collapsed" href="account.php">
+            <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
+          </a>
+        </li><!-- End Boxes Nav -->
 
         <li class="nav-item">
           <a class="nav-link collapsed" href="box.php">
@@ -734,14 +743,17 @@ End Search Bar -->
             <label for="comp_name" class="form-label">Comp_name</label>
             <input class="form-control" id="comp_name" name="comp_name" value="<?php echo $comp_name; ?>" readonly>
           </div>
-
+          <div class="col-md-6">
+            <label for="account_description" class="form-label">Description</label>
+            <textarea class="form-control" name="desc" required><?php echo $description; ?></textarea>
+          </div>
           <div class="col-md-6">
             <label for="registration" class="form-label">Setup Date</label>
             <input type="date" class="form-control" id="registration" name="registration" value="<?php echo $registration_date; ?>" readonly>
           </div>
 
           <div class="col-md-6 mb-3">
-            <label for="expiry" class="form-label">Contract Expiration Date</label>
+            <label for="expiry" class="form-label">Contract Expiry Date</label>
             <input type="date" class="form-control" id="expiry" name="expiry" value="<?php echo $expiry_date; ?>">
           </div>
 
@@ -749,6 +761,28 @@ End Search Bar -->
             <label for="foc" class="form-label">Contact Person</label>
             <input type="text" class="form-control" id="foc" name="foc" value="<?php echo $contact_person; ?>" required pattern="[A-Za-z\s\.]+" minlength="3" maxlength="38" title="only letters allowed; at least 3">
           </div>
+          <div class="col-md-6">
+              <label for="phone" class="form-label">Access/Authority</label>
+              <select name="authority" id="" class="form-select">
+                  <option value="">Select level of access</option>
+                  <option value="can get information about branch boxes" <?php echo $e_auth == 'can get information about branch boxes' ? 'selected' : ''; ?>>can get information about branch boxes</option>
+                  <option value="only retrieve department boxes" <?php echo $e_auth == 'only retrieve department boxes' ? 'selected' : ''; ?>>only retrieve department boxes</option>
+                  <option value="all departments of their branch" <?php echo $e_auth == 'all departments of their branch' ? 'selected' : ''; ?>>all departments of their branch</option>
+                  <option value="all departments and all branches of company" <?php echo $e_auth == 'all departments and all branches of company' ? 'selected' : ''; ?>>all departments and all branches of company</option>
+              </select>
+          </div>
+          
+          <div class="col-md-6">
+                        <label for="" class="form-label">Designation</label>
+                        <select name="role" id="" class="form-select">
+                            <option value="">Select Role of the Employee</option>
+                            <option value="Branch Manager" <?php echo $e_role == 'Branch Manager' ? 'selected' : ''; ?>>Branch Manager</option>
+                            <option value="Department Manager" <?php echo $e_role == 'Department Manager' ? 'selected' : ''; ?>>Department Manager</option>
+                            <option value="Junior Employee" <?php echo $e_role == 'Junior Employee' ? 'selected' : ''; ?>>Junior Employee</option>
+                            <option value="Head of Operations" <?php echo $e_role == 'Head of Operations' ? 'selected' : ''; ?>>Head of Operations</option>
+                        </select>
+                    </div>
+
 
           <div class="col-md-6">
             <label for="foc_phone" class="form-label">Phone</label>
@@ -764,7 +798,7 @@ End Search Bar -->
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
             <input type="text" class="form-control" id="address" name="address" value="<?php echo $address; ?>" required>
-            </div>
+          </div>
           <div class="col-12 text-center">
             <button type="submit" class="btn btn-outline-primary mt-3" name="update" value="update">Update</button>
           </div>

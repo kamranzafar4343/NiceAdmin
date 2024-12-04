@@ -720,7 +720,7 @@ End Search Bar -->
                     </div>
 
                     <div class="col-md-6">
-                        <label for="" class="form-label">Role</label>
+                        <label for="" class="form-label">Designation</label>
                         <select name="role" id="" class="form-select">
                             <option value="">Select Role of the Employee</option>
                             <option value="Branch Manager" <?php echo $e_role == 'Branch Manager' ? 'selected' : ''; ?>>Branch Manager</option>

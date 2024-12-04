@@ -32,6 +32,14 @@ $resultDataTask = mysqli_query($conn, $getTaskData);
 if ($resultDataTask->num_rows > 0) {
     $row41 = $resultDataTask->fetch_assoc();
 
+    $box_barcode = $row41['box'];
+    //fetch status value of barcode from store table
+    $getStatus = "SELECT * FROM store WHERE box = '$box_barcode'";
+    $getStatusResult = mysqli_query($conn, $getStatus);
+    if ($getStatusResult->num_rows > 0) {
+        $row122 = $getStatusResult->fetch_assoc();
+        $StoreStatus = $row122['status'];
+    }
     $receiver_name = $row41['receiver_name'];
     $receiver_phone = $row41['receiver_phone'];
     $receiver_cnic = $row41['receiver_cnic'];
@@ -44,33 +52,23 @@ if ($resultDataTask->num_rows > 0) {
     $location = $row41['location'];
 }
 if (isset($_POST['submit'])) {
-
-    //update status to completed
+    //update workorder status to completed
     $updateData = "UPDATE orders SET status = 'Completed' WHERE order_no = '$order_no'";
-    if ($conn->query($updateData) === TRUE) {
-        $_SESSION['success'] = "Task Verified Successfully";
-        header("Location: order.php");
-    } else {
-        echo "<p>Error verifying information: " . $conn->error . "</p>";
-        exit();
-    }
 
-    //update box status to out
-    $updateBox = "UPDATE  SET status = 'Completed' WHERE order_no = '$order_no'";
     if ($conn->query($updateData) === TRUE) {
-        $_SESSION['success'] = "Task Verified Successfully";
-        header("Location: order.php");
-    } else {
-        echo "<p>Error verifying information: " . $conn->error . "</p>";
-        exit();
-    }
 
-    if ($conn->query($updateStatus) === TRUE) {
-        //set success message and redirect to tasks page
-        $_SESSION['success'] = "Task Verified Successfully";
-        header("Location: verify_task_submission.php?id=$order_no");
+        //we only want to run this query when status is not out
+        if ($StoreStatus != 'Out') {
+            //we also need to update its status in racks that it is out for delivery
+            $updateRack = "UPDATE store SET status = 'Out' WHERE box = '$box_barcode'";
+            mysqli_query($conn, $updateRack);
+        } 
+        //if everything is successful, redirect to the home page
+        header("Location: order.php");
+        exit();
     } else {
-        echo "Error: " . $insertData . "<br>" . $conn->error;
+        echo "<p>No order no found " . $conn->error . "</p>";
+        exit();
     }
 }
 ?>
@@ -405,35 +403,96 @@ if (isset($_POST['submit'])) {
                 </a>
             </li><!-- End Dashboard Nav -->
 
+            <?php if ($_SESSION['role'] == 'admin') { ?>
+                <!-- Admin-only Links -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="Companies.php">
+                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Companies Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link active" href="tasks.php">
-                    <i class="bi bi-list-task"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
 
-            <li class="nav-heading">Pages</li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span>
+                        <i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="forms-nav" class="nav-content" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link collapsed" href="order.php">
+                                <i class="bi bi-circle"></i><span>delivery</span>
+                            </a>
+                            <a class="nav-link collapsed" href="pickup.php">
+                                <i class="bi bi-circle"></i><span>pickup </span>
+                            </a>
+                            <a class="nav-link collapsed" href="permout.php">
+                                <i class="bi bi-circle"></i><span>perm_out </span>
+                            </a>
+                            <a class="nav-link collapsed" href="destroy.php">
+                                <i class="bi bi-circle"></i><span>destroy </span>
+                            </a>
+                            <a class="nav-link collapsed" href="access.php">
+                                <i class="bi bi-circle"></i><span>access </span>
+                            </a>
+                            <a class="nav-link collapsed" href="supplies.php">
+                                <i class="bi bi-circle"></i><span>supplies </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
-            </li><!-- End Profile Page Nav -->
+                <li class="nav-item">
+                    <a class="nav-link active" href="tasks.php">
+                        <i class="bi bi-list-task"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+
+            <?php } else { ?>
+                <li class="nav-item">
+                    <a class="nav-link active" href="tasks.php">
+                        <i class="bi bi-list-task"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li>
+
+                <li class="nav-heading">Pages</li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="users-profile.php">
+                        <i class="bi bi-person"></i>
+                        <span>Profile</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
 
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
-                </a>
-            </li><!-- End Login Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="pages-login.php">
+                        <i class="bi bi-box-arrow-right"></i><span>Login</span>
+                    </a>
+                </li><!-- End Login Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="logout.php">
-                    <i class="bi bi-box-arrow-left"></i><span>Logout</span>
-                </a>
-            </li><!-- End Logout Nav -->
-
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="logout.php">
+                        <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+                    </a>
+                </li><!-- End Logout Nav -->
+            <?php } ?>
         </ul>
     </aside>
 
@@ -451,11 +510,10 @@ if (isset($_POST['submit'])) {
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
-
                     <div class="col-md-6">
                         <h4 class="mb-4 text-bg-success" style="padding: 8px;">Task Details</h4>
                         <div class="row-md-4">
-                            <h6>Work Order No:<strong> <?php echo "#" . $order_no; ?></strong></h6>
+                            <h6>Work Order No:<strong> <a href="viewWO.php?id=<?php echo $order_no; ?>"><?php echo "#" . $order_no; ?></a></strong></h6>
                             <hr>
                         </div>
                         <div class="row-md-4">
@@ -488,15 +546,15 @@ if (isset($_POST['submit'])) {
 
                                         // Display table
                                         echo '<table id="orderT" class="table mt-4 nowrap" style="font-size: 12px;">
-                    <thead>
-                        <tr >
-                        <th scope="col" style="width: 6%;">Box</th>
-                        <th scope="col" style="width: 7%;">Items</th>
-                        <th scope="col" style="width: 9%;">Location</th>
-                        <th scope="col" style="width: 15%;">Hand over to</th>';
+                                         <thead>
+                                             <tr >
+                                             <th scope="col" style="width: 6%;">Box</th>
+                                             <th scope="col" style="width: 7%;">Items</th>
+                                             <th scope="col" style="width: 9%;">Location</th>
+                                             <th scope="col" style="width: 15%;">Hand over to</th>';
                                         echo '</tr>
-                    </thead>
-                    <tbody>';
+                                         </thead>
+                                         <tbody>';
 
                                         // Loop through results
                                         while ($row = $resultShowOrders->fetch_assoc()) {
@@ -574,7 +632,7 @@ if (isset($_POST['submit'])) {
                         <h4 class="mb-4 text-bg-success" style="padding: 8px;">Verify the following details</h4>
 
                         <div class="row-md-4 mb-2">
-                            <strong>Enter Receiver's information:</strong><br>
+                            <strong style="font-size: medium;">Receiver's information:</strong><br>
                             <p>Receiver's Name: <?php echo htmlspecialchars($receiver_name); ?></p>
                             <p>Receiver's Phone Number: <?php echo htmlspecialchars($receiver_phone); ?></p>
                             <p>Receiver's CNIC: <?php echo htmlspecialchars($receiver_cnic); ?></p>
@@ -590,7 +648,7 @@ if (isset($_POST['submit'])) {
                         </div>
 
                         <div class="row-md-4 mb-2">
-                            <strong>Task description:</strong><br>
+                            <strong style="font-size: medium; margin-bottom: 7px;">Task description:</strong><br>
                             <p><?php echo nl2br(htmlspecialchars($details)); ?></p>
                         </div>
 
@@ -600,7 +658,7 @@ if (isset($_POST['submit'])) {
                                 <strong>Cross checked</strong>
                             </label>
                         </div>
-                        <div class="row-md-4 mb-2 ml-4">
+                        <div class="row-md-4 ml-4">
                             <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="<?php echo $verification; ?>" name="checkbox2">
                             <label class="form-check-label" for="flexCheckDefault">
                                 <strong>Verified information</strong>
@@ -608,9 +666,8 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
 
-                    <div class="text-center mt-4 mb-2">
-                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary ">Reset</button>
+                    <div class="text-center mb-2">
+                        <button type="submit" class="btn btn-outline-success mr-2" name="submit" value="submit">Verify</button>
                     </div>
                 </form>
 

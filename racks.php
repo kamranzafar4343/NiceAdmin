@@ -475,7 +475,7 @@ if (isset($_GET['comp_id'])) {
 
                 <li class="nav-item">
                     <a class="nav-link active" href="racks.php">
-                        <i class="bi bi-box"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
                     </a>
                 </li><!-- End Racks Nav -->
 
@@ -631,7 +631,6 @@ if (isset($_GET['comp_id'])) {
                             // Display message if no racks found
                             echo '<p>No racks found based on the selected filters.</p>';
                         }
-
                         // Close database connection
                         $conn->close();
                         ?>
@@ -639,9 +638,6 @@ if (isset($_GET['comp_id'])) {
                 </div>
             </div>
         </main>
-
-
-
         <script>
             function filterCompany(comp_id) {
                 window.location.href = "box.php?comp_id=" + comp_id;

@@ -66,7 +66,7 @@ if ($result && $result->num_rows > 0) {
     $object = $row3['object_code'];
 
     $barcode = $row3['barcode'];
-
+    
     //show location of the barcode
     $location = "SELECT * FROM store WHERE box = '$barcode'";
     $locationResult = $conn->query($location);
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($conn->query($sql) === TRUE) {
         // Set success message in session
         $_SESSION['success_message'] = "Task assigned successfully!";
-        header("Location: assignTaskForm.php?id=$workorder_no");
+        header("Location: order.php");
         exit;
     } else {
         echo "Failed to assign the task: " . $conn->error;

@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
     $registration = mysqli_real_escape_string($conn, $_POST['registration']);
     $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']); //foc means focal person = contact person
-    $role = mysqli_real_escape_string($conn, $_POST['role']); 
+    $role = mysqli_real_escape_string($conn, $_POST['role']);
     $auth = mysqli_real_escape_string($conn, $_POST['authority']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
     $comp_email = mysqli_real_escape_string($conn, $_POST['comp_email']);
@@ -505,7 +505,7 @@ if (isset($_POST['submit'])) {
                         <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="" class="form-label">Role</label>
+                        <label for="" class="form-label">Designation</label>
                         <select name="role" id="" class="form-select">
                             <option value="">Select Role of the Employee</option>
                             <option value="Branch Manager">Branch Manager</option>

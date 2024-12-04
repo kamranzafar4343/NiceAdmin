@@ -166,7 +166,7 @@ if ($resultData->num_rows > 0) {
         #fixedButtonBranch {
             position: relative;
             top: 110px;
-            left: 1187px;
+            left: 1175px;
         }
 
         .row {
@@ -235,6 +235,10 @@ if ($resultData->num_rows > 0) {
         .mt-4 {
             margin-top: 1.5rem !important;
             margin-right: 214px;
+        }
+
+        .mt-5{
+            margin-top: 5rem !important;
         }
 
         .datatable-dropdown label {
@@ -527,17 +531,9 @@ if ($resultData->num_rows > 0) {
     <!--new table design-->
     <!-- Button to add new box -->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'storedata.php';" class="btn btn-primary mb-3">Add Box & Rack</button>
-
-    <!-- Search bar for racks -->
-    <div class="search-container">
-        <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Search by rack code..." autofocus>
-            <input type="submit" value="Search" class="btn btn-success btn-success">
-        </form>
-    </div>
     <main id="main" class="main">
         <div class="col-12">
-            <div class="cardBranch recent-sales overflow-auto">
+            <div class="cardBranch recent-sales overflow-auto mt-5">
                 <div class="card-body">
                     <h5 class="card-title">List of Boxes and Rack Details</h5>
 

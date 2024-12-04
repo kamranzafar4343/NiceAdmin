@@ -55,7 +55,6 @@ if ($resultData->num_rows > 0) {
 
     <!-- Style -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
@@ -294,7 +293,6 @@ if ($resultData->num_rows > 0) {
 
     <title>Delivery Workorders</title>
 
-
 </head>
 
 <body> <!-- ======= Header ======= -->
@@ -415,6 +413,13 @@ if ($resultData->num_rows > 0) {
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="tasks.php">
+                        <i class="bi bi-list-task"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -465,6 +470,8 @@ if ($resultData->num_rows > 0) {
                     </ul>
                 </li>
 
+
+
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="racks.php">
                         <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
@@ -501,7 +508,6 @@ if ($resultData->num_rows > 0) {
 
     <!--form--------------------------------------form--------------------------------------->
 
-
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-14">
@@ -509,33 +515,9 @@ if ($resultData->num_rows > 0) {
             <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add">Add</button>
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
+
                     <h5 class="card-title">List of Delivery Work Orders</h5>
                     <?php
-                    // SQL query to fetch orders with is_read status
-                    //o is given as alias for orders table
-                    //a is given as alias for assign_tasks table
-                    $showOrders = "
-                            SELECT 
-                                    o.order_no, 
-                                    o.comp_id_fk, 
-                                    o.branch_id_fk, 
-                                    o.status, 
-                                    o.order_creation_date, 
-                                    o.priority, 
-                                    o.date, 
-                                    a.is_read
-                                    FROM 
-                                    orders o  
-                                 LEFT JOIN 
-                                assign_task a
-                                ON 
-                                o.order_no = a.order_no_fk
-                                ORDER BY 
-                                o.order_creation_date ASC
-                                LIMIT 100;
-                                ";
-                    $resultShowOrders = $conn->query($showOrders);
-
                     // SQL query to fetch orders with is_read status
                     //o is given as alias for orders table
                     //a is given as alias for assign_tasks table
@@ -583,7 +565,6 @@ if ($resultData->num_rows > 0) {
                         </thead>
                         <tbody style="font-size: 11px; ">';
 
-
                         // Counter variable
                         $counter = 1;
 
@@ -596,20 +577,24 @@ if ($resultData->num_rows > 0) {
                                     <!-- Is Read with GIF -->
 
                                     <?php
-                                    //check if the status is completed then hide the image
 
-                                  
-                                        if ($row['is_read'] == 1) {
-                                        ?>
+                                    //only show if is_read=1 means user complete his task
+                                    if ($row['is_read'] == 1) {
+                                        //check if the status is completed then hide the image
+                                        if ($row["status"] != 'Completed') {
+
+                                    ?>
                                             <a
                                                 href="verify_task_submission.php?id=<?php echo $row["order_no"]; ?>">
                                                 <img src="assets/img/new-icon-gif-2.jpg" id="gifImage" style="height: 30px; width: 30px; margin-right: 15px; visibility: visible;" alt="gif">
                                             </a>
                                     <?php
-                                        } else {
-                                            echo '';
+
                                         }
-                                    
+                                    } else {
+                                        echo '';
+                                    }
+
                                     // Workorder_no
                                     echo $row["order_no"];
                                     ?>
@@ -647,19 +632,10 @@ if ($resultData->num_rows > 0) {
                                     $conn->query($updateQuery);
                                 }
                             }
-                            // Change the status to "In Progress"
-                            if ($row['is_read'] == '1') {
-                                if ($row["status"] == 'Pending') {
-                                    $updateQuery = "UPDATE orders SET status = 'In Progress' WHERE order_no = " . $row['order_no'];
-                                    $conn->query($updateQuery);
-                                }
-                            }
                             echo '<td>';
-
 
                             if ($row["status"] == 'Completed') {
                                 echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["status"] . '</span>';
-                            } elseif ($row["status"] == 'In Progress') {
                             } elseif ($row["status"] == 'In Progress') {
                                 echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["status"] . '</span>';
                             } elseif ($row["status"] == 'Pending') {
@@ -670,8 +646,8 @@ if ($resultData->num_rows > 0) {
                                 echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["status"] . '</span>';
                             }
 
-
                             echo '</td>';
+
 
                             //convert timestamp to only date format
                             $dateTimeCreate = $row["order_creation_date"];
@@ -692,11 +668,10 @@ if ($resultData->num_rows > 0) {
                             $dateTime = $row["date"];
                             $justDate = date("Y-m-d", strtotime($dateTime));
                             echo '<td style="text-align: center;">' . $justDate . '</td>';
-                            
 
                             if ($_SESSION['role'] == 'admin') {
                             ?>
-                         <td>
+                                <td>
                                     <div style="display: flex; gap: 10px;">
                                         <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
 
@@ -781,11 +756,6 @@ if ($resultData->num_rows > 0) {
     <!--for search panes-->
     <script>
         new DataTable('#orderT', {
-
-            //show the rows in descending order by the date
-            "order": [
-                [3, "desc"]
-            ],
 
             //show the rows in descending order by the date
             "order": [

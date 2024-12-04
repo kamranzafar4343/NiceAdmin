@@ -42,10 +42,17 @@ if (isset($_POST['submit'])) {
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
     // Handle multiple selected values for "items"
-    $itemBarcodes =  $_POST['items2']; // Retrieve as an array
-    $itemBarcodesString = implode(", ", array_map(function ($value) use ($conn) {
-        return mysqli_real_escape_string($conn, $value); // Sanitize each value
-    }, $itemBarcodes)); // Convert to a comma-separated string
+    $itemBarcodes = $_POST['items2'];
+
+    // also handles empty values
+    if (empty($_POST['items2'])) {
+        $itemBarcodesString = ''; // Set to empty string if the array is empty
+    } else {
+        $itemBarcodesString = implode(", ", array_map(function ($value) use ($conn) {
+            return mysqli_real_escape_string($conn, $value); // Sanitize each value
+        }, $itemBarcodes)); // Convert to a comma-separated string
+
+    }
 
     //if box barcode already exists, show alert
     $checkBarcode = "SELECT * FROM orders WHERE barcode = '$barcode'";
@@ -54,7 +61,7 @@ if (isset($_POST['submit'])) {
 ?>
         <script>
             // JavaScript to show the alert
-            alert("<?php echo "Workorder already exist with the selected barcode" ?>");
+            alert("<?php echo "Duplicate Box Barcode! Please select another barcode while making workorder" ?>");
             window.location.href = "order.php";
         </script>
 <?php
@@ -165,8 +172,8 @@ if (isset($_POST['submit'])) {
     <script src="https://code.jquery.com/jquery/3.7.1/jquery.min.js"></script>
 
     <!-- dselect -->
-    <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
-    <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+<link rel="stylesheet" href="assets/css/dselect.css">
+<script src="assets/js/dselect.js"></script>
 
     <style>
         /* form text sizing */
@@ -607,7 +614,7 @@ if (isset($_POST['submit'])) {
                     <!-- Select barcode -->
                     <div class="col-md-4">
                         <label for="items">Select Item Barcode:</label>
-                        <select id="items2" class="form-select" name="items2[]" required multiple>
+                        <select id="items2" class="form-select" name="items2[]" multiple>
                             <option value="">Select barcode</option>
                             <!-- dynamically populate with ajax -->
                         </select>

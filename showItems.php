@@ -227,6 +227,9 @@ $result = $conn->query($sql);
             margin-top: 1.5rem !important;
             margin-right: 214px;
         }
+        .mt-5{
+            margin-top: 5rem !important;
+        }
 
         .datatable-dropdown label {
             font-size: 0.9rem;
@@ -636,18 +639,11 @@ $result = $conn->query($sql);
     <!-- Button to add new item -->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary mb-3">Add Item</button>
 
-    <!-- Search bar -->
-    <div class="search-container">
-        <form id="searchForm" action="" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Scan box barcode..." autofocus>
-            <input type="submit" value="Search" class="btn btn-success btn-success">
-        </form>
-    </div>
 
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
-            <div class="cardBranch recent-sales overflow-auto">
+            <div class="cardBranch recent-sales overflow-auto mt-5">
                 <div class="card-body">
                     <h5 class="card-title">List of Items</h5>
                     <?php

@@ -495,8 +495,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <span>Dashboard</span>
                 </a>
             </li><!-- End Dashboard Nav -->
+            <?php if ($_SESSION['role'] == 'admin') { ?>
+                <!-- Admin-only Links -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="Companies.php">
+                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Companies Nav -->
 
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="box.php">
+                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Boxes Nav -->
 
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="" href="#">
+                        <i class="ri-list-ordered"></i><span>Work Order</span>
+                        <i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="forms-nav" class="nav-content" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a class="nav-link collapsed" href="order.php">
+                                <i class="bi bi-circle"></i><span>delivery</span>
+                            </a>
+                            <a class="nav-link collapsed" href="pickup.php">
+                                <i class="bi bi-circle"></i><span>pickup </span>
+                            </a>
+                            <a class="nav-link collapsed" href="permout.php">
+                                <i class="bi bi-circle"></i><span>perm_out </span>
+                            </a>
+                            <a class="nav-link collapsed" href="destroy.php">
+                                <i class="bi bi-circle"></i><span>destroy </span>
+                            </a>
+                            <a class="nav-link collapsed" href="access.php">
+                                <i class="bi bi-circle"></i><span>access </span>
+                            </a>
+                            <a class="nav-link collapsed" href="supplies.php">
+                                <i class="bi bi-circle"></i><span>supplies </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="tasks.php">
+                        <i class="bi bi-list-task"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="racks.php">
+                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Racks Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="store.php">
+                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
+                    </a>
+                </li><!-- End Store Nav -->
+
+            <?php } else { ?>
             <li class="nav-item">
                 <a class="nav-link active" href="tasks.php">
                     <i class="bi bi-list-task"></i><span>Tasks</span><i class="bi bi-chevron ms-auto"></i>
@@ -512,19 +572,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </a>
             </li><!-- End Profile Page Nav -->
 
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
-                </a>
-            </li><!-- End Login Nav -->
-
             <li class="nav-item">
                 <a class="nav-link collapsed" href="logout.php">
                     <i class="bi bi-box-arrow-left"></i><span>Logout</span>
                 </a>
             </li><!-- End Logout Nav -->
 
+            <?php } ?>
         </ul>
     </aside>
 
@@ -542,7 +596,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <br>
                 <!-- Multi Columns Form -->
                 <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
-                    
+
                     <?php
                     //get data from`assign_tasks` table
                     $assign_tasks = "Select * FROM assign_task WHERE order_no_fk = '$order_no'";
@@ -596,7 +650,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <th scope="col" style="width: 7%;">Items</th>
                         <th scope="col" style="width: 9%;">Location</th>
                         <th scope="col" style="width: 15%;">Hand over to</th>';
-                        
+
                                         echo '</tr>
                     </thead>
                     <tbody>';
@@ -629,12 +683,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                                             echo '<td>' .
-                                                $box_location.
+                                                $box_location .
                                                 '</td>';
 
 
                                             echo '<td style="font-size: 11px;">' .
-                                       
+
                                                 $handover_to .
                                                 '</td>';
                                         }
@@ -651,7 +705,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <!-- start row -->
                         <!-- <div class="row">
-                        <!-- <div class="row">
+                      <div class="row">
                             <div class="col-md-3">
                                 <h6><b>Box:</b></h6>
 
@@ -674,62 +728,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <p>Courier</p>
                             </div>
                         </div> -->
-                        </div> -->
+                    
 
-                    </div>
-                    <div class="col-md-6">
-                        <h4 class="mb-4 text-bg-success" style="padding: 8px;">Fill the following details</h4>
-
-                        <div class="row-md-4 mb-2">
-                            <label for="" class="form-label"><b>Enter Receiver's information</b></label>
-                            <input type="text" class="form-control mb-1" id="" name="rec_name" placeholder="Receiver's Name" required>
-                            <input type="text" class="form-control mb-1" id="" name="rec_phone" placeholder="Receiver's Phone Number" required>
-                            <input type="text" class="form-control mb-2" id="" name="rec_cnic" placeholder="Recevier's CNIC" required>
-                        </div>
-
-                        <div class="row-md-4 mb-2">
-                            <label for="image" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Attach (receipt image):</b></label>
-                            <input type="file" style="font-size: 0.7rem; height: 1.9rem;" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
-                            <label for="image" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Attach (receipt image):</b></label>
-                            <input type="file" style="font-size: 0.7rem; height: 1.9rem;" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
-                            <!-- Error messages -->
-                            <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
-                            <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
-                            <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
-                        </div>
-
-
-                        <div class="row-md-4 mb-2">
-                            <label for="" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Anything else to note?</b></label><br>
-                            <label for="" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Anything else to note?</b></label><br>
-                            <textarea name="details" class="form-control mb-1" id=""></textarea>
-                        </div>
-
-                        <div class="row-md-4 mb-2 ml-4">
-                            <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox1">
-                            <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox1">
-                            <label class="form-check-label" for="flexCheckDefault">
-                                <strong>Cross checked</strong>
-                            </label>
-                        </div>
-                        <div class="row-md-4 mb-2 ml-4">
-                            <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox2">
-                            <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox2">
-                            <label class="form-check-label" for="flexCheckDefault">
-                                <strong>Verified information</strong>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="text-center mt-4 mb-2">
-                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
-                        <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
-                        <button type="reset" class="btn btn-outline-secondary ">Reset</button>
-                    </div>
-                </form>
-                <!------------------------  Form end ---------------------->
             </div>
+            <div class="col-md-6">
+                <h4 class="mb-4 text-bg-success" style="padding: 8px;">Fill the following details</h4>
+
+                <div class="row-md-4 mb-2">
+                    <label for="" class="form-label"><b>Enter Receiver's information</b></label>
+                    <input type="text" class="form-control mb-1" id="" name="rec_name" placeholder="Receiver's Name" required>
+                    <input type="text" class="form-control mb-1" id="" name="rec_phone" placeholder="Receiver's Phone Number" required>
+                    <input type="text" class="form-control mb-2" id="" name="rec_cnic" placeholder="Recevier's CNIC" required>
+                </div>
+
+                <div class="row-md-4 mb-2">
+                    <label for="image" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Attach (receipt image):</b></label>
+                    <input type="file" style="font-size: 0.7rem; height: 1.9rem;" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png" title="Only JPG, JPEG, and PNG formats are allowed">
+
+                    <!-- Error messages -->
+                    <div id="image-error" style="color:red; display:none;">Invalid image format. Only JPG, JPEG, and PNG formats are allowed.</div>
+                    <div id="size-error" style="color:red; display:none;">File size exceeds 2 MB.</div>
+                    <div id="dimension-error" style="color:red; display:none;">Image dimensions exceed the allowed 1024x768 size.</div>
+                </div>
+
+
+                <div class="row-md-4 mb-2">
+                    <label for="" class="form-label" style="font-size: 0.8rem; margin-top: 7px;"><b>Anything else to note?</b></label><br>
+
+                    <textarea name="details" class="form-control mb-1" id=""></textarea>
+                </div>
+
+                <div class="row-md-4 mb-2 ml-4">
+                    <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox1">
+
+                    <label class="form-check-label" for="flexCheckDefault">
+                        <strong>Cross checked</strong>
+                    </label>
+                </div>
+                <div class="row-md-4 mb-2 ml-4">
+                    <input class="form-check-input" style="font-size: 0.8rem; margin-top: 7px;" type="checkbox" value="1" name="checkbox2">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        <strong>Verified information</strong>
+                    </label>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 mb-2">
+                <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
+                <button type="reset" class="btn btn-outline-secondary ">Reset</button>
+            </div>
+            </form>
+            <!------------------------  Form end ---------------------->
         </div>
+    </div>
     </div>
 
 

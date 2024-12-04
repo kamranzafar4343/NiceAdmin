@@ -545,7 +545,7 @@ if ($resultData->num_rows > 0) {
                             <th scope="col" style="width: 8%;">Barcode No.</th>
                             <th scope="col" style="width: 8%;">Alt code</th>
                             <th scope="col" style="width: 9%;">Status</th>
-                            <th scope="col" style="width: 10%;">Create Date</th>';
+                            <th scope="col" style="width: 10%;">Added on</th>';
 
                         // Show "Action" column only for admins
                         if ($_SESSION['role'] == 'admin') {
@@ -579,34 +579,10 @@ if ($resultData->num_rows > 0) {
                             // Show account
                             echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
 
-
-                            echo '<td><i class="';
-                            if ($row["object"] == 'Container') {
-                                echo 'fa-solid fa-box';
-                                echo '" style="color: #007bff; font-size: 1.5rem; </i>"';
-                            } elseif ($row["object"] == 'FileFolder') {
-                                echo 'fa-solid fa-folder';
-                                echo '" style="color: grey; font-size: 1.5rem; </i>"';
-                            }
-                            echo '"></i> ' . '</td>';
-
+                            echo '<td>' . ($row["object"]) . '</td>';
                             echo '<td>' . ($row["barcode"]) . '</td>';
                             echo '<td>' . ($row["alt_code"]) . '</td>';
-
-
-                            echo '<td><i class="';
-                            if ($row["status"] == 'In') {
-                                echo 'fa-solid fa-right-to-bracket';
-                                echo '" style="color: green; font-size: 1.5rem; </i>"';
-                            } elseif ($row["status"] == 'Out') {
-                                echo 'fa-solid fa-right-from-bracket';
-                                echo '" style="color: red; font-size: 1.5rem; </i>"';
-                            } elseif ($row["status"] == 'Ready for Destroy') {
-                                echo 'fa-solid fa-trash-can';
-                                echo '" style="color: red; font-size: 1.5rem; </i>"';
-                            }
-
-                            echo '"></i> ' . '</td>';
+                            echo '<td>' . ($row["status"]) . '</td>';
 
                             //convert timestamp to only date format
                             $dateTime = $row["created_at"];

@@ -833,7 +833,7 @@ if ($result->num_rows > 0) {
                 <label for="" class="h6"><em>Contact Person Info:</em></label> <br>
                 <strong>Contact Person:</strong> <?php echo $contact_person; ?><br>
                 <strong>Designation:</strong> <?php echo $e_role; ?><br>
-                <strong>Designation:</strong> <?php echo $e_auth; ?><br>
+                <strong>Authority:</strong> <?php echo $e_auth; ?><br>
                 <strong>Email:</strong> <?php echo $email; ?><br>
                 <strong>Phone:</strong> <?php echo $phone; ?><br>
                 <strong>Address:</strong> <?php echo $address ?> <br>

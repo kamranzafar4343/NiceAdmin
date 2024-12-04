@@ -51,7 +51,9 @@ if (isset($_GET['id'])) {
     $contact_person = $row['contact_person'];
     $contact_phone = $row['contact_phone'];
     $address = $row['address'];
-    $pickup_address = $row['pickup_address'];
+    $email = $row['email'];
+    $e_role = $row['role'];
+    $e_auth = $row['auth'];
   } else {
     echo "Branch not found!";
     exit;
@@ -68,7 +70,9 @@ if (isset($_POST['update'])) {
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
-  $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']);
+  $input_email = mysqli_real_escape_string($conn, $_POST['branch_email']);
+  $input_authority = mysqli_real_escape_string($conn, $_POST['authority']);
+  $input_role = mysqli_real_escape_string($conn, $_POST['role']);
 
   // SQL query to update the record
   $sql = "UPDATE `branches` SET 
@@ -79,7 +83,9 @@ if (isset($_POST['update'])) {
                 `contact_person` = '$contact_person',
                 `contact_phone` = '$contact_phone',
                 `address` = '$address',
-                `pickup_address` = '$pickup_address' 
+               `email`='$inout_email',
+                `auth` = '$input_authority',
+                `role` = '$input_role'
             WHERE `branch_id` = '$branch_id'";
 
   // Execute the query and check for errors
@@ -704,7 +710,7 @@ End Search Bar -->
 
           <!-- Account Description -->
           <div class="col-md-6">
-            <label for="account_description" class="form-label">Account Description</label>
+            <label for="account_description" class="form-label">Description</label>
             <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"><?php echo isset($account_desc) ? $account_desc : ''; ?></textarea>
           </div>
 
@@ -726,22 +732,46 @@ End Search Bar -->
             <input type="text" class="form-control" id="" name="foc" value="<?php echo isset($contact_person) ? $contact_person : ''; ?>" required pattern="[A-Za-z\s\.]+" minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
           </div>
 
+          
+          <div class="col-md-6">
+            <label for="phone" class="form-label">Access/Authority</label>
+            <select name="authority" id="" class="form-select">
+              <option value="">Select level of access</option>
+              <option value="can get information about branch boxes" <?php echo $e_auth == 'can get information about branch boxes' ? 'selected' : ''; ?>>can get information about branch boxes</option>
+              <option value="only retrieve department boxes" <?php echo $e_auth == 'only retrieve department boxes' ? 'selected' : ''; ?>>only retrieve department boxes</option>
+              <option value="all departments of their branch" <?php echo $e_auth == 'all departments of their branch' ? 'selected' : ''; ?>>all departments of their branch</option>
+              <option value="all departments and all branches of company" <?php echo $e_auth == 'all departments and all branches of company' ? 'selected' : ''; ?>>all departments and all branches of company</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="" class="form-label">Designation</label>
+            <select name="role" id="" class="form-select">
+              <option value="">Select Role of the Employee</option>
+              <option value="Branch Manager" <?php echo $e_role == 'Branch Manager' ? 'selected' : ''; ?>>Branch Manager</option>
+              <option value="Department Manager" <?php echo $e_role == 'Department Manager' ? 'selected' : ''; ?>>Department Manager</option>
+              <option value="Junior Employee" <?php echo $e_role == 'Junior Employee' ? 'selected' : ''; ?>>Junior Employee</option>
+              <option value="Head of Operations" <?php echo $e_role == 'Head of Operations' ? 'selected' : ''; ?>>Head of Operations</option>
+            </select>
+          </div>
+
+
           <!-- Contact Phone -->
           <div class="col-md-6">
             <label for="phone" class="form-label">Phone</label>
             <input type="text" class="form-control" id="" name="foc_phone" value="<?php echo isset($contact_phone) ? $contact_phone : ''; ?>" required>
           </div>
-          
-          <!-- Pickup/Delivery Address -->
+
           <div class="col-md-6">
-            <label for="pickup_address" class="form-label">Pickup/Delivery Address</label>
-            <input type="text" class="form-control" id="" name="pickup_address" value="<?php echo isset($pickup_address) ? $pickup_address : ''; ?>" required>
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="branch_email" value="<?php echo $email; ?>">
           </div>
+
           <!-- Address -->
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
             <input type="text" class="form-control" id="" name="address" value="<?php echo isset($address) ? $address : ''; ?>" required>
-           </div>
+          </div>
 
 
           <!-- Submit Button -->

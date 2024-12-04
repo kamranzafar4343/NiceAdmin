@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
   $auth = mysqli_real_escape_string($conn, $_POST['authority']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
-  $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
 
   //check duplicate company name
   $accCheckQuery = "SELECT * FROM `branches` WHERE `branch_name` = '$branch_name'";
@@ -65,8 +65,8 @@ if (isset($_POST['submit'])) {
   }
 
   // SQL query to insert the data into the database
-  $sql = "INSERT INTO branches (comp_id_fk, branch_name, account_desc, registration_date, expiry_date, contact_person, role, auth, contact_phone, address, pickup_address) 
-          VALUES ('$company_id', '$branch_name', '$account_desc', '$registration', '$expiry', '$contact_person', '$role', '$auth', '$contact_phone', '$address', '$pickup_address')";
+  $sql = "INSERT INTO branches (comp_id_fk, branch_name, account_desc, registration_date, expiry_date, contact_person, role, auth, contact_phone, address, pickup_address, email) 
+          VALUES ('$company_id', '$branch_name', '$account_desc', '$registration', '$expiry', '$contact_person', '$role', '$auth', '$contact_phone', '$address', '$pickup_address', '$email')";
 
   if (mysqli_query($conn, $sql)) {
 
@@ -496,7 +496,7 @@ End Search Bar -->
           </div>
 
           <div class="col-md-6">
-            <label for="account_description" class="form-label">Account Description</label>
+            <label for="account_description" class="form-label">Description</label>
             <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
           </div>
 
@@ -540,13 +540,13 @@ End Search Bar -->
           </div>
 
           <div class="col-md-6">
-            <label for="pickup_address" class="form-label">Pickup/Delievry Address </label>
-            <input type="text" class="form-control" id="" name="pickup_address" required>
+            <label for="branch_email" class="form-label">Email</label>
+            <input class="form-control"  name="branch_email" ?>
           </div>
 
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="" name="address" required>
+            <input type="email" class="form-control" id="" name="address" required>
 
           </div>
 

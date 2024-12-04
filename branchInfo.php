@@ -50,7 +50,9 @@ if ($result->num_rows > 0) {
   $contact_person = $branch_data['contact_person'];
   $phone = $branch_data['contact_phone'];
   $address = $branch_data['address'];
-  $pick_address = $branch_data['pickup_address'];
+  $email = $branch_data['email'];
+  $authority = $branch_data['auth'];
+  $designation = $branch_data['role'];
 }
 
 //fetch employee table
@@ -77,7 +79,7 @@ $result_emp = $conn->query($emp_sql);
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Company Details</title>
+  <title>Branch Details</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -869,9 +871,11 @@ $result_emp = $conn->query($emp_sql);
                 <br>
                 <label for="" class="h6"><em>Contact Person Info:</em></label> <br>
                 <strong>Contact Person:</strong> <?php echo $contact_person; ?><br>
+                <strong>Designation:</strong> <?php echo $designation; ?><br>
+                <strong>Authority:</strong> <?php echo $authority; ?><br>
                 <strong>Phone:</strong> <?php echo $phone; ?><br>
+                <strong>Email:</strong> <?php echo $email; ?><br>
                 <strong>Address:</strong> <?php echo $address ?> <br>
-                <strong>pickup Address:</strong> <?php echo $pick_address; ?><br>
               </p>
 
             </div>

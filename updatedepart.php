@@ -52,8 +52,8 @@ if (isset($_GET['id'])) {
     $contact_phone = $row['foc_phone'];
     $address = $row['add_1'];
     $email = $row['email'];
-    $auth = $row['auth'];
-    $role = $row['role'];
+    $e_auth = $row['auth'];
+    $e_role = $row['role'];
   } else {
     echo "Branch not found!";
     exit;
@@ -722,24 +722,24 @@ End Search Bar -->
           </div>
 
           <div class="col-md-6">
-            <label for="" class="form-label">Role</label>
-            <select name="role" id="" class="form-select" value="<?php echo isset($role) ? $role : ''; ?>">
-              <option value="">Select Role of the Employee</option>
-              <option value="Branch Manager">Branch Manager</option>
-              <option value="Department Manager">Department Manager</option>
-              <option value="Junior Employee">Junior Employee</option>
-              <option value="Head of Operations">Head of Operations</option>
+            <label for="phone" class="form-label">Access/Authority</label>
+            <select name="authority" id="" class="form-select">
+              <option value="">Select level of access</option>
+              <option value="can get information about branch boxes" <?php echo $e_auth == 'can get information about branch boxes' ? 'selected' : ''; ?>>can get information about branch boxes</option>
+              <option value="only retrieve department boxes" <?php echo $e_auth == 'only retrieve department boxes' ? 'selected' : ''; ?>>only retrieve department boxes</option>
+              <option value="all departments of their branch" <?php echo $e_auth == 'all departments of their branch' ? 'selected' : ''; ?>>all departments of their branch</option>
+              <option value="all departments and all branches of company" <?php echo $e_auth == 'all departments and all branches of company' ? 'selected' : ''; ?>>all departments and all branches of company</option>
             </select>
           </div>
 
           <div class="col-md-6">
-            <label for="phone" class="form-label">Access/Authority</label>
-            <select name="authority" id="" class="form-select" value="<?php echo isset($auth) ? $auth : ''; ?>">
-              <option value="">Select level of access</option>
-              <option value="can get information about branch boxes">can get information about branch boxes</option>
-              <option value="only retrieve department boxes">only retrieve department boxes</option>
-              <option value="all departments of their branch">all departments of their branch</option>
-              <option value="all departments and all branches of company">all departments and all branches of company</option>
+            <label for="" class="form-label">Designation</label>
+            <select name="role" id="" class="form-select">
+              <option value="">Select Role of the Employee</option>
+              <option value="Branch Manager" <?php echo $e_role == 'Branch Manager' ? 'selected' : ''; ?>>Branch Manager</option>
+              <option value="Department Manager" <?php echo $e_role == 'Department Manager' ? 'selected' : ''; ?>>Department Manager</option>
+              <option value="Junior Employee" <?php echo $e_role == 'Junior Employee' ? 'selected' : ''; ?>>Junior Employee</option>
+              <option value="Head of Operations" <?php echo $e_role == 'Head of Operations' ? 'selected' : ''; ?>>Head of Operations</option>
             </select>
           </div>
 

@@ -52,12 +52,14 @@ if (isset($_POST['submit'])) {
   $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
   $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
   $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
+  $role = mysqli_real_escape_string($conn, $_POST['role']);
+  $authority = mysqli_real_escape_string($conn, $_POST['authority']);
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
   $address = mysqli_real_escape_string($conn, $_POST['address']);
-  $pickup_address = mysqli_real_escape_string($conn, $_POST['pickup_address']); // renamed input field for better understanding
 
   // SQL query to insert the data into the database
-  $sql = "INSERT INTO departments (branch_id_fk, dept_name, acc_desc, registration, expiry, foc, foc_phone,  add_1, pickup_address) 
-          VALUES ('$branch_id', '$dept_name', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone',  '$address', '$pickup_address')";
+  $sql = "INSERT INTO departments (branch_id_fk, dept_name, acc_desc, registration, expiry, foc, foc_phone,  add_1, email, role, auth) 
+          VALUES ('$branch_id', '$dept_name', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$address', '$email', '$role', '$authority')";
 
   if ($conn->query($sql) === TRUE) {
       // Redirecting after successful insertion
@@ -66,7 +68,6 @@ if (isset($_POST['submit'])) {
   } else {
       echo "Error: " . $sql . "<br>" . $conn->error;
   }
-
   $conn->close();
 }
 ?>
@@ -469,7 +470,7 @@ End Search Bar -->
 
           <div class="col-md-6">
             <label for="account_description" class="form-label">Account Description</label>
-            <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="1" columns="20"></textarea>
+            <textarea type="text" class="form-control" id="acc_desc" name="account_desc" rows="2" columns="20"></textarea>
           </div>
 
           <div class="col-md-6">
@@ -488,15 +489,37 @@ End Search Bar -->
           </div>
 
           <div class="col-md-6">
+            <label for="" class="form-label">Role</label>
+            <select name="role" id="" class="form-select">
+              <option value="">Select Role of the Employee</option>
+              <option value="Branch Manager">Branch Manager</option>
+              <option value="Department Manager">Department Manager</option>
+              <option value="Junior Employee">Junior Employee</option>
+              <option value="Head of Operations">Head of Operations</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="phone" class="form-label">Access/Authority</label>
+            <select name="authority" id="" class="form-select">
+              <option value="">Select level of access</option>
+              <option value="can get information about branch boxes">can get information about branch boxes</option>
+              <option value="only retrieve department boxes">only retrieve department boxes</option>
+              <option value="all departments of their branch">all departments of their branch</option>
+              <option value="all departments and all branches of company">all departments and all branches of company</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
             <label for="phone" class="form-label">Phone</label>
             <input type="text" class="form-control" id="" name="foc_phone" required>
           </div>
 
           <div class="col-md-6">
-            <label for="pickup_address" class="form-label">Pickup/Delivery Address </label>
-            <input type="text" class="form-control" id="" name="pickup_address" required>
+            <label for="email" class="form-label">Email</label>
+            <input class="form-control"  name="email" >
           </div>
-
+        
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
             <input type="text" class="form-control" id="" name="address" required>

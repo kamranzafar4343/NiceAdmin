@@ -541,7 +541,7 @@ End Search Bar -->
 
           <div class="col-md-6">
             <label for="branch_email" class="form-label">Email</label>
-            <input class="form-control"  name="branch_email" ?>
+            <input class="form-control"  name="branch_email" >
           </div>
 
           <div class="col-md-6">

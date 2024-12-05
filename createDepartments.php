@@ -36,6 +36,29 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 $branch_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 
+// Show branch previous data
+if (isset($_GET['id'])) {
+  $branch_id = intval($_GET['id']);
+
+  // Sql Query fetch the branch data
+  $sql = "SELECT * FROM `branches` WHERE `branch_id` = '$branch_id'";
+  $result = $conn->query($sql);
+
+  if ($result && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+
+    $contact_person = $row['contact_person'];
+    $contact_phone = $row['contact_phone'];
+    $address = $row['address'];
+    $email = $row['email'];
+    $e_role = $row['role'];
+    $e_auth = $row['auth'];
+  } else {
+    echo "Branch not found!";
+    exit;
+  }
+}
+
 // gives error if someone tries to access the page without a branch_id
 $branchQuery = "SELECT branch_id FROM branches WHERE branch_id = $branch_id";
 $branchResult = $conn->query($branchQuery);
@@ -50,23 +73,17 @@ if (isset($_POST['submit'])) {
   $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
   $registration = mysqli_real_escape_string($conn, $_POST['registration']);
   $expiry = mysqli_real_escape_string($conn, $_POST['expiry']);
-  $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
-  $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-  $role = mysqli_real_escape_string($conn, $_POST['role']);
-  $authority = mysqli_real_escape_string($conn, $_POST['authority']);
-  $email = mysqli_real_escape_string($conn, $_POST['email']);
-  $address = mysqli_real_escape_string($conn, $_POST['address']);
 
   // SQL query to insert the data into the database
-  $sql = "INSERT INTO departments (branch_id_fk, dept_name, acc_desc, registration, expiry, foc, foc_phone,  add_1, email, role, auth) 
-          VALUES ('$branch_id', '$dept_name', '$account_desc', '$registration', '$expiry', '$contact_person', '$contact_phone', '$address', '$email', '$role', '$authority')";
+  $sql = "INSERT INTO departments (branch_id_fk, dept_name, acc_desc, registration, expiry) 
+          VALUES ('$branch_id', '$dept_name', '$account_desc', '$registration', '$expiry')";
 
   if ($conn->query($sql) === TRUE) {
-      // Redirecting after successful insertion
-      header("Location: Departments.php?id=" . $branch_id);
-      exit;
+    // Redirecting after successful insertion
+    header("Location: Departments.php?id=" . $branch_id);
+    exit;
   } else {
-      echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Error: " . $sql . "<br>" . $conn->error;
   }
   $conn->close();
 }
@@ -461,7 +478,7 @@ End Search Bar -->
         <br>
         <!-- Multi Columns Form -->
         <form class="row g-3 p-3" action="#" method="POST">
-          
+
 
           <div class="col-md-6">
             <label class="form-label">Department Name</label>
@@ -483,50 +500,6 @@ End Search Bar -->
             <input type="date" class="form-control" id="expiry" name="expiry">
           </div>
 
-          <div class="col-md-6">
-            <label for="" class="form-label">Contact Person</label>
-            <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
-          </div>
-
-          <div class="col-md-6">
-            <label for="" class="form-label">Designation</label>
-            <select name="role" id="" class="form-select">
-              <option value="">Select Role of the Employee</option>
-              <option value="Branch Manager">Branch Manager</option>
-              <option value="Department Manager">Department Manager</option>
-              <option value="Junior Employee">Junior Employee</option>
-              <option value="Head of Operations">Head of Operations</option>
-            </select>
-          </div>
-
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Access/Authority</label>
-            <select name="authority" id="" class="form-select">
-              <option value="">Select level of access</option>
-              <option value="can get information about branch boxes">can get information about branch boxes</option>
-              <option value="only retrieve department boxes">only retrieve department boxes</option>
-              <option value="all departments of their branch">all departments of their branch</option>
-              <option value="all departments and all branches of company">all departments and all branches of company</option>
-            </select>
-          </div>
-
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Phone</label>
-            <input type="text" class="form-control" id="" name="foc_phone" required>
-          </div>
-
-          <div class="col-md-6">
-            <label for="email" class="form-label">Email</label>
-            <input class="form-control"  name="email" >
-          </div>
-        
-          <div class="col-md-6">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="" name="address" required>
-            <br>
-
-          </div>
-
           <div class="text-center mt-4 mb-2">
             <button type="submit" class="btn btn-outline-primary mr-2" name="submit" value="submit">Submit</button>
             <button type="reset" class="btn btn-outline-secondary ">Reset</button>
@@ -536,24 +509,24 @@ End Search Bar -->
     </div>
   </div>
 
-     <!-- Vendor JS Files -->
-     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js">
-    </script>
-    <!-- Bootstrap JS (Optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
-    <!-- Template Main JS File -->
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js">
+  </script>
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
+  <!-- Template Main JS File -->
 
   <script src="assets/js/main.js"></script>
 </body>

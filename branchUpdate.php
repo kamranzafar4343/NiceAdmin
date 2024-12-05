@@ -48,12 +48,12 @@ if (isset($_GET['id'])) {
     $account_desc = $row['account_desc'];
     $registration_date = $row['registration_date'];
     $expiry_date = $row['expiry_date'];
-    $contact_person = $row['contact_person'];
-    $contact_phone = $row['contact_phone'];
-    $address = $row['address'];
-    $email = $row['email'];
-    $e_role = $row['role'];
-    $e_auth = $row['auth'];
+    // $contact_person = $row['contact_person'];
+    // $contact_phone = $row['contact_phone'];
+    // $address = $row['address'];
+    // $email = $row['email'];
+    // $e_role = $row['role'];
+    // $e_auth = $row['auth'];
   } else {
     echo "Branch not found!";
     exit;
@@ -67,25 +67,13 @@ if (isset($_POST['update'])) {
   $account_desc = mysqli_real_escape_string($conn, $_POST['account_desc']);
   $registration_date = mysqli_real_escape_string($conn, $_POST['registration']);
   $expiry_date = mysqli_real_escape_string($conn, $_POST['expiry']);
-  $contact_person = mysqli_real_escape_string($conn, $_POST['foc']);
-  $contact_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
-  $address = mysqli_real_escape_string($conn, $_POST['address']);
-  $input_email = mysqli_real_escape_string($conn, $_POST['branch_email']);
-  $input_authority = mysqli_real_escape_string($conn, $_POST['authority']);
-  $input_role = mysqli_real_escape_string($conn, $_POST['role']);
 
   // SQL query to update the record
   $sql = "UPDATE `branches` SET 
                 `branch_name` = '$branch_name',
                 `account_desc` = '$account_desc',
                 `registration_date` = '$registration_date',
-                `expiry_date` = '$expiry_date',
-                `contact_person` = '$contact_person',
-                `contact_phone` = '$contact_phone',
-                `address` = '$address',
-               `email`='$inout_email',
-                `auth` = '$input_authority',
-                `role` = '$input_role'
+                `expiry_date` = '$expiry_date'
             WHERE `branch_id` = '$branch_id'";
 
   // Execute the query and check for errors
@@ -725,54 +713,6 @@ End Search Bar -->
             <label for="expiry" class="form-label">Contract Expiration Date</label>
             <input type="date" class="form-control" id="expiry" name="expiry" value="<?php echo isset($expiry_date) ? $expiry_date : ''; ?>">
           </div>
-
-          <!-- Contact Person -->
-          <div class="col-md-6">
-            <label for="" class="form-label">Contact Person</label>
-            <input type="text" class="form-control" id="" name="foc" value="<?php echo isset($contact_person) ? $contact_person : ''; ?>" required pattern="[A-Za-z\s\.]+" minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
-          </div>
-
-          
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Access/Authority</label>
-            <select name="authority" id="" class="form-select">
-              <option value="">Select level of access</option>
-              <option value="can get information about branch boxes" <?php echo $e_auth == 'can get information about branch boxes' ? 'selected' : ''; ?>>can get information about branch boxes</option>
-              <option value="only retrieve department boxes" <?php echo $e_auth == 'only retrieve department boxes' ? 'selected' : ''; ?>>only retrieve department boxes</option>
-              <option value="all departments of their branch" <?php echo $e_auth == 'all departments of their branch' ? 'selected' : ''; ?>>all departments of their branch</option>
-              <option value="all departments and all branches of company" <?php echo $e_auth == 'all departments and all branches of company' ? 'selected' : ''; ?>>all departments and all branches of company</option>
-            </select>
-          </div>
-
-          <div class="col-md-6">
-            <label for="" class="form-label">Designation</label>
-            <select name="role" id="" class="form-select">
-              <option value="">Select Role of the Employee</option>
-              <option value="Branch Manager" <?php echo $e_role == 'Branch Manager' ? 'selected' : ''; ?>>Branch Manager</option>
-              <option value="Department Manager" <?php echo $e_role == 'Department Manager' ? 'selected' : ''; ?>>Department Manager</option>
-              <option value="Junior Employee" <?php echo $e_role == 'Junior Employee' ? 'selected' : ''; ?>>Junior Employee</option>
-              <option value="Head of Operations" <?php echo $e_role == 'Head of Operations' ? 'selected' : ''; ?>>Head of Operations</option>
-            </select>
-          </div>
-
-
-          <!-- Contact Phone -->
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Phone</label>
-            <input type="text" class="form-control" id="" name="foc_phone" value="<?php echo isset($contact_phone) ? $contact_phone : ''; ?>" required>
-          </div>
-
-          <div class="col-md-6">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" name="branch_email" value="<?php echo $email; ?>">
-          </div>
-
-          <!-- Address -->
-          <div class="col-md-6">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="" name="address" value="<?php echo isset($address) ? $address : ''; ?>" required>
-          </div>
-
 
           <!-- Submit Button -->
           <div class="col-12 text-center">

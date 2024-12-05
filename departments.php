@@ -492,8 +492,8 @@ if ($result2->num_rows > 0) {
                                 <tr>
                                     <!-- <th scope="col">ID</th> -->
                                     <th scope="col">Department Name</th>
-                                    <th scope="col">Contact Person</th>
-                                    <th scope="col">Address</th>
+                                    <th scope="col">Setup Date</th>
+                                    <th scope="col">Contract Expiry Date</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -504,8 +504,8 @@ if ($result2->num_rows > 0) {
 
 
                                     echo "<td>" . ($row["dept_name"]) . "</td>";
-                                    echo "<td style= ' color: #fd7e14; font-weight: bold; opacity: 0.8;'> " . ($row["foc"]) . "</td>"; //foc means focal person
-                                    echo "<td>" . ($row["add_1"]) . "</td>"; //add_1 is address
+                                    echo "<td>" . ($row["registration"]) . "</td>";
+                                    echo "<td>" . ($row["expiry"]) . "</td>";
                                     ?>
                                     <td>
                                         <div style="display: flex; gap: 10px;">

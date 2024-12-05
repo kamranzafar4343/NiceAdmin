@@ -73,8 +73,8 @@ if (isset($_POST['submit'])) {
     //get id of newly inserted branch
     $newBranchId = mysqli_insert_id($conn);
 
-    $addStaff = "INSERT INTO `employee` (`branch_id_fk`, `name`, `phone`, `role`, `Authority`) 
- VALUES ('$newBranchId', '$contact_person', '$contact_phone', '$role', '$auth') ";
+    $addStaff = "INSERT INTO `employee` (`branch_id_fk`, `name`, `phone`, `role`, `Authority`, `email`) 
+ VALUES ('$newBranchId', '$contact_person', '$contact_phone', '$role', '$auth', '$email') ";
 
     if (mysqli_query($conn, $addStaff)) {
       header("Location: Branches.php?id=" . $company_id);
@@ -546,7 +546,7 @@ End Search Bar -->
 
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
-            <input type="email" class="form-control" id="" name="address" required>
+            <input type="text" class="form-control" id="" name="address" required>
 
           </div>
 

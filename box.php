@@ -540,16 +540,16 @@ if ($resultData->num_rows > 0) {
                         echo '<table id="box" class="table mt-4">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 20%;">Account</th>
-                            <th scope="col" style="width: 9%;">Object</th>
-                            <th scope="col" style="width: 8%;">Barcode No.</th>
-                            <th scope="col" style="width: 8%;">Alt code</th>
-                            <th scope="col" style="width: 9%;">Status</th>
-                            <th scope="col" style="width: 10%;">Added on</th>';
+                            <th scope="col">Account</th>
+                            <th scope="col">Object</th>
+                            <th scope="col">Barcode No.</th>
+                            <th scope="col">Alt code</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Added on</th>';
 
                         // Show "Action" column only for admins
                         if ($_SESSION['role'] == 'admin') {
-                            echo '<th scope="col" style="width: 10%;">Action</th>';
+                            echo '<th scope="col">Action</th>';
                         }
                         echo '</tr>
                     </thead>
@@ -594,10 +594,6 @@ if ($resultData->num_rows > 0) {
                                 echo '<td>
                                 <div style="display: flex; gap: 10px;">
                                     <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="boxUpdate.php?id= ' . $row['box_id'] . '"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
- 
-                                <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                        onclick="return confirm(\'Are you sure you want to delete this record?\');" href="boxDelete.php?id=' . $row['box_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                </div>
                             </td>';
                             }
                             echo '</tr>';
@@ -694,6 +690,7 @@ if ($resultData->num_rows > 0) {
         });
     });
     </script>
+
 </body>
 
 </html>

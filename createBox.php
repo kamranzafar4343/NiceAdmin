@@ -536,13 +536,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 search: true, // Enable search feature
                 creatable: false, // Disable creatable selection
                 clearable: false, // Disable clearable selection
-                maxHeight: '360px', // Max height for showing scrollbar
+                maxHeight: '400px', // Max height for showing scrollbar
                 size: 'sm', // Size of the select, can be 'sm' or 'lg'
             };
 
             // Initialize dselect for the initial dropdowns
             dselect(document.querySelector('#company'), config);
             dselect(document.querySelector('#branch'), config);
+            dselect(document.querySelector('#dept'), config);
 
             // When company is changed, fetch the branches
             $('#company').change(function() {
@@ -568,6 +569,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             // Refresh or reinitialize dselect
                             dselect(document.querySelector('#branch'), config);
 
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+
+            // When branch is changed, fetch the departments
+            $('#branch').change(function() {
+                var branch_id = $(this).val();
+
+                // AJAX request to get dept's for the selected branch
+                $.ajax({
+                    url: 'get_departments.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var departments = JSON.parse(response); //return the json response as an array
+                            // Clear existing dept's
+                            $('#dept').empty();
+                            $('#dept').append('<option value="">Select department</option>');
+
+                            // Add the new options from the response
+                            $.each(departments, function(index, department) {
+                                $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
+                            });
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#dept'), config);
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }

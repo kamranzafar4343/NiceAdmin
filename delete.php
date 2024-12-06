@@ -15,7 +15,7 @@ include 'config/db.php';
 if (isset($_GET['id'])) {
     $comp_id = intval($_GET['id']); // Ensure ID is an int
 
-    // Get the number of company for the specific box
+    //user can only del a company if it has no branches
     $queryCount = "SELECT COUNT(*) AS comp_count FROM branches WHERE comp_id_fk = '$comp_id'";
     $resultCount = mysqli_query($conn, $queryCount);
     $rowCount = mysqli_fetch_assoc($resultCount);

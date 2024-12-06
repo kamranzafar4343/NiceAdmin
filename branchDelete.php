@@ -42,7 +42,7 @@ if (isset($_GET['id'])) {
   $Count = $rowCount['Acc3_count'];
 
   if ($Count > 0) {
-    echo 'Error: Cannot delete a branch having departments. Please delete the departments first.';
+    die('cannot delete branch which has departments associated with it.');
   }
 
   // Fetch the company ID associated with the branch from the compID_FK column

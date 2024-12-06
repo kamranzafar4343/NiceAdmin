@@ -23,6 +23,17 @@ if (isset($_GET['id'])) {
         $row = $result->fetch_assoc();
         $branch_id = $row['branch_id_fk'];
 
+        //only delete departments which has no employees and no boxes or items associated with it
+        //user can only del a company if it has no branches
+    $queryCount = "SELECT COUNT(*) AS comp_count FROM branches WHERE comp_id_fk = '$comp_id'";
+    $resultCount = mysqli_query($conn, $queryCount);
+    $rowCount = mysqli_fetch_assoc($resultCount);
+    $Count = $rowCount['comp_count'];
+
+    //if record exists in branches table, then it cannot be deleted
+    if ($Count > 0) {
+        die('cannot delete department, which has records of employees or boxes or items');
+    } 
         // Now, perform the delete operation
         $delete_sql = "DELETE FROM `departments` WHERE `dept_id` = $dept_id";
         if ($conn->query($delete_sql) === TRUE) {
@@ -33,7 +44,7 @@ if (isset($_GET['id'])) {
             echo "Error deleting record: " . $conn->error;
         }
     } else {
-        echo "Error: No company found for this branch.";
+        echo "Error: No department found for this branch.";
     }
 
     // Close the database connection

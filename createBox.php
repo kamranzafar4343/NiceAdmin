@@ -427,7 +427,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <br>
                 <form class="row g-3 needs-validation" action="" method="POST" id="boxForm">
 
-                    <!-- For the Level 1 field -->
+                    <!-- company -->
                     <div class="col-md-4">
                         <label for="company">Select company:</label>
                         <select id="company" class="form-select" name="company" required>
@@ -441,11 +441,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             ?>
                         </select>
                     </div>
-                    <!-- For the Level 2 field -->
+                    <!-- branch -->
                     <div class="col-md-4">
                         <label for="branch">Select Branch:</label>
                         <select id="branch" class="form-select" name="branch">
                             <option value="">Select a branch</option>
+                        </select>
+                    </div>
+
+                    <!-- dept -->
+                    <div class="col-md-4">
+                        <label for="dept">Select department:</label>
+                        <select id="dept" class="form-select" name="dept">
+                            <option value="">Select a department</option>
                         </select>
                     </div>
 
@@ -461,12 +469,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- Select Barcode -->
                     <div class="col-md-6">
                         <label for="barcode_select" class="form-label">Enter Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" maxlength="8" placeholder="Enter Barcode" name="barcode_select" required>
+                        <input type="text" class="form-control" id="barcode_select"  placeholder="Enter Barcode" name="barcode_select" required>
                     </div>
                     <!-- FOR the alternative code -->
                     <div class="col-md-6">
                         <label for="alt_code" class="form-label">Alt Code</label>
-                        <input type="text" class="form-control" id="alt_code" name="alt_code" maxlength="8" placeholder="Enter Alt code">
+                        <input type="text" class="form-control" id="alt_code" name="alt_code"  placeholder="Enter Alt code">
                     </div>
                     <hr style="color: white;">
                     <!--  Description -->
@@ -495,11 +503,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             const alt_input = document.getElementById('alt_code');
 
             if (object_type.value === 'Container') {
+                barcode_input.minLength = 7;
+                alt_input.minLength = 7;
                 barcode_input.maxLength = 7;
                 alt_input.maxLength = 7;
                 barcode_input.placeholder = "Enter 7 digit Container Barcode";
                 alt_input.placeholder = "Enter 7 digit Container alt code";
             } else {
+                barcode_input.minLength = 8;
+                alt_input.minLength = 8;
                 barcode_input.maxLength = 8;
                 alt_input.maxLength = 8;
                 barcode_input.placeholder = "Enter 8 digit Filefolder Barcode";

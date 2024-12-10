@@ -20,21 +20,8 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-// Initialize query condition
-$searchQuery = "";
-if (isset($_GET['query']) && !empty($_GET['query'])) {
-    $searchQuery = mysqli_real_escape_string($conn, $_GET['query']);
-
-    // Search query: match barcode exactly or item name partially
-    $sql = "SELECT * FROM box WHERE barcode = '%$searchQuery%'";
-    $result = $conn->query($sql);
-} else {
-    // Default query if no search is performed
     $sql = "SELECT * FROM item ORDER BY item_id DESC";
     $result = $conn->query($sql);
-}
-
-$result = $conn->query($sql);
 
 ?>
 
@@ -656,7 +643,6 @@ $result = $conn->query($sql);
                         <th scope="col" style="width: 5%;">#</th>
                         <th scope="col" style="width: 15%;">Box barcode</th>
                         <th scope="col" style="width: 15%;">Item barcode</th>
-                        <th scope="col" style="width: 20%;">Created at</th>
                         <th scope="col" style="width: 15%;">Status</th>';
 
                         // Show "Actions" column only if the user is an admin
@@ -676,33 +662,9 @@ $result = $conn->query($sql);
                             echo '<tr>';
                             echo '<td>' . $counter++ . '</td>';
                             
-                            // Get specific company id
-                            $box_id = $row['box_id_fk'];
-                            $sql3 = "SELECT * FROM box WHERE box_id= '$box_id'";
-                            $result3 = $conn->query($sql3);
-                            if ($result3->num_rows > 0) {
-                                $row3 = $result3->fetch_assoc();
-                                $box_barcode = $row3['barcode'];
-                            }
-
-                            echo '<td>' . $box_barcode . '</td>';
-                            
-                            echo '<td> '. $row['barcode'] . '</a></td>';
-                            echo '<td>' . ($row["creation_date"]) . '</td>';
-
-                            
-
-                            echo '<td><i class="';
-                            if ($row["status"] == 'In') {
-                                echo 'fa-solid fa-right-to-bracket';
-                                echo '" style="color: green; font-size: 1.5rem; </i>"';
-                            } elseif ($row["status"] == 'Out') {
-                                echo 'fa-solid fa-right-from-bracket';
-                                echo '" style="color: red; font-size: 1.5rem; </i>"';
-                            }
-
-                            echo '"></i> ' . '</td>';
-                            // echo '<td><img class="barcode" alt="' . ($row["item_id"]) . '" src="barcode.php?text=' . urlencode($row["item_id"]) . '&codetype=code128&orientation=horizontal&size=20&print=false"/></td>';
+                            echo '<td> '. $row['box_barcode'] . '</a></td>';
+                            echo '<td> '. $row['file_no'] . '</a></td>';
+                            echo '<td>' . ($row["status"]) . '</td>';
 
                             // Show "Actions" only if the user is an admin
                             if ($_SESSION['role'] == 'admin') {
@@ -744,54 +706,6 @@ $result = $conn->query($sql);
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
-
-    <script>
-        // Listen for the Enter key press
-        document.getElementById("searchInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault(); // Prevent default form submission
-                document.getElementById("searchForm").submit(); // Manually submit the form
-            }
-        });
-
-        //click on the picture to update with ajax
-        $(document).on('click', 'img', function() {
-            $(this).next('input[type="file"]').click();
-        });
-
-        function uploadImage(comp_id) {
-            var fileInput = document.getElementById('file-' + comp_id);
-            var file = fileInput.files[0];
-            var formData = new FormData();
-            formData.append('image', file);
-            formData.append('comp_id', comp_id);
-
-            $.ajax({
-                url: 'update_image.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    // Update the image source with the new image path
-                    $('#image-' + comp_id).attr('src', response);
-                },
-                error: function() {
-                    alert('Image upload failed. Please try again.');
-                }
-            });
-        }
-        import {
-            Ripple,
-            initMDB
-        } from "mdb-ui-kit";
-
-        initMDB({
-            Ripple
-        });
-    </script>
-
-
 </body>
 
 </html>

@@ -586,7 +586,7 @@ if ($resultData->num_rows > 0) {
 
                             //convert timestamp to only date format
                             $dateTime = $row["created_at"];
-                            $justDate = date("Y-m-d", strtotime($dateTime));
+                            $justDate = date("d-m-Y", strtotime($dateTime));
                             echo '<td>' . $justDate . '</td>';
 
                             // Show action buttons only for admins

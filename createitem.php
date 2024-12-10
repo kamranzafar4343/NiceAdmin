@@ -27,6 +27,7 @@ $error = false;
 
 //handle form submission and import data from excel file
 if (isset($_POST["import"])) {
+
     $fileName = $_FILES["excel"]["name"];
     $fileExtension = explode('.', $fileName);
     $fileExtension = strtolower(end($fileExtension));
@@ -41,22 +42,20 @@ if (isset($_POST["import"])) {
     require 'excelReader/excel_reader2.php';
     require 'excelReader/SpreadsheetReader.php';
 
+    //get box barcode from form
     $new_barcode =  mysqli_real_escape_string($conn, $_POST['box_FK_item']);
+    
+    //batch_id = unix timestamp
+    $batch_id = time();
 
     $reader = new SpreadsheetReader($targetDirectory);
     foreach ($reader as $key => $row) {
 
-        $file_number = $row[1];
-        mysqli_query($conn, "INSERT INTO item (box_barcode, file_no) VALUES('$new_barcode', '$file_number')");
+        $file_number = $row[0];
+        mysqli_query($conn, "INSERT INTO item (box_barcode, file_no, batch_id) VALUES('$new_barcode', '$file_number', '$batch_id')");
     }
 
-    echo
-    "
-<script>
-alert('Succesfully Imported');
-document.location.href = '';
-</script>
-";
+    echo "";
 }
 
 
@@ -490,12 +489,12 @@ document.location.href = '';
     <div class="container d-flex justify-content-center">
         <div class="card custom-card shadow-lg mt-3">
             <div class="card-body">
-                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
+                <form class="row g-3 needs-validation mt-2" action="" method="POST" enctype="multipart/form-data">
 
                     <!-- Select Company -->
                     <div class="col-md-4">
                         <label for="company">Select Company:</label>
-                        <select id="company" class="form-select" name="comp_FK_item">
+                        <select id="company" class="form-select" name="comp_FK_item" required>
                             <option value="">Select a Company</option>
                             <?php
                             // Fetch the companies from the database
@@ -510,7 +509,7 @@ document.location.href = '';
                     <!-- Select Branch -->
                     <div class="col-md-4">
                         <label for="branch">Select a Branch:</label>
-                        <select id="branch" class="form-select" name="branch_FK_item">
+                        <select id="branch" class="form-select" name="branch_FK_item" required>
                             <option value="">Select a Branch</option>
                             <!-- The options will be populated via AJAX based on the selected company -->
                         </select>
@@ -528,7 +527,7 @@ document.location.href = '';
                     <!-- Select Box -->
                     <div class="col-md-4">
                         <label for="box">Select Box:</label>
-                        <select id="box" class="form-select" name="box_FK_item">
+                        <select id="box" class="form-select" name="box_FK_item" required>
                             <option value="">Select a Box</option>
                             <!-- The options will be populated via AJAX based on the selected company -->
                         </select>
@@ -538,20 +537,42 @@ document.location.href = '';
                     <div class="col-md-5">
                         <label class="form-label">Upload Excel File:</label>
                         <input type="file" class="form-control" name="excel" accept=".xlsx, .xls" required>
-                       
                     </div>
 
                     <div class="text-center mt-4 mb-2">
                         <button type="reset" class="btn btn-outline-info mr-1"
                             onclick="window.location.href = 'showItems.php';">Go back</button>
-                        <button type="submit" class="btn btn-outline-primary mr-1" name="import" value="import">Import</button>
+                        <button type="submit" class="btn btn-primary mr-1" name="import" value="import"><i class="bi bi-cloud-arrow-up-fill"></i> Import</button>
                         <button type="reset" class="btn btn-outline-secondary">Reset</button>
                     </div>
                 </form>
+                <div class="container mt-5">
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th>#</th>
+                    <th>Box Barcode</th>
+                    <th>File Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $i = 1;
+                $rows = mysqli_query($conn, "SELECT * FROM item WHERE batch_id = (SELECT MAX(batch_id) FROM item)");
+                foreach ($rows as $row) :
+                ?>
+                <tr>
+                    <td><?php echo $i++; ?></td>
+                    <td><?php echo htmlspecialchars($row["box_barcode"]); ?></td>
+                    <td><?php echo htmlspecialchars($row["file_no"]); ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
             </div>
         </div>
     </div>
-
     <!-- Include Bootstrap JS (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -588,6 +609,8 @@ document.location.href = '';
 
     <script>
         $(document).ready(function() {
+
+         
 
             // When company is changed, fetch the branches
             $('#company').change(function() {
@@ -642,8 +665,7 @@ document.location.href = '';
                                 $('#box').append('<option value="' + box.barcode + '">' + box.barcode + '</option>');
 
                             });
-                            // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#box'), config);
+                      
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
@@ -674,8 +696,7 @@ document.location.href = '';
                             $.each(departments, function(index, department) {
                                 $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
                             });
-                            // Refresh or reinitialize dselect
-                            dselect(document.querySelector('#dept'), config);
+                        
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
@@ -703,13 +724,6 @@ document.location.href = '';
     endif;
     ?>
 
-
-    <script>
-        const dataTable = new simpleDatatables.DataTable("#myTable2", {
-            searchable: false,
-            fixedHeight: true,
-        })
-    </script>
     <script src="assets/js/main.js"></script>
 </body>
 

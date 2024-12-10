@@ -32,14 +32,18 @@ if (isset($_GET['id'])) {
     $row = mysqli_fetch_array($result);
     $barcode = $row['barcode'];
     $description = $row['box_desc'];
+    $fetch_altcode = $row['alt_code'];
+    $fetch_status = $row['status'];
 }
 
 //update the record
 if (isset($_POST['update'])) {
     $barcode =  mysqli_real_escape_string($conn, $_POST['barcode_select']);
     $box_desc =  mysqli_real_escape_string($conn, $_POST['description']);
+    $status =  mysqli_real_escape_string($conn, $_POST['status']);
+    $alt_code =  mysqli_real_escape_string($conn, $_POST['alt_code']);
 
-    $sql = "UPDATE `box` SET `barcode`='$barcode', `box_desc`='$box_desc' WHERE `box_id`='$box_id'";
+    $sql = "UPDATE `box` SET `barcode`='$barcode', `status`='$status', `alt_code`='$alt_code', `box_desc`='$box_desc' WHERE `box_id`='$box_id'";
 
     if (mysqli_query($conn, $sql)) {
         header("Location: box.php");
@@ -670,10 +674,29 @@ End Search Bar -->
                 <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
                  
                     <!-- Select Barcode -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="barcode_select" class="form-label">Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" value="<?php echo $barcode; ?>" name="barcode_select" readonly>
+                        <input type="text" class="form-control" id="barcode_select" value="<?php echo $barcode; ?>" name="barcode_select" required>
                     </div>
+
+                    <!-- FOR the alternative code -->
+                    <div class="col-md-4">
+                        <label for="alt_code" class="form-label">Alt Code</label>
+                        <input type="text" class="form-control" id="alt_code" name="alt_code" value="<?php echo $fetch_altcode; ?>" placeholder="Enter Alt code">
+                    </div>
+
+                    <!-- change status -->
+                     <!-- Object Code -->
+                    <div class="col-md-3">
+                        <label for="change_status" class="form-label">Status</label>
+                        <select class="form-select" name="status" value="<?= $fetch_status;?>" required>
+                        <option value="">Select Status</option>   
+                        <option value="In">In</option>
+                            <option value="Out">Out</option>
+                            <option value="Destroyed">Destroyed</option>
+                        </select>
+                    </div>
+
                     <hr style="color: white;">
                     <!--  Description -->
                     <div class="col-md-6">
@@ -704,7 +727,8 @@ End Search Bar -->
       tinymce.init({
             selector: '#summernotelib', // Replace with your textarea ID
             menubar: false,
-            width: 600 // Optional: Remove the menu bar if you want
+            width: 500,
+        height:200
         });
     </script>
 

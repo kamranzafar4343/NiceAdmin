@@ -25,34 +25,61 @@ if ($resultData->num_rows > 0) {
 
 $error = false;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $company_FK_item = mysqli_real_escape_string($conn, $_POST['comp_FK_item']);
-    $box_FK_item = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
-    $branch_FK_item = mysqli_real_escape_string($conn, $_POST['branch_FK_item']);
-    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
+//handle form submission and import data from excel file
+if (isset($_POST["import"])) {
+    $fileName = $_FILES["excel"]["name"];
+    $fileExtension = explode('.', $fileName);
+    $fileExtension = strtolower(end($fileExtension));
+    $newFileName = date("Y.m.d") . " - " . date("h.i.sa") . "." . $fileExtension;
 
-    // Check if the item barcode already exists
-    $nameCheck = "SELECT * FROM `item` WHERE `barcode`='$barcode'";
-    $nameCheckResult = $conn->query($nameCheck);
+    $targetDirectory = "uploads/" . $newFileName;
+    move_uploaded_file($_FILES['excel']['tmp_name'], $targetDirectory);
 
-    if ($nameCheckResult->num_rows > 0) {
-        $error = true; // Set error to true if barcode exists
-    } else {
-        $sql = "INSERT INTO item (comp_fk_item, box_id_fk, branch_id_fk, barcode, status) 
-                VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode', 'In')";
+    error_reporting(0);
+    ini_set('display_errors', 0);
 
-        if ($conn->query($sql) === TRUE) {
-           // Set success message in session
-        $_SESSION['success_message_item'] = "Item added successfully!";
-            header("Location: createitem.php");
-            exit;
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
+    require 'excelReader/excel_reader2.php';
+    require 'excelReader/SpreadsheetReader.php';
+
+    $new_barcode =  mysqli_real_escape_string($conn, $_POST['box_FK_item']);
+
+    $reader = new SpreadsheetReader($targetDirectory);
+    foreach ($reader as $key => $row) {
+
+        $file_number = $row[1];
+        mysqli_query($conn, "INSERT INTO item (box_barcode, file_no) VALUES('$new_barcode', '$file_number')");
     }
+
+    echo
+    "
+<script>
+alert('Succesfully Imported');
+document.location.href = '';
+</script>
+";
 }
 
-$selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
+
+// // Check if the item barcode already exists
+// $nameCheck = "SELECT * FROM `item` WHERE `barcode`='$barcode'";
+// $nameCheckResult = $conn->query($nameCheck);
+
+// if ($nameCheckResult->num_rows > 0) {
+//     $error = true; // Set error to true if barcode exists
+// } else {
+//     $sql = "INSERT INTO item (comp_fk_item, box_id_fk, branch_id_fk, dept_FK_item, barcode, status) 
+//             VALUES ('$company_FK_item', '$box_FK_item',  '$branch_FK_item' , '$barcode', 'In')";
+
+//     if ($conn->query($sql) === TRUE) {
+//         // Set success message in session
+//         $_SESSION['success_message_item'] = "Item added successfully!";
+//         header("Location: createitem.php");
+//         exit;
+//     } else {
+//         echo "Error: " . $sql . "<br>" . $conn->error;
+//     }
+// }
+
 ?>
 
 
@@ -463,17 +490,12 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
     <div class="container d-flex justify-content-center">
         <div class="card custom-card shadow-lg mt-3">
             <div class="card-body">
-                <form class="row g-3 needs-validation" action="" method="POST">
-                    <div class="col-md-6">
-                        <label class="form-label">Item Barcode</label>
-                        <input type="text" class="form-control" name="barcode" id="item_barcode" maxlength="8" pattern="[a-zA-Z0-9]{8}"
-                            title="Input must be exactly 8 characters long" autofocus required>
-                    </div>
+                <form class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
 
                     <!-- Select Company -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="company">Select Company:</label>
-                        <select id="company" class="form-select" name="comp_FK_item" required>
+                        <select id="company" class="form-select" name="comp_FK_item">
                             <option value="">Select a Company</option>
                             <?php
                             // Fetch the companies from the database
@@ -486,27 +508,43 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     </div>
 
                     <!-- Select Branch -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="branch">Select a Branch:</label>
-                        <select id="branch" class="form-select" name="branch_FK_item" required>
+                        <select id="branch" class="form-select" name="branch_FK_item">
                             <option value="">Select a Branch</option>
                             <!-- The options will be populated via AJAX based on the selected company -->
                         </select>
                     </div>
 
+                    <!-- Select dept -->
+                    <div class="col-md-4">
+                        <label for="dept">Select a dept:</label>
+                        <select id="dept" class="form-select" name="dept_FK_item">
+                            <option value="">Select a dept</option>
+                            <!-- The options will be populated via AJAX based on the selected branch -->
+                        </select>
+                    </div>
+
                     <!-- Select Box -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="box">Select Box:</label>
-                        <select id="box" class="form-select" name="box_FK_item" required>
+                        <select id="box" class="form-select" name="box_FK_item">
                             <option value="">Select a Box</option>
                             <!-- The options will be populated via AJAX based on the selected company -->
                         </select>
                     </div>
 
+                    <!-- upload data -->
+                    <div class="col-md-5">
+                        <label class="form-label">Upload Excel File:</label>
+                        <input type="file" class="form-control" name="excel" accept=".xlsx, .xls" required>
+                       
+                    </div>
+
                     <div class="text-center mt-4 mb-2">
                         <button type="reset" class="btn btn-outline-info mr-1"
                             onclick="window.location.href = 'showItems.php';">Go back</button>
-                        <button type="submit" class="btn btn-outline-primary mr-1" name="submit" value="submit">Submit</button>
+                        <button type="submit" class="btn btn-outline-primary mr-1" name="import" value="import">Import</button>
                         <button type="reset" class="btn btn-outline-secondary">Reset</button>
                     </div>
                 </form>
@@ -579,97 +617,13 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                 });
             });
 
-            // When branch is changed, fetch the box
+
+            // When branch is changed, fetch the barcodes
             $('#branch').change(function() {
                 var branch_id = $(this).val();
+                // console.log(branch_id);
 
-                // AJAX request to get box for the selected company
-                $.ajax({
-                    url: 'get_boxes.php',
-                    type: 'POST',
-                    data: {
-                        branch_id: branch_id
-                    },
-                    success: function(response) {
-                        try {
-                            var boxes = JSON.parse(response);
-                            // Clea r existing branches
-                            $('#box').empty();
-                            $('#box').append('<option value="">Select a Box</option>');
-                            // Add the new options from the response
-                            $.each(boxes, function(index, box) {
-                                $('#box').append('<option value="' + box.box_id + '">' + box.barcode + '</option>');
-                            });
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const companySelect = document.getElementById('company');
-            const branchSelect = document.getElementById('branch');
-            const boxSelect = document.getElementById('box');
-
-            // Retrieve the previously selected company from localStorage
-            const selectedCompany = localStorage.getItem('selectedCompany');
-            if (selectedCompany) {
-                companySelect.value = selectedCompany;
-                loadBranches(selectedCompany); // Load branches based on the selected company
-            }
-
-            // Store the selected company in localStorage on change
-            companySelect.addEventListener('change', function() {
-                localStorage.setItem('selectedCompany', this.value);
-                loadBranches(this.value); // Load branches based on the new selection
-            });
-
-            // Store the selected branch in localStorage on change
-            branchSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBranch', this.value);
-                loadBoxes(this.value); // Load boxes based on the selected branch
-            });
-
-            // Store the selected box in localStorage on change
-            boxSelect.addEventListener('change', function() {
-                localStorage.setItem('selectedBox', this.value);
-            });
-
-            // Function to load branches via AJAX
-            function loadBranches(company_id) {
-                $.ajax({
-                    url: 'get_branches.php',
-                    type: 'POST',
-                    data: {
-                        company_id: company_id
-                    },
-                    success: function(response) {
-                        try {
-                            const branches = JSON.parse(response);
-                            branchSelect.innerHTML = '<option value="">Select a Branch</option>';
-                            branches.forEach(function(branch) {
-                                branchSelect.innerHTML += `<option value="${branch.branch_id}">${branch.branch_name}</option>`;
-                            });
-
-                            // Set previously selected branch again, if available
-                            const selectedBranch = localStorage.getItem('selectedBranch');
-                            if (selectedBranch) {
-                                branchSelect.value = selectedBranch;
-                                loadBoxes(selectedBranch); // Load boxes based on the selected branch
-                            }
-                        } catch (e) {
-                            console.error("Invalid JSON response", response);
-                        }
-                    }
-                });
-            }
-
-            // Function to load boxes via AJAX
-            function loadBoxes(branch_id) {
+                // AJAX request to get barcodes for the selected branch
                 $.ajax({
                     url: 'getBarcodes.php',
                     type: 'POST',
@@ -678,32 +632,64 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
                     },
                     success: function(response) {
                         try {
-                            const boxes = JSON.parse(response);
-                            boxSelect.innerHTML = '<option value="">Select a Box</option>';
-                            boxes.forEach(function(box) {
-                                boxSelect.innerHTML += `<option value="${box.box_id}">${box.barcode}</option>`;
-                            });
+                            var boxes = JSON.parse(response); //return the json response as an array
+                            // Clear existing dept's
+                            $('#box').empty();
+                            $('#box').append('<option value="">Select barcode</option>');
 
-                            // Set previously selected box again, if available
-                            const selectedBox = localStorage.getItem('selectedBox');
-                            if (selectedBox) {
-                                boxSelect.value = selectedBox;
-                            }
+                            // Add the new options from the response
+                            $.each(boxes, function(index, box) {
+                                $('#box').append('<option value="' + box.barcode + '">' + box.barcode + '</option>');
+
+                            });
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#box'), config);
                         } catch (e) {
                             console.error("Invalid JSON response", response);
                         }
                     }
                 });
-            }
+            });
 
+
+            // When branch is changed, fetch the departments
+            $('#branch').change(function() {
+                var branch_id = $(this).val();
+
+                // AJAX request to get dept's for the selected branch
+                $.ajax({
+                    url: 'get_departments.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var departments = JSON.parse(response); //return the json response as an array
+                            // Clear existing dept's
+                            $('#dept').empty();
+                            $('#dept').append('<option value="">Select department</option>');
+
+                            // Add the new options from the response
+                            $.each(departments, function(index, department) {
+                                $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
+                            });
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#dept'), config);
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
         });
     </script>
 
-       <!-- ALERTIFY JavaScript -->
-       <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+    <!-- ALERTIFY JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
 
 
-        <?php
+    <?php
     if (isset($_SESSION['success_message_item'])):
     ?>
         <script>
@@ -716,7 +702,7 @@ $selected_status = isset($_POST['status']) ? $_POST['status'] : 'default_value';
         unset($_SESSION['success_message_item']); // Clear the message
     endif;
     ?>
-    
+
 
     <script>
         const dataTable = new simpleDatatables.DataTable("#myTable2", {

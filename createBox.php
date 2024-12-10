@@ -25,6 +25,7 @@ if ($resultData->num_rows > 0) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $company = mysqli_real_escape_string($conn, $_POST['company']);
     $branch = mysqli_real_escape_string($conn, $_POST['branch']);
+    $dept = mysqli_real_escape_string($conn, $_POST['dept']);
     $object_code = mysqli_real_escape_string($conn, $_POST['object_code']);
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode_select']);
     $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
@@ -40,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Insert data into box table
-    $sql = "INSERT INTO box (comp_id_fk, branch_id_fk, object, barcode, alt_code, box_desc, status) 
-            VALUES ('$company', '$branch', '$object_code', '$barcode', '$alt_code', '$description', 'In')";
+    $sql = "INSERT INTO box (comp_id_fk, branch_id_fk, dept_id_fk, object, barcode, alt_code, box_desc, status) 
+            VALUES ('$company', '$branch', '$dept','$object_code',  '$barcode', '$alt_code', '$description', 'In')";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['success_message_box'] = "Container/Box added successfully.";
@@ -469,12 +470,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- Select Barcode -->
                     <div class="col-md-6">
                         <label for="barcode_select" class="form-label">Enter Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select"  placeholder="Enter Barcode" name="barcode_select" required>
+                        <input type="text" class="form-control" id="barcode_select" placeholder="Enter Barcode" name="barcode_select" required>
                     </div>
                     <!-- FOR the alternative code -->
                     <div class="col-md-6">
                         <label for="alt_code" class="form-label">Alt Code</label>
-                        <input type="text" class="form-control" id="alt_code" name="alt_code"  placeholder="Enter Alt code">
+                        <input type="text" class="form-control" id="alt_code" name="alt_code" placeholder="Enter Alt code">
                     </div>
                     <hr style="color: white;">
                     <!--  Description -->

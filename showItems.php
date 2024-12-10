@@ -146,9 +146,7 @@ if ($resultData->num_rows > 0) {
         }
 
         #fixedButtonBranch {
-            position: relative;
-            top: 110px;
-            left: 1187px;
+           
         }
 
         .row {
@@ -623,9 +621,7 @@ if ($resultData->num_rows > 0) {
     <!-- ---------------------------------------------------End Sidebar------------------------->
 
     <!--new table design-->
-    <!-- Button to add new item -->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary mb-3">Add Item</button>
-
+    
 
     <!-- Main content -->
     <main id="main" class="main">
@@ -633,11 +629,14 @@ if ($resultData->num_rows > 0) {
             <div class="cardBranch recent-sales overflow-auto mt-5">
                 <div class="card-body">
                     <h5 class="card-title">List of Items</h5>
+                    <!-- Button to add new item -->
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary mb-3">Add Item</button>
+
                     <?php
                     // Check if there are any results
                     if ($result->num_rows > 0) {
                         // Display table
-                        echo '<table class="table datatable mt-4" style="table-layout: fixed;">
+                        echo '<table class="table mt-4" id="items">
                 <thead>
                     <tr>
                         <th scope="col" style="width: 5%;">#</th>
@@ -652,7 +651,7 @@ if ($resultData->num_rows > 0) {
 
                         echo '</tr>
                 </thead>
-                <tbody style="table-layout: fixed;">';
+                <tbody style="text-align: left !important;">';
 
                         // Counter variable
                         $counter = 1;
@@ -690,6 +689,34 @@ if ($resultData->num_rows > 0) {
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+    <!-- DataTables core library and export buttons -->
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+
+
+    <!-- Bootstrap and DataTables styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SearchPanes and Select styling and functionality -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap5.css">
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/dataTables.searchPanes.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
+
+    <!--for icons-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
     <!-- Vendor JS Files -->
     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -699,13 +726,26 @@ if ($resultData->num_rows > 0) {
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
 
+
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
+    <!--for datatable.net-->
+    <script>
+         $(document).ready(function() {
+        new DataTable('#items', {
+            // Show 100 rows by default
+            "pageLength": 100,
+            columnDefs: [
+            { className: "text-left", targets: [0,1,2] } // change alignment 
+        
+        ]
+        });
+    });
+    </script>
 </body>
 
 </html>

@@ -656,7 +656,7 @@ if ($resultData->num_rows > 0) {
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
-    <!--for search panes-->
+    <!--for datatable.net-->
     <script>
          $(document).ready(function() {
         new DataTable('#box', {

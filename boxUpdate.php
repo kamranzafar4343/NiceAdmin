@@ -59,60 +59,13 @@ if (isset($_POST['update'])) {
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Update box</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Favicons -->
-    <link href="assets/img/dtl.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
-
-    <!-- Vendor CSS Files -->
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="fonts/icomoon/style.css">
-
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-
-    <!-- Style -->
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Update box</title>
 
     <!-- Favicons -->
     <link href="assets/img/favicon.png" rel="icon">
@@ -131,16 +84,32 @@ if (isset($_POST['update'])) {
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Additional Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Template Main CSS File -->
+    <link href="assets/css/style.css" rel="stylesheet">
+
     <style>
         /* Custom CSS to decrease font size of the table */
-
         .img {
             border-radius: 30%;
         }
 
         .custom {
             font-size: 0.9rem;
-            /* Adjust as needed */
             font-family: monospace;
         }
 
@@ -162,10 +131,8 @@ if (isset($_POST['update'])) {
             margin-left: 290px;
             box-shadow: none;
             border: none;
-
         }
 
-        /*styles for form*/
         .card-body {
             padding: 0 20px 20px 20px;
             font-size: 0.8rem;
@@ -182,9 +149,7 @@ if (isset($_POST['update'])) {
         }
 
         @media (min-width: 1200px) {
-
-            .h2,
-            h2 {
+            .h2, h2 {
                 font-size: 1.5rem;
             }
         }
@@ -194,7 +159,6 @@ if (isset($_POST['update'])) {
             font-size: 1.5rem;
         }
 
-        /* Define the pulse animation */
         @keyframes pulse {
             0% {
                 transform: scale(1);
@@ -209,7 +173,6 @@ if (isset($_POST['update'])) {
             }
         }
 
-        /* Define the click animation */
         @keyframes clickEffect {
             0% {
                 transform: scale(1);
@@ -227,10 +190,6 @@ if (isset($_POST['update'])) {
             }
         }
 
-        .card-title {
-            margin-bottom: 40px;
-        }
-
         .company-name {
             color: #000;
             text-decoration: none;
@@ -240,23 +199,17 @@ if (isset($_POST['update'])) {
 
         .company-name:hover {
             color: #007bff;
-            /* Change color on hover */
             animation: pulse 10s ease-in-out;
-            /* Apply the pulse animation on hover */
         }
 
         .company-name:active {
             animation: clickEffect 0.s ease;
-            /* Apply the click effect animation on click */
             color: #0056b3;
-            /* Darken color on click */
         }
 
         * {
             margin: 0;
-
             padding: 0;
-
             box-sizing: border-box;
         }
 
@@ -271,228 +224,7 @@ if (isset($_POST['update'])) {
             border: none;
         }
     </style>
-
-    <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
-
-    <title>Update</title>
-
 </head>
-
-<body>
-
-    <!doctype html>
-    <html lang="en">
-
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <!-- Favicons -->
-        <link href="assets/img/favicon.png" rel="icon">
-        <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-        <!-- Google Fonts -->
-        <link href="https://fonts.gstatic.com" rel="preconnect">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
-
-        <!-- Vendor CSS Files -->
-        <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-        <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-        <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-        <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-        <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-        <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link rel="stylesheet" href="style.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
-        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
-
-        <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
-
-        <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
-
-        <link rel="stylesheet" href="fonts/icomoon/style.css">
-
-        <link rel="stylesheet" href="css/owl.carousel.min.css">
-
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-
-        <!-- Style -->
-        <link rel="stylesheet" href="css/style.css">
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-        <!-- Favicons -->
-        <link href="assets/img/favicon.png" rel="icon">
-        <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-        <!-- Google Fonts -->
-        <link href="https://fonts.gstatic.com" rel="preconnect">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-        <!-- Vendor CSS Files -->
-        <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-        <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-        <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-        <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-        <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-        <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-        <style>
-            /* Custom CSS to decrease font size of the table */
-            .custom {
-                font-size: 0.9rem;
-                /* Adjust as needed */
-                font-family: monospace;
-            }
-
-            .company-name {
-                font-size: 1rem;
-            }
-
-            .company-title {
-                font-size: 1.1rem;
-            }
-
-            .burger {
-                left: -10px;
-                top: -20px;
-            }
-
-            .headerimg {
-                margin-top: 104px;
-                margin-left: 260px;
-            }
-
-            .custom-header {
-                background-color: white;
-                /* Light gray background */
-                color: #343a40;
-                /* Dark text color */
-                font-weight: bold;
-                /* Bold text */
-                text-align: center;
-                /* Center align text */
-                padding: 14px;
-                /* Bottom border */
-                margin-left: 19px;
-            }
-
-
-            /*styles for form*/
-            .card-body {
-                padding: 0 20px 20px 20px;
-                font-size: 0.8rem;
-            }
-
-            .form-control[type=file]:not(:disabled):not([readonly]) {
-                cursor: pointer;
-                font-size: 0.8rem;
-
-            }
-
-            input[type=date].form-control {
-                appearance: none;
-                font-size: 0.8rem;
-            }
-
-            @media (min-width: 1200px) {
-
-                .h2,
-                h2 {
-                    font-size: 1.5rem;
-                }
-            }
-
-            /* Define the pulse animation */
-            @keyframes pulse {
-                0% {
-                    transform: scale(1);
-                }
-
-                50% {
-                    transform: scale(1.1);
-                }
-
-                100% {
-                    transform: scale(1);
-                }
-            }
-
-            /* Define the click animation */
-            @keyframes clickEffect {
-                0% {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-
-                50% {
-                    transform: scale(0.9);
-                    opacity: 0.7;
-                }
-
-                100% {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-            }
-
-            .company-name {
-                color: #000;
-                text-decoration: none;
-                display: inline-block;
-                transition: color 0.3s ease;
-            }
-
-            .company-name:hover {
-                color: #007bff;
-                /* Change color on hover */
-                animation: pulse 10s ease-in-out;
-                /* Apply the pulse animation on hover */
-            }
-
-            .company-name:active {
-                animation: clickEffect 0.s ease;
-                /* Apply the click effect animation on click */
-                color: #0056b3;
-                /* Darken color on click */
-            }
-
-            * {
-                margin: 0;
-
-                padding: 0;
-
-                box-sizing: border-box;
-            }
-
-            .custom-card {
-                width: 100%;
-                margin-top: 64px;
-                margin-left: 290px;
-                box-shadow: none;
-
-                border: none;
-            }
-        </style>
-
-        <!-- Template Main CSS File -->
-        <link href="assets/css/style.css" rel="stylesheet">
-
-        <title>Register Company</title>
-
-
-    </head>
-
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -555,9 +287,6 @@ End Search Bar -->
 
     </header><!-- End Header -->
 
-
-    <!-- ======= header ======= -->
-    <?php include 'headerfile.php'; ?>
     <?php
     include "config/db.php";
     $role = $_SESSION['role'];

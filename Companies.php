@@ -93,6 +93,7 @@ $result = $conn->query($sql);
 
   <!-- Style -->
   <link rel="stylesheet" href="css/style.css">
+  
   <style>
     /* Custom CSS to decrease font size of the table */
 

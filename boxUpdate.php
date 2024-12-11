@@ -296,8 +296,13 @@ End Search Bar -->
     include "sidebarcode.php";
     ?>
 
+<div class="mt-3">
+
+<!-- empty space -->
+<br>
+</div>
     <!-- Start Header form -->
-    <div class="headerimg text-center">
+    <div class="headerimg text-center mt-5">
         <img src="image/update.png.png" alt="network-logo" width="50" height="50" />
         <h2>Update Container/filefolder</h2>
     </div>

@@ -598,97 +598,11 @@ End Search Bar -->
   </header><!-- End Header -->
 
 
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="index.php">
-          <i class="ri-home-8-line"></i>
-          <span>Dashboard</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-
-
-      <li class="nav-item">
-        <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-          <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li><!-- End Tables Nav -->
-
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="account.php">
-          <i class="ri-bank-card-line"></i><span>Account Range</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li><!-- End Boxes Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-          <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="order.php">
-          <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="racks.php">
-          <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="store.php">
-          <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-        </a>
-      </li>
-
-
-      <li class="nav-heading">Pages</li>
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.php">
-          <i class="bi bi-person"></i>
-          <span>Profile</span>
-        </a>
-      </li>
-      <!-- End Profile Page Nav -->
-
-
-
-      <!-- <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-register.php">
-      <i class="bi bi-card-list"></i>
-      <span>Register</span>
-    </a>
-  </li> -->
-      <!-- End Register Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.php">
-          <i class="bi bi-box-arrow-in-right"></i>
-          <span>Login</span>
-        </a>
-      </li><!-- End Login Page Nav -->
-
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-contact.php">
-          <i class="bi bi-envelope"></i>
-          <span>Contact</span>
-        </a>
-      </li><!-- End Contact Page Nav -->
-
-    </ul>
-
-  </aside>
-
-
-  <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
-
+  <!-- sidebar start -->
+  <?php
+  include "sidebarcode.php";
+  ?>
+  <!-- sidebar end -->
 
   <!-- Start Header form -->
   <div class="headerimg text-center">
@@ -732,7 +646,7 @@ End Search Bar -->
             <input type="text" class="form-control" id="" name="foc" value="<?php echo isset($contact_person) ? $contact_person : ''; ?>" required pattern="[A-Za-z\s\.]+" minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
           </div>
 
-          
+
           <div class="col-md-6">
             <label for="phone" class="form-label">Access/Authority</label>
             <select name="authority" id="" class="form-select">

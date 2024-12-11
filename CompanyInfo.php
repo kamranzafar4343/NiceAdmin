@@ -110,8 +110,9 @@ if ($result->num_rows > 0) {
     .card-text {
       font-size: 15px;
     }
+
     /* css for setting table position */
-    .cbd-position{
+    .cbd-position {
       position: relative;
 
     }
@@ -445,7 +446,7 @@ if ($result->num_rows > 0) {
     .datatable-wrapper.no-footer .datatable-container {
       border: none;
       margin-left: -337px !important;
-    width: 421px !important;
+      width: 421px !important;
     }
 
     .company-title {
@@ -598,7 +599,7 @@ if ($result->num_rows > 0) {
       text-align: center;
     }
 
-/* hiding datatabe top */
+    /* hiding datatabe top */
     .datatable-top {
       display: none !important;
     }
@@ -716,101 +717,11 @@ if ($result->num_rows > 0) {
 
   </header><!-- End Header -->
 
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="index.php">
-          <i class="ri-home-8-line"></i>
-          <span>Dashboard</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-
-
-      <?php if ($_SESSION['role'] == 'admin') { ?>
-        <!-- Admin-only Links -->
-        <li class="nav-item">
-          <a class="nav-link active" href="Companies.php">
-            <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Companies Nav -->
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="box.php">
-            <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Boxes Nav -->
-
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="order.php">
-            <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Work Orders Nav -->
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="racks.php">
-            <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Racks Nav -->
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="store.php">
-            <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Store Nav -->
-
-      <?php } else { ?>
-        <!-- User-only Links -->
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="box.php">
-            <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Boxes Nav -->
-
-
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="order.php">
-            <i class="ri-list-ordered"></i><span>Work Orders</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Work Orders Nav -->
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="racks.php">
-            <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Racks Nav -->
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="store.php">
-            <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-          </a>
-        </li><!-- End Store Nav -->
-      <?php } ?>
-
-
-      <li class="nav-heading">Pages</li>
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.php">
-          <i class="bi bi-box-arrow-right"></i><span>Login</span>
-        </a>
-      </li><!-- End Login Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="logout.php">
-          <i class="bi bi-box-arrow-left"></i><span>Logout</span>
-        </a>
-      </li><!-- End Logout Nav -->
-
-    </ul>
-  </aside>
-  <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
-
+  <!-- sidebar start -->
+  <?php
+  include "sidebarcode.php";
+  ?>
+  <!-- sidebar end -->
 
   <main id="main" class="main">
     <div class="container mt-5">

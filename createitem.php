@@ -23,9 +23,7 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$error = false;
 
-//handle form submission and import data from excel file
 if (isset($_POST["import"])) {
 
     $fileName = $_FILES["excel"]["name"];
@@ -42,25 +40,59 @@ if (isset($_POST["import"])) {
     require 'excelReader/excel_reader2.php';
     require 'excelReader/SpreadsheetReader.php';
 
-    //get box barcode from form
-    $new_barcode =  mysqli_real_escape_string($conn, $_POST['box_FK_item']);
+    // Get box barcode from form
+    $new_barcode = mysqli_real_escape_string($conn, $_POST['box_FK_item']);
     
-    //batch_id = unix timestamp
+    // batch_id = unix timestamp
     $batch_id = time();
 
     $reader = new SpreadsheetReader($targetDirectory);
+
+    // Array to collect duplicate file_no values
+    $duplicates = [];
+
     foreach ($reader as $key => $row) {
 
-        $file_number = $row[0];
-        mysqli_query($conn, "INSERT INTO item (box_barcode, file_no, batch_id) VALUES('$new_barcode', '$file_number', '$batch_id')");
+        $file_number = mysqli_real_escape_string($conn, $row[0]);
+
+        // Check if file_no already exists
+        $checkQuery = "SELECT COUNT(*) as count FROM item WHERE file_no = '$file_number'";
+        $result = mysqli_query($conn, $checkQuery);
+        $rowExists = mysqli_fetch_assoc($result);
+
+        if ($rowExists['count'] == 0) {
+            // Insert only if file_no does not exist
+            $insertQuery = "INSERT INTO item (box_barcode, file_no, batch_id) 
+                            VALUES('$new_barcode', '$file_number', '$batch_id')";
+            mysqli_query($conn, $insertQuery);
+        } else {
+            // Add duplicate file_no to the array
+            $duplicates[] = $file_number;
+        }
     }
 
-    echo "";
+    // Generate JavaScript alert and redirection if duplicates are found
+    if (!empty($duplicates)) {
+        $duplicateList = implode(", ", $duplicates);
+        echo "<script>
+                alert('Duplicate file_no(s) detected: $duplicateList');
+                window.location.href = 'createitem.php';
+              </script>";
+        exit;
+    }
+
+    // If no duplicates, redirect to createitem.php with success message
+    echo "<script>
+            alert('Import completed successfully.');
+            window.location.href = 'createitem.php';
+          </script>";
+    exit;
 }
 
 
-// // Check if the item barcode already exists
-// $nameCheck = "SELECT * FROM `item` WHERE `barcode`='$barcode'";
+
+// Check if the item barcode already exists
+// $nameCheck = "SELECT * FROM `item` WHERE `file_no`='$barcode'";
 // $nameCheckResult = $conn->query($nameCheck);
 
 // if ($nameCheckResult->num_rows > 0) {
@@ -91,7 +123,7 @@ if (isset($_POST["import"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/dtl.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -293,7 +325,7 @@ if (isset($_POST["import"])) {
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>create item</title>
+    <title>Import Files</title>
 
 
 </head>
@@ -302,10 +334,10 @@ if (isset($_POST["import"])) {
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
-            <img class="navbar-image" src="assets/img/logo3.png" alt="">
+            <img class="navbar-image" src="assets/img/dtl.png" alt="">
             <a href="index.php" class="logo d-flex align-items-center">
 
-                <span class="d-none d-lg-block">FingerLog</span>
+                <span class="d-none d-lg-block"></span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
@@ -482,7 +514,7 @@ if (isset($_POST["import"])) {
     <!-- Start Header form -->
     <div class="headerimg text-center">
         <img src="image/create.png" alt="network-logo" width="50" height="50">
-        <h2>Add an item</h2>
+        <h2>Import Files</h2>
     </div>
     <!-- End Header form -->
 
@@ -576,15 +608,7 @@ if (isset($_POST["import"])) {
     <!-- Include Bootstrap JS (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Script to show modal when barcode already exists -->
-    <?php if ($error): ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var barcodeErrorModal = new bootstrap.Modal(document.getElementById('barcodeErrorModal'));
-                barcodeErrorModal.show();
-            });
-        </script>
-    <?php endif; ?>
+
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->

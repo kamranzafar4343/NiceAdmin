@@ -32,11 +32,9 @@ if (isset($_GET['id'])) {
     $result = $conn->query($sql);
     $row = mysqli_fetch_array($result);
 
-    $item_name = $row['item_name'];
-    // $item_price = $row['item_price'];
-    $item_quantity = $row['item_quantity'];
+    $box_barcode = $row['box_barcode'];
+    $file_no = $row['file_no'];
     $status = $row['status'];
-    $barcode = $row['barcode'];
 }
 
 if (isset($_GET['id'])) {
@@ -51,13 +49,14 @@ if (isset($_GET['id'])) {
 }
 //update the record
 if (isset($_POST['update'])) {
-    $item_name = mysqli_real_escape_string($conn, $_POST['item_name']);
-    $status = mysqli_real_escape_string($conn, $_POST['status']);
+    $input_box = mysqli_real_escape_string($conn, $_POST['input_box']);
+    $input_file = mysqli_real_escape_string($conn, $_POST['input_file']);
+    $status = mysqli_real_escape_string($conn, $_POST['input_status']);
 
-    $sql = "UPDATE `item` SET `item_name`='$item_name', `item_price`='$item_price' , `item_quantity`='$item_quantity', `status`='$status' WHERE `item_id`='$item_id'";
+    $sql = "UPDATE `item` SET `box_barcode`='$input_box', `file_no`='$input_file' , `status`='$status' WHERE `item_id`='$item_id'";
 
     if (mysqli_query($conn, $sql)) {
-        header("Location: showitems.php?id=" . $company_id);
+        header("Location: showitems.php");
         exit;
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -643,22 +642,21 @@ End Search Bar -->
             <div class="card-body">
                 <!-- <h5 class="card-title">Update Company Information</h5> -->
                 <form class="row g-3 mt-2" action="" method="POST" enctype="multipart/form-data">
-                    <div class="col-md-6">
-                        <label class="form-label">Item name</label>
-                        <input type="text" class="form-control" name="item_name" required pattern="[A-Za-z\s]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" value="<?php echo $item_name; ?>" required>
-
-                    </div>
-                    
 
                     <div class="col-md-6">
-                        <label class="form-label">Item Condition</label>
-                        <input type="text" class="form-control" name="status" value="<?php echo $status; ?>" required>
-
+                        <label class="form-label">Box Barcode</label>
+                        <input type="text" class="form-control" name="input_box" value="<?php echo $box_barcode; ?>">
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Barcode</label>
-                        <input type="text" class="form-control" name="barcode" value="<?php echo $barcode; ?>" readonly>
+                        <label class="form-label">File No.</label>
+                        <input type="text" class="form-control" name="input_file" value="<?php echo $file_no; ?>">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Status</label>
+                        <input type="text" class="form-control" name="input_status" value="<?php echo $status; ?>">
 
                     </div>
 

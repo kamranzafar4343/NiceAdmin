@@ -33,7 +33,7 @@ $resultShowOrders = $conn->query($showOrders);
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/dtl.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Bootstrap CSS -->
@@ -325,10 +325,10 @@ $resultShowOrders = $conn->query($showOrders);
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
-            <img class="navbar-image" src="assets/img/logo3.png" alt="">
+            <img class="navbar-image" src="assets/img/dtl.png" alt="">
             <a href="index.php" class="logo d-flex align-items-center">
 
-                <span class="d-none d-lg-block">FingerLog</span>
+                <span class="d-none d-lg-block"></span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
@@ -383,143 +383,9 @@ $resultShowOrders = $conn->query($showOrders);
 
     </header><!-- End Header -->
 
-
-    <!-- ======= Sidebar ======= -->
-    <!-- ======= Sidebar ======= -->
-    <aside id="sidebar" class="sidebar">
-        <ul class="sidebar-nav" id="sidebar-nav">
-
-            <!-- Dashboard Link (Visible to all users) -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="index.php">
-                    <i class="ri-home-8-line"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li><!-- End Dashboard Nav -->
-
-            <?php if ($_SESSION['role'] == 'admin') { ?>
-                <!-- Admin-only Links -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="Companies.php">
-                        <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Companies Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="" href="#">
-                        <i class="ri-list-ordered"></i><span>Work Order</span>
-                        <i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="forms-nav" class="nav-content" data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a class="nav-link collapsed" href="order.php">
-                                <i class="bi bi-circle"></i><span>delivery</span>
-                            </a>
-                            <a class="nav-link collapsed" href="pickup.php">
-                                <i class="bi bi-circle"></i><span>pickup </span>
-                            </a>
-                            <a class="nav-link collapsed" href="permout.php">
-                                <i class="bi bi-circle"></i><span>perm_out </span>
-                            </a>
-                            <a class="nav-link collapsed" href="destroy.php">
-                                <i class="bi bi-circle"></i><span>destroy </span>
-                            </a>
-                            <a class="nav-link active" href="access.php">
-                                <i class="bi bi-circle"></i><span>access </span>
-                            </a>
-                            <a class="nav-link collapsed" href="supplies.php">
-                                <i class="bi bi-circle"></i><span>supplies </span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="racks.php">
-                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Racks Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="store.php">
-                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Store Nav -->
-
-            <?php } else { ?>
-                <!-- User-only Links -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="box.php">
-                        <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Boxes Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-target="#forms-nav" data-bs-toggle="" href="#">
-                        <i class="ri-list-ordered"></i><span>Work Order</span>
-                        <i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="forms-nav" class="nav-content" data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a class="nav-link collapsed" href="order.php">
-                                <i class="bi bi-circle"></i><span>delivery</span>
-                            </a>
-                            <a class="nav-link collapsed" href="pickup.php">
-                                <i class="bi bi-circle"></i><span>pickup </span>
-                            </a>
-                            <a class="nav-link collapsed" href="permout.php">
-                                <i class="bi bi-circle"></i><span>perm_out </span>
-                            </a>
-                            <a class="nav-link collapsed" href="destroy.php">
-                                <i class="bi bi-circle"></i><span>destroy </span>
-                            </a>
-                            <a class="nav-link active" href="access.php">
-                                <i class="bi bi-circle"></i><span>access </span>
-                            </a>
-                            <a class="nav-link collapsed" href="supplies.php">
-                                <i class="bi bi-circle"></i><span>supplies </span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="racks.php">
-                        <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Racks Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="store.php">
-                        <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
-                    </a>
-                </li><!-- End Store Nav -->
-            <?php } ?>
-
-
-            <li class="nav-heading">Pages</li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-right"></i><span>Login</span>
-                </a>
-            </li><!-- End Login Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="logout.php">
-                    <i class="bi bi-box-arrow-left"></i><span>Logout</span>
-                </a>
-            </li><!-- End Logout Nav -->
-
-        </ul>
-    </aside>
-    <!--------------- End sidebar ------------------>
-    <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
+    <!-- sidebar -->
+    <?php include "sidebarcode.php"; ?>
+    <!-- -----End Sidebar------>
 
 
     <!--form--------------------------------------form--------------------------------------->
@@ -621,20 +487,20 @@ $resultShowOrders = $conn->query($showOrders);
 
                             if ($_SESSION['role'] == 'admin') {
                     ?>
-                            <td>
-                                <div style="display: flex; gap: 10px;">
-                                    <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
+                                <td>
+                                    <div style="display: flex; gap: 10px;">
+                                        <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
 
-                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                        onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                    <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
+                                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
+                                            onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                        <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
 
-                                    <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
+                                        <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
                     onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=">Access</a> -->
 
 
-                                </div>
-                            </td>
+                                    </div>
+                                </td>
                     <?php
                             }
 

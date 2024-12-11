@@ -451,11 +451,11 @@ h6 {
   width: 100%;
 }
 
-.navbar-image{
-  width: 43px;
+.navbar-image {
+  width: 73px;
   height: 44px;
-  margin-right: 9px;
-
+  margin-right: -40px;
+  margin-left: 5px;
 }
 .headerbox {
   display: flex;

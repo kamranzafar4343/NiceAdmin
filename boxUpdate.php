@@ -68,7 +68,7 @@ if (isset($_POST['update'])) {
     <title>Update box</title>
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/dtl.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -232,7 +232,7 @@ if (isset($_POST['update'])) {
             <img class="navbar-image" src="assets/img/dtl.png" alt="">
             <a href="index.php" class="logo d-flex align-items-center">
 
-                <span class="d-none d-lg-block">FingerLog</span>
+                <span class="d-none d-lg-block"></span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->

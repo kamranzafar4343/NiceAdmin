@@ -52,7 +52,7 @@ if (isset($_GET['comp_id'])) {
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/dtl.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -370,10 +370,10 @@ if (isset($_GET['comp_id'])) {
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
-            <img class="navbar-image" src="assets/img/logo3.png" alt="">
+            <img class="navbar-image" src="assets/img/dtl.png" alt="">
 
             <a href="index.php" class="logo d-flex align-items-center">
-                <span class="d-none d-lg-block">FingerLog</span>
+                <span class="d-none d-lg-block"></span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->

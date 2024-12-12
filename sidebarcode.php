@@ -63,7 +63,9 @@
 
             <li class="nav-item">
                 <a class="nav-link <?php echo ($currentPage == 'racks.php') ? 'active' : 'collapsed'; ?>" href="racks.php">
-                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    <img src="assets/img/racking-system.png" alt="Racks Icon" style="width: 18px; height: 20px; margin-right: 8px;">
+                    <span>Racks</span>
+                    <i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Racks Nav -->
 
@@ -117,9 +119,12 @@
 
             <li class="nav-item">
                 <a class="nav-link <?php echo ($currentPage == 'racks.php') ? 'active' : 'collapsed'; ?>" href="racks.php">
-                    <i class="bi bi-box"></i><span>Racks</span><i class="bi bi-chevron ms-auto"></i>
+                    <img src="assets/img/racking-system.png" alt="Racks Icon" style="width: 18px; height: 20px; margin-right: 8px;">
+                    <span>Racks</span>
+                    <i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Racks Nav -->
+
 
             <li class="nav-item">
                 <a class="nav-link <?php echo ($currentPage == 'store.php') ? 'active' : 'collapsed'; ?>" href="store.php">

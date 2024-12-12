@@ -589,7 +589,8 @@ $result = $conn->query($sql);
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
-    <!--for datatable.net-->
+    
+    <!--for changing text alignment in datatable.net-->
     <script>
         $(document).ready(function() {
             new DataTable('#items', {

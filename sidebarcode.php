@@ -16,25 +16,25 @@
             <!-- Admin-only Links -->
             <li class="nav-item">
                 <a class="nav-link <?php echo ($currentPage == 'Companies.php') ? 'active' : 'collapsed'; ?>" href="Companies.php">
-                    <i class="ri-building-4-line"></i><span>Accounts</span><i class="bi bi-chevron ms-auto"></i>
+                    <i class="ri-building-4-line"></i><span>Clients</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Companies Nav -->
 
             <li class="nav-item">
                 <a class="nav-link <?php echo ($currentPage == 'box.php') ? 'active' : 'collapsed'; ?>" href="box.php">
-                    <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+                    <i class="bi bi-box"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Boxes Nav -->
 
             <li class="nav-item">
                 <a class="nav-link <?php echo ($currentPage == 'showItems.php') ? 'active' : 'collapsed'; ?>" href="showItems.php">
-                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    <i class="ri-file-copy-2-line"></i><span>Files</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Items Nav -->
 
             <li class="nav-item">
                 <a class="nav-link <?php echo ($currentPage == 'order.php' || $currentPage == 'pickup.php' || $currentPage == 'permout.php' || $currentPage == 'destroy.php' || $currentPage == 'access.php' || $currentPage == 'supplies.php') ? 'active' : 'collapsed'; ?>" data-bs-toggle="collapse" data-bs-target="#forms-nav" href="#">
-                    <i class="ri-list-ordered"></i><span>Work Order</span>
+                    <i class="ri-list-ordered"></i><span>Work Orders</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="forms-nav" class="nav-content collapse <?php echo ($currentPage == 'order.php' || $currentPage == 'pickup.php' || $currentPage == 'permout.php' || $currentPage == 'destroy.php' || $currentPage == 'access.php' || $currentPage == 'supplies.php') ? 'show' : ''; ?>" data-bs-parent="#sidebar-nav">
@@ -76,19 +76,19 @@
         <?php } else { ?>
             <li class="nav-item">
                 <a class="nav-link <?php echo ($currentPage == 'box.php') ? 'active' : 'collapsed'; ?>" href="box.php">
-                    <i class="ri-archive-stack-fill"></i><span>Containers</span><i class="bi bi-chevron ms-auto"></i>
+                    <i class="bi bi-box"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Boxes Nav -->
 
             <li class="nav-item">
                 <a class="nav-link <?php echo ($currentPage == 'showItems.php') ? 'active' : 'collapsed'; ?>" href="showItems.php">
-                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
+                    <i class="ri-shopping-cart-line"></i><span>Files</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Items Nav -->
 
             <li class="nav-item">
                 <a class="nav-link <?php echo ($currentPage == 'order.php' || $currentPage == 'pickup.php' || $currentPage == 'permout.php' || $currentPage == 'destroy.php' || $currentPage == 'access.php' || $currentPage == 'supplies.php') ? 'active' : 'collapsed'; ?>" data-bs-toggle="collapse" data-bs-target="#forms-nav" href="#">
-                    <i class="ri-list-ordered"></i><span>Work Order</span>
+                    <i class="ri-list-ordered"></i><span>Work Orders</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="forms-nav" class="nav-content collapse <?php echo ($currentPage == 'order.php' || $currentPage == 'pickup.php' || $currentPage == 'permout.php' || $currentPage == 'destroy.php' || $currentPage == 'access.php' || $currentPage == 'supplies.php') ? 'show' : ''; ?>" data-bs-parent="#sidebar-nav">

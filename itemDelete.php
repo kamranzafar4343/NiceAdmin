@@ -42,13 +42,13 @@ if (isset($_GET['id'])) {
 
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $box_id = $row['box_FK_item'];
+        // $box_id = $row['box_barcode'];
 
         // Now, perform the delete operation (since the user is an admin)
         $delete_sql = "DELETE FROM `item` WHERE `item_id` = $item_id";
         if ($conn->query($delete_sql) === TRUE) {
             // Redirect to the page showing the items for the box after successful deletion
-            header("Location: showItems.php?id=" . $box_id);
+            header("Location: showItems.php");
             exit;
         } else {
             echo "Error deleting record: " . $conn->error;

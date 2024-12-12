@@ -39,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   <title>Login</title>
 
+  <!-- Favicons -->
+  <link href="assets/img/dtl.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans|Nunito|Poppins" rel="stylesheet">
 
@@ -54,6 +58,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     .w-100 {
       margin-left: 122px;
       width: 100% !important;
+    }
+
+    .py-4 {
+      padding-top: 1.5rem !important;
+      padding-bottom: 0rem !important;
+    }
+
+    .logo img {
+      max-height: 78px !important;
+      margin-right: -14px !important;
     }
   </style>
 
@@ -72,8 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
               <div class="d-flex justify-content-center py-4">
                 <a href="index.php" class="logo d-flex align-items-center w-auto">
-                  <img src="assets/img/logo3.png" alt="">
-                  <span class="d-none d-lg-block">FingerLog</span>
+                  <img src="assets/img/dtl.png" alt="">
+                  <span class="d-none d-lg-block"></span>
                 </a>
               </div>
 

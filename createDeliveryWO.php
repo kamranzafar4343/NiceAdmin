@@ -595,7 +595,7 @@ if (isset($_POST['submit'])) {
                 creatable: false, // Disable creatable selection
                 clearable: false, // Disable clearable selection
                 maxHeight: '360px', // Max height for showings scrollbar
-                size: 'sm', // Size of the select, can be 'sm' or 'lg'
+                size: 'md', // Size of the select, can be 'sm' or 'lg'
             };
 
             // Initialize dselect for the initial dropdowns

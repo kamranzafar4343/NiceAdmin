@@ -468,7 +468,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 creatable: false, // Disable creatable selection
                 clearable: false, // Disable clearable selection
                 maxHeight: '400px', // Max height for showing scrollbar
-                size: 'sm', // Size of the select, can be 'sm' or 'lg'
+                size: 'md', // Size of the select, can be 'sm' or 'lg'
             };
 
             // Initialize dselect for the initial dropdowns

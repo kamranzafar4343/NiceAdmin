@@ -611,9 +611,17 @@ if ($resultData->num_rows > 0) {
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
-    <!--for search panes-->
+    <!--for datatable-->
     <script>
+
         new DataTable('#orderT', {
+            // <!--make the table => datatable.net table and also change the alignment of the text in columns-->
+            columnDefs: [{
+                        className: "text-left",
+                        targets: [0, 1, 2, 3, 4, 5]
+                    } // change alignment 
+
+                ],
 
             //show the rows in descending order by the date
             "order": [
@@ -623,10 +631,6 @@ if ($resultData->num_rows > 0) {
             //show 100 rows by default
             "pageLength": 100,
 
-            layout: {
-                top1: 'searchPanes'
-            },
-
             //collapse by default
             "searchPanes": {
                 "initCollapsed": true,
@@ -635,8 +639,6 @@ if ($resultData->num_rows > 0) {
 
         });
     </script>
-
-
 
 </body>
 

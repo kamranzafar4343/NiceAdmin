@@ -573,16 +573,21 @@ End Search Bar -->
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
-    <!--for datatable.net-->
-    <script>
+<!--make the table => datatable.net table and also change the alignment of the text in columns-->
+<script>
         $(document).ready(function() {
             new DataTable('#box', {
                 // Show 100 rows by default
                 "pageLength": 100,
+                columnDefs: [{
+                        className: "text-left",
+                        targets: [0, 1, 2, 3, 4, 5]
+                    } // change alignment 
+
+                ]
             });
         });
     </script>
-
 </body>
 
 </html>

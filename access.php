@@ -569,9 +569,17 @@ $resultShowOrders = $conn->query($showOrders);
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
-    <!--for search panes-->
+    <!--for datatables-->
     <script>
         new DataTable('#orderT', {
+
+             // <!--make the table => datatable.net table and also change the alignment of the text in columns-->
+             columnDefs: [{
+                        className: "text-left",
+                        targets: [0, 1, 2, 3, 4, 5]
+                    } // change alignment 
+
+                ],
 
             //show 100 rows by default
             "pageLength": 100,

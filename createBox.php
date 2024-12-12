@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES ('$company', '$branch', '$dept','$object_code',  '$barcode', '$alt_code', '$description', 'In')";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['success_message_box'] = "Container/Box added successfully.";
+        $_SESSION['success_message_box'] = "Box added successfully.";
         header("location: createBox.php");
         exit;
     } else {

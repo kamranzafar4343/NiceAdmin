@@ -32,7 +32,7 @@ $result = $conn->query($sql);
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>items</title>
+    <title>Files</title>
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
@@ -477,7 +477,7 @@ $result = $conn->query($sql);
 
                     <div class="row">
                         <div class="col-6">
-                            <h5 class="card-title">List of Items</h5>
+                            <h5 class="card-title">List of all Files</h5>
                         </div>
 
                         <div class="col-6">
@@ -535,7 +535,7 @@ $result = $conn->query($sql);
                         echo '</tbody></table>';
                     } else {
                         // Display message if no results
-                        echo '<p>No items found.</p>';
+                        echo '<p>No File found.</p>';
                     }
                     ?>
                 </div>

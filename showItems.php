@@ -482,7 +482,7 @@ $result = $conn->query($sql);
 
                         <div class="col-6">
                             <!-- Button to add new item -->
-                            <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary mb-3">Add Item</button>
+                            <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary mb-3">Add File</button>
                         </div>
 
                     </div>

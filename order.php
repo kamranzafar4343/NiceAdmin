@@ -370,7 +370,7 @@ if ($resultData->num_rows > 0) {
     <main id="main" class="main">
         <div class="col-14">
             <!-- Add the buttton for the work order -->
-            <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add">Add</button>
+            <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add"> + </button>
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
 
@@ -509,7 +509,7 @@ if ($resultData->num_rows > 0) {
 
                             //convert timestamp to only date format
                             $dateTimeCreate = $row["order_creation_date"];
-                            $justDateCreate = date("Y-m-d", strtotime($dateTimeCreate));
+                            $justDateCreate = date("d-m-Y", strtotime($dateTimeCreate));
                             echo '<td style="text-align: center;">' . $justDateCreate . '</td>';
 
                             echo '<td style="text-align: center;">';
@@ -524,7 +524,7 @@ if ($resultData->num_rows > 0) {
 
                             //convert timestamp to only date format
                             $dateTime = $row["date"];
-                            $justDate = date("Y-m-d", strtotime($dateTime));
+                            $justDate = date("d-m-Y", strtotime($dateTime));
                             echo '<td style="text-align: center;">' . $justDate . '</td>';
 
                             if ($_SESSION['role'] == 'admin') {

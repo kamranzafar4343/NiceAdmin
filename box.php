@@ -436,7 +436,7 @@ End Search Bar -->
 
 
     <!-- Button to add new box -->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add Container </button>
+    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add box </button>
 
     <!-- Main content -->
     <main id="main" class="main">

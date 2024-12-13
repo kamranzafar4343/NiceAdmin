@@ -75,7 +75,7 @@ if (isset($_POST['update'])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Update item</title>
+    <title>Update file</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 
@@ -565,70 +565,9 @@ End Search Bar -->
 
     </header><!-- End Header -->
 
-
-    <!-- ======= Sidebar ======= -->
-    <aside id="sidebar" class="sidebar">
-
-        <ul class="sidebar-nav" id="sidebar-nav">
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="index.php">
-                    <i class="ri-home-8-line"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li><!-- End Dashboard Nav -->
-
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="Companies.php">
-                    <i class="ri-building-4-line"></i><span>Companies</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li><!-- End Tables Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="" href="box.php">
-                    <i class="ri-archive-stack-fill"></i><span>Boxes</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link active" data-bs-target="#tables-nav" data-bs-toggle="" href="showItems.php">
-                    <i class="ri-shopping-cart-line"></i><span>Items</span><i class="bi bi-chevron ms-auto"></i>
-                </a>
-            </li>
-
-            <li class="nav-heading">Pages</li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.php">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-            <!-- End Profile Page Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-login.php">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
-                </a>
-            </li><!-- End Login Page Nav -->
-
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-contact.php">
-                    <i class="bi bi-envelope"></i>
-                    <span>Contact</span>
-                </a>
-            </li><!-- End Contact Page Nav -->
-
-        </ul>
-
-    </aside>
-
-
-    <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
-
+    <?php 
+    include "sidebarcode.php";
+    ?>
 
     <!-- Start Header form -->
     <div class="headerimg text-center">
@@ -645,19 +584,25 @@ End Search Bar -->
 
                     <div class="col-md-6">
                         <label class="form-label">Box Barcode</label>
-                        <input type="text" class="form-control" name="input_box" value="<?php echo $box_barcode; ?>">
+                        <input type="text" class="form-control" name="input_box" maxlength="8" value="<?php echo $box_barcode; ?>" required>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">File No.</label>
-                        <input type="text" class="form-control" name="input_file" value="<?php echo $file_no; ?>">
+                        <input type="text" class="form-control" name="input_file" maxlength="12" value="<?php echo $file_no; ?>" required>
 
                     </div>
 
+                    <!-- Object Code -->
                     <div class="col-md-3">
-                        <label class="form-label">Status</label>
-                        <input type="text" class="form-control" name="input_status" value="<?php echo $status; ?>">
-
+                        <label for="change_status" class="form-label">Status</label>
+                        <select class="form-select" name="status" required>
+                        <option value="">Select Status</option>   
+                        <option value="In" <?php echo $status == 'In' ? 'selected' : ''; ?>>In</option>
+                            <option value="Out" <?php echo $status == 'Out' ? 'selected' : ''; ?>>Out</option>
+                            <option value="Out" <?php echo $status == 'Perm Out' ? 'selected' : ''; ?>>Perm Out</option>
+                            <option value="Destroyed" <?php echo $status == 'Destroyed' ? 'selected' : ''; ?>>Destroyed</option>
+                        </select>
                     </div>
 
                     <div class="col-12 text-center">

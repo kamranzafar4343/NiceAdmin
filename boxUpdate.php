@@ -330,11 +330,12 @@ End Search Bar -->
                      <!-- Object Code -->
                     <div class="col-md-3">
                         <label for="change_status" class="form-label">Status</label>
-                        <select class="form-select" name="status" value="<?= $fetch_status;?>" required>
+                        <select class="form-select" name="status" required>
                         <option value="">Select Status</option>   
-                        <option value="In">In</option>
-                            <option value="Out">Out</option>
-                            <option value="Destroyed">Destroyed</option>
+                        <option value="In" <?php echo $fetch_status == 'In' ? 'selected' : ''; ?>>In</option>
+                            <option value="Out" <?php echo $fetch_status == 'Out' ? 'selected' : ''; ?>>Out</option>
+                            <option value="Out" <?php echo $fetch_status == 'Perm Out' ? 'selected' : ''; ?>>Perm Out</option>
+                            <option value="Destroyed" <?php echo $fetch_status == 'Destroyed' ? 'selected' : ''; ?>>Destroyed</option>
                         </select>
                     </div>
 

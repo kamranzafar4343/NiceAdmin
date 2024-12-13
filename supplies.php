@@ -456,7 +456,7 @@ $resultShowOrders = $conn->query($showOrders);
 
                             //convert timestamp to only date format
                             $dateTimeCreate = $row["order_creation_date"];
-                            $justDateCreate = date("Y-m-d", strtotime($dateTimeCreate));
+                            $justDateCreate = date("d-m-Y", strtotime($dateTimeCreate));
                             echo '<td>' . $justDateCreate . '</td>';
 
                             echo '<td>';
@@ -483,7 +483,7 @@ $resultShowOrders = $conn->query($showOrders);
 
                             //convert timestamp to only date format
                             $dateTime = $row["date"];
-                            $justDate = date("Y-m-d", strtotime($dateTime));
+                            $justDate = date("d-m-Y", strtotime($dateTime));
                             echo '<td>' . $justDate . '</td>';
                     
                             if ($_SESSION['role'] == 'admin') {

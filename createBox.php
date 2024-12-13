@@ -9,7 +9,13 @@ if (!isset($_SESSION['email'])) {
 
 include 'config/db.php';
 
+
 $email = $_SESSION['email'];
+
+// Get session variables
+$session_userId = $_SESSION['id']; // User ID
+$session_user_role = $_SESSION['role']; // User role
+$session_email = $_SESSION['email']; // User email
 
 // Get user name and email from the register table
 $getAdminData = "SELECT * FROM register WHERE email = '" . mysqli_real_escape_string($conn, $email) . "'";
@@ -19,6 +25,26 @@ if ($resultData->num_rows > 0) {
     $row2 = $resultData->fetch_assoc();
     $adminName = $row2['name'];
     $adminEmail = $row2['email'];
+}
+
+// Audit log function
+function logAudit($action_by, $action, $description) {
+    global $conn;
+
+    // Escape and sanitize inputs
+    $action_by = mysqli_real_escape_string($conn, $action_by);
+    $action = mysqli_real_escape_string($conn, $action);
+    $description = mysqli_real_escape_string($conn, $description);
+
+    $query = "
+        INSERT INTO audit_log (user_info, action, description)
+        VALUES ('$action_by', '$action', '$description')
+    ";
+
+    // Execute the query
+    if (!mysqli_query($conn, $query)) {
+        error_log("Failed to log audit: " . mysqli_error($conn));
+    }
 }
 
 // Handle form submission
@@ -45,6 +71,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES ('$company', '$branch', '$dept','$object_code',  '$barcode', '$alt_code', '$description', 'In')";
 
     if ($conn->query($sql) === TRUE) {
+
+         // Prepare details for logging the audit
+         $action_by = "Created by the user-id: $session_userId, user-role: $session_user_role, user-email: $session_email";
+         $action = 'Create';
+         $description = "Created record: Object Code - $object_code, Barcode - $barcode, Alt Code - $alt_code, Status - In, Description - $description";
+        
+         // Log the audit
+         logAudit($action_by, $action, $description);
+
         $_SESSION['success_message_box'] = "Box added successfully.";
         header("location: createBox.php");
         exit;
@@ -340,11 +375,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     </header><!-- End Header -->
 
-  <!-- sidebar start -->
-  <?php
-  include "sidebarcode.php";
-  ?>
-  <!-- sidebar end -->
+    <!-- sidebar start -->
+    <?php
+    include "sidebarcode.php";
+    ?>
+    <!-- sidebar end -->
 
     <!--form--------------------------------------form--------------------------------------->
     <div class="headerimg text-center">

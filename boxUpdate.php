@@ -13,6 +13,12 @@ if (!isset($_SESSION['email'])) {
 include 'config/db.php';
 
 $email = $_SESSION['email'];
+
+// Get session variables
+$session_userId = $_SESSION['id']; // User ID
+$session_user_role = $_SESSION['role']; // User role
+$session_email = $_SESSION['email']; // User email
+
 //get user name and email from register table
 $getAdminData = "SELECT * FROM register WHERE email = '$email'";
 $resultData = mysqli_query($conn, $getAdminData);
@@ -34,6 +40,27 @@ if (isset($_GET['id'])) {
     $description = $row['box_desc'];
     $fetch_altcode = $row['alt_code'];
     $fetch_status = $row['status'];
+    $fetch_object_code = $row['object'];
+}
+
+// Audit log function
+function logAudit($action_by, $action, $description) {
+    global $conn;
+
+    // Escape and sanitize inputs
+    $action_by = mysqli_real_escape_string($conn, $action_by);
+    $action = mysqli_real_escape_string($conn, $action);
+    $description = mysqli_real_escape_string($conn, $description);
+
+    $query = "
+        INSERT INTO audit_log (user_info, action, description)
+        VALUES ('$action_by', '$action', '$description')
+    ";
+
+    // Execute the query
+    if (!mysqli_query($conn, $query)) {
+        error_log("Failed to log audit: " . mysqli_error($conn));
+    }
 }
 
 //update the record
@@ -42,10 +69,20 @@ if (isset($_POST['update'])) {
     $box_desc =  mysqli_real_escape_string($conn, $_POST['description']);
     $status =  mysqli_real_escape_string($conn, $_POST['status']);
     $alt_code =  mysqli_real_escape_string($conn, $_POST['alt_code']);
+    $obj_code =  mysqli_real_escape_string($conn, $_POST['object']);
 
-    $sql = "UPDATE `box` SET `barcode`='$barcode', `status`='$status', `alt_code`='$alt_code', `box_desc`='$box_desc' WHERE `box_id`='$box_id'";
+    $sql = "UPDATE `box` SET `object`='$obj_code', `barcode`='$barcode', `status`='$status', `alt_code`='$alt_code', `box_desc`='$box_desc' WHERE `box_id`='$box_id'";
 
     if (mysqli_query($conn, $sql)) {
+
+        // Prepare details for logging the audit
+        $action_by = "Update by the user-id: $session_userId, user-role: $session_user_role, user-email: $session_email";
+        $action = 'Update';
+        $description = "Updated record: From(Box ID - $box_id, Object Code - $fetch_object_code, Barcode - $barcode, Alt Code - $fetch_altcode, Status - $fetch_status, Description - $description) to (Box ID - $box_id, Object Code - $obj_code, Barcode - $barcode, Alt Code - $alt_code, Status - $status, Description - $box_desc)";
+       
+        // Log the audit
+        logAudit($action_by, $action, $description);
+
         header("Location: box.php");
         exit;
     } else {
@@ -317,17 +354,17 @@ End Search Bar -->
                     <!-- Select Barcode -->
                     <div class="col-md-4">
                         <label for="barcode_select" class="form-label">Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" pattern="\d{7,8}" title="Enter a 7 or 8-digit number" value="<?php echo $barcode; ?>" name="barcode_select" required>
+                        <input type="text" class="form-control" id="barcode_select" maxlength="8"  pattern="\d{7,8}" title="Enter a 7 or 8-digit number" value="<?php echo $barcode; ?>" name="barcode_select" required>
                     </div>
 
                     <!-- FOR the alternative code -->
                     <div class="col-md-4">
                         <label for="alt_code" class="form-label">Alt Code</label>
-                        <input type="text" class="form-control" id="alt_code" name="alt_code" pattern="\d{7,8}" title="Enter a 7 or 8-digit number"  value="<?php echo $fetch_altcode; ?>" placeholder="Enter Alt code">
+                        <input type="text" class="form-control" id="alt_code" name="alt_code" maxlength="8" pattern="\d{7,8}" title="Enter a 7 or 8-digit number"  value="<?php echo $fetch_altcode; ?>" placeholder="Enter Alt code">
                     </div>
 
                     <!-- change status -->
-                     <!-- Object Code -->
+                   
                     <div class="col-md-3">
                         <label for="change_status" class="form-label">Status</label>
                         <select class="form-select" name="status" required>
@@ -337,6 +374,16 @@ End Search Bar -->
                             <option value="Out" <?php echo $fetch_status == 'Perm Out' ? 'selected' : ''; ?>>Perm Out</option>
                             <option value="Destroyed" <?php echo $fetch_status == 'Destroyed' ? 'selected' : ''; ?>>Destroyed</option>
                         </select>
+                    </div>
+
+                      <!-- Object Code -->
+                      <div class="col-md-3">
+                        <label for="object_code" class="form-label">Object</label>
+                        <select class="form-select" name="object" required>
+                        <option value="">Select object code</option>
+                        <option value="Container" <?php echo $fetch_object_code == 'Container' ? 'selected' : ''; ?>>Conainer</option>
+                            <option value="Filefolder" <?php echo $fetch_object_code == 'Filefolder' ? 'selected' : ''; ?>>Filefolder</option>
+                            </select>
                     </div>
 
                     <hr style="color: white;">

@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Set session variables
     $_SESSION['email'] = $email;
     $_SESSION['role'] = $user['role'];  // Store the role (admin or user)
+    $_SESSION['id'] = $user['id'];  // Store the name of the user
+    $_SESSION['name'] = $user['name'];  // Store the name of the user
 
     // Redirect to index.php
     header("Location: index.php");
@@ -42,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <!-- Favicons -->
   <link href="assets/img/dtl.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-  
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans|Nunito|Poppins" rel="stylesheet">
 

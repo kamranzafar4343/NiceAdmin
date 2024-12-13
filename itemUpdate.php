@@ -584,19 +584,19 @@ End Search Bar -->
 
                     <div class="col-md-6">
                         <label class="form-label">Box Barcode</label>
-                        <input type="text" class="form-control" name="input_box" maxlength="8" value="<?php echo $box_barcode; ?>" required>
+                        <input type="text" class="form-control" name="input_box" maxlength="8" pattern="\d{7,8}" title="Enter a 7 or 8-digit number" value="<?php echo $box_barcode; ?>" required>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">File No.</label>
-                        <input type="text" class="form-control" name="input_file" maxlength="12" value="<?php echo $file_no; ?>" required>
+                        <input type="text" class="form-control" name="input_file" maxlength="12" pattern="\d-\d{2}-\d{8}" title="Enter in the format e.g. 0-00-02050107" value="<?php echo $file_no; ?>" required>
 
                     </div>
 
                     <!-- Object Code -->
                     <div class="col-md-3">
                         <label for="change_status" class="form-label">Status</label>
-                        <select class="form-select" name="status" required>
+                        <select class="form-select" name="input_status" required>
                         <option value="">Select Status</option>   
                         <option value="In" <?php echo $status == 'In' ? 'selected' : ''; ?>>In</option>
                             <option value="Out" <?php echo $status == 'Out' ? 'selected' : ''; ?>>Out</option>

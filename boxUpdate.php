@@ -317,13 +317,13 @@ End Search Bar -->
                     <!-- Select Barcode -->
                     <div class="col-md-4">
                         <label for="barcode_select" class="form-label">Barcode</label>
-                        <input type="text" class="form-control" id="barcode_select" value="<?php echo $barcode; ?>" name="barcode_select" required>
+                        <input type="text" class="form-control" id="barcode_select" pattern="\d{7,8}" title="Enter a 7 or 8-digit number" value="<?php echo $barcode; ?>" name="barcode_select" required>
                     </div>
 
                     <!-- FOR the alternative code -->
                     <div class="col-md-4">
                         <label for="alt_code" class="form-label">Alt Code</label>
-                        <input type="text" class="form-control" id="alt_code" name="alt_code" value="<?php echo $fetch_altcode; ?>" placeholder="Enter Alt code">
+                        <input type="text" class="form-control" id="alt_code" name="alt_code" pattern="\d{7,8}" title="Enter a 7 or 8-digit number"  value="<?php echo $fetch_altcode; ?>" placeholder="Enter Alt code">
                     </div>
 
                     <!-- change status -->

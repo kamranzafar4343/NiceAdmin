@@ -83,6 +83,20 @@ if ($resultData->num_rows > 0) {
             margin-right: 10px;
         }
 
+        /* changed the body background color */
+        body {
+            margin: 0;
+            font-family: var(--bs-body-font-family);
+            font-size: var(--bs-body-font-size);
+            font-weight: var(--bs-body-font-weight);
+            line-height: var(--bs-body-line-height);
+            color: var(--bs-body-color);
+            text-align: var(--bs-body-text-align);
+            background-color: #F6F9FF !important;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         /* Custom CSS to decrease font size of the table */
         /* Basic styling for search bar */
         input.btn.btn-success {
@@ -573,8 +587,8 @@ End Search Bar -->
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
-<!--make the table => datatable.net table and also change the alignment of the text in columns-->
-<script>
+    <!--make the table => datatable.net table and also change the alignment of the text in columns-->
+    <script>
         $(document).ready(function() {
             new DataTable('#box', {
                 // Show 100 rows by default

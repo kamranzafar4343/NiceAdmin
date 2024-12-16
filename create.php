@@ -375,11 +375,11 @@ if (isset($_POST['submit'])) {
     $role = $_SESSION['role'];
     ?>
 
-      <!-- sidebar start -->
-  <?php
-  include "sidebarcode.php";
-  ?>
-  <!-- sidebar end -->
+    <!-- sidebar start -->
+    <?php
+    include "sidebarcode.php";
+    ?>
+    <!-- sidebar end -->
 
     <!--form--------------------------------------form--------------------------------------->
     <!-- Start Header form -->
@@ -422,10 +422,65 @@ if (isset($_POST['submit'])) {
                         <label for="" class="form-label">Designation</label>
                         <select name="role" id="" class="form-select">
                             <option value="">Select Role of the Employee</option>
-                            <option value="Branch Manager">Branch Manager</option>
-                            <option value="Department Manager">Department Manager</option>
-                            <option value="Junior Employee">Junior Employee</option>
-                            <option value="Head of Operations">Head of Operations</option>
+                            <option value="Unit Head Re-pricing, Archiving & NOC Issuance|CDBOD					
+">Unit Head Re-pricing, Archiving & NOC Issuance|CDBOD
+                            </option>
+                            <option value="Manager Archiving & NOC Issuance					
+">Manager Archiving & NOC Issuance
+                            </option>
+                            <option value="Sr. Officer Archiving | ASSETS OPERATIONS-CDBOD 					
+">Sr. Officer Archiving | ASSETS OPERATIONS-CDBOD
+                            </option>
+                            <option value="Officer Archiving | ASSETS OPERATIONS-CDBOD					
+ 					
+">Officer Archiving | ASSETS OPERATIONS-CDBOD
+
+                            </option>
+                            <option value="Unit Head | Collection Operations					 					
+">Unit Head | Collection Operations
+
+                            </option>
+                            <option value="Senior Officer Remittance Services | C&GTBO Division					
+				
+">Senior Officer Remittance Services | C&GTBO Division
+
+                            </option>
+                            <option value="Compliance Officer | C&GTBO Division					
+ 					
+">Compliance Officer | C&GTBO Division
+
+                            </option>
+                            <option value="Unit Head-System Development & Quality Assurance |GTCMOD					
+				
+ 					
+">Unit Head-System Development & Quality Assurance |GTCMOD
+
+                            </option>
+                            <option value="Senior Manager Infrastructure & Services | BFC Office					
+				
+">Senior Manager Infrastructure & Services | BFC Office
+
+                            </option>
+                            <option value="Team Lead – North					
+ 					
+">Team Lead – North
+
+                            </option>
+                            <option value="Record Management Officer					
+				
+ 					
+">Record Management Officer
+
+                            </option>
+                            <option value="Head of General Services						
+">Head of General Services
+                            </option>
+                            <option value="General Manager Accounts					
+				
+">General Manager Accounts
+
+                            </option>
+
                         </select>
                     </div>
 

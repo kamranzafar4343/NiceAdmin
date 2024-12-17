@@ -1,7 +1,4 @@
-
 <?php
-
-// session_start(); // Start the session
 session_start();
 
 // Check if the user is logged in
@@ -12,6 +9,8 @@ if (!isset($_SESSION['email'])) {
 }
 include 'config/db.php';
 
+$email = $_SESSION['email'];
+
 if (isset($_GET['id'])) {
     $order_id = intval($_GET['id']); // Ensure order ID is an integer
 
@@ -20,7 +19,7 @@ if (isset($_GET['id'])) {
 
     //insert delete time into order audit table
     if ($conn->query($delete_sql) === TRUE) {
-        $updateDelTime = "UPDATE `orders_audit` SET `deleted_at` = NOW(), `deleted_by` = '".$_SESSION['email']."' WHERE `order_no` = $order_id";
+        $updateDelTime = "UPDATE `orders_audit` SET `deleted_at` = NOW(), `deleted_by` = '$email' WHERE `order_no` = $order_id";
     }
     if ($conn->query($updateDelTime) === TRUE) {
         // Redirect to the referring page

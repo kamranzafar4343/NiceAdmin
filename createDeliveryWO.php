@@ -172,8 +172,8 @@ if (isset($_POST['submit'])) {
     <script src="https://code.jquery.com/jquery/3.7.1/jquery.min.js"></script>
 
     <!-- dselect -->
-<link rel="stylesheet" href="assets/css/dselect.css">
-<script src="assets/js/dselect.js"></script>
+    <link rel="stylesheet" href="assets/css/dselect.css">
+    <script src="assets/js/dselect.js"></script>
 
     <style>
         /* form text sizing */
@@ -398,11 +398,11 @@ if (isset($_POST['submit'])) {
     </header><!-- End Header -->
 
 
-      <!-- sidebar start -->
-  <?php
-  include "sidebarcode.php";
-  ?>
-  <!-- sidebar end -->
+    <!-- sidebar start -->
+    <?php
+    include "sidebarcode.php";
+    ?>
+    <!-- sidebar end -->
 
     <!--form--------------------------------------form--------------------------------------->
     <!-- Start Header form -->

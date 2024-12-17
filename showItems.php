@@ -472,74 +472,111 @@ $result = $conn->query($sql);
 <br>
         </div>
         <div class="col-12">
-            <div class="cardBranch recent-sales overflow-auto mt-5">
-                <div class="card-body">
+        <div class="cardBranch recent-sales overflow-auto mt-5">
+    <div class="card-body">
 
-                    <div class="row">
-                        <div class="col-6">
-                            <h5 class="card-title">List of all Files</h5>
-                        </div>
+        <!-- Title and Add Button -->
+        <div class="row mb-3">
+            <div class="col-6">
+                <h5 class="card-title">List of all Files</h5>
+            </div>
+            <div class="col-6 text-end">
+                <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary">Add File</button>
+            </div>
+        </div>
 
-                        <div class="col-6">
-                            <!-- Button to add new item -->
-                            <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary mb-3">Add File</button>
-                        </div>
+        <!-- Search Form -->
+        <form method="GET" action="" class="row g-3 mb-3">
+            <!-- Dropdown for Column Selection -->
+            <div class="col-md-4">
+                <label for="column" class="form-label">Select Column</label>
+                <select name="column" id="column" class="form-select" required>
+                    <option value="" selected>Choose...</option>
+                    <option value="box_barcode">Box Barcode</option>
+                    <option value="file_no">Item Barcode</option>
+                    <option value="status">Status</option>
+                </select>
+            </div>
 
-                    </div>
+            <!-- Input Field for Search Value -->
+            <div class="col-md-6">
+                <label for="value" class="form-label">Search Value</label>
+                <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
+            </div>
 
-                    <?php
-                    // Check if there are any results
-                    if ($result->num_rows > 0) {
-                        // Display table
-                        echo '<table class="table mt-4" id="items">
-                <thead>
-                    <tr>
-                        <th scope="col" style="width: 5%;">#</th>
-                        <th scope="col" style="width: 15%;">Box barcode</th>
-                        <th scope="col" style="width: 15%;">Item barcode</th>
-                        <th scope="col" style="width: 15%;">Status</th>';
+            <!-- Buttons -->
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" name="search" class="btn btn-primary me-2 w-100">Search</button>
+                <button type="submit" name="show_all" class="btn btn-secondary w-100">Show All</button>
+            </div>
+        </form>
 
-                        // Show "Actions" column only if the user is an admin
-                        if ($_SESSION['role'] == 'admin') {
-                            echo '<th scope="col" style="width: 15%;">Actions</th>';
-                        }
+        <!-- Table -->
+        <?php
+        // Default query (no rows initially)
+        $query = "SELECT * FROM item WHERE 1=0";
 
-                        echo '</tr>
-                </thead>
-                <tbody style="text-align: left !important;">';
+        // If Search Button is clicked
+        if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
+            $column = $conn->real_escape_string($_GET['column']);
+            $value = $conn->real_escape_string($_GET['value']);
+            $query = "SELECT * FROM item WHERE $column LIKE '%$value%'";
+        }
 
-                        // Counter variable
-                        $counter = 1;
+        // If Show All Button is clicked
+        if (isset($_GET['show_all'])) {
+            $query = "SELECT * FROM item LIMIT 100";
+        }
 
-                        // Loop through results
-                        while ($row = $result->fetch_assoc()) {
-                            echo '<tr>';
-                            echo '<td>' . $counter++ . '</td>';
+        // Execute Query
+        $result = $conn->query($query);
 
-                            echo '<td> ' . $row['box_barcode'] . '</a></td>';
-                            echo '<td> ' . $row['file_no'] . '</a></td>';
-                            echo '<td>' . ($row["status"]) . '</td>';
+        // Display Table if Results Exist
+        if ($result && $result->num_rows > 0) {
+            echo '<table class="table table-striped mt-4" id="items">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 5%;">#</th>
+                            <th scope="col" style="width: 15%;">Box Barcode</th>
+                            <th scope="col" style="width: 15%;">Item Barcode</th>
+                            <th scope="col" style="width: 15%;">Status</th>';
+            if ($_SESSION['role'] == 'admin') {
+                echo '<th scope="col" style="width: 15%;">Actions</th>';
+            }
+            echo '</tr></thead><tbody>';
 
-                            // Show "Actions" only if the user is an admin
-                            if ($_SESSION['role'] == 'admin') {
-                                echo '<td>
+            $counter = 1;
+            while ($row = $result->fetch_assoc()) {
+                echo '<tr>';
+                echo '<td>' . $counter++ . '</td>';
+                echo '<td>' . htmlspecialchars($row['box_barcode']) . '</td>';
+                echo '<td>' . htmlspecialchars($row['file_no']) . '</td>';
+                echo '<td>' . htmlspecialchars($row['status']) . '</td>';
+
+                // Admin Actions
+                if ($_SESSION['role'] == 'admin') {
+                    echo '<td>
                             <div style="display: flex; gap: 10px;">
-                                 <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="itemUpdate.php?id= ' . $row['item_id'] . '"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this record?\');" href="itemDelete.php?id=' . $row['item_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
+                                <a href="itemUpdate.php?id=' . $row['item_id'] . '" class="btn btn-success btn-sm">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <a href="itemDelete.php?id=' . $row['item_id'] . '" class="btn btn-danger btn-sm" 
+                                   onclick="return confirm(\'Are you sure you want to delete this record?\');">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
                             </div>
                         </td>';
-                            }
+                }
+                echo '</tr>';
+            }
+            echo '</tbody></table>';
+        } elseif (isset($_GET['search']) || isset($_GET['show_all'])) {
+            echo '<p class="text-center mt-3">No results found.</p>';
+        }
+        ?>
+    </div>
+</div>
 
-                            echo '</tr>';
-                        }
-                        echo '</tbody></table>';
-                    } else {
-                        // Display message if no results
-                        echo '<p>No File found.</p>';
-                    }
-                    ?>
-                </div>
-            </div>
         </div>
     </main>
 

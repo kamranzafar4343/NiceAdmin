@@ -194,7 +194,7 @@ if ($resultData->num_rows > 0) {
         }
 
         .card-body {
-            padding: 0 20px 20px 60px !important;
+            padding: 0 20px 20px 18px !important;
         }
 
 
@@ -358,207 +358,142 @@ if ($resultData->num_rows > 0) {
     </header><!-- End Header -->
 
 
-  <!-- sidebar start -->
-  <?php
-  include "sidebarcode.php";
-  ?>
-  <!-- sidebar end -->
+    <!-- sidebar start -->
+    <?php
+    include "sidebarcode.php";
+    ?>
+    <!-- sidebar end -->
 
     <!--form--------------------------------------form--------------------------------------->
 
     <!-- Main content -->
     <main id="main" class="main">
-        <div class="col-14">
+        <div class="col-15">
             <!-- Add the buttton for the work order -->
             <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add"> + </button>
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
 
+                    <!-- Card Title -->
                     <h5 class="card-title">List of Delivery Work Orders</h5>
+
+                    <!-- Search Form -->
+                    <form method="GET" action="" class="row g-3 mb-3">
+                        <!-- Dropdown for Column Selection -->
+                        <div class="col-md-4">
+                            <label for="column" class="form-label">Select Column</label>
+                            <select name="column" id="column" class="form-select" required>
+                                <option value="" selected>Choose...</option>
+                                <option value="comp_id_fk">Company</option>
+                                <option value="branch_id_fk">Branch</option>
+                                <option value="dept_id_fk">Department</option>
+                                <option value="status">Status</option>
+                                <option value="priority">Priority</option>
+                            </select>
+                        </div>
+
+                        <!-- Input Field for Search Value -->
+                        <div class="col-md-6">
+                            <label for="value" class="form-label">Search Value</label>
+                            <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" name="search" class="btn btn-primary me-2 w-100">Search</button>
+                            <button type="submit" name="show_all" class="btn btn-secondary w-100">Show All</button>
+                        </div>
+                    </form>
+
+                    <!-- Table -->
                     <?php
-                    // SQL query to fetch orders with is_read status
-                    //o is given as alias for orders table
-                    //a is given as alias for assign_tasks table
-                    $showOrders = "
-                            SELECT 
-                                    o.order_no, 
-                                    o.comp_id_fk, 
-                                    o.branch_id_fk, 
-                                    o.status, 
-                                    o.order_creation_date, 
-                                    o.priority, 
-                                    o.date, 
-                                    a.is_read
-                                    FROM 
-                                    orders o  
-                                 LEFT JOIN 
-                                assign_task a
-                                ON 
-                                o.order_no = a.order_no_fk
-                                ORDER BY 
-                                o.order_creation_date ASC
-                                LIMIT 100;
-                                ";
-                    $resultShowOrders = $conn->query($showOrders);
 
+                    // Query logic
+                    $query = "SELECT * FROM orders WHERE 1=0"; // Default no rows
+                    if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
+                        $column = $conn->real_escape_string($_GET['column']);
+                        $value = $conn->real_escape_string($_GET['value']);
+                        $query = "SELECT * FROM orders WHERE $column LIKE '%$value%'";
+                    } elseif (isset($_GET['show_all'])) {
+                        $query = "SELECT * FROM orders LIMIT 100";
+                    }
 
-                    // Check if there are any results
-                    if ($resultShowOrders->num_rows > 0) {
-                        // Display table
-                        echo '<table id="orderT" class="table mt-4 nowrap">
-                    <thead>
-                        <tr>
-                        <th scope="col" style="width: 6%;">WorkOrder#</th>
-                        <th scope="col" style="width: 14%;">Account</th>
-                        <th scope="col" style="width: 8%;">Status</th>
-                        <th scope="col" style="width: 10%;">Create Date</th>
-                        <th scope="col" style="width: 8%;">Service Priority</th>
-                        <th scope="col" style="width: 7%;">Required By</th>';
+                    // Execute the query
+                    $result = $conn->query($query);
 
-                        // Only display the Action column if the user is an admin
+                    if ($result && $result->num_rows > 0) {
+                        echo '<table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Company</th>
+                        <th>Branch</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                        <th>Create Date</th>
+                        <th>Priority</th>
+                        <th>Required By</th>';
                         if ($_SESSION['role'] == 'admin') {
-                            echo '<th scope="col" style="width: 18%;">Action</th>';
+                            echo '<th>Action</th>';
                         }
-                        echo '</tr>
-                        </thead>
-                        <tbody style="font-size: 11px; ">';
+                        echo '</tr></thead><tbody>';
 
-                        // Counter variable
                         $counter = 1;
+                        while ($row = $result->fetch_assoc()) {
+                            // Fetch Company Name
+                            $comp_name = get_name($conn, "compani", "comp_name", "comp_id", $row['comp_id_fk']);
+                            // Fetch Branch Name
+                            $branch_name = get_name($conn, "branches", "branch_name", "branch_id", $row['branch_id_fk']);
+                            // Fetch Department Name
+                            $dept_name = get_name($conn, "departments", "dept_name", "dept_id", $row['dept_id_fk']);
 
-                        // Loop through results
-                        while ($row = $resultShowOrders->fetch_assoc()) {
-                            echo '<tr>';
-                    ?>
-                            <td>
-                                <div>
-                                    <!-- Is Read with GIF -->
+                            // Convert Dates
+                            $createDate = date("d-m-Y", strtotime($row['order_creation_date']));
+                            $requiredBy = date("d-m-Y", strtotime($row['date']));
 
-                                    <?php
-
-                                    //only show if is_read=1 means user complete his task
-                                    if ($row['is_read'] == 1) {
-                                        //check if the status is completed then hide the image
-                                        if ($row["status"] != 'Completed') {
-
-                                    ?>
-                                            <a
-                                                href="verify_task_submission.php?id=<?php echo $row["order_no"]; ?>">
-                                                <img src="assets/img/new-icon-gif-2.jpg" id="gifImage" style="height: 30px; width: 30px; margin-right: 15px; visibility: visible;" alt="gif">
-                                            </a>
-                                    <?php
-
-                                        }
-                                    } else {
-                                        echo '';
-                                    }
-
-                                    // Workorder_no
-                                    echo $row["order_no"];
-                                    ?>
-                                </div>
-                            </td>
-
-                            <?php
-
-                            // Get specific company id
-                            $comp_id = $row['comp_id_fk'];
-                            $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
-                            $result3 = $conn->query($sql3);
-                            if ($result3->num_rows > 0) {
-                                $row3 = $result3->fetch_assoc();
-                                $comp_name = $row3['comp_name'];
-                            }
-
-                            // Get specific branch id
-                            $branch_id = $row['branch_id_fk'];
-                            $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
-                            $result7 = $conn->query($sql7);
-                            if ($result7->num_rows > 0) {
-                                $row7 = $result7->fetch_assoc();
-                                $branch_name = $row7['branch_name'];
-                            }
-
-                            // Show account
-                            echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
-
-
-                            // Change the status to "In Progress"
-                            if ($row['is_read'] == '1') {
-                                if ($row["status"] == 'Pending') {
-                                    $updateQuery = "UPDATE orders SET status = 'In Progress' WHERE order_no = " . $row['order_no'];
-                                    $conn->query($updateQuery);
-                                }
-                            }
-                            echo '<td>';
-
-                            if ($row["status"] == 'Completed') {
-                                echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["status"] . '</span>';
-                            } elseif ($row["status"] == 'In Progress') {
-                                echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["status"] . '</span>';
-                            } elseif ($row["status"] == 'Pending') {
-                                echo '<span class="badge badge-pill badge-info" style="font-size: 12px;">' . $row["status"] . '</span>';
-                            } elseif ($row["status"] == 'Cancelled') {
-                                echo '<span class="badge badge-pill badge-danger" style="font-size: 12px;">' . $row["status"] . '</span>';
-                            } elseif ($row["status"] == 'Dispute') {
-                                echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["status"] . '</span>';
-                            }
-
-                            echo '</td>';
-
-
-                            //convert timestamp to only date format
-                            $dateTimeCreate = $row["order_creation_date"];
-                            $justDateCreate = date("d-m-Y", strtotime($dateTimeCreate));
-                            echo '<td style="text-align: center;">' . $justDateCreate . '</td>';
-
-                            echo '<td style="text-align: center;">';
-                            if ($row["priority"] == 'Regular') {
-                                // Display a green badge for "Regular"
-                                echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            } elseif ($row["priority"] == 'Urgent') {
-                                // Display a red icon for "Urgent"
-                                echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                            }
-                            echo '</td>';
-
-                            //convert timestamp to only date format
-                            $dateTime = $row["date"];
-                            $justDate = date("d-m-Y", strtotime($dateTime));
-                            echo '<td style="text-align: center;">' . $justDate . '</td>';
+                            echo "<tr>
+                        <td>{$row['order_no']}</td>
+                        <td>{$comp_name}</td>
+                        <td>{$branch_name}</td>
+                        <td>{$dept_name}</td>
+                        <td>{$row['status']}</td>
+                        <td>{$createDate}</td>
+                        <td>{$row['priority']}</td>
+                        <td>{$requiredBy}</td>";
 
                             if ($_SESSION['role'] == 'admin') {
-                            ?>
-                                <td>
-                                    <div style="display: flex; gap: 10px;">
-                                        <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
-
-                                        <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                            onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-
-                                        <a type="button" class="btn btn-secondary btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewWO.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-eye" target="_blank"></i></a>
-
-                                        <a type="button"
-                                            class=""
-                                            style="height: 30px; width: 30px;"
-                                            href="assignTaskForm.php?id=<?php echo $row['order_no']; ?>"
-                                            target="_blank">
-                                            <img src="assets/img/Gartoon-Team-Gartoon-Misc-Stock-Task-Assigned.32.png" alt="View">
-                                        </a>
-                                    </div>
-                                </td>
-                    <?php
+                                echo '<td>
+                            <a href="viewOrder.php?id=' . $row['order_no'] . '" class="btn btn-success btn-sm">View</a>
+                            <a href="viewWO.php?id=' . $row['order_no'] . '" class="btn btn-success btn-sm">Print</a>
+                            <a href="deleteOrder.php?id=' . $row['order_no'] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\');">Delete</a>
+                          </td>';
                             }
+
                             echo '</tr>';
+                            $counter++;
                         }
+
                         echo '</tbody></table>';
-                    } else {
-                        // Display message if no results
-                        echo '<p>No items found.</p>';
+                    } elseif (isset($_GET['search']) || isset($_GET['show_all'])) {
+                        echo '<p class="text-center mt-3">No results found.</p>';
                     }
                     ?>
+
                 </div>
             </div>
+
+            <?php
+            // Function to fetch names based on IDs
+            function get_name($conn, $table, $column_name, $id_column, $id_value)
+            {
+                $query = "SELECT $column_name FROM $table WHERE $id_column = '$id_value' LIMIT 1";
+                $result = $conn->query($query);
+                if ($result && $result->num_rows > 0) {
+                    return $result->fetch_assoc()[$column_name];
+                }
+                return "N/A"; // Return default if not found
+            }
+            ?>
 
         </div>
     </main>
@@ -613,15 +548,14 @@ if ($resultData->num_rows > 0) {
 
     <!--for datatable-->
     <script>
-
         new DataTable('#orderT', {
             // <!--make the table => datatable.net table and also change the alignment of the text in columns-->
             columnDefs: [{
-                        className: "text-left",
-                        targets: [0, 1, 2, 3, 4, 5]
-                    } // change alignment 
+                    className: "text-left",
+                    targets: [0, 1, 2, 3, 4, 5, 6, 7]
+                } // change alignment 
 
-                ],
+            ],
 
             //show the rows in descending order by the date
             "order": [

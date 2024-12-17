@@ -451,87 +451,142 @@ End Search Bar -->
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
-            <div class="cardBranch recent-sales overflow-auto">
-                <div class="card-body">
-                    <h5 class="card-title">List of containers/filefolders</h5>
+        <div class="cardBranch recent-sales overflow-auto">
+    <div class="card-body">
 
-                    <?php
-                    // Default query
-                    $sql = "SELECT * FROM box ORDER BY box_id DESC";
-                    $result = $conn->query($sql);
+        <!-- Card Title -->
+        <h5 class="card-title">List of Containers/Filefolders</h5>
 
-                    if ($result->num_rows > 0) {
-                        echo '<table id="box" class="table mt-4">
-                    <thead>
-                        <tr>
-                            <th scope="col">Account</th>
-                            <th scope="col">Object</th>
-                            <th scope="col">Barcode No.</th>
-                            <th scope="col">Alt code</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Added on</th>';
-
-                        // Show "Action" column only for admins
-                        if ($_SESSION['role'] == 'admin') {
-                            echo '<th scope="col">Action</th>';
-                        }
-                        echo '</tr>
-                    </thead>
-                    <tbody style="table-layout: fixed;">';
-
-                        while ($row = $result->fetch_assoc()) {
-                            echo '<tr>';
-
-                            // Get specific company id
-                            $comp_id = $row['comp_id_fk'];
-                            $sql30 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
-                            $result30 = $conn->query($sql30);
-                            if ($result30->num_rows > 0) {
-                                $row30 = $result30->fetch_assoc();
-                                $comp_name = $row30['comp_name'];
-                            }
-
-
-                            // Get specific branch id
-                            $branch_id = $row['branch_id_fk'];
-                            $sql70 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
-                            $result70 = $conn->query($sql70);
-                            if ($result70->num_rows > 0) {
-                                $row70 = $result70->fetch_assoc();
-                                $branch_name = $row70['branch_name'];
-                            }
-                            // Show account
-                            echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
-
-                            echo '<td>' . ($row["object"]) . '</td>';
-                            echo '<td>' . ($row["barcode"]) . '</td>';
-                            echo '<td>' . ($row["alt_code"]) . '</td>';
-                            echo '<td>' . ($row["status"]) . '</td>';
-
-                            //convert timestamp to only date format
-                            $dateTime = $row["created_at"];
-                            $justDate = date("d-m-Y", strtotime($dateTime));
-                            echo '<td>' . $justDate . '</td>';
-
-                            // Show action buttons only for admins
-                            if ($_SESSION['role'] == 'admin') {
-                                echo '<td>
-                                <div style="display: flex; gap: 10px;">
-                                    <a type="button" class="btn btn-success btn-info d-flex justify-content-center" style="width:25px; height: 28px;" href="boxUpdate.php?id= ' . $row['box_id'] . '"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-                             <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                        onclick="return confirm(\'Are you sure you want to delete this record?\');" href="boxDelete.php?id=' . $row['box_id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                </div>
-                                    </td>';
-                            }
-                            echo '</tr>';
-                        }
-                        echo '</tbody></table>';
-                    } else {
-                        echo '<p>No boxes found.</p>';
-                    }
-                    ?>
-                </div>
+        <!-- Search Form -->
+        <form method="GET" action="" class="row g-3 mb-3">
+            <!-- Dropdown for Column Selection -->
+            <div class="col-md-4">
+                <label for="column" class="form-label">Select Column</label>
+                <select name="column" id="column" class="form-select" required>
+                    <option value="" selected>Choose...</option>
+                    <option value="comp_id_fk">Company</option>
+                    <option value="branch_id_fk">Branch</option>
+                    <option value="dept_id_fk">Department</option>
+                    <option value="object">Object</option>
+                    <option value="barcode">Barcode</option>
+                    <option value="alt_code">Alt Code</option>
+                    <option value="status">Status</option>
+                </select>
             </div>
+
+            <!-- Input Field for Search Value -->
+            <div class="col-md-6">
+                <label for="value" class="form-label">Search Value</label>
+                <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" name="search" class="btn btn-primary me-2 w-100">Search</button>
+                <button type="submit" name="show_all" class="btn btn-secondary w-100">Show All</button>
+            </div>
+        </form>
+
+        <!-- Table -->
+        <?php
+
+        // Default query - No rows displayed initially
+        $sql = "SELECT * FROM box WHERE 1=0";
+
+        // If Search button is clicked
+        if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
+            $column = $conn->real_escape_string($_GET['column']);
+            $value = $conn->real_escape_string($_GET['value']);
+            $sql = "SELECT * FROM box WHERE $column LIKE '%$value%'";
+        }
+
+        // If Show All button is clicked
+        if (isset($_GET['show_all'])) {
+            $sql = "SELECT * FROM box ORDER BY box_id DESC";
+        }
+
+        // Execute the query
+        $result = $conn->query($sql);
+
+        // Display table if results exist
+        if ($result && $result->num_rows > 0) {
+            echo '<table id="box" class="table mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">Company</th>
+                        <th scope="col">Branch</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Object</th>
+                        <th scope="col">Barcode No.</th>
+                        <th scope="col">Alt Code</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Added On</th>';
+
+            if ($_SESSION['role'] == 'admin') {
+                echo '<th scope="col">Action</th>';
+            }
+            echo '</tr></thead><tbody>';
+
+            while ($row = $result->fetch_assoc()) {
+                // Fetch Company Name
+                $comp_name = getName($conn, 'compani', 'comp_name', 'comp_id', $row['comp_id_fk']);
+                
+                // Fetch Branch Name
+                $branch_name = getName($conn, 'branches', 'branch_name', 'branch_id', $row['branch_id_fk']);
+                
+                // Fetch Department Name
+                $dept_name = getName($conn, 'departments', 'dept_name', 'dept_id', $row['dept_id_fk']);
+                
+                // Format Date
+                $created_at = date("d-m-Y", strtotime($row["created_at"]));
+
+                // Display Table Row
+                echo '<tr>';
+                echo "<td>{$comp_name}</td>";
+                echo "<td>{$branch_name}</td>";
+                echo "<td>{$dept_name}</td>";
+                echo "<td>{$row['object']}</td>";
+                echo "<td>{$row['barcode']}</td>";
+                echo "<td>{$row['alt_code']}</td>";
+                echo "<td>{$row['status']}</td>";
+                echo "<td>{$created_at}</td>";
+
+                if ($_SESSION['role'] == 'admin') {
+                    echo '<td>
+                            <div style="display: flex; gap: 10px;">
+                                <a class="btn btn-success btn-sm" href="boxUpdate.php?id=' . $row['box_id'] . '">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <a class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this record?\');" href="boxDelete.php?id=' . $row['box_id'] . '">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </div>
+                          </td>';
+                }
+
+                echo '</tr>';
+            }
+            echo '</tbody></table>';
+        } elseif (isset($_GET['search']) || isset($_GET['show_all'])) {
+            echo "<p>No results found.</p>";
+        }
+        ?>
+
+    </div>
+</div>
+
+<?php
+// Function to fetch name based on ID
+function getName($conn, $table, $column, $id_field, $id_value) {
+    $query = "SELECT $column FROM $table WHERE $id_field = '$id_value'";
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0) {
+        return $result->fetch_assoc()[$column];
+    }
+    return "N/A";
+}
+?>
+
         </div>
     </main><!-- End #main -->
 

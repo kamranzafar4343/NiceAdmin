@@ -439,15 +439,70 @@ End Search Bar -->
             <input type="text" class="form-control" id="" name="foc" required pattern="[A-Za-z\s\.]+" required minlength="3" maxlength="38" title="only letters allowed; at least 3" required>
           </div>
           <div class="col-md-6">
-            <label for="" class="form-label">Role</label>
-            <select name="role" id="" class="form-select">
-              <option value="">Select Role of the Employee</option>
-              <option value="Branch Manager">Branch Manager</option>
-              <option value="Department Manager">Department Manager</option>
-              <option value="Junior Employee">Junior Employee</option>
-              <option value="Head of Operations">Head of Operations</option>
-            </select>
-          </div>
+                        <label for="" class="form-label">Designation</label>
+                        <select name="role" id="" class="form-select">
+                            <option value="">Select Role of the Employee</option>
+                            <option value="Unit Head Re-pricing, Archiving & NOC Issuance|CDBOD					
+">Unit Head Re-pricing, Archiving & NOC Issuance|CDBOD
+                            </option>
+                            <option value="Manager Archiving & NOC Issuance					
+">Manager Archiving & NOC Issuance
+                            </option>
+                            <option value="Sr. Officer Archiving | ASSETS OPERATIONS-CDBOD 					
+">Sr. Officer Archiving | ASSETS OPERATIONS-CDBOD
+                            </option>
+                            <option value="Officer Archiving | ASSETS OPERATIONS-CDBOD					
+ 					
+">Officer Archiving | ASSETS OPERATIONS-CDBOD
+
+                            </option>
+                            <option value="Unit Head | Collection Operations					 					
+">Unit Head | Collection Operations
+
+                            </option>
+                            <option value="Senior Officer Remittance Services | C&GTBO Division					
+				
+">Senior Officer Remittance Services | C&GTBO Division
+
+                            </option>
+                            <option value="Compliance Officer | C&GTBO Division					
+ 					
+">Compliance Officer | C&GTBO Division
+
+                            </option>
+                            <option value="Unit Head-System Development & Quality Assurance |GTCMOD					
+				
+ 					
+">Unit Head-System Development & Quality Assurance |GTCMOD
+
+                            </option>
+                            <option value="Senior Manager Infrastructure & Services | BFC Office					
+				
+">Senior Manager Infrastructure & Services | BFC Office
+
+                            </option>
+                            <option value="Team Lead – North					
+ 					
+">Team Lead – North
+
+                            </option>
+                            <option value="Record Management Officer					
+				
+ 					
+">Record Management Officer
+
+                            </option>
+                            <option value="Head of General Services						
+">Head of General Services
+                            </option>
+                            <option value="General Manager Accounts					
+				
+">General Manager Accounts
+
+                            </option>
+
+                        </select>
+                    </div>
 
           <div class="col-md-6">
             <label for="phone" class="form-label">Access/Authority</label>

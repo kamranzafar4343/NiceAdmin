@@ -75,7 +75,7 @@ if (isset($_POST['update'])) {
   $input_role = mysqli_real_escape_string($conn, $_POST['role']);
 
   // SQL query to update the company record
- $sql = "UPDATE `compani` SET 
+  $sql = "UPDATE `compani` SET 
             
             `comp_name` = '$comp_name',
 `acc_desc` = '$get_description',
@@ -621,7 +621,7 @@ End Search Bar -->
 
   $role = $_SESSION['role'];
   ?>
-  
+
   <!-- sidebar start -->
   <?php
   include "sidebarcode.php";
@@ -666,26 +666,59 @@ End Search Bar -->
             <input type="text" class="form-control" id="foc" name="foc" value="<?php echo $contact_person; ?>" required pattern="[A-Za-z\s\.]+" minlength="3" maxlength="38" title="only letters allowed; at least 3">
           </div>
           <div class="col-md-6">
-              <label for="phone" class="form-label">Access/Authority</label>
-              <select name="authority" id="" class="form-select">
-                  <option value="">Select level of access</option>
-                  <option value="can get information about branch boxes" <?php echo $e_auth == 'can get information about branch boxes' ? 'selected' : ''; ?>>can get information about branch boxes</option>
-                  <option value="only retrieve department boxes" <?php echo $e_auth == 'only retrieve department boxes' ? 'selected' : ''; ?>>only retrieve department boxes</option>
-                  <option value="all departments of their branch" <?php echo $e_auth == 'all departments of their branch' ? 'selected' : ''; ?>>all departments of their branch</option>
-                  <option value="all departments and all branches of company" <?php echo $e_auth == 'all departments and all branches of company' ? 'selected' : ''; ?>>all departments and all branches of company</option>
-              </select>
+            <label for="phone" class="form-label">Access/Authority</label>
+            <select name="authority" id="" class="form-select">
+              <option value="">Select level of access</option>
+              <option value="can get information about branch boxes" <?php echo $e_auth == 'can get information about branch boxes' ? 'selected' : ''; ?>>can get information about branch boxes</option>
+              <option value="only retrieve department boxes" <?php echo $e_auth == 'only retrieve department boxes' ? 'selected' : ''; ?>>only retrieve department boxes</option>
+              <option value="all departments of their branch" <?php echo $e_auth == 'all departments of their branch' ? 'selected' : ''; ?>>all departments of their branch</option>
+              <option value="all departments and all branches of company" <?php echo $e_auth == 'all departments and all branches of company' ? 'selected' : ''; ?>>all departments and all branches of company</option>
+            </select>
           </div>
-          
+
           <div class="col-md-6">
-                        <label for="" class="form-label">Designation</label>
-                        <select name="role" id="" class="form-select">
-                            <option value="">Select Role of the Employee</option>
-                            <option value="Branch Manager" <?php echo $e_role == 'Branch Manager' ? 'selected' : ''; ?>>Branch Manager</option>
-                            <option value="Department Manager" <?php echo $e_role == 'Department Manager' ? 'selected' : ''; ?>>Department Manager</option>
-                            <option value="Junior Employee" <?php echo $e_role == 'Junior Employee' ? 'selected' : ''; ?>>Junior Employee</option>
-                            <option value="Head of Operations" <?php echo $e_role == 'Head of Operations' ? 'selected' : ''; ?>>Head of Operations</option>
-                        </select>
-                    </div>
+            <label for="" class="form-label">Designation</label>
+            <select name="role" id="" class="form-select">
+
+              <option value="">Select Role of the Employee</option>
+              <option value="<?php echo $e_role == 'Unit Head Re-pricing, Archiving & NOC Issuance|CDBOD' ? 'selected' : ''; ?>					
+">Unit Head Re-pricing, Archiving & NOC Issuance|CDBOD
+              </option>
+              <option value="<?php echo $e_role == 'Manager Archiving & NOC Issuance' ? 'selected' : ''; ?>				
+">Manager Archiving & NOC Issuance
+              </option>
+              <option value="<?php echo $e_role == 'Sr. Officer Archiving | ASSETS OPERATIONS-CDBOD' ? 'selected' : ''; ?>	 					
+">Sr. Officer Archiving | ASSETS OPERATIONS-CDBOD
+              </option>
+              <option value="<?php echo $e_role == 'Officer Archiving | ASSETS OPERATIONS-CDBOD' ? 'selected' : ''; ?>
+">Officer Archiving | ASSETS OPERATIONS-CDBOD
+              </option>
+              <option value="<?php echo $e_role == 'Unit Head | Collection Operations' ? 'selected' : ''; ?>					 					
+">Unit Head | Collection Operations
+              </option>
+              <option value="<?php echo $e_role == 'Senior Officer Remittance Services | C&GTBO Division' ? 'selected' : ''; ?>
+">Senior Officer Remittance Services | C&GTBO Division
+              </option>
+              <option value="<?php echo $e_role == 'Compliance Officer | C&GTBO Division' ? 'selected' : ''; ?>
+">Compliance Officer | C&GTBO Division
+              </option>
+              <option value="<?php echo $e_role == 'Unit Head-System Development & Quality Assurance |GTCMOD' ? 'selected' : ''; ?>					
+">Unit Head-System Development & Quality Assurance |GTCMOD
+              </option>
+              <option value="<?php echo $e_role == 'Senior Manager Infrastructure & Services | BFC Office' ? 'selected' : ''; ?>
+">Senior Manager Infrastructure & Services | BFC Office
+              </option>
+              <option value="<?php echo $e_role == 'Team Lead – North' ? 'selected' : ''; ?>">Team Lead – North
+              </option>
+              <option value="<?php echo $e_role == 'Record Management Officer' ? 'selected' : ''; ?>">Record Management Officer
+              </option>
+              <option value="<?php echo $e_role == 'Head of General Services' ? 'selected' : ''; ?>">Head of General Services
+              </option>
+              <option value="<?php echo $e_role == 'General Manager Accounts' ? 'selected' : ''; ?>">General Manager Accounts
+              </option>
+
+            </select>
+          </div>
 
 
           <div class="col-md-6">
@@ -751,7 +784,7 @@ End Search Bar -->
         <?php unset($_SESSION['data_inserted']); ?>
       <?php endif; ?>
 
-     
+
 
       //click on the picture to update with ajax
       $(document).on('click', 'img', function() {

@@ -219,7 +219,7 @@ $result = $conn->query($sql);
         <!-- Title and Add Button -->
         <div class="row mb-3">
             <div class="col-6">
-                <h5 class="card-title">List of Companies</h5>
+                <h5 class="card-title">Search Companies</h5>
             </div>
             <div class="col-6 text-end">
                 <button type="button" onclick="window.location.href = 'createCompany.php'" class="btn btn-primary">Add Company</button>

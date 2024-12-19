@@ -201,7 +201,7 @@ $result = $conn->query($sql);
 
   <!-- ---------------------------------------------------End Sidebar--------------------------------------------------->
 
-  <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Company</button>
+  <!-- <button id="fixedButton" type="button" onclick="window.location.href = 'create.php';" class="btn btn-primary mb-3 add">Add Company</button> -->
   <!-- <button id="fixedButton" type="button" onclick="window.location.href = 'emailTable.php';" class="btn btn-outline-info mail">
     <b><i class="ri-mail-line"></i></b>
   </button> -->
@@ -214,62 +214,122 @@ $result = $conn->query($sql);
 
     <div class="col-14">
 
-      <div class="card recent-sales overflow-auto">
-        <div class="card-body mt-4">
-          <!-- <h5 class="card-title">List of Companies</h5> -->
-
-          <?php
-          if ($result->num_rows > 0) {
-          ?>
-            <table id="companies" class="table">
-              <thead>
-                <tr>
-
-                  <th scope="col">Company Name</th>
-
-                  <th scope="col">Contact Person</th>
-
-                  <th scope="col" style="width:15%;">Address</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-
-              <tbody style="table-layout: fixed;">
-                <?php
-                while ($row = $result->fetch_assoc()) {
-                  echo "<tr>";
-                ?>
-
-                  <td>
-                    <a class="text-primary fw-bold" href="Branches.php?id=<?php echo $row['comp_id']; ?>">
-                      <?php echo $row['comp_name']; ?>
-                    </a>
-                  </td>
-                  <?php
-
-                  echo "<td style= '  color: #6f42c1; font-weight: bold; opacity: 0.8;'> " . ($row["foc"]) . "</td>";
-
-                  echo "<td >" . htmlspecialchars($row["add_1"]) . "</td>";
-                  ?>
-                  <td>
-                    <div style="display: flex; gap: 10px;">
-                      <a type="button" class="btn btn-success btn-success d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="CompanyInfo.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-eye"></i></a>
-                      <a type="button" class="btn btn-success btn-info d-flex justify-content-center " style="padding-bottom: 0px; width:25px; height: 28px;" href="update.php?id=<?php echo $row['comp_id']; ?>"><i style="width: 20px;" class="fa-solid fa-pen-to-square"></i></a>
-                    </div>
-                  </td>
-                  </tr>
-                <?php
-                }
-                ?>
-
-              </tbody>
-            </table>
-          <?php
-          }
-          ?>
-
+    <div class="card recent-sales overflow-auto">
+    <div class="card-body mt-4">
+        <!-- Title and Add Button -->
+        <div class="row mb-3">
+            <div class="col-6">
+                <h5 class="card-title">List of Companies</h5>
+            </div>
+            <div class="col-6 text-end">
+                <button type="button" onclick="window.location.href = 'createCompany.php'" class="btn btn-primary">Add Company</button>
+            </div>
         </div>
-      </div>
+
+        <!-- Search Form -->
+        <form method="GET" action="" class="row g-3 mb-3">
+            <!-- First Row: Column and Search Value -->
+            <div class="col-md-4">
+                <label for="column" class="form-label">Select Column</label>
+                <select name="column" id="column" class="form-select">
+                    <option value="" selected>Choose...</option>
+                    <option value="comp_name">Company Name</option>
+                    <option value="foc">Contact Person</option>
+                    <option value="add_1">Address</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="value" class="form-label">Search Value</label>
+                <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" name="search" class="btn btn-primary w-100 me-2">Search</button>
+                <button type="submit" name="show_all" class="btn btn-secondary w-100">Show All</button>
+            </div>
+
+            <!-- Second Row: Registration and Expiry Date Filter -->
+            <div class="col-md-4">
+                <label for="start_date" class="form-label">Start Date (Registration)</label>
+                <input type="date" name="start_date" id="start_date" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label for="end_date" class="form-label">End Date (Expiry)</label>
+                <input type="date" name="end_date" id="end_date" class="form-control">
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" name="filter_date" class="btn btn-secondary" style="width: 150px;">Filter Dates</button>
+            </div>
+        </form>
+
+        <!-- Table -->
+        <?php
+        // Default query (no rows initially)
+        $query = "SELECT * FROM compani WHERE 1=0";
+
+        // If Search Button is Clicked
+        if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
+            $column = $conn->real_escape_string($_GET['column']);
+            $value = $conn->real_escape_string($_GET['value']);
+            $query = "SELECT * FROM compani WHERE $column LIKE '%$value%'";
+        }
+
+        // If Date Range Filter is Applied
+        if (isset($_GET['filter_date']) && !empty($_GET['start_date']) && !empty($_GET['end_date'])) {
+            $start_date = $conn->real_escape_string($_GET['start_date']);
+            $end_date = $conn->real_escape_string($_GET['end_date']);
+            $query = "SELECT * FROM compani WHERE registration >= '$start_date' AND expiry <= '$end_date'";
+        }
+
+        // If Show All Button is Clicked
+        if (isset($_GET['show_all'])) {
+            $query = "SELECT * FROM compani";
+        }
+
+        // Execute Query
+        $result = $conn->query($query);
+
+        // Display Table if Results Exist
+        if ($result && $result->num_rows > 0) {
+            echo '<table id="companies" class="table table-striped mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Contact Person</th>
+                            <th scope="col" style="width:15%;">Address</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+            while ($row = $result->fetch_assoc()) {
+                echo '<tr>';
+                echo '<td>
+                        <a class="text-primary fw-bold" href="Branches.php?id=' . $row['comp_id'] . '">
+                            ' . htmlspecialchars($row['comp_name']) . '
+                        </a>
+                      </td>';
+                echo '<td style="color: #6f42c1; font-weight: bold; opacity: 0.8;">' . htmlspecialchars($row['foc']) . '</td>';
+                echo '<td>' . htmlspecialchars($row['add_1']) . '</td>';
+                echo '<td>
+                        <div style="display: flex; gap: 10px;">
+                            <a type="button" class="btn btn-success btn-sm" href="CompanyInfo.php?id=' . $row['comp_id'] . '">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                            <a type="button" class="btn btn-info btn-sm" href="update.php?id=' . $row['comp_id'] . '">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                        </div>
+                      </td>';
+                echo '</tr>';
+            }
+            echo '</tbody></table>';
+        } elseif (isset($_GET['search']) || isset($_GET['filter_date']) || isset($_GET['show_all'])) {
+            echo '<p class="text-center mt-3">No results found.</p>';
+        }
+        ?>
+    </div>
+</div>
+
+
     </div>
 
   </main><!-- End #main -->

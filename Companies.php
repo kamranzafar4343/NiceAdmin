@@ -247,17 +247,17 @@ $result = $conn->query($sql);
                 <button type="submit" name="show_all" class="btn btn-secondary w-100">Show All</button>
             </div>
 
-            <!-- Second Row: Registration and Expiry Date Filter -->
+            <!-- Second Row: Date Range Filter -->
             <div class="col-md-4">
-                <label for="start_date" class="form-label">Start Date (Registration)</label>
+                <label for="start_date" class="form-label">Start Date</label>
                 <input type="date" name="start_date" id="start_date" class="form-control">
             </div>
             <div class="col-md-4">
-                <label for="end_date" class="form-label">End Date (Expiry)</label>
+                <label for="end_date" class="form-label">End Date</label>
                 <input type="date" name="end_date" id="end_date" class="form-control">
             </div>
             <div class="col-md-4 d-flex align-items-end">
-                <button type="submit" name="filter_date" class="btn btn-secondary" style="width: 150px;">Filter Dates</button>
+                <button type="submit" name="filter_date" class="btn btn-secondary w-50">Filter by Dates</button>
             </div>
         </form>
 
@@ -277,7 +277,7 @@ $result = $conn->query($sql);
         if (isset($_GET['filter_date']) && !empty($_GET['start_date']) && !empty($_GET['end_date'])) {
             $start_date = $conn->real_escape_string($_GET['start_date']);
             $end_date = $conn->real_escape_string($_GET['end_date']);
-            $query = "SELECT * FROM compani WHERE registration >= '$start_date' AND expiry <= '$end_date'";
+            $query = "SELECT * FROM compani WHERE registration BETWEEN '$start_date' AND '$end_date'";
         }
 
         // If Show All Button is Clicked

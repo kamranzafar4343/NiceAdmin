@@ -445,91 +445,114 @@ End Search Bar -->
     include "sidebarcode.php";
     ?>
 
-    <!-- Button to add new box -->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createBox.php';" class="btn btn-primary mb-3">Add box </button>
-
     <!-- Main content -->
     <main id="main" class="main">
         <div class="col-12">
-        <div class="cardBranch recent-sales overflow-auto">
-    <div class="card-body">
+            <div class="cardBranch recent-sales overflow-auto">
+                <div class="card-body">
 
-        <!-- Card Title -->
-        <h5 class="card-title">Containers/Filefolders</h5>
+                    <!-- Card Title -->
+                    <h5 class="card-title"></h5>
 
-        <!-- Search Form -->
-        <form method="GET" action="" class="row g-3 mb-3">
-            <!-- Dropdown for Column Selection -->
-            <div class="col-md-4">
-                <label for="column" class="form-label">Select Column</label>
-                <select name="column" id="column" class="form-select">
-                    <option value="" selected>Choose...</option>
-                    <option value="comp_id_fk">Company</option>
-                    <option value="branch_id_fk">Branch</option>
-                    <option value="dept_id_fk">Department</option>
-                    <option value="object">Object</option>
-                    <option value="barcode">Barcode</option>
-                    <option value="alt_code">Alt Code</option>
-                    <option value="status">Status</option>
-                </select>
-            </div>
+                    <!-- Title and Add Button -->
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <h5 class="card-title">Search Containers/Filefolders</h5>
+                        </div>
+                        <div class="col-6 text-end">
+                            <button type="button" onclick="window.location.href = 'createBox.php'" class="btn btn-primary mb-3">Add Box</button>
+                        </div>
+                    </div>
 
-            <!-- Input Field for Search Value -->
-            <div class="col-md-6">
-                <label for="value" class="form-label">Search Value</label>
-                <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
-            </div>
+                    <!-- Search Form -->
+                    <form method="GET" action="" class="row g-3 mb-3">
+                        <!-- Dropdown for Column Selection -->
+                        <div class="col-md-4">
+                            <label for="column" class="form-label">Select Column</label>
+                            <select name="column" id="column" class="form-select">
+                                <option value="" selected>Choose...</option>
+                                <option value="comp_id_fk">Company</option>
+                                <option value="branch_id_fk">Branch</option>
+                                <option value="dept_id_fk">Department</option>
+                                <option value="object">Object</option>
+                                <option value="barcode">Barcode</option>
+                                <option value="alt_code">Alt Code</option>
+                                <option value="status">Status</option>
+                            </select>
+                        </div>
 
-            <!-- Buttons -->
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" name="search" class="btn btn-primary me-2 w-100">Search</button>
-                <button type="submit" name="show_all" class="btn btn-secondary w-100">Show All</button>
-            </div>
-        </form>
+                        <!-- Input Field for Search Value -->
+                        <div class="col-md-4">
+                            <label for="value" class="form-label">Search Value</label>
+                            <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
+                        </div>
 
-        <!-- Table -->
-        <?php
+                        <!-- Buttons for Search and Show All -->
+                        <div class="col-md-4 d-flex align-items-end gap-2">
 
-        // Default query - No rows displayed initially
-        $sql = "SELECT * FROM box WHERE 1=0";
+                            <button type="submit" name="search" class="btn btn-primary w-50">Search</button>
+                            <button type="submit" name="show_all" class="btn btn-secondary w-50">Show All</button>
+                        </div>
 
-        // Search Logic
-if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
-    $column = $conn->real_escape_string($_GET['column']);
-    $value = $conn->real_escape_string($_GET['value']);
+                        <!-- Date Range Filter -->
+                        <div class="col-md-4">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="date" name="end_date" id="end_date" class="form-control">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" name="filter_date" class="btn btn-secondary w-50">Filter Dates</button>
+                        </div>
+                    </form>
 
-    if ($column === 'comp_id_fk') {
-        // Search by Company Name
-        $sql = "SELECT b.* FROM box b 
-                JOIN compani c ON b.comp_id_fk = c.comp_id 
-                WHERE c.comp_name LIKE '%$value%'";
-    } elseif ($column === 'branch_id_fk') {
-        // Search by Branch Name
-        $sql = "SELECT b.* FROM box b 
-                JOIN branches br ON b.branch_id_fk = br.branch_id 
-                WHERE br.branch_name LIKE '%$value%'";
-    } elseif ($column === 'dept_id_fk') {
-        // Search by Department Name
-        $sql = "SELECT b.* FROM box b 
-                JOIN departments d ON b.dept_id_fk = d.dept_id 
-                WHERE d.dept_name LIKE '%$value%'";
-    } else {
-        // Search by other columns in the box table
-        $sql = "SELECT * FROM box WHERE $column LIKE '%$value%'";
-    }
-}
+                    <!-- Table -->
+                    <?php
+                    // Default query - No rows displayed initially
+                    $sql = "SELECT * FROM box WHERE 1=0";
 
-        // If Show All button is clicked
-        if (isset($_GET['show_all'])) {
-            $sql = "SELECT * FROM box ORDER BY box_id DESC";
-        }
+                    // Search Logic
+                    if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
+                        $column = $conn->real_escape_string($_GET['column']);
+                        $value = $conn->real_escape_string($_GET['value']);
 
-        // Execute the query
-        $result = $conn->query($sql);
+                        if ($column === 'comp_id_fk') {
+                            $sql = "SELECT b.* FROM box b 
+                        JOIN compani c ON b.comp_id_fk = c.comp_id 
+                        WHERE c.comp_name LIKE '%$value%'";
+                        } elseif ($column === 'branch_id_fk') {
+                            $sql = "SELECT b.* FROM box b 
+                        JOIN branches br ON b.branch_id_fk = br.branch_id 
+                        WHERE br.branch_name LIKE '%$value%'";
+                        } elseif ($column === 'dept_id_fk') {
+                            $sql = "SELECT b.* FROM box b 
+                        JOIN departments d ON b.dept_id_fk = d.dept_id 
+                        WHERE d.dept_name LIKE '%$value%'";
+                        } else {
+                            $sql = "SELECT * FROM box WHERE $column LIKE '%$value%'";
+                        }
+                    }
 
-        // Display table if results exist
-        if ($result && $result->num_rows > 0) {
-            echo '<table id="box" class="table mt-4">
+                    // Date Range Filter
+                    if (isset($_GET['filter_date']) && !empty($_GET['start_date']) && !empty($_GET['end_date'])) {
+                        $start_date = $conn->real_escape_string($_GET['start_date']);
+                        $end_date = $conn->real_escape_string($_GET['end_date']);
+                        $sql = "SELECT * FROM box WHERE created_at BETWEEN '$start_date' AND '$end_date'";
+                    }
+
+                    // Show All Button
+                    if (isset($_GET['show_all'])) {
+                        $sql = "SELECT * FROM box ORDER BY box_id DESC";
+                    }
+
+                    // Execute Query
+                    $result = $conn->query($sql);
+
+                    // Display Table if Results Exist
+                    if ($result && $result->num_rows > 0) {
+                        echo '<table id="box" class="table mt-4">
                 <thead>
                     <tr>
                         <th scope="col">Company</th>
@@ -541,37 +564,29 @@ if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value']))
                         <th scope="col">Status</th>
                         <th scope="col">Added On</th>';
 
-            if ($_SESSION['role'] == 'admin') {
-                echo '<th scope="col">Action</th>';
-            }
-            echo '</tr></thead><tbody>';
+                        if ($_SESSION['role'] == 'admin') {
+                            echo '<th scope="col">Action</th>';
+                        }
+                        echo '</tr></thead><tbody>';
 
-            while ($row = $result->fetch_assoc()) {
-                // Fetch Company Name
-                $comp_name = getName($conn, 'compani', 'comp_name', 'comp_id', $row['comp_id_fk']);
-                
-                // Fetch Branch Name
-                $branch_name = getName($conn, 'branches', 'branch_name', 'branch_id', $row['branch_id_fk']);
-                
-                // Fetch Department Name
-                $dept_name = getName($conn, 'departments', 'dept_name', 'dept_id', $row['dept_id_fk']);
-                
-                // Format Date
-                $created_at = date("d-m-Y", strtotime($row["created_at"]));
+                        while ($row = $result->fetch_assoc()) {
+                            $comp_name = getName($conn, 'compani', 'comp_name', 'comp_id', $row['comp_id_fk']);
+                            $branch_name = getName($conn, 'branches', 'branch_name', 'branch_id', $row['branch_id_fk']);
+                            $dept_name = getName($conn, 'departments', 'dept_name', 'dept_id', $row['dept_id_fk']);
+                            $created_at = date("d-m-Y", strtotime($row["created_at"]));
 
-                // Display Table Row
-                echo '<tr>';
-                echo "<td>{$comp_name}</td>";
-                echo "<td>{$branch_name}</td>";
-                echo "<td>{$dept_name}</td>";
-                echo "<td>{$row['object']}</td>";
-                echo "<td>{$row['barcode']}</td>";
-                echo "<td>{$row['alt_code']}</td>";
-                echo "<td>{$row['status']}</td>";
-                echo "<td>{$created_at}</td>";
+                            echo '<tr>';
+                            echo "<td>{$comp_name}</td>";
+                            echo "<td>{$branch_name}</td>";
+                            echo "<td>{$dept_name}</td>";
+                            echo "<td>{$row['object']}</td>";
+                            echo "<td>{$row['barcode']}</td>";
+                            echo "<td>{$row['alt_code']}</td>";
+                            echo "<td>{$row['status']}</td>";
+                            echo "<td>{$created_at}</td>";
 
-                if ($_SESSION['role'] == 'admin') {
-                    echo '<td>
+                            if ($_SESSION['role'] == 'admin') {
+                                echo '<td>
                             <div style="display: flex; gap: 10px;">
                                 <a class="btn btn-success btn-sm" href="boxUpdate.php?id=' . $row['box_id'] . '">
                                     <i class="fa-solid fa-pen-to-square"></i>
@@ -581,30 +596,28 @@ if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value']))
                                 </a>
                             </div>
                           </td>';
-                }
+                            }
 
-                echo '</tr>';
+                            echo '</tr>';
+                        }
+                        echo '</tbody></table>';
+                    } elseif (isset($_GET['search']) || isset($_GET['filter_date']) || isset($_GET['show_all'])) {
+                        echo "<p>No results found.</p>";
+                    }
+                    ?>
+
+                </div>
+            </div>
+
+            <?php
+            // Function to fetch names based on IDs
+            function getName($conn, $table, $column, $id_field, $id_value)
+            {
+                $query = "SELECT $column FROM $table WHERE $id_field = '$id_value'";
+                $result = $conn->query($query);
+                return ($result && $result->num_rows > 0) ? $result->fetch_assoc()[$column] : "N/A";
             }
-            echo '</tbody></table>';
-        } elseif (isset($_GET['search']) || isset($_GET['show_all'])) {
-            echo "<p>No results found.</p>";
-        }
-        ?>
-
-    </div>
-</div>
-
-<?php
-// Function to fetch name based on ID
-function getName($conn, $table, $column, $id_field, $id_value) {
-    $query = "SELECT $column FROM $table WHERE $id_field = '$id_value'";
-    $result = $conn->query($query);
-    if ($result && $result->num_rows > 0) {
-        return $result->fetch_assoc()[$column];
-    }
-    return "N/A";
-}
-?>
+            ?>
 
         </div>
     </main><!-- End #main -->

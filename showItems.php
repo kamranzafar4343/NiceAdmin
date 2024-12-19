@@ -148,8 +148,8 @@ $result = $conn->query($sql);
 
         #fixedButtonBranch {
             position: relative;
-            top: 16px;
-            left: 358px;
+            top: 17px;
+            left: 0px;
         }
 
         .row {
@@ -227,7 +227,7 @@ $result = $conn->query($sql);
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
-            
+
 
         }
 
@@ -460,16 +460,16 @@ $result = $conn->query($sql);
     include "config/db.php";
     $role = $_SESSION['role'];
     ?>
-  <!-- sidebar start -->
-  <?php
-  include "sidebarcode.php";
-  ?>
-  <!-- sidebar end -->
+    <!-- sidebar start -->
+    <?php
+    include "sidebarcode.php";
+    ?>
+    <!-- sidebar end -->
 
     <!-- Main content -->
     <main id="main" class="main">
         <div class="mt-4">
-<br>
+            <br>
         </div>
         <div class="col-12">
         <div class="cardBranch recent-sales overflow-auto mt-5">
@@ -478,68 +478,93 @@ $result = $conn->query($sql);
         <!-- Title and Add Button -->
         <div class="row mb-3">
             <div class="col-6">
-                <h5 class="card-title">List of all Files</h5>
+                <h5 class="card-title">Search Files</h5>
             </div>
             <div class="col-6 text-end">
                 <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createitem.php'" class="btn btn-primary">Add File</button>
             </div>
         </div>
 
-        <!-- Search Form -->
-        <form method="GET" action="" class="row g-3 mb-3">
-            <!-- Dropdown for Column Selection -->
-            <div class="col-md-4">
-                <label for="column" class="form-label">Select Column</label>
-                <select name="column" id="column" class="form-select" required>
-                    <option value="" selected>Choose...</option>
-                    <option value="box_barcode">Box Barcode</option>
-                    <option value="file_no">Item Barcode</option>
-                    <option value="status">Status</option>
-                </select>
-            </div>
+<!-- Search Form -->
+<form method="GET" action="" class="row g-3 mb-3">
 
-            <!-- Input Field for Search Value -->
-            <div class="col-md-6">
-                <label for="value" class="form-label">Search Value</label>
-                <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
-            </div>
+<!-- First Row: Column and Search Value -->
+<div class="col-md-4">
+    <label for="column" class="form-label">Select Column</label>
+    <select name="column" id="column" class="form-select">
+        <option value="" selected>Choose...</option>
+        <option value="box_barcode">Box Barcode</option>
+        <option value="file_no">Item Barcode</option>
+        <option value="status">Status</option>
+    </select>
+</div>
+<div class="col-md-4">
+    <label for="value" class="form-label">Search Value</label>
+    <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
+</div>
 
-            <!-- Buttons -->
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" name="search" class="btn btn-primary me-2 w-100">Search</button>
-                <button type="submit" name="show_all" class="btn btn-secondary w-100">Show All</button>
-            </div>
-        </form>
+ <!-- Buttons for Search and Show All -->
+ <div class="col-md-4 d-flex align-items-end gap-2">
+
+<button type="submit" name="search" class="btn btn-primary w-50">Search</button>
+<button type="submit" name="show_all" class="btn btn-secondary w-50">Show All</button>
+</div>
+
+
+<!-- Second Row: Date Range Filter -->
+<div class="col-md-4">
+    <label for="start_date" class="form-label">Start Date</label>
+    <input type="date" name="start_date" id="start_date" class="form-control">
+</div>
+<div class="col-md-4">
+    <label for="end_date" class="form-label">End Date</label>
+    <input type="date" name="end_date" id="end_date" class="form-control">
+</div>
+<div class="col-md-2 d-flex align-items-end">
+    <button type="submit" name="filter_date" class="btn btn-secondary w-100 px-4 py-2" >
+        Filter Dates
+    </button>
+</div>
+</form>
 
         <!-- Table -->
         <?php
-        // Default query (no rows initially)
+        
+
+        // Default Query - No rows initially
         $query = "SELECT * FROM item WHERE 1=0";
 
-        // If Search Button is clicked
+        // If Search Button is Clicked
         if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
             $column = $conn->real_escape_string($_GET['column']);
             $value = $conn->real_escape_string($_GET['value']);
             $query = "SELECT * FROM item WHERE $column LIKE '%$value%'";
         }
 
-        // If Show All Button is clicked
+        // If Date Range Filter is Applied
+        if (isset($_GET['filter_date']) && !empty($_GET['start_date']) && !empty($_GET['end_date'])) {
+            $start_date = $conn->real_escape_string($_GET['start_date']);
+            $end_date = $conn->real_escape_string($_GET['end_date']);
+            $query = "SELECT * FROM item WHERE creation_date BETWEEN '$start_date' AND '$end_date'";
+        }
+
+        // If Show All Button is Clicked
         if (isset($_GET['show_all'])) {
-            $query = "SELECT * FROM item LIMIT 100";
+            $query = "SELECT * FROM item";
         }
 
         // Execute Query
         $result = $conn->query($query);
 
-        // Display Table if Results Exist
         if ($result && $result->num_rows > 0) {
-            echo '<table class="table table-striped mt-4" id="items">
+            echo '<table id="items" class="table table-striped mt-4">
                     <thead>
                         <tr>
                             <th scope="col" style="width: 5%;">#</th>
                             <th scope="col" style="width: 15%;">Box Barcode</th>
                             <th scope="col" style="width: 15%;">Item Barcode</th>
-                            <th scope="col" style="width: 15%;">Status</th>';
+                            <th scope="col" style="width: 15%;">Status</th>
+                            <th scope="col" style="width: 15%;">Added on</th>';
             if ($_SESSION['role'] == 'admin') {
                 echo '<th scope="col" style="width: 15%;">Actions</th>';
             }
@@ -548,10 +573,14 @@ $result = $conn->query($sql);
             $counter = 1;
             while ($row = $result->fetch_assoc()) {
                 echo '<tr>';
+                 // Format Date
+                 $created_at = date("d-m-Y", strtotime($row["creation_date"]));
+
                 echo '<td>' . $counter++ . '</td>';
                 echo '<td>' . htmlspecialchars($row['box_barcode']) . '</td>';
                 echo '<td>' . htmlspecialchars($row['file_no']) . '</td>';
                 echo '<td>' . htmlspecialchars($row['status']) . '</td>';
+                echo '<td>' . htmlspecialchars($created_at) . '</td>';
 
                 // Admin Actions
                 if ($_SESSION['role'] == 'admin') {
@@ -570,7 +599,7 @@ $result = $conn->query($sql);
                 echo '</tr>';
             }
             echo '</tbody></table>';
-        } elseif (isset($_GET['search']) || isset($_GET['show_all'])) {
+        } elseif (isset($_GET['search']) || isset($_GET['filter_date']) || isset($_GET['show_all'])) {
             echo '<p class="text-center mt-3">No results found.</p>';
         }
         ?>
@@ -626,7 +655,7 @@ $result = $conn->query($sql);
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
-    
+
     <!--for changing text alignment in datatable.net-->
     <script>
         $(document).ready(function() {

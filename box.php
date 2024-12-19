@@ -455,14 +455,14 @@ End Search Bar -->
     <div class="card-body">
 
         <!-- Card Title -->
-        <h5 class="card-title">List of Containers/Filefolders</h5>
+        <h5 class="card-title">Containers/Filefolders</h5>
 
         <!-- Search Form -->
         <form method="GET" action="" class="row g-3 mb-3">
             <!-- Dropdown for Column Selection -->
             <div class="col-md-4">
                 <label for="column" class="form-label">Select Column</label>
-                <select name="column" id="column" class="form-select" required>
+                <select name="column" id="column" class="form-select">
                     <option value="" selected>Choose...</option>
                     <option value="comp_id_fk">Company</option>
                     <option value="branch_id_fk">Branch</option>
@@ -493,12 +493,31 @@ End Search Bar -->
         // Default query - No rows displayed initially
         $sql = "SELECT * FROM box WHERE 1=0";
 
-        // If Search button is clicked
-        if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
-            $column = $conn->real_escape_string($_GET['column']);
-            $value = $conn->real_escape_string($_GET['value']);
-            $sql = "SELECT * FROM box WHERE $column LIKE '%$value%'";
-        }
+        // Search Logic
+if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
+    $column = $conn->real_escape_string($_GET['column']);
+    $value = $conn->real_escape_string($_GET['value']);
+
+    if ($column === 'comp_id_fk') {
+        // Search by Company Name
+        $sql = "SELECT b.* FROM box b 
+                JOIN compani c ON b.comp_id_fk = c.comp_id 
+                WHERE c.comp_name LIKE '%$value%'";
+    } elseif ($column === 'branch_id_fk') {
+        // Search by Branch Name
+        $sql = "SELECT b.* FROM box b 
+                JOIN branches br ON b.branch_id_fk = br.branch_id 
+                WHERE br.branch_name LIKE '%$value%'";
+    } elseif ($column === 'dept_id_fk') {
+        // Search by Department Name
+        $sql = "SELECT b.* FROM box b 
+                JOIN departments d ON b.dept_id_fk = d.dept_id 
+                WHERE d.dept_name LIKE '%$value%'";
+    } else {
+        // Search by other columns in the box table
+        $sql = "SELECT * FROM box WHERE $column LIKE '%$value%'";
+    }
+}
 
         // If Show All button is clicked
         if (isset($_GET['show_all'])) {

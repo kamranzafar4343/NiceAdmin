@@ -80,6 +80,11 @@ if ($resultData->num_rows > 0) {
     <style>
         /* Custom CSS to decrease font size of the table */
 
+        .overflow-auto {
+            overflow: auto !important;
+            margin-top: 92px !important;
+        }
+
         .add {
             /* cursor: pointer; */
             margin-left: 976px;
@@ -370,19 +375,26 @@ if ($resultData->num_rows > 0) {
     <main id="main" class="main">
         <div class="col-15">
             <!-- Add the buttton for the work order -->
-            <button id="" type="button" onclick="window.location.href = 'createDeliveryWO.php';" class="btn btn-primary mb-1 add"> + </button>
             <div class="cardBranch recent-sales overflow-auto">
                 <div class="card-body">
 
-                    <!-- Card Title -->
-                    <h5 class="card-title">List of Delivery Work Orders</h5>
+                    <!-- Title and Add Button -->
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <h5 class="card-title">Delivery Work Orders</h5>
+                        </div>
+                        <div class="col-6 text-end mt-2">
+                            <button type="button" onclick="window.location.href = 'createDeliveryWO.php'" class="btn btn-primary mb-3">Add</button>
+                        </div>
+                    </div>
+
 
                     <!-- Search Form -->
                     <form method="GET" action="" class="row g-3 mb-3">
                         <!-- Dropdown for Column Selection -->
                         <div class="col-md-4">
                             <label for="column" class="form-label">Select Column</label>
-                            <select name="column" id="column" class="form-select" required>
+                            <select name="column" id="column" class="form-select">
                                 <option value="" selected>Choose...</option>
                                 <option value="comp_id_fk">Company</option>
                                 <option value="branch_id_fk">Branch</option>
@@ -393,28 +405,52 @@ if ($resultData->num_rows > 0) {
                         </div>
 
                         <!-- Input Field for Search Value -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="value" class="form-label">Search Value</label>
                             <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
                         </div>
 
                         <!-- Buttons -->
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" name="search" class="btn btn-primary me-2 w-100">Search</button>
+                        <div class="col-md-4 d-flex align-items-end gap-2">
+                            <button type="submit" name="search" class="btn btn-primary w-100">Search</button>
                             <button type="submit" name="show_all" class="btn btn-secondary w-100">Show All</button>
+                        </div>
+
+                        <!-- Date Range Filter -->
+                        <div class="col-md-4">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="date" name="end_date" id="end_date" class="form-control">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" name="filter_date" class="btn btn-info w-50" style="font-weight: bold;">Filter Dates</button>
                         </div>
                     </form>
 
                     <!-- Table -->
                     <?php
-
                     // Query logic
                     $query = "SELECT * FROM orders WHERE 1=0"; // Default no rows
+
+                    // Search by Column and Value
                     if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
                         $column = $conn->real_escape_string($_GET['column']);
                         $value = $conn->real_escape_string($_GET['value']);
                         $query = "SELECT * FROM orders WHERE $column LIKE '%$value%'";
-                    } elseif (isset($_GET['show_all'])) {
+                    }
+
+                    // Filter by Date Range
+                    if (isset($_GET['filter_date']) && !empty($_GET['start_date']) && !empty($_GET['end_date'])) {
+                        $start_date = $conn->real_escape_string($_GET['start_date']);
+                        $end_date = $conn->real_escape_string($_GET['end_date']);
+                        $query = "SELECT * FROM orders WHERE order_creation_date BETWEEN '$start_date' AND '$end_date'";
+                    }
+
+                    // Show All Button
+                    if (isset($_GET['show_all'])) {
                         $query = "SELECT * FROM orders LIMIT 100";
                     }
 
@@ -422,7 +458,7 @@ if ($resultData->num_rows > 0) {
                     $result = $conn->query($query);
 
                     if ($result && $result->num_rows > 0) {
-                        echo '<table class="table table-striped mt-4">
+                        echo '<table id="orderT" class="table table-striped mt-4">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -447,7 +483,7 @@ if ($resultData->num_rows > 0) {
                             // Fetch Department Name
                             $dept_name = get_name($conn, "departments", "dept_name", "dept_id", $row['dept_id_fk']);
 
-                            // Convert Dates
+                            // Format Dates
                             $createDate = date("d-m-Y", strtotime($row['order_creation_date']));
                             $requiredBy = date("d-m-Y", strtotime($row['date']));
 
@@ -463,9 +499,11 @@ if ($resultData->num_rows > 0) {
 
                             if ($_SESSION['role'] == 'admin') {
                                 echo '<td>
-                            <a href="viewOrder.php?id=' . $row['order_no'] . '" class="btn btn-success btn-sm">View</a>
-                            <a href="viewWO.php?id=' . $row['order_no'] . '" class="btn btn-success btn-sm">Print</a>
-                            <a href="deleteOrder.php?id=' . $row['order_no'] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\');">Delete</a>
+                            <div class="d-flex gap-2">
+                                <a href="viewOrder.php?id=' . $row['order_no'] . '" class="btn btn-success btn-sm">View</a>
+                                <a href="viewWO.php?id=' . $row['order_no'] . '" class="btn btn-primary btn-sm">Print</a>
+                                <a href="deleteOrder.php?id=' . $row['order_no'] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\');">Delete</a>
+                            </div>
                           </td>';
                             }
 
@@ -474,7 +512,7 @@ if ($resultData->num_rows > 0) {
                         }
 
                         echo '</tbody></table>';
-                    } elseif (isset($_GET['search']) || isset($_GET['show_all'])) {
+                    } elseif (isset($_GET['search']) || isset($_GET['filter_date']) || isset($_GET['show_all'])) {
                         echo '<p class="text-center mt-3">No results found.</p>';
                     }
                     ?>
@@ -494,6 +532,7 @@ if ($resultData->num_rows > 0) {
                 return "N/A"; // Return default if not found
             }
             ?>
+
 
         </div>
     </main>

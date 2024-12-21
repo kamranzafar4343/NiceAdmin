@@ -426,7 +426,7 @@ if ($resultData->num_rows > 0) {
                             <input type="date" name="end_date" id="end_date" class="form-control">
                         </div>
                         <div class="col-md-4 d-flex align-items-end">
-                            <button type="submit" name="filter_date" class="btn btn-info w-50" style="font-weight: bold;">Filter Dates</button>
+                            <button type="submit" name="filter_date" class="btn btn-info w-50">Filter Dates</button>
                         </div>
                     </form>
 
@@ -439,7 +439,26 @@ if ($resultData->num_rows > 0) {
                     if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
                         $column = $conn->real_escape_string($_GET['column']);
                         $value = $conn->real_escape_string($_GET['value']);
-                        $query = "SELECT * FROM orders WHERE $column LIKE '%$value%'";
+
+                        if ($column === 'comp_id_fk') {
+                            // Search by Company Name
+                            $query = "SELECT o.* FROM orders o 
+                  JOIN compani c ON o.comp_id_fk = c.comp_id 
+                  WHERE c.comp_name LIKE '%$value%'";
+                        } elseif ($column === 'branch_id_fk') {
+                            // Search by Branch Name
+                            $query = "SELECT o.* FROM orders o 
+                  JOIN branches b ON o.branch_id_fk = b.branch_id 
+                  WHERE b.branch_name LIKE '%$value%'";
+                        } elseif ($column === 'dept_id_fk') {
+                            // Search by Department Name
+                            $query = "SELECT o.* FROM orders o 
+                  JOIN departments d ON o.dept_id_fk = d.dept_id 
+                  WHERE d.dept_name LIKE '%$value%'";
+                        } else {
+                            // Search other fields in the orders table
+                            $query = "SELECT * FROM orders WHERE $column LIKE '%$value%'";
+                        }
                     }
 
                     // Filter by Date Range
@@ -459,16 +478,16 @@ if ($resultData->num_rows > 0) {
 
                     if ($result && $result->num_rows > 0) {
                         echo '<table id="orderT" class="table table-striped mt-4">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Company</th>
-                        <th>Branch</th>
-                        <th>Department</th>
-                        <th>Status</th>
-                        <th>Create Date</th>
-                        <th>Priority</th>
-                        <th>Required By</th>';
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Company</th>
+                    <th>Branch</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Create Date</th>
+                    <th>Priority</th>
+                    <th>Required By</th>';
                         if ($_SESSION['role'] == 'admin') {
                             echo '<th>Action</th>';
                         }
@@ -488,23 +507,29 @@ if ($resultData->num_rows > 0) {
                             $requiredBy = date("d-m-Y", strtotime($row['date']));
 
                             echo "<tr>
-                        <td>{$row['order_no']}</td>
-                        <td>{$comp_name}</td>
-                        <td>{$branch_name}</td>
-                        <td>{$dept_name}</td>
-                        <td>{$row['status']}</td>
-                        <td>{$createDate}</td>
-                        <td>{$row['priority']}</td>
-                        <td>{$requiredBy}</td>";
+                <td>{$row['order_no']}</td>
+                <td>{$comp_name}</td>
+                <td>{$branch_name}</td>
+                <td>{$dept_name}</td>
+                <td>{$row['status']}</td>
+                <td>{$createDate}</td>
+                <td>{$row['priority']}</td>
+                <td>{$requiredBy}</td>";
 
                             if ($_SESSION['role'] == 'admin') {
                                 echo '<td>
-                            <div class="d-flex gap-2">
-                                <a href="viewOrder.php?id=' . $row['order_no'] . '" class="btn btn-success btn-sm">View</a>
-                                <a href="viewWO.php?id=' . $row['order_no'] . '" class="btn btn-primary btn-sm">Print</a>
-                                <a href="deleteOrder.php?id=' . $row['order_no'] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\');">Delete</a>
-                            </div>
-                          </td>';
+                    <div class="d-flex gap-2">
+                        <a href="viewOrder.php?id=' . $row['order_no'] . '" class="btn btn-success btn-sm">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                        <a href="viewWO.php?id=' . $row['order_no'] . '" class="btn btn-primary btn-sm">
+                            <i class="fa-solid fa-print"></i>
+                        </a>
+                        <a href="deleteOrder.php?id=' . $row['order_no'] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\');">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </div>
+                  </td>';
                             }
 
                             echo '</tr>';

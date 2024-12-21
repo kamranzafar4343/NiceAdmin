@@ -39,58 +39,30 @@ if (isset($_POST['submit'])) {
     $role = mysqli_real_escape_string($conn, $_POST['role']);
     $request_date = mysqli_real_escape_string($conn, $_POST['req_date']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
-    $barcode = mysqli_real_escape_string($conn, $_POST['barcode']);
 
     // Handle multiple selected values for "items"
-    $itemBarcodes = $_POST['items2'];
+    $boxBarcodes = $_POST['barcode'];
 
     // also handles empty values
-    if (empty($_POST['items2'])) {
-        $itemBarcodesString = ''; // Set to empty string if the array is empty
+    if (empty($_POST['barcode'])) {
+        $boxBarcodesString = ''; // Set to empty string if the array is empty
     } else {
-        $itemBarcodesString = implode(", ", array_map(function ($value) use ($conn) {
+        $boxBarcodesString = implode(", ", array_map(function ($value) use ($conn) {
             return mysqli_real_escape_string($conn, $value); // Sanitize each value
-        }, $itemBarcodes)); // Convert to a comma-separated string
-
+        }, $boxBarcodes)); // Convert to a comma-separated string
     }
 
-    //if box barcode already exists, show alert
-    $checkBarcode = "SELECT * FROM orders WHERE barcode = '$barcode'";
-    $barcodeResult = mysqli_query($conn, $checkBarcode);
-    if ($barcodeResult->num_rows > 0) {
-?>
-        <script>
-            // JavaScript to show the alert
-            alert("<?php echo "Duplicate Box Barcode! Please select another barcode while making workorder" ?>");
-            window.location.href = "order.php";
-        </script>
-<?php
-        die();
-    }
-
-    $sql = "INSERT INTO orders ( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, item_barcode, requestor, role, req_date, description) 
-     VALUES ( '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$itemBarcodesString', '$requestor_name', '$role', '$request_date', '$description')";
-
+    $sql = "INSERT INTO orders( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, requestor, role, req_date, description) 
+     VALUES ('$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$boxBarcodesString', '$requestor_name', '$role', '$request_date', '$description')";
 
     if ($conn->query($sql) === TRUE) {
-
-        // Get the last inserted order_no from the orders table
-        $last_id = $conn->insert_id;
-
-        $sqlAudit = "INSERT INTO orders_audit ( order_no, creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, item_barcode, requestor, role, req_date, description) 
-     VALUES ('$last_id', '$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$barcode', '$itemBarcodes', '$requestor_name', '$role', '$request_date', '$description')";
-    } else {
+        header("Location: order.php");
+        exit();
+           } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
         exit();
     }
 
-    if ($conn->query($sqlAudit) === TRUE) {
-        header("Location: order.php");
-        exit();
-    } else {
-        echo "Error: " . $sqlAudit . "<br>" . $conn->error;
-        exit();
-    }
 }
 ?>
 
@@ -494,16 +466,7 @@ if (isset($_POST['submit'])) {
                     <!-- Select barcode -->
                     <div class="col-md-4">
                         <label for="barcodes">Select Container/Filefolder:</label>
-                        <select id="barcode" class="form-select" name="barcode" required>
-                            <option value="">Select barcode</option>
-                            <!-- dynamically populate with ajax -->
-                        </select>
-                    </div>
-
-                    <!-- Select barcode -->
-                    <div class="col-md-4">
-                        <label for="items">Select Item Barcode:</label>
-                        <select id="items2" class="form-select" name="items2[]" multiple>
+                        <select id="barcode" class="form-select" name="barcode[]" multiple>
                             <option value="">Select barcode</option>
                             <!-- dynamically populate with ajax -->
                         </select>
@@ -604,10 +567,6 @@ if (isset($_POST['submit'])) {
             dselect(document.querySelector('#dept'), config);
             dselect(document.querySelector('#emp'), config);
             dselect(document.querySelector('#barcode'), config);
-            dselect(document.querySelector('#items2'), config);
-
-
-
 
             // When company is changed, fetch the branches
             $('#company').change(function() {
@@ -737,35 +696,35 @@ if (isset($_POST['submit'])) {
             });
 
             // When barcode is changed, fetch the items
-            $('#barcode').change(function() {
-                var barcode = $(this).val();
-                console.log(barcode);
+            // $('#barcode').change(function() {
+            //     var barcode = $(this).val();
+            //     console.log(barcode);
 
-                // AJAX request to get item barcodes for the selected box
-                $.ajax({
-                    url: 'getItems.php',
-                    type: 'POST',
-                    data: {
-                        barcode: barcode
-                    },
-                    success: function(response) {
+            //     // AJAX request to get item barcodes for the selected box
+            //     $.ajax({
+            //         url: 'getItems.php',
+            //         type: 'POST',
+            //         data: {
+            //             barcode: barcode
+            //         },
+            //         success: function(response) {
 
-                        var items = JSON.parse(response); //return the json response as an array
+            //             var items = JSON.parse(response); //return the json response as an array
 
-                        // Clear existing items
-                        $('#items2').empty();
-                        $('#items2').append('<option value="">Select barcode</option>');
+            //             // Clear existing items
+            //             $('#items2').empty();
+            //             $('#items2').append('<option value="">Select barcode</option>');
 
-                        // Add the new options from the response
-                        $.each(items, function(index, item) {
-                            $('#items2').append('<option value="' + item.barcode + '">' + item.barcode + '</option>');
-                            // console.log(item.barcode);
+            //             // Add the new options from the response
+            //             $.each(items, function(index, item) {
+            //                 $('#items2').append('<option value="' + item.barcode + '">' + item.barcode + '</option>');
+            //                 // console.log(item.barcode);
 
-                            dselect(document.querySelector('#items2'), config);
-                        });
-                    }
-                });
-            });
+            //                 dselect(document.querySelector('#items2'), config);
+            //             });
+            //         }
+            //     });
+            // });
 
             //            When company is changed, populate phone
             // $('#company').change(function() {

@@ -457,7 +457,7 @@ if (isset($_POST['submit'])) {
                     <!-- for the Pickup and delivery Addrss -->
                     <div class="col-md-5">
                         <label for="pickup_address" class="form-label">Pickup/Delivery Address </label>
-                        <input type="text" class="form-control" id="" name="pickup_address" required>
+                        <input type="text" class="form-control" id="pickup_address" name="pickup_address" required>
                     </div>
 
                     <h2 style="color: #0056b3; margin-top: 45px;">Add Container/Filefolder</h2>
@@ -617,7 +617,7 @@ if (isset($_POST['submit'])) {
 
                             // Add the new options from the response
                             $.each(departments, function(index, department) {
-                              $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
+                                $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
                             });
                             // Refresh or reinitialize dselect
                             dselect(document.querySelector('#dept'), config);
@@ -694,7 +694,7 @@ if (isset($_POST['submit'])) {
                 });
             });
 
-            //show the phone no and address of employee on selection
+            //show the phone no of employee on selection
             $('#emp').change(function() {
                 var emp_id = $(this).val();
                 if (emp_id) {
@@ -706,10 +706,10 @@ if (isset($_POST['submit'])) {
                         },
                         success: function(response) {
                             var response = JSON.parse(response); //return the json response as an array
-                            
+
                             // Assuming response is a JSON object containing phone
                             document.getElementById('foc_phone').value = response.phone;
-                        console.log(response.phone);
+                            console.log(response.phone);
                         },
                         error: function() {
                             alert('Error fetching employee details');
@@ -717,6 +717,33 @@ if (isset($_POST['submit'])) {
                     });
                 } else {
                     document.getElementById('foc_phone').value = '';
+                }
+            });
+
+
+            //show the address of employee on selection
+            $('#emp').change(function() {
+                var emp_id = $(this).val();
+                if (emp_id) {
+                    $.ajax({
+                        url: 'getEmpAdd.php', // API endpoint where you get employee details
+                        type: 'GET',
+                        data: {
+                            emp_id: emp_id
+                        },
+                        success: function(response) {
+                            var response = JSON.parse(response); //return the json response as an array
+
+                            // Assuming response is a JSON object containing phone
+                            document.getElementById('pickup_address').value = response.address;
+                            console.log(response.address);
+                        },
+                        error: function() {
+                            alert('Error fetching employee details');
+                        }
+                    });
+                } else {
+                    document.getElementById('pickup_address').value = '';
                 }
             });
 

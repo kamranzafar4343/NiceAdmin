@@ -11,8 +11,8 @@ if (isset($_GET['emp_id'])) {
         $data = $result->fetch_assoc();
         echo json_encode($data);
     } else {
-        echo json_encode(['phone' => '', 'address' => ''], JSON_FORCE_OBJECT); // Ensure consistent object output
+        echo json_encode(['phone' => ''], JSON_FORCE_OBJECT); // Ensure consistent object output
     }
 } else {
-    echo json_encode(['phone' => '', 'address' => ''], JSON_FORCE_OBJECT);
+    echo json_encode(['phone' => ''], JSON_FORCE_OBJECT);
 }

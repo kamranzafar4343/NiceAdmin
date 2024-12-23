@@ -483,7 +483,7 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <div class="col-md-3">
-                        <label class="form-label">request date</label>
+                        <label class="form-label">Request date</label>
                         <input type="datetime-local" id="req_date" class="form-control" name="req_date" required>
                     </div>
                     <!--  Comments -->
@@ -531,6 +531,7 @@ if (isset($_POST['submit'])) {
     <!-- Updated JavaScript with proper lev2Select selection -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    <!-- made request date the default date -->
 <script>
      window.onload = function() {
         var now = new Date();
@@ -759,6 +760,5 @@ if (isset($_POST['submit'])) {
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
 </body>
-
 
 </html>

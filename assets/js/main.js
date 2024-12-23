@@ -431,6 +431,7 @@ window.onload = function () {
 
   // Set the value of the date input to the formatted date
   document.getElementById('registration').value = formattedDate;
+
 };
 window.onload = function () {
   // Get the current date

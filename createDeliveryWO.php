@@ -484,7 +484,7 @@ if (isset($_POST['submit'])) {
 
                     <div class="col-md-3">
                         <label class="form-label">request date</label>
-                        <input type="datetime-local" class="form-control" name="req_date" required>
+                        <input type="datetime-local" id="req_date" class="form-control" name="req_date" required>
                     </div>
                     <!--  Comments -->
                     <div class="col-md-5">
@@ -531,23 +531,19 @@ if (isset($_POST['submit'])) {
     <!-- Updated JavaScript with proper lev2Select selection -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            // Get today's date in the format yyyy-mm-dd
-            const today = new Date().toISOString().split('T')[0];
-
-            // Set the minimum attribute to today's date
-            $('#dateField').attr('min', today);
-
-            // Optional: You can also reset the value if it's less than today
-            $('#dateField').on('change', function() {
-                if ($(this).val() < today) {
-                    alert('Select a date greater than or equal to today.');
-                    $(this).val(''); // Clear the invalid selection
-                }
-            });
-        });
-    </script>
+<script>
+     window.onload = function() {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = ('0' + (now.getMonth() + 1)).slice(-2);  // Months are zero indexed
+        var day = ('0' + now.getDate()).slice(-2);
+        var hour = ('0' + now.getHours()).slice(-2);
+        var minute = ('0' + now.getMinutes()).slice(-2);
+        
+        var dateTime = year + '-' + month + '-' + day + 'T' + hour + ':' + minute;
+        document.getElementById('req_date').value = dateTime;
+    };
+</script>
 
     <script>
         $(document).ready(function() {
@@ -747,66 +743,9 @@ if (isset($_POST['submit'])) {
                 }
             });
 
-            // When barcode is changed, fetch the items
-            // $('#barcode').change(function() {
-            //     var barcode = $(this).val();
-            //     console.log(barcode);
-
-            //     // AJAX request to get item barcodes for the selected box
-            //     $.ajax({
-            //         url: 'getItems.php',
-            //         type: 'POST',
-            //         data: {
-            //             barcode: barcode
-            //         },
-            //         success: function(response) {
-
-            //             var items = JSON.parse(response); //return the json response as an array
-
-            //             // Clear existing items
-            //             $('#items2').empty();
-            //             $('#items2').append('<option value="">Select barcode</option>');
-
-            //             // Add the new options from the response
-            //             $.each(items, function(index, item) {
-            //                 $('#items2').append('<option value="' + item.barcode + '">' + item.barcode + '</option>');
-            //                 // console.log(item.barcode);
-
-            //                 dselect(document.querySelector('#items2'), config);
-            //             });
-            //         }
-            //     });
-            // });
-
-            //            When company is changed, populate phone
-            // $('#company').change(function() {
-            //     var company_id = $(this).val();
-
-            // AJAX request to get phone no delivery address
-            //     $.ajax({
-            //         url: 'get_company_details.php', // Replace with your server-side script
-            //         type: 'POST',
-            //         data: { company_id: company_id },
-            //         success: function(response) {
-            //             try {
-            //                 var companyDetails = JSON.parse(response); // Expect JSON data from server
-            //                 // Populate the input fields with the data
-            //                 $('#company_name').val(companyDetails.name); // Input field for company name
-            //                 $('#company_address').val(companyDetails.address); // Input field for company address
-            //             } catch (e) {
-            //                 console.error("Invalid JSON response", response);
-            //             }
-            //         },
-            //         error: function(xhr, status, error) {
-            //             console.error("AJAX Error: " + error);
-            //         }
-            //     });
-            // });
-
         });
     </script>
 
-    <script src="assets/js/main.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 

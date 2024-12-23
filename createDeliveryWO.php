@@ -58,11 +58,10 @@ if (isset($_POST['submit'])) {
     if ($conn->query($sql) === TRUE) {
         header("Location: order.php");
         exit();
-           } else {
+    } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
         exit();
     }
-
 }
 ?>
 
@@ -467,7 +466,7 @@ if (isset($_POST['submit'])) {
                     <div class="col-md-4">
                         <label for="barcodes">Select Container/Filefolder:</label>
                         <select id="barcode" class="form-select" name="barcode[]" multiple>
-                            <option value="">Select barcode</option>
+                            <option value="">Select 1 or more boxes</option>
                             <!-- dynamically populate with ajax -->
                         </select>
                     </div>
@@ -618,7 +617,7 @@ if (isset($_POST['submit'])) {
 
                             // Add the new options from the response
                             $.each(departments, function(index, department) {
-                                $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
+                              $('#dept').append('<option value="' + department.dept_id + '">' + department.dept_name + '</option>');
                             });
                             // Refresh or reinitialize dselect
                             dselect(document.querySelector('#dept'), config);
@@ -651,7 +650,7 @@ if (isset($_POST['submit'])) {
 
                             // Add the new options from the response
                             $.each(employees, function(index, employe) {
-                                $('#emp').append('<option value="' + employe.name + '">' + employe.name + '</option>');
+                                $('#emp').append('<option value="' + employe.emp_id + '">' + employe.name + '</option>');
                             });
                             // Refresh or reinitialize dselect
                             dselect(document.querySelector('#emp'), config);
@@ -679,7 +678,7 @@ if (isset($_POST['submit'])) {
                             var boxes = JSON.parse(response); //return the json response as an array
                             // Clear existing dept's
                             $('#barcode').empty();
-                            $('#barcode').append('<option value="">Select barcode</option>');
+                            $('#barcode').append('<option value="">Select 1 or more boxes</option>');
 
                             // Add the new options from the response
                             $.each(boxes, function(index, box) {
@@ -693,6 +692,32 @@ if (isset($_POST['submit'])) {
                         }
                     }
                 });
+            });
+
+            //show the phone no and address of employee on selection
+            $('#emp').change(function() {
+                var emp_id = $(this).val();
+                if (emp_id) {
+                    $.ajax({
+                        url: 'getEmpDetail.php', // API endpoint where you get employee details
+                        type: 'GET',
+                        data: {
+                            emp_id: emp_id
+                        },
+                        success: function(response) {
+                            var response = JSON.parse(response); //return the json response as an array
+                            
+                            // Assuming response is a JSON object containing phone
+                            document.getElementById('foc_phone').value = response.phone;
+                        console.log(response.phone);
+                        },
+                        error: function() {
+                            alert('Error fetching employee details');
+                        }
+                    });
+                } else {
+                    document.getElementById('foc_phone').value = '';
+                }
             });
 
             // When barcode is changed, fetch the items

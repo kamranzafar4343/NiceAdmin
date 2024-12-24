@@ -522,9 +522,7 @@ if ($resultData->num_rows > 0) {
                         <a href="viewOrder.php?id=' . $row['order_no'] . '" class="btn btn-success btn-sm">
                             <i class="fa-solid fa-eye"></i>
                         </a>
-                        <a href="viewWO.php?id=' . $row['order_no'] . '" class="btn btn-primary btn-sm">
-                            <i class="fa-solid fa-print"></i>
-                        </a>
+                        
                         <a href="deleteOrder.php?id=' . $row['order_no'] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\');">
                             <i class="fa-solid fa-trash"></i>
                         </a>

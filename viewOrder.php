@@ -549,18 +549,52 @@ date_default_timezone_set('Asia/Karachi');
 
                                     foreach ($barcodes as $barcode) {
 
+                                        echo '<li>' . htmlspecialchars($barcode) . '</li>'; // Escape HTML for safety
+
+                                        //run counter variables
                                         if (strlen(trim($barcode)) == 7) { // Check for 7-character barcodes
                                             $containerCount++;
                                         } elseif (strlen(trim($barcode)) == 8) { // Check for 8-character barcodes
                                             $filefolderCount++;
                                         }
-
-                                        echo '<li>' . htmlspecialchars($barcode) . '</li>'; // Escape HTML for safety
                                     }
                                     ?>
                         </div>
                         <div class="col-3 text-left">
                             Alternate Code:
+                            <?php
+                                    // Dynamically generate barcodes from the input
+                                    $barcodes = explode(',', $row['barcode']);
+                                    $barcodeList = implode(',', array_map('intval', $barcodes));
+
+                                    // Query to fetch grouped alternate codes
+                                    $getAlt = "SELECT barcode, GROUP_CONCAT(DISTINCT alt_code) AS alt_codes
+                                      FROM box
+                                      WHERE barcode IN ($barcodeList)
+                                      GROUP BY barcode";
+
+                                    $resultAlt = $conn->query($getAlt);
+
+                                    echo '<ul style="list-style: none; margin-left: -30px;">';
+
+                                    if ($resultAlt && $resultAlt->num_rows > 0) {
+                                        while ($rowAlt = $resultAlt->fetch_assoc()) {
+                                            $barcode = htmlspecialchars($rowAlt['barcode']);
+                                            $altCodes = explode(',', $rowAlt['alt_codes']); // Split concatenated alt codes
+
+                                            echo '<li>Barcode: ' . $barcode . '</li>';
+                                            echo '<ul>';
+                                            foreach ($altCodes as $altCode) {
+                                                echo '<li>' . htmlspecialchars($altCode) . '</li>';
+                                            }
+                                            echo '</ul>';
+                                        }
+                                    } else {
+                                        echo '<li>No barcodes or alternate codes found.</li>';
+                                    }
+
+                                    echo '</ul>';
+                            ?>
                             <br>
                         </div>
                         <div class="col-3 text-left">
@@ -571,7 +605,7 @@ date_default_timezone_set('Asia/Karachi');
 
                                     if ($resultFOC->num_rows > 0) {
                                         $rowFOC = $resultFOC->fetch_assoc();
-                                        echo $rowFOC['name'] . " / " .$branch_name ;
+                                        echo $rowFOC['name'] . " / " . $branch_name;
                                     }
                                 ?>
                             </p>

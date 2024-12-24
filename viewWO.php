@@ -565,12 +565,10 @@ date_default_timezone_set('Asia/Karachi');
                                 if ($resultShowOrders->num_rows > 0) {
 
                                     // Display table
-                                    echo '<table id="orderT" class="table mt-4 nowrap" style="font-size: 12px;">
+                                    echo '<table id="orderT" class="table mt-4 nowrap table-borderless" style="font-size: 12px;">
                     <thead>
                         <tr >
-                        <th scope="col" style="width: 8%;">Object</th>
                         <th scope="col" style="width: 8%;">Box</th>
-                        <th scope="col" style="width: 8%;">Items</th>
                         <th scope="col" style="width: 11%;">Requestor</th>
                         <th scope="col" style="width: 10%;">Role</th>
                         <th scope="col" style="width: 10%;">Request date</th>
@@ -583,16 +581,6 @@ date_default_timezone_set('Asia/Karachi');
                                     while ($row = $resultShowOrders->fetch_assoc()) {
                                         echo '<tr>';
 
-                                        //1st: show array values of object_code in list 
-                                        echo '<td>';
-                                        $objectCodes = explode(',', $row['object_code']); // Split comma-separated values into an array
-                                        echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
-                                        foreach ($objectCodes as $code) {
-                                            echo '<li>' . htmlspecialchars($code) . '</li>'; // Escape HTML for safety
-                                        }
-                                        echo '</ul>'; // End unordered list
-                                        echo '</td>';
-
                                         echo '<td>';
                                         $barcodes = explode(',', $row['barcode']); // Split comma-separated values into an array
                                         echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
@@ -600,18 +588,6 @@ date_default_timezone_set('Asia/Karachi');
                                             echo '<li>' . htmlspecialchars($barcode) . '</li>'; // Escape HTML for safety
                                         }
                                         
-                                        echo '</ul>'; // End unordered list
-                                        echo '</td>';
-                                        echo '<td>';
-                                        $item_barcodes = explode(',', $row['item_barcode']); // Split comma-separated values into an array
-                                        echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
-                                        foreach ($item_barcodes as $item_barcode) {
-                                            echo '<li>' . htmlspecialchars($item_barcode) . '</li>'; // Escape HTML for safety
-                                        }
-                                        echo '</ul>'; // End unordered list
-                                        echo '</td>';
-
-
                                         echo '</ul>'; // End unordered list
                                         echo '</td>';
 
@@ -639,7 +615,7 @@ date_default_timezone_set('Asia/Karachi');
                                     echo '</tbody></table>';
                                 } else {
                                     // Display message if no results
-                                    echo '<p>No items found.</p>';
+                                    echo '';
                                 }
 
                                 ?>

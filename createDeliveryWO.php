@@ -473,9 +473,12 @@ if (isset($_POST['submit'])) {
 
                     <!-- Select Requestor -->
                     <div class="col-md-4">
-                        <label for="requestor" class="form-label">Requestor Name</label>
-                        <input type="text" class="form-control" id="requestor" name="requestor_name" required>
+                        <label for="">Contact Person:</label>
+                        <select id="requestor" class="form-select" name="requestor_name">
+                            <option value="">Select contact person</option>
+                        </select>
                     </div>
+
                     <!--  Comments -->
                     <div class="col-md-4">
                         <label for="designation" class="form-label">Contact Person Role</label>
@@ -531,20 +534,33 @@ if (isset($_POST['submit'])) {
     <!-- Updated JavaScript with proper lev2Select selection -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <!-- made request date the default date -->
-<script>
-     window.onload = function() {
-        var now = new Date();
-        var year = now.getFullYear();
-        var month = ('0' + (now.getMonth() + 1)).slice(-2);  // Months are zero indexed
-        var day = ('0' + now.getDate()).slice(-2);
-        var hour = ('0' + now.getHours()).slice(-2);
-        var minute = ('0' + now.getMinutes()).slice(-2);
-        
-        var dateTime = year + '-' + month + '-' + day + 'T' + hour + ':' + minute;
-        document.getElementById('req_date').value = dateTime;
-    };
-</script>
+    <script>
+        window.onload = function() {
+            //user can't select the date before current date in required by field
+            const dateField = document.getElementById('dateField');
+            const req_date = document.getElementById('req_date');
+
+            const now = new Date();
+            var year = now.getFullYear();
+            var month = ('0' + (now.getMonth() + 1)).slice(-2); // Months are zero indexed
+            var day = ('0' + now.getDate()).slice(-2);
+            var hour = ('0' + now.getHours()).slice(-2);
+            var minute = ('0' + now.getMinutes()).slice(-2);
+
+            // Format the date and time in the format yyyy-MM-ddTHH:mm
+            const formattedDateTime = now.toISOString().slice(0, 16);
+            const formattedDateTime2 = now.toISOString().slice(0, 16);
+
+
+            dateField.min = formattedDateTime;
+
+            req_date.min = formattedDateTime2;
+
+            // Set the default value of required by field to current date and time
+            var dateTime = year + '-' + month + '-' + day + 'T' + hour + ':' + minute;
+            document.getElementById('req_date').value = dateTime;
+        };
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -562,6 +578,7 @@ if (isset($_POST['submit'])) {
             dselect(document.querySelector('#branch'), config);
             dselect(document.querySelector('#dept'), config);
             dselect(document.querySelector('#emp'), config);
+            dselect(document.querySelector('#requestor'), config);
             dselect(document.querySelector('#barcode'), config);
 
             // When company is changed, fetch the branches
@@ -658,6 +675,39 @@ if (isset($_POST['submit'])) {
                 });
             });
 
+            // When branch is changed, fetch the employees
+            $('#branch').change(function() {
+                var branch_id = $(this).val();
+
+                console.log(branch_id);
+
+                // AJAX request to get requestor's for the selected branch
+                $.ajax({
+                    url: 'get_employees.php',
+                    type: 'POST',
+                    data: {
+                        branch_id: branch_id
+                    },
+                    success: function(response) {
+                        try {
+                            var employees = JSON.parse(response); //return the json response as an array
+                            // Clear existing employees
+                            $('#requestor').empty();
+                            $('#requestor').append('<option value="">Select requestor</option>');
+
+                            // Add the new options from the response
+                            $.each(employees, function(index, employe) {
+                                $('#requestor').append('<option value="' + employe.emp_id + '">' + employe.name + '</option>');
+                            });
+                            // Refresh or reinitialize dselect
+                            dselect(document.querySelector('#requestor'), config);
+                        } catch (e) {
+                            console.error("Invalid JSON response", response);
+                        }
+                    }
+                });
+            });
+
             // When branch is changed, fetch the barcodes
             $('#branch').change(function() {
                 var branch_id = $(this).val();
@@ -717,7 +767,6 @@ if (isset($_POST['submit'])) {
                 }
             });
 
-
             //show the address of employee on selection
             $('#emp').change(function() {
                 var emp_id = $(this).val();
@@ -743,6 +792,32 @@ if (isset($_POST['submit'])) {
                     document.getElementById('pickup_address').value = '';
                 }
             });
+
+            //show the role of employee on selection
+            $('#emp').change(function() {
+                var emp_id = $(this).val();
+                if (emp_id) {
+                    $.ajax({
+                        url: 'getEmpDetail.php', // API endpoint where you get employee details
+                        type: 'GET',
+                        data: {
+                            emp_id: emp_id
+                        },
+                        success: function(response) {
+                            var response = JSON.parse(response); 
+
+                            document.getElementById('designation').value = response.role;
+                            console.log(response.role);
+                        },
+                        error: function() {
+                            alert('Error fetching employee details');
+                        }
+                    });
+                } else {
+                    document.getElementById('designation').value = '';
+                }
+            });
+
 
         });
     </script>

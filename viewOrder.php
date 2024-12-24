@@ -146,232 +146,226 @@ date_default_timezone_set('Asia/Karachi');
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<style>
-    /* Custom CSS to decrease font size of the table */
+    <style>
+        /* Custom CSS to decrease font size of the table */
 
-    .company-name {
-        font-size: 1rem;
-    }
-
-    .datatable-wrapper.no-footer .datatable-container {
-        border: none;
-        margin-left: -315px !important;
-        width: 700px !important;
-    }
-
-    .company-title {
-        font-size: 1.1rem;
-    }
-
-    .burger {
-        left: -10px;
-        top: -20px;
-    }
-
-    /* Define the pulse animation */
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
+        .company-name {
+            font-size: 1rem;
         }
 
-        50% {
-            transform: scale(1.1);
+        .datatable-wrapper.no-footer .datatable-container {
+            border: none;
+            margin-left: -315px !important;
+            width: 700px !important;
         }
 
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    /* Define the click animation */
-    @keyframes clickEffect {
-        0% {
-            transform: scale(1);
-            opacity: 1;
+        .company-title {
+            font-size: 1.1rem;
         }
 
-        50% {
-            transform: scale(0.9);
-            opacity: 0.7;
+        .burger {
+            left: -10px;
+            top: -20px;
         }
 
-        100% {
-            transform: scale(1);
-            opacity: 1;
+        /* Define the pulse animation */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-    }
 
-    .customImage {
-        border: 1px solid white;
-        position: relative;
-        top: 36%;
-        left: 25%;
+        /* Define the click animation */
+        @keyframes clickEffect {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
 
-    }
+            50% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
 
-    .card {
-        margin-bottom: 30px;
-        border: none;
-        border-radius: 5px;
-        box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
-        background-color: white;
-        font-size: 0.8rem;
-        margin-top: 38px;
-    }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
 
-    .container-card {
-        font-size: 0.8rem;
-        color: #666666;
-        font-family: "Open Sans";
-        width: 84%;
-    }
 
-    /* Custom CSS to place card and table side by side */
-    .side-by-side-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        /* Align items to the start of the container */
-        gap: 20px;
-        /* Space between the card and table */
-    }
 
-    .company-name {
-        color: #000;
-        text-decoration: none;
-        display: inline-block;
-        transition: color 0.3s ease;
-    }
+        .card {
+            margin-bottom: 30px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+            background-color: white;
+            font-size: 0.8rem;
+            margin-top: 38px;
+        }
 
-    .img-fluid {
-        margin-top: 20px;
-        margin-left: 37px !important;
-        margin-bottom: 15px;
-    }
+        .container-card {
+            font-size: 0.8rem;
+            color: #666666;
+            font-family: "Open Sans";
+            width: 84%;
+        }
 
-    .company-name:hover {
-        color: #007bff;
-        /* Change color on hover */
-        animation: pulse 10s ease-in-out;
-        /* Apply the pulse animation on hover */
-    }
+        /* Custom CSS to place card and table side by side */
+        .side-by-side-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            /* Align items to the start of the container */
+            gap: 20px;
+            /* Space between the card and table */
+        }
 
-    .company-name:active {
-        animation: clickEffect 0.s ease;
-        /* Apply the click effect animation on click */
-        color: #0056b3;
-        /* Darken color on click */
-    }
+        .company-name {
+            color: #000;
+            text-decoration: none;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
 
-    .pagetitleinside {
-        padding-left: 600px;
-    }
+        .img-fluid {
+            margin-top: 20px;
+            margin-left: 37px !important;
+            margin-bottom: 15px;
+        }
 
-    * {
-        margin: 0;
+        .company-name:hover {
+            color: #007bff;
+            /* Change color on hover */
+            animation: pulse 10s ease-in-out;
+            /* Apply the pulse animation on hover */
+        }
 
-        padding: 0;
+        .company-name:active {
+            animation: clickEffect 0.s ease;
+            /* Apply the click effect animation on click */
+            color: #0056b3;
+            /* Darken color on click */
+        }
 
-        box-sizing: border-box;
-    }
+        .pagetitleinside {
+            padding-left: 600px;
+        }
 
-    .remix {
-        margin-right: 5px;
-    }
+        * {
+            margin: 0;
 
-    /* styles for card */
-    .custom {
-        font-size: 0.8rem;
-        border-radius: 7px;
-        padding-top: 14px;
-        padding-bottom: 14px;
-        padding-right: 14px;
-        padding-left: 18px;
-        margin-left: 307px;
-        /* table-layout: fixed; */
-        /* width: 100%; */
-        /* overflow: hidden; */
-        /* text-overflow: ellipsis; */
-        /* white-space: nowrap; */
-    }
+            padding: 0;
 
-    tbody,
-    td,
-    tr {
-        word-wrap: break-word;
-        max-width: 200px;
-    }
+            box-sizing: border-box;
+        }
 
-    .card-title-info {
-        text-align: center;
-    }
+        .remix {
+            margin-right: 5px;
+        }
 
-    .datatable-top {
-        margin-left: 10px !important;
-        width: 0px;
-    }
+        /* styles for card */
+        .custom {
+            font-size: 0.8rem;
+            border-radius: 7px;
+            padding-top: 14px;
+            padding-bottom: 14px;
+            padding-right: 14px;
+            padding-left: 18px;
+            margin-left: 307px;
+            /* table-layout: fixed; */
+            /* width: 100%; */
+            /* overflow: hidden; */
+            /* text-overflow: ellipsis; */
+            /* white-space: nowrap; */
+        }
 
-    .customImage {
-        border: 1px solid white;
-        position: relative;
-        top: 36%;
-        left: 25%;
+        tbody,
+        td,
+        tr {
+            word-wrap: break-word;
+            max-width: 200px;
+        }
 
-        /* Change cursor to indicate clickability */
-    }
+        .card-title-info {
+            text-align: center;
+        }
 
-    .hiddenFileInput {
-        display: none;
-        /* Hide the file input */
-    }
+        .datatable-top {
+            margin-left: 10px !important;
+            width: 0px;
+        }
 
-    /*Employee header*/
-    .headerSetting {
-        display: flex;
-        gap: 250px;
-    }
+        .customImage {
+            border: 1px solid white;
+            position: relative;
+            top: 36%;
+            left: 25%;
 
-    .barcode {
-        height: 30px;
-        width: 230px;
-        position: relative;
-        left: -38px;
-    }
+            /* Change cursor to indicate clickability */
+        }
 
-    body {
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        font-size: 16px;
-    }
+        .hiddenFileInput {
+            display: none;
+            /* Hide the file input */
+        }
 
-    .invoice-container {
-        margin: 20px auto;
-        padding: 20px;
-        max-width: 900px;
-        background-color: #fff;
-    }
+        /*Employee header*/
+        .headerSetting {
+            display: flex;
+            gap: 250px;
+        }
 
-    .header-section {
-        border-bottom: 1px solid #000;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-    }
+        .barcode {
+            height: 30px;
+            width: 230px;
+            position: relative;
+            left: -38px;
+        }
 
-    .section-title {
-        font-weight: bold;
-        text-align: center;
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 16px;
+        }
 
-    }
+        .invoice-container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 900px;
+            background-color: #fff;
+        }
 
-    .signature-area {
-        margin-top: 50px;
-        text-align: center;
-    }
-</style>
+        .header-section {
+            border-bottom: 1px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
 
-<!-- Template Main CSS File -->
-<link href="assets/css/style.css" rel="stylesheet">
+        .section-title {
+            font-weight: bold;
+            text-align: center;
 
-<!-- =======================================================
+        }
+
+        .signature-area {
+            margin-top: 50px;
+            text-align: center;
+        }
+    </style>
+
+    <!-- Template Main CSS File -->
+    <link href="assets/css/style.css" rel="stylesheet">
+
+    <!-- =======================================================
   * Template Name: NiceAdmin
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
   * Updated: Apr 20 2024 with Bootstrap v5.3.3
@@ -442,15 +436,15 @@ date_default_timezone_set('Asia/Karachi');
         </nav><!-- End Icons Navigation -->
 
     </header><!-- End Header -->
-  <!-- sidebar start -->
-  <?php
-  include "sidebarcode.php";
-  ?>
-  <!-- sidebar end -->
+    <!-- sidebar start -->
+    <?php
+    include "sidebarcode.php";
+    ?>
+    <!-- sidebar end -->
 
     <main id="main" class="main">
         <!-- Print Button -->
-        <button class="btn btn-primary mb-2 mt-3" style="margin-left: 840px;" onclick="$('#workorder').print();"><i class="ri-printer-line"></i>  Print</button>
+        <button class="btn btn-primary mb-2 mt-3" style="margin-left: 840px;" onclick="$('#workorder').print();"><i class="ri-printer-line"></i> Print</button>
         <div class="headerbox">
         </div><!-- End Page Title -->
         <div class="pagetitleinside mt-1">
@@ -537,22 +531,43 @@ date_default_timezone_set('Asia/Karachi');
                             </p>
                         </div>
                         <div class="col-3 text-center">
-                            <p>Containers: <br>
-                                ???<br>
-                            </p>
+                            <?php $showOrders = "Select * FROM orders WHERE order_no = '$order_no'";
+                            $resultShowOrders = $conn->query($showOrders);
 
+                            // Check if there are any results
+                            if ($resultShowOrders->num_rows > 0) {
+                                // Loop through results
+                                while ($row = $resultShowOrders->fetch_assoc()) {
+                            ?>
+                                    Containers:
+                                    <?php
+                                    $barcodes = explode(',', $row['barcode']); // Split comma-separated values into an array
+                                    echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
+
+                                    $containerCount = 0;
+                                    $filefolderCount = 0;
+
+                                    foreach ($barcodes as $barcode) {
+
+                                        if (strlen(trim($barcode)) == 7) { // Check for 7-character barcodes
+                                            $containerCount++;
+                                        } elseif (strlen(trim($barcode)) == 8) { // Check for 8-character barcodes
+                                            $filefolderCount++;
+                                        }
+
+                                        echo '<li>' . htmlspecialchars($barcode) . '</li>'; // Escape HTML for safety
+                                    }
+                                    ?>
                         </div>
                         <div class="col-3 text-left">
-                            <p>Alternate Code: <br>
-                                ???<br>
-                            </p>
+                            Alternate Code:
+                            <br>
                         </div>
                         <div class="col-3 text-left">
                             <p>Requestor: <br>
                                 ????<br>
                             </p>
                         </div>
-
 
                         <div class="section-title mb-2 mt-3">WORKORDER SUMMARY</div>
 
@@ -564,44 +579,55 @@ date_default_timezone_set('Asia/Karachi');
 
                             <div class="col-4">
 
-                                <p>Containers:<br>
-                                    ???<br>
+                                <p>Containers:
+                                    <?php
+                                echo $containerCount;
+                                    ?><br>
                                 </p>
                             </div>
                             <div class="col-4 text-center">
-                                <p>Filefolders:<br>
-                                    ???<br>
+                                <p>Filefolders:
+                                    <?php
+                                echo $filefolderCount;
+                                    ?><br>
                                 </p>
 
                             </div>
                         </div>
-
-                        <br><br><br><br><br>
-                        <br><br><br><br>
-                        <br><br><br><br>
-                        <br><br><br><br><br>
-
-                        <br><br><br><br><br>
-                        <br><br><br><br>
-                        <br><br><br><br>
-                        <br><br><br><br>
-                        <br><br><br><br>
+                <?php
 
 
-                        <div class="row mt-5">
-                            <div class="col-6 text-center">
 
-                                ----------------------------
-                                <br> Signature
+                                }
+                            }
+                ?>
+                <br><br><br><br><br>
+                <br><br><br><br>
+                <br><br><br><br>
+                <br><br><br><br><br>
 
-                            </div>
-                            <br>
-                            <div class="col-6 text-center">
-                                ----------------------------
-                                <br> Signature
+                <br><br><br><br><br>
+                <br><br><br><br>
+                <br><br><br><br>
+                <br><br><br><br>
+                <br><br><br><br>
 
-                            </div>
-                        </div>
+
+                <div class="row mt-5">
+                    <div class="col-6 text-center">
+
+                        ------------------------------------------------------------------------------
+                        <br> Data Technologies
+
+                    </div>
+                    <br>
+                    <div class="col-6 text-center">
+                        ------------------------------------------------------------------------------
+                        <br> <?php echo $comp_name ?> -
+                        <?php echo $branch_name ?>
+
+                    </div>
+                </div>
 
                     </div>
                 </div>

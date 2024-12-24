@@ -492,7 +492,7 @@ date_default_timezone_set('Asia/Karachi');
                                     <?php echo $comp_name ?><br>
                                     <?php echo $branch_name ?><br>
                                     <?php echo $pickup_add ?><br>
-                                    CONTACT: <?php echo $foc ?><br>
+                                    CONTACT: <?php echo $role ?><br>
                                     PHONE: <?php echo $phone ?><br>
                                 </p>
                             </div>
@@ -565,7 +565,15 @@ date_default_timezone_set('Asia/Karachi');
                         </div>
                         <div class="col-3 text-left">
                             <p>Requestor: <br>
-                                ????<br>
+                                <?php
+                                    $getFOC = "SELECT * FROM employee WHERE emp_id = '$foc'";
+                                    $resultFOC = $conn->query($getFOC);
+
+                                    if ($resultFOC->num_rows > 0) {
+                                        $rowFOC = $resultFOC->fetch_assoc();
+                                        echo $rowFOC['name'] . " / " .$branch_name ;
+                                    }
+                                ?>
                             </p>
                         </div>
 
@@ -581,14 +589,14 @@ date_default_timezone_set('Asia/Karachi');
 
                                 <p>Containers:
                                     <?php
-                                echo $containerCount;
+                                    echo $containerCount;
                                     ?><br>
                                 </p>
                             </div>
                             <div class="col-4 text-center">
                                 <p>Filefolders:
                                     <?php
-                                echo $filefolderCount;
+                                    echo $filefolderCount;
                                     ?><br>
                                 </p>
 

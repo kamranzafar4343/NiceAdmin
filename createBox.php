@@ -28,7 +28,8 @@ if ($resultData->num_rows > 0) {
 }
 
 // Audit log function
-function logAudit($action_by, $action, $description) {
+function logAudit($action_by, $action, $description)
+{
     global $conn;
 
     // Escape and sanitize inputs
@@ -56,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $barcode = mysqli_real_escape_string($conn, $_POST['barcode_select']);
     $alt_code = mysqli_real_escape_string($conn, $_POST['alt_code']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $location = mysqli_real_escape_string($conn, $_POST['loc']);
 
     //check if barcode is already in use
     $checkBarcode = "SELECT * FROM box WHERE barcode = '$barcode'";
@@ -67,18 +69,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Insert data into box table
-    $sql = "INSERT INTO box (comp_id_fk, branch_id_fk, dept_id_fk, object, barcode, alt_code, box_desc, status) 
-            VALUES ('$company', '$branch', '$dept','$object_code',  '$barcode', '$alt_code', '$description', 'In')";
+    $sql = "INSERT INTO box (comp_id_fk, branch_id_fk, dept_id_fk, object, barcode, alt_code, box_desc, status, location) 
+            VALUES ('$company', '$branch', '$dept','$object_code',  '$barcode', '$alt_code', '$description', 'In', '$location')";
 
     if ($conn->query($sql) === TRUE) {
 
-         // Prepare details for logging the audit
-         $action_by = "Created by the user-id: $session_userId, user-role: $session_user_role, user-email: $session_email";
-         $action = 'Create';
-         $description = "Created record: Object Code - $object_code, Barcode - $barcode, Alt Code - $alt_code, Status - In, Description - $description";
-        
-         // Log the audit
-         logAudit($action_by, $action, $description);
+        // Prepare details for logging the audit
+        $action_by = "Created by the user-id: $session_userId, user-role: $session_user_role, user-email: $session_email";
+        $action = 'Create';
+        $description = "Created record: Object Code - $object_code, Barcode - $barcode, Alt Code - $alt_code, Status - In, Description - $description, Location - $location";
+
+        // Log the audit
+        logAudit($action_by, $action, $description);
 
         $_SESSION['success_message_box'] = "Box added successfully.";
         header("location: createBox.php");
@@ -159,6 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- dselect -->
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+    
     <!-- ALERTIFY CSS -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css" />
@@ -442,6 +445,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="alt_code" class="form-label">Alt Code</label>
                         <input type="text" class="form-control" id="alt_code" name="alt_code" placeholder="Enter Alt code">
                     </div>
+                    <!-- locations -->
+                    <div class="col-md-4">
+                        <label for="loc">Location:</label>
+                        <select id="loc" class="form-select" name="loc" required>
+                            <option value="">Select Location</option>
+                            <?php
+                            // Fetch the location from the database
+                            $result = $conn->query("SELECT id, rack_location FROM racks");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['rack_location']}'>{$row['rack_location']} </option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <!-- FOR the location description code
+                    <div class="col-md-6">
+                        <label for="alt_code" class="form-label">Location Description</label>
+                        <input type="text" class="form-control" id="loc_desc" name="loc_desc" placeholder="Enter Location Description">
+                    </div> -->
                     <hr style="color: white;">
                     <!--  Description -->
                     <div class="col-md-6">
@@ -459,7 +481,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-
+    <!-- check the user entered the location in correct format -->
+    <script>
+        function validateForm(event) {
+            const location = document.getElementById('loc');
+            const pattern = /^L[0-9]-[A-Z]-[0-9]{2}-[A-Z]-[0-9]{2}$/;
+            if (!pattern.test(location.value)) {
+                alert("Please enter a valid location in the format L1-A-02-D-06 (L followed by a digit, a letter, two digits, another letter, and two digits)");
+                event.preventDefault();
+                }
+        }
+    </script>
 
     <!--Function to update the barcode input field on selection of the object type-->
     <script>
@@ -510,6 +542,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             dselect(document.querySelector('#company'), config);
             dselect(document.querySelector('#branch'), config);
             dselect(document.querySelector('#dept'), config);
+            dselect(document.querySelector('#loc'), config);
 
             // When company is changed, fetch the branches
             $('#company').change(function() {

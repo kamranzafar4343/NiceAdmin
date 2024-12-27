@@ -562,6 +562,7 @@ End Search Bar -->
                         <th scope="col">Barcode No.</th>
                         <th scope="col">Alt Code</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Location</th>
                         <th scope="col">Added On</th>';
 
                         if ($_SESSION['role'] == 'admin') {
@@ -583,6 +584,7 @@ End Search Bar -->
                             echo "<td>{$row['barcode']}</td>";
                             echo "<td>{$row['alt_code']}</td>";
                             echo "<td>{$row['status']}</td>";
+                            echo "<td>{$row['location']}</td>";
                             echo "<td>{$created_at}</td>";
 
                             if ($_SESSION['role'] == 'admin') {

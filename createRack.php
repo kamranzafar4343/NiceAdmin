@@ -340,12 +340,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     </header><!-- End Header -->
 
-  <!-- sidebar start -->
-  <?php
-  include "sidebarcode.php";
-  ?>
-  <!-- sidebar end -->
-   
+    <!-- sidebar start -->
+    <?php
+    include "sidebarcode.php";
+    ?>
+    <!-- sidebar end -->
+
     <!--form--------------------------------------form--------------------------------------->
 
     <!-- Start Header Form -->
@@ -385,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- Capacity -->
                     <div class="col-md-6">
                         <label for="capacity" class="form-label">Capacity</label>
-                        <input type="number" class="form-control" id="capacity" name="capacity" value="9" required>
+                        <input type="number" class="form-control" id="capacity" name="capacity" value="9" readonly>
                     </div>
 
 
@@ -402,7 +402,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <!-- End Form Container -->
 
-    <!-- Include Bootstrap JS (with Popper) -->
+    
+
+        <!-- Include Bootstrap JS (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Modal for duplicate entry error -->

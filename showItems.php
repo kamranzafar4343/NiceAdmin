@@ -20,7 +20,7 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$sql = "SELECT * FROM item ORDER BY item_id DESC";
+$sql = "SELECT * FROM item ORDER BY creation_date DESC";
 $result = $conn->query($sql);
 
 ?>

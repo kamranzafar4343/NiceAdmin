@@ -531,7 +531,7 @@ End Search Bar -->
                         JOIN departments d ON b.dept_id_fk = d.dept_id 
                         WHERE d.dept_name LIKE '%$value%'";
                         } else {
-                            $sql = "SELECT * FROM box WHERE $column LIKE '%$value%'";
+                            $sql = "SELECT * FROM box WHERE $column LIKE '%$value%' ORDER BY created_at DESC";
                         }
                     }
 

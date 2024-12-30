@@ -37,7 +37,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Fetch branches of the company
-$sql = "SELECT * FROM branches WHERE comp_id_fk = $company_id";
+$sql = "SELECT * FROM branches WHERE comp_id_fk = $company_id ORDER BY registration_date DESC";
 $result = $conn->query($sql);
 
 //2nd query to fetch the info of the company to show on top of table

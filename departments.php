@@ -37,7 +37,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] != 'admin') {
 $branch_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 //Fetch departments of a branch
-$sql = "SELECT * FROM `departments` WHERE `branch_id_fk` = $branch_id";
+$sql = "SELECT * FROM `departments` WHERE `branch_id_fk` = $branch_id ORDER BY registration DESC";
 $result = $conn->query($sql);
 
 //get name of branch to show on top of table

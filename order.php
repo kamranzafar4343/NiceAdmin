@@ -457,7 +457,7 @@ if ($resultData->num_rows > 0) {
                   WHERE d.dept_name LIKE '%$value%'";
                         } else {
                             // Search other fields in the orders table
-                            $query = "SELECT * FROM orders WHERE $column LIKE '%$value%'";
+                            $query = "SELECT * FROM orders WHERE $column LIKE '%$value%' ORDER BY order_creation_date DESC";
                         }
                     }
 

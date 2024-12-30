@@ -264,13 +264,13 @@ $result = $conn->query($sql);
         <!-- Table -->
         <?php
         // Default query (no rows initially)
-        $query = "SELECT * FROM compani WHERE 1=0";
+        $query = "SELECT * FROM compani WHERE 1=0 ";
 
         // If Search Button is Clicked
         if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
             $column = $conn->real_escape_string($_GET['column']);
             $value = $conn->real_escape_string($_GET['value']);
-            $query = "SELECT * FROM compani WHERE $column LIKE '%$value%'";
+            $query = "SELECT * FROM compani WHERE $column LIKE '%$value%' ORDER BY registration DESC";
         }
 
         // If Date Range Filter is Applied
@@ -290,7 +290,7 @@ $result = $conn->query($sql);
 
         // Display Table if Results Exist
         if ($result && $result->num_rows > 0) {
-            echo '<table id="companies" class="table table-striped mt-4">
+            echo '<table id="companies" class="table mt-4">
                     <thead>
                         <tr>
                             <th scope="col">Company Name</th>

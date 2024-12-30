@@ -627,6 +627,24 @@ date_default_timezone_set('Asia/Karachi');
                             </p>
                         </div>
 
+                        <!-- show description -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?php 
+                                    if(!empty($description)){
+                                        ?>
+                                        <p><b>Description</b>: </b><br>
+                                        <?php
+                                        echo $description;
+                                    }
+                                ?>
+                            </div>
+  
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+
                         <div class="section-title mb-2 mt-3">WORKORDER SUMMARY</div>
 
                         <p>Total <?php echo $flag; ?> Items

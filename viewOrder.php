@@ -572,7 +572,7 @@ date_default_timezone_set('Asia/Karachi');
                                     $resultAltAndLocation = $conn->query($getAltAndLocation);
 
                                     // Start the table
-                                    echo '<table class="table table-borderless">';
+                                    echo '<table class="table table-borderless" >';
                                     echo '<thead>';
                                     echo '<tr>';
                                     echo '<th>Location</th>';

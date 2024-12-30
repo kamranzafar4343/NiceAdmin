@@ -454,11 +454,11 @@ date_default_timezone_set('Asia/Karachi');
 
     </header><!-- End Header -->
 
-      <!-- sidebar start -->
-  <?php
-  include "sidebarcode.php";
-  ?>
-  <!-- sidebar end -->
+    <!-- sidebar start -->
+    <?php
+    include "sidebarcode.php";
+    ?>
+    <!-- sidebar end -->
 
     <main id="main" class="main">
 
@@ -566,7 +566,7 @@ date_default_timezone_set('Asia/Karachi');
 
                                     // Display table
                                     echo '<table id="orderT" class="table mt-4 nowrap table-borderless" style="font-size: 12px;">
-                    <thead>
+                    <thead >
                         <tr >
                         <th scope="col" style="width: 8%;">Box</th>
                         <th scope="col" style="width: 11%;">Requestor</th>
@@ -574,7 +574,7 @@ date_default_timezone_set('Asia/Karachi');
                         <th scope="col" style="width: 10%;">Request date</th>
                         <th scope="col" style="width: 10%;">Create Date</th>
                         <th scope="col" style="width: 8%;">Description</th>';
-                                    echo '</tr>
+                        echo '</tr>
                     </thead>
                     <tbody>';
                                     // Loop through results
@@ -587,7 +587,7 @@ date_default_timezone_set('Asia/Karachi');
                                         foreach ($barcodes as $barcode) {
                                             echo '<li>' . htmlspecialchars($barcode) . '</li>'; // Escape HTML for safety
                                         }
-                                        
+
                                         echo '</ul>'; // End unordered list
                                         echo '</td>';
 

@@ -68,26 +68,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    // Insert data into box table
-    $sql = "INSERT INTO box (comp_id_fk, branch_id_fk, dept_id_fk, object, barcode, alt_code, box_desc, status, location) 
+    // Check if the selected rack already contains 9 boxes (max limit for each rack)
+    $rack_limit_check_sql = "SELECT COUNT(*) as total_boxes FROM box WHERE location = '$location'";
+    $rack_limit_check_result = $conn->query($rack_limit_check_sql);
+    $rack_data = $rack_limit_check_result->fetch_assoc();
+
+    if ($rack_data['total_boxes'] >= 9) {
+        // Rack already contains 9 boxes, show error
+        echo "<script>alert('The selected rack reached its maximum capacity(9 boxes)'); window.location.href = 'createBox.php';</script>";
+        exit();
+    } else {
+        // SQL query to insert data into the database
+        $sql = "INSERT INTO box (comp_id_fk, branch_id_fk, dept_id_fk, object, barcode, alt_code, box_desc, status, location) 
             VALUES ('$company', '$branch', '$dept','$object_code',  '$barcode', '$alt_code', '$description', 'In', '$location')";
 
-    if ($conn->query($sql) === TRUE) {
+        if ($conn->query($sql) === TRUE) {
 
-        // Prepare details for logging the audit
-        $action_by = "Created by the user-id: $session_userId, user-role: $session_user_role, user-email: $session_email";
-        $action = 'Create';
-        $description = "Created record: Object Code - $object_code, Barcode - $barcode, Alt Code - $alt_code, Status - In, Description - $description, Location - $location";
+            // Prepare details for logging the audit
+            $action_by = "Created by the user-id: $session_userId, user-role: $session_user_role, user-email: $session_email";
+            $action = 'Create';
+            $description = "Created record: Object Code - $object_code, Barcode - $barcode, Alt Code - $alt_code, Status - In, Description - $description, Location - $location";
 
-        // Log the audit
-        logAudit($action_by, $action, $description);
+            // Log the audit
+            logAudit($action_by, $action, $description);
 
-        $_SESSION['success_message_box'] = "Box added successfully.";
-        header("location: createBox.php");
-        exit;
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-        exit;
+            $_SESSION['success_message_box'] = "Box added successfully.";
+            header("location: createBox.php");
+            exit;
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+            exit;
+        }
     }
 
     $conn->close();
@@ -161,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- dselect -->
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
-    
+
     <!-- ALERTIFY CSS -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.rtl.min.css" />
@@ -489,7 +500,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!pattern.test(location.value)) {
                 alert("Please enter a valid location in the format L1-A-02-D-06 (L followed by a digit, a letter, two digits, another letter, and two digits)");
                 event.preventDefault();
-                }
+            }
         }
     </script>
 

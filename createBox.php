@@ -446,7 +446,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="text" class="form-control" id="alt_code" name="alt_code" placeholder="Enter Alt code">
                     </div>
                     <!-- locations -->
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="loc">Location:</label>
                         <select id="loc" class="form-select" name="loc" required>
                             <option value="">Select Location</option>

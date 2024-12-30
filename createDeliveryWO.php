@@ -725,12 +725,11 @@ if (isset($_POST['submit'])) {
                             var boxes = JSON.parse(response); //return the json response as an array
                             // Clear existing dept's
                             $('#barcode').empty();
-                            $('#barcode').append('<option value="">Select 1 or more boxes</option>');
+                            $('#barcode').append('<option value="">Select box</option>');
 
                             // Add the new options from the response
                             $.each(boxes, function(index, box) {
                                 $('#barcode').append('<option value="' + box.barcode + '">' + box.barcode + '</option>');
-
                             });
                             // Refresh or reinitialize dselect
                             dselect(document.querySelector('#barcode'), config);

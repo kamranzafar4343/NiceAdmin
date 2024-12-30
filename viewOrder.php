@@ -445,6 +445,7 @@ date_default_timezone_set('Asia/Karachi');
     <main id="main" class="main">
         <!-- Print Button -->
         <button class="btn btn-primary mb-2 mt-3" style="margin-left: 840px;" onclick="$('#workorder').print();"><i class="ri-printer-line"></i> Print</button>
+        <!-- <button class="btn btn-info mb-2 mt-3" style="margin-left: 840px;"><i class="ri-printer-line"></i> Download</button> -->
         <div class="headerbox">
         </div><!-- End Page Title -->
         <div class="pagetitleinside mt-1">
@@ -525,12 +526,8 @@ date_default_timezone_set('Asia/Karachi');
                     </div>
 
                     <div class="row">
-                        <div class="col-3">
-                            <p>Location:<br>
-                                ???<br>
-                            </p>
-                        </div>
-                        <div class="col-3 text-center">
+
+                        <div class="col-0 text-center">
                             <?php $showOrders = "Select * FROM orders WHERE order_no = '$order_no'";
                             $resultShowOrders = $conn->query($showOrders);
 
@@ -539,17 +536,14 @@ date_default_timezone_set('Asia/Karachi');
                                 // Loop through results
                                 while ($row = $resultShowOrders->fetch_assoc()) {
                             ?>
-                                    Containers:
                                     <?php
                                     $barcodes = explode(',', $row['barcode']); // Split comma-separated values into an array
-                                    echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
+                                    // echo '<ul style="list-style: none; margin-left: -30px;">'; // Start unordered list
 
                                     $containerCount = 0;
                                     $filefolderCount = 0;
 
                                     foreach ($barcodes as $barcode) {
-
-                                        echo '<li>' . htmlspecialchars($barcode) . '</li>'; // Escape HTML for safety
 
                                         //run counter variables
                                         if (strlen(trim($barcode)) == 7) { // Check for 7-character barcodes
@@ -560,45 +554,67 @@ date_default_timezone_set('Asia/Karachi');
                                     }
                                     ?>
                         </div>
-                        <div class="col-3 text-left">
-                            Alternate Code:
+                        <div class="col-9 text-left">
                             <?php
                                     // Dynamically generate barcodes from the input
                                     $barcodes = explode(',', $row['barcode']);
                                     $barcodeList = implode(',', array_map('intval', $barcodes));
 
-                                    // Query to fetch grouped alternate codes
-                                    $getAlt = "SELECT barcode, GROUP_CONCAT(DISTINCT alt_code) AS alt_codes
-                                      FROM box
-                                      WHERE barcode IN ($barcodeList)
-                                      GROUP BY barcode";
+                                    // Query to fetch grouped alternate codes and locations
+                                    $getAltAndLocation = "
+        SELECT barcode, 
+               GROUP_CONCAT(DISTINCT alt_code) AS alt_codes,
+               GROUP_CONCAT(DISTINCT location) AS locations
+        FROM box
+        WHERE barcode IN ($barcodeList)
+        GROUP BY barcode";
 
-                                    $resultAlt = $conn->query($getAlt);
+                                    $resultAltAndLocation = $conn->query($getAltAndLocation);
 
-                                    echo '<ul style="list-style: none; margin-left: -30px;">';
+                                    // Start the table
+                                    echo '<table class="table table-borderless">';
+                                    echo '<thead>';
+                                    echo '<tr>';
+                                    echo '<th>Location</th>';
+                                    echo '<th>Containers</th>';
+                                    echo '<th>Alternate Code</th>';
+                                    echo '</tr>';
+                                    echo '</thead>';
+                                    echo '<tbody>';
 
-                                    if ($resultAlt && $resultAlt->num_rows > 0) {
-                                        while ($rowAlt = $resultAlt->fetch_assoc()) {
-                                            $barcode = htmlspecialchars($rowAlt['barcode']);
-                                            $altCodes = explode(',', $rowAlt['alt_codes']); // Split concatenated alt codes
+                                    if ($resultAltAndLocation && $resultAltAndLocation->num_rows > 0) {
+                                        while ($rowAltLoc = $resultAltAndLocation->fetch_assoc()) {
+                                            $barcode = htmlspecialchars($rowAltLoc['barcode']);
+                                            $altCodes = isset($rowAltLoc['alt_codes']) ? explode(',', $rowAltLoc['alt_codes']) : []; // Handle NULL values
+                                            $locations = isset($rowAltLoc['locations']) ? explode(',', $rowAltLoc['locations']) : []; // Handle NULL values
 
-                                            echo '<li>Barcode: ' . $barcode . '</li>';
-                                            echo '<ul>';
-                                            foreach ($altCodes as $altCode) {
-                                                echo '<li>' . htmlspecialchars($altCode) . '</li>';
+                                            // Ensure there is a row for each combination of location and alternate code
+                                            $maxRows = max(count($locations), count($altCodes));
+
+                                            for ($i = 0; $i < $maxRows; $i++) {
+                                                echo '<tr>';
+                                                echo '<td>' . htmlspecialchars($locations[$i] ?? 'N/A') . '</td>'; // Use 'N/A' if location is missing
+                                                echo '<td>' . ($i === 0 ? $barcode : '') . '</td>'; // Only show barcode once
+                                                echo '<td>' . htmlspecialchars($altCodes[$i] ?? 'N/A') . '</td>'; // Use 'N/A' if alt code is missing
+                                                echo '</tr>';
                                             }
-                                            echo '</ul>';
                                         }
                                     } else {
-                                        echo '<li>No barcodes or alternate codes found.</li>';
+                                        echo '<tr>';
+                                        echo '<td colspan="3">No barcodes, alternate codes, or locations found.</td>';
+                                        echo '</tr>';
                                     }
 
-                                    echo '</ul>';
+                                    // Close the table
+                                    echo '</tbody>';
+                                    echo '</table>';
                             ?>
-                            <br>
                         </div>
+
+
+
                         <div class="col-3 text-left">
-                            <p>Requestor: <br>
+                            <p><b>Requestor: </b><br>
                                 <?php
                                     $getFOC = "SELECT * FROM employee WHERE emp_id = '$foc'";
                                     $resultFOC = $conn->query($getFOC);
@@ -651,8 +667,8 @@ date_default_timezone_set('Asia/Karachi');
                 <br><br><br><br>
                 <br><br><br><br>
                 <br><br><br><br><br><br><br>
-          
-           
+
+
 
 
                 <div class="row mt-5">

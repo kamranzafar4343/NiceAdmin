@@ -75,6 +75,9 @@ if (isset($_POST['update'])) {
     $storedLocation =  mysqli_real_escape_string($conn, $_POST['location']);
     $location = mysqli_real_escape_string($conn, $_POST['location']);
 
+    //only checks when location is changed otherwise it will not check
+    if ($location !== $fetch_location) {
+
     // Check if the selected rack already contains 9 boxes (max limit for each rack)
     $rack_limit_check_sql = "SELECT COUNT(*) as total_boxes FROM box WHERE location = '$location'";
     $rack_limit_check_result = $conn->query($rack_limit_check_sql);
@@ -84,7 +87,8 @@ if (isset($_POST['update'])) {
         // Rack already contains 9 boxes, show error
         echo "<script>alert('The selected rack reached its maximum capacity(9 boxes)'); window.location.href = 'boxUpdate.php?id=$box_id';</script>";
         exit();
-    } else {
+    }
+    }
 
     $sql = "UPDATE `box` SET `object`='$obj_code', `barcode`='$barcode', `status`='$status', `alt_code`='$alt_code', `box_desc`='$box_desc', `location`='$storedLocation' WHERE `box_id`='$box_id'";
 
@@ -103,7 +107,7 @@ if (isset($_POST['update'])) {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
-    }
+    
     $conn->close();
 }
 

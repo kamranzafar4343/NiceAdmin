@@ -73,6 +73,18 @@ if (isset($_POST['update'])) {
     $alt_code =  mysqli_real_escape_string($conn, $_POST['alt_code']);
     $obj_code =  mysqli_real_escape_string($conn, $_POST['object']);
     $storedLocation =  mysqli_real_escape_string($conn, $_POST['location']);
+    $location = mysqli_real_escape_string($conn, $_POST['location']);
+
+    // Check if the selected rack already contains 9 boxes (max limit for each rack)
+    $rack_limit_check_sql = "SELECT COUNT(*) as total_boxes FROM box WHERE location = '$location'";
+    $rack_limit_check_result = $conn->query($rack_limit_check_sql);
+    $rack_data = $rack_limit_check_result->fetch_assoc();
+
+    if ($rack_data['total_boxes'] >= 9) {
+        // Rack already contains 9 boxes, show error
+        echo "<script>alert('The selected rack reached its maximum capacity(9 boxes)'); window.location.href = 'boxUpdate.php?id=$box_id';</script>";
+        exit();
+    } else {
 
     $sql = "UPDATE `box` SET `object`='$obj_code', `barcode`='$barcode', `status`='$status', `alt_code`='$alt_code', `box_desc`='$box_desc', `location`='$storedLocation' WHERE `box_id`='$box_id'";
 
@@ -91,7 +103,7 @@ if (isset($_POST['update'])) {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
-
+    }
     $conn->close();
 }
 
@@ -137,8 +149,8 @@ if (isset($_POST['update'])) {
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- dselect -->
-    <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
+ <!-- dselect -->
+ <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
 
     <!-- Template Main CSS File -->
@@ -281,7 +293,7 @@ if (isset($_POST['update'])) {
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
-    <!-- 
+    <!--
 <div class="search-bar">
   <form class="search-form d-flex align-items-center" method="POST" action="#">
     <input type="text" name="query" placeholder="Search" title="Enter search keyword">
@@ -298,7 +310,6 @@ End Search Bar -->
                     <i class="bi bi-search"></i>
                 </a>
             </li><!-- End Search Icon-->
-
 
             <li class="nav-item profileimage dropdown pe-3 mr-4">
 
@@ -361,7 +372,7 @@ include "sidebarcode.php";
                 <!-- Object Code -->
                 <div class="col-md-3">
                     <label for="object_code" class="form-label">Object</label>
-                    <select class="form-select" name="object" required>
+                    <select class="form-select" id="object_code" name="object" required>
                         <option value="">Select object code</option>
                         <option value="Container" <?php echo $fetch_object_code == 'Container' ? 'selected' : ''; ?>>Conainer</option>
                         <option value="Filefolder" <?php echo $fetch_object_code == 'Filefolder' ? 'selected' : ''; ?>>Filefolder</option>
@@ -383,7 +394,7 @@ include "sidebarcode.php";
 
                 <div class="col-md-3">
                     <label for="change_status" class="form-label">Status</label>
-                    <select class="form-select" name="status" required>
+                    <select class="form-select" name="status" id="status" required>
                         <option value="">Select Status</option>
                         <option value="In" <?php echo $fetch_status == 'In' ? 'selected' : ''; ?>>In</option>
                         <option value="Out" <?php echo $fetch_status == 'Out' ? 'selected' : ''; ?>>Out</option>
@@ -395,7 +406,7 @@ include "sidebarcode.php";
                 <!-- Location Code -->
                 <div class="col-md-3">
                     <label for="location" class="form-label">Location</label>
-                    <select class="form-select" name="location" required>
+                    <select class="form-select" name="location" id="location" required>
 
                         <option value="">Select Location</option>
                         <?php
@@ -429,25 +440,6 @@ include "sidebarcode.php";
     </div>
 </section>
 
-<script>
-    $(document).ready(function() {
-        //d-search dropdown
-        const config = {
-            search: true, // Enable search feature
-            creatable: false, // Disable creatable selection
-            clearable: false, // Disable clearable selection
-            maxHeight: '400px', // Max height for showing scrollbar
-            size: 'md', // Size of the select, can be 'sm' or 'lg'
-        };
-
-        // Initialize dselect for the initial dropdowns
-        dselect(document.querySelector('#company'), config);
-        dselect(document.querySelector('#branch'), config);
-        dselect(document.querySelector('#dept'), config);
-        dselect(document.querySelector('#loc'), config);
-
-    });
-</script>
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -478,18 +470,35 @@ include "sidebarcode.php";
     })
 </script>
 
-<script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/popper.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/main.js">
 </script>
-
 <!-- Template Main JS File -->
 <script src="assets/js/main.js"></script>
 
 <!-- Bootstrap JS (Optional) -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/z1gk35k1RA6QQg+SjaK6MjpS3TdeL1h1jDdED5+ZIIbsSdyX/twQvKZq5uY15B" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9BfDxO4v5a9J9TZz1ck8vTAvO8ue+zjqBd5l3eUe8n5EM14ZlXyI4nN" crossorigin="anonymous"></script>
+
+
+<script>
+    $(document).ready(function() {
+        //d-search dropdown
+        const config = {
+            search: true, // Enable search feature
+            creatable: false, // Disable creatable selection
+            clearable: false, // Disable clearable selection
+            maxHeight: '400px', // Max height for showing scrollbar
+            size: 'md', // Size of the select, can be 'sm' or 'lg'
+        };
+
+        // Initialize dselect for the initial dropdowns
+
+        dselect(document.querySelector('#location'), config);
+    });
+</script>
+
 
 </body>
 

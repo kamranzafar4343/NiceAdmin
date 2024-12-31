@@ -456,7 +456,7 @@ if ($resultData->num_rows > 0) {
                   WHERE d.dept_name LIKE '%$value%'";
                         } else {
                             // Search other fields in the orders table
-                            $query = "SELECT * FROM orders WHERE $column LIKE '%$value%' ORDER BY order_creation_date DESC";
+                            $query = "SELECT * FROM orders WHERE flag = 'Delivery' AND $column LIKE '%$value%' ORDER BY order_creation_date DESC";
                         }
                     }
 
@@ -464,19 +464,19 @@ if ($resultData->num_rows > 0) {
                     if (isset($_GET['filter_date']) && !empty($_GET['start_date']) && !empty($_GET['end_date'])) {
                         $start_date = $conn->real_escape_string($_GET['start_date']);
                         $end_date = $conn->real_escape_string($_GET['end_date']);
-                        $query = "SELECT * FROM orders WHERE order_creation_date BETWEEN '$start_date' AND '$end_date'";
+                        $query = "SELECT * FROM orders WHERE flag = 'Delivery' AND order_creation_date BETWEEN '$start_date' AND '$end_date'";
                     }
 
                     // Show All Button
                     if (isset($_GET['show_all'])) {
-                        $query = "SELECT * FROM orders LIMIT 100";
+                        $query = "SELECT * FROM orders where flag = 'Delivery' LIMIT 100";
                     }
 
                     // Execute the query
                     $result = $conn->query($query);
 
                     if ($result && $result->num_rows > 0) {
-                        echo '<table id="orderT" class="table table-striped mt-4">
+                        echo '<table id="orderT" class="table mt-4">
             <thead>
                 <tr>
                     <th>#</th>
@@ -509,8 +509,7 @@ if ($resultData->num_rows > 0) {
                 <td>{$row['order_no']}</td>
                 <td>{$comp_name}</td>
                 <td>{$branch_name}</td>
-                <td>{$dept_name}</td>
-            
+                <td>{$dept_name}</td>       
                 <td>{$createDate}</td>
                 <td>{$row['priority']}</td>
                 <td>{$requiredBy}</td>";

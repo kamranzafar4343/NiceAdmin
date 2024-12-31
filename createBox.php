@@ -9,7 +9,6 @@ if (!isset($_SESSION['email'])) {
 
 include 'config/db.php';
 
-
 $email = $_SESSION['email'];
 
 // Get session variables

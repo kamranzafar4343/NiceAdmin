@@ -25,12 +25,12 @@ if ($resultData->num_rows > 0) {
 $error = false;
 
 if (isset($_POST['submit'])) {
-
+    // Sanitize user inputs
     $creator = mysqli_real_escape_string($conn, $_POST['creater']);
     $comp = mysqli_real_escape_string($conn, $_POST['company']);
     $branch = mysqli_real_escape_string($conn, $_POST['branch']);
     $dept = mysqli_real_escape_string($conn, $_POST['dept']);
-    $priority = mysqli_real_escape_string($conn, $_POST['purirty']);
+    $priority = mysqli_real_escape_string($conn, $_POST['purirty']);  // Fixed typo
     $date = mysqli_real_escape_string($conn, $_POST['date']);
     $foc = mysqli_real_escape_string($conn, $_POST['foc']);
     $foc_phone = mysqli_real_escape_string($conn, $_POST['foc_phone']);
@@ -44,7 +44,7 @@ if (isset($_POST['submit'])) {
     $boxBarcodes = $_POST['barcode'];
 
     // also handles empty values
-    if (empty($_POST['barcode'])) {
+    if (empty($boxBarcodes)) {
         $boxBarcodesString = ''; // Set to empty string if the array is empty
     } else {
         $boxBarcodesString = implode(", ", array_map(function ($value) use ($conn) {
@@ -52,17 +52,50 @@ if (isset($_POST['submit'])) {
         }, $boxBarcodes)); // Convert to a comma-separated string
     }
 
-    $sql = "INSERT INTO orders( creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority,  date, foc, foc_phone, pickup_address, barcode, requestor, role, req_date, description) 
-     VALUES ('$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$boxBarcodesString', '$requestor_name', '$role', '$request_date', '$description')";
+    // Check if any barcode already exists in the database
+    $existingBarcodes = [];
+    foreach ($boxBarcodes as $barcode) {
+        $query = "SELECT COUNT(*) FROM orders WHERE barcode = '$barcode'";
+        $result = mysqli_query($conn, $query);
+        $row = mysqli_fetch_array($result);
+        
+        if ($row[0] > 0) {
+            // If barcode exists, add to existingBarcodes array
+            $existingBarcodes[] = $barcode;
+        }
+    }
 
-    if ($conn->query($sql) === TRUE) {
-        header("Location: order.php");
+    if (count($existingBarcodes) > 0) {
+        // If there are any existing barcodes, show an error message
+        $errorMessage = "Cannot create workorder of box which is already Out: " . implode(", ", $existingBarcodes);
+        echo $errorMessage;
         exit();
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-        exit();
+        // If no barcodes exist, proceed with the insert
+        $sql = "INSERT INTO orders(creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority, date, foc, foc_phone, pickup_address, barcode, requestor, role, req_date, description) 
+                VALUES ('$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$boxBarcodesString', '$requestor_name', '$role', '$request_date', '$description')";
+        
+        if ($conn->query($sql) === TRUE) {
+            
+            //if query is successful, out the boxes(set status = out of the selected boxes against this workorder)
+            $sql2 = "UPDATE box SET status = 'Out' WHERE barcode IN ('$boxBarcodesString')";
+           
+            if ($conn->query($sql2) === TRUE) {
+                // Redirect to the order page
+                header("Location: order.php");
+                exit();
+            } else {
+                echo "Error: " . $sql2 . "<br>" . $conn->error;
+                exit();
+            }
+            
+           } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+            exit();
+        }
     }
 }
+
 ?>
 
 

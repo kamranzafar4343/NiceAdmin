@@ -388,7 +388,6 @@ if ($resultData->num_rows > 0) {
                         </div>
                     </div>
 
-
                     <!-- Search Form -->
                     <form method="GET" action="" class="row g-3 mb-3">
                         <!-- Dropdown for Column Selection -->
@@ -399,7 +398,7 @@ if ($resultData->num_rows > 0) {
                                 <option value="comp_id_fk">Company</option>
                                 <option value="branch_id_fk">Branch</option>
                                 <option value="dept_id_fk">Department</option>
-                                <option value="status">Status</option>
+                                <!-- <option value="status">Status</option> -->
                                 <option value="priority">Priority</option>
                             </select>
                         </div>
@@ -484,7 +483,7 @@ if ($resultData->num_rows > 0) {
                     <th>Company</th>
                     <th>Branch</th>
                     <th>Department</th>
-                    <th>Status</th>
+                
                     <th>Create Date</th>
                     <th>Priority</th>
                     <th>Required By</th>';
@@ -511,7 +510,7 @@ if ($resultData->num_rows > 0) {
                 <td>{$comp_name}</td>
                 <td>{$branch_name}</td>
                 <td>{$dept_name}</td>
-                <td>{$row['status']}</td>
+            
                 <td>{$createDate}</td>
                 <td>{$row['priority']}</td>
                 <td>{$requiredBy}</td>";

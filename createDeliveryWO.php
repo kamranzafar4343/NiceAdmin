@@ -88,7 +88,6 @@ if (isset($_POST['submit'])) {
                 echo "Error: " . $sql2 . "<br>" . $conn->error;
                 exit();
             }
-            
            } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
             exit();

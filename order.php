@@ -471,7 +471,7 @@ if ($resultData->num_rows > 0) {
                     if (isset($_GET['show_all'])) {
                         $query = "SELECT * FROM orders where flag = 'Delivery' LIMIT 100";
                     }
-
+                    
                     // Execute the query
                     $result = $conn->query($query);
 

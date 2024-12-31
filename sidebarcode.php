@@ -70,7 +70,7 @@
             </li><!-- End Racks Nav -->
 
             <li class="nav-item">
-                <a class="nav-link <?php echo ($currentPage == 'store.php') ? 'active' : 'collapsed'; ?>" href="store.php">
+                <a class="nav-link <?php echo ($currentPage == 'store.php') ? 'active' : 'collapsed'; ?>" href="store-landing-page.php">
                     <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Store Nav -->
@@ -127,7 +127,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link <?php echo ($currentPage == 'store.php') ? 'active' : 'collapsed'; ?>" href="store.php">
+                <a class="nav-link <?php echo ($currentPage == 'store.php') ? 'active' : 'collapsed'; ?>" href="store-landing-page.php">
                     <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron ms-auto"></i>
                 </a>
             </li><!-- End Store Nav -->

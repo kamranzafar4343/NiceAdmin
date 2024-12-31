@@ -475,8 +475,11 @@ date_default_timezone_set('Asia/Karachi');
                                 if ($priority == "Regular") {
 
                                     echo "REGULAR - Next Working Day";
-                                } else {
+                                } elseif($priority == "Urgent") {
                                     echo "Urgent - Rush Same Day";
+                                }
+                                else{
+                                    echo '';
                                 }
                                 ?>
                             </p>

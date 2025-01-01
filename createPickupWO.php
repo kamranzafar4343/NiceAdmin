@@ -40,16 +40,20 @@ if (isset($_POST['submit'])) {
     $request_date = mysqli_real_escape_string($conn, $_POST['req_date']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
 
-    // Handle multiple selected values for "items"
-    $boxBarcodes = $_POST['barcode'];
+    // Handle barcodes: Check if the barcode key exists and is not empty
+    if (!isset($_POST['barcode']) || empty($_POST['barcode'])) {
+        $boxBarcodes = []; // Initialize as an empty array if not set or empty
+    } else {
+        $boxBarcodes = $_POST['barcode']; // Assign the barcodes
+    }
 
-    // also handles empty values
+    // Convert the barcode array to a sanitized comma-separated string
     if (empty($boxBarcodes)) {
-        $boxBarcodesString = ''; // Set to empty string if the array is empty
+        $boxBarcodesString = ''; // Set to an empty string if no barcodes
     } else {
         $boxBarcodesString = implode(", ", array_map(function ($value) use ($conn) {
             return mysqli_real_escape_string($conn, $value); // Sanitize each value
-        }, $boxBarcodes)); // Convert to a comma-separated string
+        }, $boxBarcodes));
     }
 
     // Check if any barcode already exists in the database
@@ -58,7 +62,7 @@ if (isset($_POST['submit'])) {
         $query = "SELECT COUNT(*) FROM orders WHERE barcode = '$barcode' AND status = 'Pickup'";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_array($result);
-        
+
         if ($row[0] > 0) {
             // If barcode exists, add to existingBarcodes array
             $existingBarcodes[] = $barcode;
@@ -71,29 +75,30 @@ if (isset($_POST['submit'])) {
         echo $errorMessage;
         exit();
     } else {
-        // If no barcodes exist, proceed with the insert
+        // Proceed with inserting a new order
         $sql = "INSERT INTO orders(creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority, date, foc, foc_phone, pickup_address, barcode, requestor, role, req_date, description) 
                 VALUES ('$creator', 'Pickup', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$boxBarcodesString', '$requestor_name', '$role', '$request_date', '$description')";
-        
+
         if ($conn->query($sql) === TRUE) {
-            
-            //if query is successful, out the boxes(set status = out of the selected boxes against this workorder)
-            $sql2 = "UPDATE box SET status = 'In' WHERE barcode IN ('$boxBarcodesString')";
-           
-            if ($conn->query($sql2) === TRUE) {
-                // Redirect to the order page
-                header("Location: order.php");
-                exit();
-            } else {
-                echo "Error: " . $sql2 . "<br>" . $conn->error;
-                exit();
+            // Update box status
+            if (!empty($boxBarcodes)) {
+                $sql2 = "UPDATE box SET status = 'In' WHERE barcode IN ('" . implode("','", $boxBarcodes) . "')";
+                if ($conn->query($sql2) === TRUE) {
+                    // Redirect to the order page
+                    header("Location: order.php");
+                    exit();
+                } else {
+                    echo "Error: " . $sql2 . "<br>" . $conn->error;
+                    exit();
+                }
             }
-           } else {
+        } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
             exit();
         }
     }
 }
+
 
 ?>
 
@@ -510,17 +515,17 @@ if (isset($_POST['submit'])) {
                             <option value="">Select Requestor</option>
                         </select>
                     </div>
-
-                    <!--  Comments -->
+                    
                     <div class="col-md-4">
                         <label for="designation" class="form-label">Contact Person Role</label>
-                        <input type="text" class="form-control" id="designation" name="role" required>
+                        <input type="text" class="form-control" id="designation" name="role" >
                     </div>
 
                     <div class="col-md-3">
                         <label class="form-label">Request date</label>
                         <input type="datetime-local" id="req_date" class="form-control" name="req_date" required>
                     </div>
+
                     <!--  Comments -->
                     <div class="col-md-5">
                         <label for="description" class="form-label">Description</label>

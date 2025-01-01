@@ -683,7 +683,12 @@ End Search Bar -->
                         targets: [0, 1, 2, 3, 4, 5]
                     } // change alignment 
 
-                ]
+                ],
+
+                // Sort by date added in descending order
+                "order": [
+                    [8, "desc"]
+                ],
             });
         });
     </script>

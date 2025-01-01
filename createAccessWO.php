@@ -457,7 +457,7 @@ if (isset($_POST['submit'])) {
 
                     <div class="col-md-5">
                         <label for="purirty" class="form-label">Service Priority</label>
-                        <select class="form-select" id="purirty" name="purirty" required>
+                        <select class="form-select" id="purirty" name="purirty" >
                             <option value="">Select Service Priority</option>
                             <option value="Urgent">Urgent - Rush Same Day</option>
                             <option value="Regular">Regular - Next Working Day</option>
@@ -467,7 +467,7 @@ if (isset($_POST['submit'])) {
                     <!-- Required BY -->
                     <div class="col-md-3">
                         <label class="form-label">Required By</label>
-                        <input type="datetime-local" class="form-control" name="date" id="dateField" required>
+                        <input type="datetime-local" class="form-control" name="date" id="dateField" >
                     </div>
 
                     <!-- hidden field -->

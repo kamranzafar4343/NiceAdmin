@@ -544,7 +544,7 @@ End Search Bar -->
 
                     // Show All Button
                     if (isset($_GET['show_all'])) {
-                        $sql = "SELECT * FROM box ORDER BY box_id DESC";
+                        $sql = "SELECT * FROM box ORDER BY created_at DESC";
                     }
 
                     // Execute Query

@@ -443,65 +443,111 @@ if (isset($_GET['comp_id'])) {
     <!-- Button to add a new rack -->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php';" class="btn btn-primary mt-5 mb-3">Add Rack</button>
 
-    <!-- Main content -->
-    <main id="main" class="main">
-        <div class="col-12">
-            <div class="cardBranch recent-sales overflow-auto">
-                <div class="card-body">
-                    <h5 class="card-title">List of Racks</h5>
+<!-- Main content -->
+<main id="main" class="main">
+    <div class="mt-4">
+        <br>
+    </div>
+    <div class="col-12">
+        <div class="cardBranch recent-sales overflow-auto mt-5">
+            <div class="card-body">
 
-                    <?php
-                    include 'config/db.php'; // Include the database connection
+                <!-- Title and Add Button -->
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <h5 class="card-title">Search Racks</h5>
+                    </div>
+                    <div class="col-6 text-end">
+                        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php'" class="btn btn-primary">Add Rack</button>
+                    </div>
+                </div>
 
-                    // Initialize filter variables
-                    $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
-                    $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
-                    $location = isset($_GET['location']) ? $_GET['location'] : '';
+                <!-- Search Form -->
+                <form method="GET" action="" class="row g-3 mb-3">
 
-                    // Build SQL query with filters
-                    $sql = "SELECT * FROM racks WHERE 1 = 1";
+                    <!-- First Row: Column and Search Value -->
+                    <div class="col-md-4">
+                        <label for="column" class="form-label">Select Column</label>
+                        <select name="column" id="column" class="form-select">
+                            <option value="" selected>Choose...</option>
+                            <option value="rack_location">Rack Location</option>
+                            <option value="rack_description">Rack Description</option>
+                            <option value="object_code">Object Code</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="value" class="form-label">Search Value</label>
+                        <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
+                    </div>
 
-                    // If 'from' date is set, filter by date range
-                    if (!empty($from_date)) {
-                        $sql .= " AND created_at >= '$from_date'";
+                    <!-- Buttons for Search and Show All -->
+                    <div class="col-md-4 d-flex align-items-end gap-2">
+                        <button type="submit" name="search" class="btn btn-primary w-50">Search</button>
+                        <button type="submit" name="show_all" class="btn btn-secondary w-50">Show All</button>
+                    </div>
+
+                    <!-- Second Row: Date Range Filter -->
+                    <div class="col-md-4">
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control">
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" name="filter_date" class="btn btn-secondary w-100 px-4 py-2">
+                            Filter Dates
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Table -->
+                <?php
+                include 'config/db.php';
+
+                // Default Query - No rows initially
+                $query = "SELECT * FROM racks WHERE 1=1";
+
+                // If Search Button is Clicked
+                if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
+                    $column = $conn->real_escape_string($_GET['column']);
+                    $value = $conn->real_escape_string($_GET['value']);
+                    $query .= " AND $column LIKE '%$value%'";
+                }
+
+                // If Date Range Filter is Applied
+                if (isset($_GET['filter_date']) && !empty($_GET['start_date']) && !empty($_GET['end_date'])) {
+                    $start_date = $conn->real_escape_string($_GET['start_date']);
+                    $end_date = $conn->real_escape_string($_GET['end_date']);
+                    $query .= " AND created_at BETWEEN '$start_date' AND '$end_date'";
+                }
+
+                // If Show All Button is Clicked
+                if (isset($_GET['show_all'])) {
+                    $query = "SELECT * FROM racks";
+                }
+
+                // Execute Query
+                $result = $conn->query($query);
+
+                if ($result && $result->num_rows > 0) {
+                    echo '<table id="racks" class="table table-striped mt-4">
+                        <thead>
+                            <tr>
+                                <th scope="col">Rack Location</th>
+                                <th scope="col">Rack Description</th>
+                                <th scope="col">Object Code</th>
+                                <th scope="col">Capacity</th>
+                                <th scope="col">Current Quantity</th>
+                                <th scope="col">Added on</th>';
+                    if ($_SESSION['role'] == 'admin') {
+                        echo '<th scope="col">Actions</th>';
                     }
-                    if (!empty($to_date)) {
-                        $sql .= " AND created_at <= '$to_date'";
-                    }
+                    echo '</tr></thead><tbody>';
 
-                    // Filter by location if provided
-                    if (!empty($location)) {
-                        $sql .= " AND location = '$location'";
-                    }
-
-                    $result = $conn->query($sql);
-
-                    if ($result->num_rows > 0) {
-                        // Display table of racks
-                        echo '<table class="table mt-4" id="racks" style="table-layout: fixed;">
-                            <thead>
-                                <tr>
-                                <th scope="col" >Rack Location</th>
-                                <th scope="col" >Rack Description</th>
-                                <th scope="col" >Object Code</th>
-                                <th scope="col" >Capacity</th>
-                                <th scope="col" >Current Quantity</th>
-                                <th scope="col" >Created Date</th>';
-
-                        // Show "Actions" column only if the user is an admin
-                        if ($_SESSION['role'] == 'admin') {
-                            echo '<th scope="col" style="width: 15%;">Actions</th>';
-                        }
-
-                        echo '</tr>
-                        </thead>
-                        <tbody>';
-
-
-                        // Loop through the results and display each row
-                        while ($row = $result->fetch_assoc()) {
-
-                            //count current quantity for current location of rack
+                    while ($row = $result->fetch_assoc()) {
+//count current quantity for current location of rack
                             // Get the current rack's location
                             $location = $row['rack_location']; // Adjust column name if necessary
 
@@ -515,39 +561,37 @@ if (isset($_GET['comp_id'])) {
                                 $currentQuantity = $quantityRow['quantity'];
                             }
 
-                            echo '<tr>';
-                            echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_location'] . '</a></td>';
-                            // echo '<td>' . $row["rack_location"] . '</td>';
-                            echo '<td>' . $row["rack_description"] . '</td>';
-                            echo '<td>' . $row["object_code"] . '</td>';
-                            echo '<td>' . $row["capacity"] . '</td>';
-                            echo '<td>' . $currentQuantity . '</td>';
-                            echo '<td>' . $row["created_at"] . '</td>';
+                        echo '<tr>';
+                        echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_location'] . '</a></td>';
+                        echo '<td>' . htmlspecialchars($row['rack_description']) . '</td>';
+                        echo '<td>' . htmlspecialchars($row['object_code']) . '</td>';
+                        echo '<td>' . htmlspecialchars($row['capacity']) . '</td>';
+                        echo '<td>' . $currentQuantity . '</td>';
+                        echo '<td>' . htmlspecialchars($row['created_at']) . '</td>';
 
-                            // Show "Actions" button only for admins
-                            if ($_SESSION['role'] == 'admin') {
-                                echo '<td>
-                                     <div style="display: flex; gap: 10px;">
-                                    <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init onclick="return confirm(\'Are you sure you want to delete this record?\');" href="rackDelete.php?id=' .  $row['id'] . '"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                    </div>
-                                    
-                                  </td>';
-                            }
-
-                            echo '</tr>';
+                        if ($_SESSION['role'] == 'admin') {
+                            echo '<td>
+                                <div style="display: flex; gap: 10px;">
+                                    <a href="rackDelete.php?id=' . $row['id'] . '" class="btn btn-danger btn-sm" 
+                                       onclick="return confirm(\'Are you sure you want to delete this record?\');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>';
                         }
-                        echo '</tbody></table>';
-                    } else {
-                        // Display message if no racks found
-                        echo '<p>No racks found based on the selected filters.</p>';
+                        echo '</tr>';
                     }
-                    // Close database connection
-                    $conn->close();
-                    ?>
-                </div>
+                    echo '</tbody></table>';
+                } elseif (isset($_GET['search']) || isset($_GET['filter_date']) || isset($_GET['show_all'])) {
+                    echo '<p class="text-center mt-3">No results found.</p>';
+                }
+                ?>
             </div>
         </div>
-    </main>
+    </div>
+</main>
+
+
     <script>
         function filterCompany(comp_id) {
             window.location.href = "box.php?comp_id=" + comp_id;
@@ -621,7 +665,8 @@ if (isset($_GET['comp_id'])) {
             // <!--make the table => datatable.net table and also change the alignment of the text in columns-->
             columnDefs: [{
                     className: "text-left",
-                    targets: [0, 1, 2, 3, 4, 5]
+                    targets: [0, 1, 2, 3, 4, 5],
+                    
                 } // change alignment 
 
             ],

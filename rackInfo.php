@@ -352,14 +352,6 @@ $rack_data = $result->fetch_assoc();
 
     </header><!-- End Header -->
 
-      <!-- ======= header ======= -->
-      <?php include 'headerfile.php'; ?>
-    <?php
-    include "config/db.php";
-    $role = $_SESSION['role'];
-    ?>
-
-      <!-- sidebar start -->
   <?php
   include "sidebarcode.php";
   ?>
@@ -403,7 +395,7 @@ $rack_data = $result->fetch_assoc();
                             <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $rack_data['capacity']; ?></li>
                         </ul>
                         <ul class="list-group list-group-horizontal-lg d-flex justify-content-between">
-                            <li class="list-group-item" style="color:grey; width: 39%;">Createcd At</li>
+                            <li class="list-group-item" style="color:grey; width: 39%;">Added on</li>
                             <li class="list-group-item" style="text-align: right; width: 55%;"><?php echo $rack_data['created_at']; ?></li>
                         </ul>
 

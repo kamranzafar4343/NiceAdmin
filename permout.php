@@ -20,8 +20,6 @@ if ($resultData->num_rows > 0) {
     $adminEmail = $row2['email'];
 }
 
-$showOrders = "Select * FROM orders where flag = 'Permout' ORDER BY order_creation_date DESC";
-$resultShowOrders = $conn->query($showOrders);
 
 ?>
 <!doctype html>
@@ -36,12 +34,6 @@ $resultShowOrders = $conn->query($showOrders);
     <link href="assets/img/dtl.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap JS (with Popper.js) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
@@ -51,7 +43,6 @@ $resultShowOrders = $conn->query($showOrders);
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -62,15 +53,8 @@ $resultShowOrders = $conn->query($showOrders);
 
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="fonts/icomoon/style.css">
-
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-
     <!-- Style -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
@@ -93,19 +77,18 @@ $resultShowOrders = $conn->query($showOrders);
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-
-    <!-- dselect -->
-    <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
-    <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
-
     <style>
         /* Custom CSS to decrease font size of the table */
 
+        .overflow-auto {
+            overflow: auto !important;
+            margin-top: 92px !important;
+        }
+
         .add {
             /* cursor: pointer; */
-
-            margin-left: 1144px;
-            margin-top: 89px;
+            margin-left: 976px;
+            margin-top: 85px;
             margin-bottom: 103px;
         }
 
@@ -216,7 +199,7 @@ $resultShowOrders = $conn->query($showOrders);
         }
 
         .card-body {
-            padding: 0 20px 20px 60px !important;
+            padding: 0 20px 20px 18px !important;
         }
 
 
@@ -286,7 +269,7 @@ $resultShowOrders = $conn->query($showOrders);
             box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
             background-color: white;
             font-size: 0.8rem;
-
+            margin-top: 7px;
         }
 
         .company-name:active {
@@ -312,9 +295,6 @@ $resultShowOrders = $conn->query($showOrders);
             font-size: 10px;
         }
     </style>
-
-    <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
 
     <title>Permout Workorders</title>
 
@@ -382,154 +362,204 @@ $resultShowOrders = $conn->query($showOrders);
 
     </header><!-- End Header -->
 
-  <!-- sidebar start -->
-  <?php
-  include "sidebarcode.php";
-  ?>
-  <!-- sidebar end -->
+
+    <!-- sidebar start -->
+    <?php
+    include "sidebarcode.php";
+    ?>
+    <!-- sidebar end -->
 
     <!--form--------------------------------------form--------------------------------------->
-    <!-- Add the buttton for the work order -->
-    <button id="" type="button" onclick="window.location.href = 'createPermoutWO.php';" class="btn btn-primary mb-1 add">+</button>
+
     <!-- Main content -->
     <main id="main" class="main">
-        <div class="pagetitle">
+        <div class="col-15">
+            <!-- Add the buttton for the work order -->
+            <div class="cardBranch recent-sales overflow-auto">
+                <div class="card-body">
 
-            <!-- <h1>Breadcrumbs</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">Home</a></li>
-                    <li class="breadcrumb-item">Components</li>
-                    <li class="breadcrumb-item active">Breadcrumbs</li>
-                </ol>
-            </nav>
-        </div> -->
-
-            <div class="col-12">
-                <div class="cardBranch recent-sales overflow-auto">
-                    <div class="card-body">
-                        <h5 class="card-title">List of Permout Work Orders</h5>
-                        <?php
-                        // Check if there are any results
-                        if ($resultShowOrders->num_rows > 0) {
-                            // Display table
-                            echo '<table id="perm" class="table mt-4 nowrap">
-                          <thead>
-                            <tr>
-                          <th scope="col" style="width: 18%;">Account</th>
-                                    <th scope="col" style="width: 8%;">WorkOrder No</th>
-                          <th scope="col" style="width: 13%;">Create Date</th>
-                                    <th scope="col" style="width: 8%;">Service Priority</th>
-                          <th scope="col" style="width: 10%;">Required By</th>';
-
-                            // Only display the "Action" column if the user is an admin
-                            if ($_SESSION['role'] == 'admin') {
-                                echo '<th scope="col" style="width: 15%;">Action</th>';
-                            }
-
-                            echo '</tr>
-                         </thead>
-                            <tbody>';
-
-                            // Counter variable
-                            $counter = 1;
-
-                            // Loop through results
-                            while ($row = $resultShowOrders->fetch_assoc()) {
-                                echo '<tr>';
-
-                                // Get specific company id
-                                $comp_id = $row['comp_id_fk'];
-                                $sql3 = "SELECT * FROM compani WHERE comp_id= '$comp_id'";
-                                $result3 = $conn->query($sql3);
-                                if ($result3->num_rows > 0) {
-                                    $row3 = $result3->fetch_assoc();
-                                    $comp_name = $row3['comp_name'];
-                                }
-
-                                // Get specific branch id
-                                $branch_id = $row['branch_id_fk'];
-                                $sql7 = "SELECT * FROM branches WHERE branch_id= '$branch_id'";
-                                $result7 = $conn->query($sql7);
-                                if ($result7->num_rows > 0) {
-                                    $row7 = $result7->fetch_assoc();
-                                    $branch_name = $row7['branch_name'];
-                                }
-
-                                // Show account
-                                echo '<td>' . $comp_name . " / " . $branch_name . '</td>';
-
-                                //workorder_no
-                                echo '<td>' . ($row['order_no']) . '</td>';
-
-                                //convert timestamp to only date format
-                                $dateTimeCreate = $row["order_creation_date"];
-                                $justDateCreate = date("d-m-Y", strtotime($dateTimeCreate));
-                                echo '<td>' . $justDateCreate . '</td>';
-
-                                echo '<td>';
-                                if ($row["priority"] == 'Regular') {
-                                    // Display a green badge for "Regular"
-                                    echo '<span class="badge badge-pill badge-success" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                                } elseif ($row["priority"] == 'Urgent') {
-                                    // Display a red icon for "Urgent"
-                                    echo '<span class="badge badge-pill badge-warning" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                                } elseif ($row["priority"] == 'Box Pickup') {
-                                    // Display a red icon for "Urgent"
-                                    echo '<span class="badge badge-pill badge-info" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                                } elseif ($row["priority"] == 'Cancel Workorder') {
-                                    // Display a red icon for "Urgent"
-                                    echo '<span class="badge badge-pill badge-secondary" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                                } elseif ($row["priority"] == 'Permanantly out') {
-                                    // Display a red icon for "Urgent"
-                                    echo '<span class="badge badge-pill badge-danger" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                                } elseif ($row["priority"] == 'Supplies') {
-                                    // Display a red icon for "Urgent"
-                                    echo '<span class="badge badge-pill badge-primary" style="font-size: 12px;">' . $row["priority"] . '</span>';
-                                }
-                                echo '</td>';
-
-
-                                //convert timestamp to only date format
-                                $dateTimeRequired = $row["date"];
-                                $justDateRequired = date("d-m-Y", strtotime($dateTimeRequired));
-                                echo '<td>' . $justDateRequired . '</td>';
-                             
-                                if ($_SESSION['role'] == 'admin') {
-                        ?>
-                                    <td>
-                                        <div style="display: flex; gap: 10px;">
-                                            <a type="button" class="btn btn-success btn-secondary d-flex justify-content-center" style="width:25px; height: 28px;" href="viewOrder.php?id=<?php echo $row['order_no']; ?>"><i style="width: 20px;" class="fa-solid fa-print" target="_blank"></i></a>
-
-                                            <a type="button" class="btn btn-danger btn-floating d-flex justify-content-center" style="width:25px; height:28px" data-mdb-ripple-init
-                                                onclick="return confirm('Are you sure you want to delete this record?');" href="deleteOrder.php?id=<?php echo $row['order_no']; ?>"> <i style="width: 20px;" class="fa-solid fa-trash"></i></a>
-                                            <!-- <a type="button" class="btn btn-success" data-mdb-ripple-init onclick="return confirm('status will be out, and the for record this order is deleted from here and added to the delivery-workorder table');" href="deliveryWorkorder.php?id=<?php echo $row['branch']; ?>">Deliver</a> -->
-
-                                            <!-- <a type="button" class="btn btn-info" data-mdb-ripple-init
-                    onclick="return confirm('Are you sure you want to delete this record?');" href="OrderDelete.php?id=">Access</a> -->
-                                        </div>
-                                    </td>
-                        <?php
-                                }
-
-                                echo '</tr>';
-                            }
-                            echo '</tbody></table>';
-                        } else {
-                            // Display message if no results
-                            echo '<p>No items found.</p>';
-                        }
-                        ?>
+                    <!-- Title and Add Button -->
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <h5 class="card-title">Permout Work Orders</h5>
+                        </div>
+                        <div class="col-6 text-end mt-2">
+                            <button type="button" onclick="window.location.href = 'createPermoutWO.php'" class="btn btn-primary mb-3">Add</button>
+                        </div>
                     </div>
-                </div>
 
+                    <!-- Search Form -->
+                    <form method="GET" action="" class="row g-3 mb-3">
+                        <!-- Dropdown for Column Selection -->
+                        <div class="col-md-4">
+                            <label for="column" class="form-label">Select Column</label>
+                            <select name="column" id="column" class="form-select">
+                                <option value="" selected>Choose...</option>
+                                <option value="comp_id_fk">Company</option>
+                                <option value="branch_id_fk">Branch</option>
+                                <option value="dept_id_fk">Department</option>
+                                <!-- <option value="status">Status</option> -->
+                                <option value="priority">Priority</option>
+                            </select>
+                        </div>
+
+                        <!-- Input Field for Search Value -->
+                        <div class="col-md-4">
+                            <label for="value" class="form-label">Search Value</label>
+                            <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="col-md-4 d-flex align-items-end gap-2">
+                            <button type="submit" name="search" class="btn btn-primary w-100">Search</button>
+                            <button type="submit" name="show_all" class="btn btn-secondary w-100">Show All</button>
+                        </div>
+
+                        <!-- Date Range Filter -->
+                        <div class="col-md-4">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="date" name="end_date" id="end_date" class="form-control">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" name="filter_date" class="btn btn-info w-50">Filter Dates</button>
+                        </div>
+                    </form>
+
+                    <!-- Table -->
+                    <?php
+                    // Query logic
+                    $query = "SELECT * FROM orders WHERE 1=0"; // Default no rows
+
+                    // Search by Column and Value
+                    if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
+                        $column = $conn->real_escape_string($_GET['column']);
+                        $value = $conn->real_escape_string($_GET['value']);
+
+                        if ($column === 'comp_id_fk') {
+                            // Search by Company Name
+                            $query = "SELECT o.* FROM orders o 
+                  JOIN compani c ON o.comp_id_fk = c.comp_id 
+                  WHERE c.comp_name LIKE '%$value%'";
+                        } elseif ($column === 'branch_id_fk') {
+                            // Search by Branch Name
+                            $query = "SELECT o.* FROM orders o 
+                  JOIN branches b ON o.branch_id_fk = b.branch_id 
+                  WHERE b.branch_name LIKE '%$value%'";
+                        } elseif ($column === 'dept_id_fk') {
+                            // Search by Department Name
+                            $query = "SELECT o.* FROM orders o 
+                  JOIN departments d ON o.dept_id_fk = d.dept_id 
+                  WHERE d.dept_name LIKE '%$value%'";
+                        } else {
+                            // Search other fields in the orders table
+                            $query = "SELECT * FROM orders WHERE flag = 'Permout' AND $column LIKE '%$value%' ORDER BY order_creation_date DESC";
+                        }
+                    }
+
+                    // Filter by Date Range
+                    if (isset($_GET['filter_date']) && !empty($_GET['start_date']) && !empty($_GET['end_date'])) {
+                        $start_date = $conn->real_escape_string($_GET['start_date']);
+                        $end_date = $conn->real_escape_string($_GET['end_date']);
+                        $query = "SELECT * FROM orders WHERE flag = 'Permout' AND order_creation_date BETWEEN '$start_date' AND '$end_date'";
+                    }
+
+                    // Show All Button
+                    if (isset($_GET['show_all'])) {
+                        $query = "SELECT * FROM orders where flag = 'Permout' LIMIT 100";
+                    }
+                    
+                    // Execute the query
+                    $result = $conn->query($query);
+
+                    if ($result && $result->num_rows > 0) {
+                        echo '<table id="orderT" class="table mt-4">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Company</th>
+                    <th>Branch</th>
+                    <th>Department</th>
+                
+                    <th>Create Date</th>
+                    <th>Priority</th>
+                    <th>Required By</th>';
+                        if ($_SESSION['role'] == 'admin') {
+                            echo '<th>Action</th>';
+                        }
+                        echo '</tr></thead><tbody>';
+
+                        $counter = 1;
+                        while ($row = $result->fetch_assoc()) {
+                            // Fetch Company Name
+                            $comp_name = get_name($conn, "compani", "comp_name", "comp_id", $row['comp_id_fk']);
+                            // Fetch Branch Name
+                            $branch_name = get_name($conn, "branches", "branch_name", "branch_id", $row['branch_id_fk']);
+                            // Fetch Department Name
+                            $dept_name = get_name($conn, "departments", "dept_name", "dept_id", $row['dept_id_fk']);
+
+                            // Format Dates
+                            $createDate = date("d-m-Y", strtotime($row['order_creation_date']));
+                            $requiredBy = date("d-m-Y", strtotime($row['date']));
+
+                            echo "<tr>
+                <td>{$row['order_no']}</td>
+                <td>{$comp_name}</td>
+                <td>{$branch_name}</td>
+                <td>{$dept_name}</td>       
+                <td>{$createDate}</td>
+                <td>{$row['priority']}</td>
+                <td>{$requiredBy}</td>";
+
+                            if ($_SESSION['role'] == 'admin') {
+                                echo '<td>
+                    <div class="d-flex gap-2">
+                        <a href="viewOrder.php?id=' . $row['order_no'] . '" class="btn btn-info btn-sm">
+                            <i class="fa-solid fa-print"></i>
+                        </a>
+                        
+                        <a href="deleteOrder.php?id=' . $row['order_no'] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\');">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </div>
+                  </td>';
+                            }
+
+                            echo '</tr>';
+                            $counter++;
+                        }
+
+                        echo '</tbody></table>';
+                    } elseif (isset($_GET['search']) || isset($_GET['filter_date']) || isset($_GET['show_all'])) {
+                        echo '<p class="text-center mt-3">No results found.</p>';
+                    }
+                    ?>
+
+                </div>
             </div>
+
+            <?php
+            // Function to fetch names based on IDs
+            function get_name($conn, $table, $column_name, $id_column, $id_value)
+            {
+                $query = "SELECT $column_name FROM $table WHERE $id_column = '$id_value' LIMIT 1";
+                $result = $conn->query($query);
+                if ($result && $result->num_rows > 0) {
+                    return $result->fetch_assoc()[$column_name];
+                }
+                return "N/A"; // Return default if not found
+            }
+            ?>
+        </div>
     </main>
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- jQuery library -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
     <!-- DataTables core library and export buttons -->
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
@@ -538,6 +568,10 @@ $resultShowOrders = $conn->query($showOrders);
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
 
+    <!-- Additional libraries for exporting (Excel, PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
     <!-- Bootstrap and DataTables styling -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
@@ -556,6 +590,7 @@ $resultShowOrders = $conn->query($showOrders);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
 
+
     <!-- Vendor JS Files -->
     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -565,40 +600,37 @@ $resultShowOrders = $conn->query($showOrders);
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
     <!--for datatable-->
     <script>
-        new DataTable('#perm', {
+        new DataTable('#orderT', {
+            // <!--make the table => datatable.net table and also change the alignment of the text in columns-->
+            columnDefs: [{
+                    className: "text-left",
+                    targets: [0, 1, 2, 3, 4, 5, 6, 7]
+                } // change alignment 
 
-             // <!--make the table => datatable.net table and also change the alignment of the text in columns-->
-             columnDefs: [{
-                        className: "text-left",
-                        targets: [0, 1, 2, 3, 4, 5]
-                    } // change alignment 
+            ],
 
-                ],
-                
+            //show the rows in descending order by the date
+            "order": [
+                [3, "desc"]
+            ],
+
             //show 100 rows by default
             "pageLength": 100,
 
-            layout: {
-                top1: 'searchPanes'
-            },
-
             //collapse by default
             "searchPanes": {
-                "initCollapsed": true
+                "initCollapsed": true,
+                columns: []
             }
+
         });
     </script>
-
-
 
 </body>
 

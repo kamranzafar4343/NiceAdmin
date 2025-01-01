@@ -574,7 +574,7 @@ $result = $conn->query($sql);
                             echo '<tr>';
                             // Format Date
                             $created_at = date("d-m-Y", strtotime($row["creation_date"]));
-                            
+
                             echo '<td>' . htmlspecialchars($row['box_barcode']) . '</td>';
                             echo '<td>' . htmlspecialchars($row['file_no']) . '</td>';
                             echo '<td>' . htmlspecialchars($row['status']) . '</td>';
@@ -668,7 +668,7 @@ $result = $conn->query($sql);
                 ],
                 // Sort by date added in descending order
                 "order": [
-                    [8, "desc"]
+                    [3, "desc"]
                 ],
             });
         });

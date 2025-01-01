@@ -567,7 +567,11 @@ if (isset($_GET['comp_id'])) {
                         echo '<td>' . htmlspecialchars($row['object_code']) . '</td>';
                         echo '<td>' . htmlspecialchars($row['capacity']) . '</td>';
                         echo '<td>' . $currentQuantity . '</td>';
-                        echo '<td>' . htmlspecialchars($row['created_at']) . '</td>';
+
+                        // Format Date
+                        $created_at = date("d-m-Y", strtotime($row["created_at"]));
+
+                        echo '<td>' . $created_at . '</td>';
 
                         if ($_SESSION['role'] == 'admin') {
                             echo '<td>

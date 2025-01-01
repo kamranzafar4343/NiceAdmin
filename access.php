@@ -503,7 +503,10 @@ if ($resultData->num_rows > 0) {
 
                             // Format Dates
                             $createDate = date("d-m-Y", strtotime($row['order_creation_date']));
-                            $requiredBy = date("d-m-Y", strtotime($row['date']));
+
+                            //handle date and empty values
+                            $requiredBy = !empty($row['date']) ? date("d-m-Y", strtotime($row['date'])) : '';
+
 
                             echo "<tr>
                 <td>{$row['order_no']}</td>

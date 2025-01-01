@@ -453,7 +453,7 @@ if (isset($_POST['submit'])) {
 
                     <div class="col-md-5">
                         <label for="purirty" class="form-label">Service Priority</label>
-                        <select class="form-select" id="purirty" name="purirty" required>
+                        <select class="form-select" id="purirty" name="purirty" >
                             <option value="">Select Service Priority</option>
                             <option value="Urgent">Urgent - Rush Same Day</option>
                             <option value="Regular">Regular - Next Working Day</option>
@@ -463,7 +463,7 @@ if (isset($_POST['submit'])) {
                     <!-- Required BY -->
                     <div class="col-md-3">
                         <label class="form-label">Required By</label>
-                        <input type="datetime-local" class="form-control" name="date" id="dateField" required>
+                        <input type="datetime-local" class="form-control" name="date" id="dateField" >
                     </div>
 
                     <!-- hidden field -->
@@ -505,9 +505,9 @@ if (isset($_POST['submit'])) {
 
                     <!-- Select Requestor -->
                     <div class="col-md-4">
-                        <label for="">Contact Person:</label>
+                        <label for="">Requestor:</label>
                         <select id="requestor" class="form-select" name="requestor_name">
-                            <option value="">Select contact person</option>
+                            <option value="">Select Requestor</option>
                         </select>
                     </div>
 
@@ -524,7 +524,7 @@ if (isset($_POST['submit'])) {
                     <!--  Comments -->
                     <div class="col-md-5">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
+                        <input type="text" class="form-control" id="description" name="description">
                     </div>
 
                     <div class="text-center mt-4 mb-2 ml-2">

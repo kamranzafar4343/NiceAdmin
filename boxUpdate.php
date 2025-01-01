@@ -402,7 +402,7 @@ include "sidebarcode.php";
                         <option value="">Select Status</option>
                         <option value="In" <?php echo $fetch_status == 'In' ? 'selected' : ''; ?>>In</option>
                         <option value="Out" <?php echo $fetch_status == 'Out' ? 'selected' : ''; ?>>Out</option>
-                        <option value="Out" <?php echo $fetch_status == 'Perm Out' ? 'selected' : ''; ?>>Perm Out</option>
+                        <option value="Out" <?php echo $fetch_status == 'Permout' ? 'selected' : ''; ?>>Permout</option>
                         <option value="Destroyed" <?php echo $fetch_status == 'Destroyed' ? 'selected' : ''; ?>>Destroyed</option>
                     </select>
                 </div>

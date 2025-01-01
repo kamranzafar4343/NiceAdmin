@@ -479,7 +479,7 @@ if ($resultData->num_rows > 0) {
                         echo '<table id="orderT" class="table mt-4">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>Workorder#</th>
                     <th>Company</th>
                     <th>Branch</th>
                     <th>Department</th>

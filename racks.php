@@ -173,8 +173,8 @@ if (isset($_GET['comp_id'])) {
 
         #fixedButtonBranch {
             position: relative;
-            top: 28px;
-            left: 1187px;
+            top: 18px;
+            left: -2px;
         }
 
         .row {
@@ -443,96 +443,96 @@ if (isset($_GET['comp_id'])) {
     <!-- Button to add a new rack -->
     <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php';" class="btn btn-primary mt-5 mb-3">Add Rack</button>
 
-<!-- Main content -->
-<main id="main" class="main">
-    <div class="mt-4">
-        <br>
-    </div>
-    <div class="col-12">
-        <div class="cardBranch recent-sales overflow-auto mt-5">
-            <div class="card-body">
+    <!-- Main content -->
+    <main id="main" class="main">
+        <div class="mt-4">
+            <br>
+        </div>
+        <div class="col-12">
+            <div class="cardBranch recent-sales overflow-auto mt-5">
+                <div class="card-body">
 
-                <!-- Title and Add Button -->
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <h5 class="card-title">Search Racks</h5>
-                    </div>
-                    <div class="col-6 text-end">
-                        <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php'" class="btn btn-primary">Add Rack</button>
-                    </div>
-                </div>
-
-                <!-- Search Form -->
-                <form method="GET" action="" class="row g-3 mb-3">
-
-                    <!-- First Row: Column and Search Value -->
-                    <div class="col-md-4">
-                        <label for="column" class="form-label">Select Column</label>
-                        <select name="column" id="column" class="form-select">
-                            <option value="" selected>Choose...</option>
-                            <option value="rack_location">Rack Location</option>
-                            <option value="rack_description">Rack Description</option>
-                            <option value="object_code">Object Code</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="value" class="form-label">Search Value</label>
-                        <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
+                    <!-- Title and Add Button -->
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <h5 class="card-title">Search Racks</h5>
+                        </div>
+                        <div class="col-6 text-end">
+                            <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php'" class="btn btn-primary">Add Rack</button>
+                        </div>
                     </div>
 
-                    <!-- Buttons for Search and Show All -->
-                    <div class="col-md-4 d-flex align-items-end gap-2">
-                        <button type="submit" name="search" class="btn btn-primary w-50">Search</button>
-                        <button type="submit" name="show_all" class="btn btn-secondary w-50">Show All</button>
-                    </div>
+                    <!-- Search Form -->
+                    <form method="GET" action="" class="row g-3 mb-3">
 
-                    <!-- Second Row: Date Range Filter -->
-                    <div class="col-md-4">
-                        <label for="start_date" class="form-label">Start Date</label>
-                        <input type="date" name="start_date" id="start_date" class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="end_date" class="form-label">End Date</label>
-                        <input type="date" name="end_date" id="end_date" class="form-control">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" name="filter_date" class="btn btn-secondary w-100 px-4 py-2">
-                            Filter Dates
-                        </button>
-                    </div>
-                </form>
+                        <!-- First Row: Column and Search Value -->
+                        <div class="col-md-4">
+                            <label for="column" class="form-label">Select Column</label>
+                            <select name="column" id="column" class="form-select">
+                                <option value="" selected>Choose...</option>
+                                <option value="rack_location">Rack Location</option>
+                                <option value="rack_description">Rack Description</option>
+                                <option value="object_code">Object Code</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="value" class="form-label">Search Value</label>
+                            <input type="text" name="value" id="value" class="form-control" placeholder="Enter search value">
+                        </div>
 
-                <!-- Table -->
-                <?php
-                include 'config/db.php';
+                        <!-- Buttons for Search and Show All -->
+                        <div class="col-md-4 d-flex align-items-end gap-2">
+                            <button type="submit" name="search" class="btn btn-primary w-50">Search</button>
+                            <button type="submit" name="show_all" class="btn btn-secondary w-50">Show All</button>
+                        </div>
 
-                // Default Query - No rows initially
-                $query = "SELECT * FROM racks WHERE 1=1";
+                        <!-- Second Row: Date Range Filter -->
+                        <div class="col-md-4">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="date" name="end_date" id="end_date" class="form-control">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" name="filter_date" class="btn btn-secondary w-100 px-4 py-2">
+                                Filter Dates
+                            </button>
+                        </div>
+                    </form>
 
-                // If Search Button is Clicked
-                if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
-                    $column = $conn->real_escape_string($_GET['column']);
-                    $value = $conn->real_escape_string($_GET['value']);
-                    $query .= " AND $column LIKE '%$value%'";
-                }
+                    <!-- Table -->
+                    <?php
+                    include 'config/db.php';
 
-                // If Date Range Filter is Applied
-                if (isset($_GET['filter_date']) && !empty($_GET['start_date']) && !empty($_GET['end_date'])) {
-                    $start_date = $conn->real_escape_string($_GET['start_date']);
-                    $end_date = $conn->real_escape_string($_GET['end_date']);
-                    $query .= " AND created_at BETWEEN '$start_date' AND '$end_date'";
-                }
+                    // Default Query - No rows initially
+                    $query = "SELECT * FROM racks WHERE 1=0";
 
-                // If Show All Button is Clicked
-                if (isset($_GET['show_all'])) {
-                    $query = "SELECT * FROM racks";
-                }
+                    // If Search Button is Clicked
+                    if (isset($_GET['search']) && !empty($_GET['column']) && !empty($_GET['value'])) {
+                        $column = $conn->real_escape_string($_GET['column']);
+                        $value = $conn->real_escape_string($_GET['value']);
+                        $query .= " AND $column LIKE '%$value%'";
+                    }
 
-                // Execute Query
-                $result = $conn->query($query);
+                    // If Date Range Filter is Applied
+                    if (isset($_GET['filter_date']) && !empty($_GET['start_date']) && !empty($_GET['end_date'])) {
+                        $start_date = $conn->real_escape_string($_GET['start_date']);
+                        $end_date = $conn->real_escape_string($_GET['end_date']);
+                        $query .= " AND created_at BETWEEN '$start_date' AND '$end_date'";
+                    }
 
-                if ($result && $result->num_rows > 0) {
-                    echo '<table id="racks" class="table table-striped mt-4">
+                    // If Show All Button is Clicked
+                    if (isset($_GET['show_all'])) {
+                        $query = "SELECT * FROM racks";
+                    }
+
+                    // Execute Query
+                    $result = $conn->query($query);
+
+                    if ($result && $result->num_rows > 0) {
+                        echo '<table id="racks" class="table table-striped mt-4">
                         <thead>
                             <tr>
                                 <th scope="col">Rack Location</th>
@@ -541,13 +541,13 @@ if (isset($_GET['comp_id'])) {
                                 <th scope="col">Capacity</th>
                                 <th scope="col">Current Quantity</th>
                                 <th scope="col">Added on</th>';
-                    if ($_SESSION['role'] == 'admin') {
-                        echo '<th scope="col">Actions</th>';
-                    }
-                    echo '</tr></thead><tbody>';
+                        if ($_SESSION['role'] == 'admin') {
+                            echo '<th scope="col">Actions</th>';
+                        }
+                        echo '</tr></thead><tbody>';
 
-                    while ($row = $result->fetch_assoc()) {
-//count current quantity for current location of rack
+                        while ($row = $result->fetch_assoc()) {
+                            //count current quantity for current location of rack
                             // Get the current rack's location
                             $location = $row['rack_location']; // Adjust column name if necessary
 
@@ -561,20 +561,20 @@ if (isset($_GET['comp_id'])) {
                                 $currentQuantity = $quantityRow['quantity'];
                             }
 
-                        echo '<tr>';
-                        echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_location'] . '</a></td>';
-                        echo '<td>' . htmlspecialchars($row['rack_description']) . '</td>';
-                        echo '<td>' . htmlspecialchars($row['object_code']) . '</td>';
-                        echo '<td>' . htmlspecialchars($row['capacity']) . '</td>';
-                        echo '<td>' . $currentQuantity . '</td>';
+                            echo '<tr>';
+                            echo '<td><a class="text-primary fw-bold" href="rackInfo.php?id=' . $row['id'] . '">' . $row['rack_location'] . '</a></td>';
+                            echo '<td>' . htmlspecialchars($row['rack_description']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['object_code']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['capacity']) . '</td>';
+                            echo '<td>' . $currentQuantity . '</td>';
 
-                        // Format Date
-                        $created_at = date("d-m-Y", strtotime($row["created_at"]));
+                            // Format Date
+                            $created_at = date("d-m-Y", strtotime($row["created_at"]));
 
-                        echo '<td>' . $created_at . '</td>';
+                            echo '<td>' . $created_at . '</td>';
 
-                        if ($_SESSION['role'] == 'admin') {
-                            echo '<td>
+                            if ($_SESSION['role'] == 'admin') {
+                                echo '<td>
                                 <div style="display: flex; gap: 10px;">
                                     <a href="rackDelete.php?id=' . $row['id'] . '" class="btn btn-danger btn-sm" 
                                        onclick="return confirm(\'Are you sure you want to delete this record?\');">
@@ -582,18 +582,18 @@ if (isset($_GET['comp_id'])) {
                                     </a>
                                 </div>
                             </td>';
+                            }
+                            echo '</tr>';
                         }
-                        echo '</tr>';
+                        echo '</tbody></table>';
+                    } elseif (isset($_GET['search']) || isset($_GET['filter_date']) || isset($_GET['show_all'])) {
+                        echo '<p class="text-center mt-3">No results found.</p>';
                     }
-                    echo '</tbody></table>';
-                } elseif (isset($_GET['search']) || isset($_GET['filter_date']) || isset($_GET['show_all'])) {
-                    echo '<p class="text-center mt-3">No results found.</p>';
-                }
-                ?>
+                    ?>
+                </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
 
     <script>
@@ -670,7 +670,7 @@ if (isset($_GET['comp_id'])) {
             columnDefs: [{
                     className: "text-left",
                     targets: [0, 1, 2, 3, 4, 5],
-                    
+
                 } // change alignment 
 
             ],

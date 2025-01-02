@@ -78,12 +78,11 @@ if (isset($_POST['submit'])) {
         if ($conn->query($sql) === TRUE) {
 
             //if query is successful, out the boxes(set status = out of the selected boxes against this workorder)
-            $sql2 = "UPDATE box SET status = 'Permout' WHERE barcode IN ('$boxBarcodesString')";
+            $sql2 = "UPDATE box SET status = 'Permout', location= '' WHERE barcode IN ('$boxBarcodesString')";
 
             if ($conn->query($sql2) === TRUE) {
 
-                //set location of the boxes to empty string
-                $sql3 = "UPDATE box SET location = '' WHERE barcode IN ('$boxBarcodesString')";
+                $sql3 = "UPDATE item SET status = 'Permout' WHERE box_barcode IN ('$boxBarcodesString')";
 
                 if ($conn->query($sql3) === TRUE) {
                     // Redirect to the view page

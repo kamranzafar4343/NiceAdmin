@@ -87,8 +87,8 @@ if (isset($_POST['submit'])) {
             if ($conn->query($sql2) === TRUE) {
  
                 //also delete the boxes location
-                $sql3 = "UPDATE box SET loction = '' WHERE barcode IN ('$boxBarcodesString')";
-                
+                $sql3 = "UPDATE box SET location = '' WHERE barcode IN ('$boxBarcodesString')";
+
                 if ($conn->query($sql3) === TRUE) {
                     //if query is successful, redirect to the destroy workorder page
                     header("Location: destroy.php");

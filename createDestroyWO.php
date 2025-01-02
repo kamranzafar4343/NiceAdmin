@@ -85,9 +85,18 @@ if (isset($_POST['submit'])) {
             $sql2 = "UPDATE box SET status = 'Destroyed' WHERE barcode IN ('$boxBarcodesString')";
            
             if ($conn->query($sql2) === TRUE) {
-                // Redirect to the order page
-                header("Location: destroy.php");
-                exit();
+ 
+                //also delete the boxes location
+                $sql3 = "UPDATE box SET loction = '' WHERE barcode IN ('$boxBarcodesString')";
+                
+                if ($conn->query($sql3) === TRUE) {
+                    //if query is successful, redirect to the destroy workorder page
+                    header("Location: destroy.php");
+                    exit();
+                } else {
+                    echo "Error: " . $sql3 . "<br>" . $conn->error;
+                    exit();
+                }
             } else {
                 echo "Error: " . $sql2 . "<br>" . $conn->error;
                 exit();

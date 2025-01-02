@@ -440,9 +440,6 @@ if (isset($_GET['comp_id'])) {
     ?>
     <!-- sidebar end -->
 
-    <!-- Button to add a new rack -->
-    <button id="fixedButtonBranch" type="button" onclick="window.location.href = 'createRack.php';" class="btn btn-primary mt-5 mb-3">Add Rack</button>
-
     <!-- Main content -->
     <main id="main" class="main">
         <div class="mt-4">

@@ -476,14 +476,13 @@ if ($resultData->num_rows > 0) {
                     $result = $conn->query($query);
 
                     if ($result && $result->num_rows > 0) {
-                        echo '<table id="orderT" class="table mt-4">
+                        echo '<table id="orderT" class="table table-striped mt-4">
             <thead>
                 <tr>
                     <th>Workorder#</th>
                     <th>Company</th>
                     <th>Branch</th>
                     <th>Department</th>
-                
                     <th>Create Date</th>
                     <th>Priority</th>
                     <th>Required By</th>';

@@ -552,7 +552,7 @@ End Search Bar -->
 
                     // Display Table if Results Exist
                     if ($result && $result->num_rows > 0) {
-                        echo '<table id="box" class="table mt-4">
+                        echo '<table id="box" class="table table-striped mt-4">
                 <thead>
                     <tr>
                         <th scope="col">Company</th>

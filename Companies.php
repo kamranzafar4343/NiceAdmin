@@ -290,7 +290,7 @@ $result = $conn->query($sql);
 
         // Display Table if Results Exist
         if ($result && $result->num_rows > 0) {
-            echo '<table id="companies" class="table mt-4">
+            echo '<table id="companies" class="table table-striped mt-4">
                     <thead>
                         <tr>
                             <th scope="col">Company Name</th>

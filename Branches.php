@@ -443,7 +443,7 @@ if ($result2->num_rows > 0) {
                     <?php
                     if ($result->num_rows > 0) {
                     ?>
-                        <table id="branchTable" class="table" style="width:100%">
+                        <table id="branchTable" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
                                     <th scope="col">Branch Name</th>

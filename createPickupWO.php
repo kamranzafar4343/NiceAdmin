@@ -83,10 +83,19 @@ if (isset($_POST['submit'])) {
             // Update box status
             if (!empty($boxBarcodes)) {
                 $sql2 = "UPDATE box SET status = 'In' WHERE barcode IN ('" . implode("','", $boxBarcodes) . "')";
+                
                 if ($conn->query($sql2) === TRUE) {
-                    // Redirect to the order page
-                    header("Location: order.php");
+                //update item status
+                $sql3 = "UPDATE item SET status = 'In' WHERE barcode IN ('" . implode("','", $boxBarcodes) . "')";
+                
+                if ($conn->query($sql3) === TRUE) {
+                    // Redirect to the order details page
+                    header("Location: pickup.php");
                     exit();
+                } else {
+                    echo "Error: " . $sql3 . "<br>" . $conn->error;
+                    exit();
+                    }
                 } else {
                     echo "Error: " . $sql2 . "<br>" . $conn->error;
                     exit();

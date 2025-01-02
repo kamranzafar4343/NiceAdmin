@@ -82,12 +82,12 @@ if (isset($_POST['submit'])) {
         if ($conn->query($sql) === TRUE) {
             
             //if query is successful, out the boxes(set status = out of the selected boxes against this workorder)
-            $sql2 = "UPDATE box SET status = 'Destroyed' WHERE barcode IN ('$boxBarcodesString')";
+            $sql2 = "UPDATE box SET status = 'Destroyed', location='' WHERE barcode IN ('$boxBarcodesString')";
            
             if ($conn->query($sql2) === TRUE) {
  
                 //also delete the boxes location
-                $sql3 = "UPDATE box SET location = '' WHERE barcode IN ('$boxBarcodesString')";
+                $sql3 = "UPDATE item SET status = 'destroyed' WHERE box_barcode IN ('$boxBarcodesString')";
 
                 if ($conn->query($sql3) === TRUE) {
                     //if query is successful, redirect to the destroy workorder page

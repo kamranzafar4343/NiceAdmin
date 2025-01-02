@@ -58,7 +58,7 @@ if (isset($_POST['submit'])) {
         $query = "SELECT COUNT(*) FROM orders WHERE barcode = '$barcode'";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_array($result);
-        
+
         if ($row[0] > 0) {
             // If barcode exists, add to existingBarcodes array
             $existingBarcodes[] = $barcode;
@@ -74,21 +74,28 @@ if (isset($_POST['submit'])) {
         // If no barcodes exist, proceed with the insert
         $sql = "INSERT INTO orders(creator, flag, comp_id_fk, branch_id_fk, dept_id_fk, status, priority, date, foc, foc_phone, pickup_address, barcode, requestor, role, req_date, description) 
                 VALUES ('$creator', 'Delivery', '$comp', '$branch', '$dept', 'Pending', '$priority', '$date', '$foc', '$foc_phone', '$pickup_address', '$boxBarcodesString', '$requestor_name', '$role', '$request_date', '$description')";
-        
+
         if ($conn->query($sql) === TRUE) {
-            
+
             //if query is successful, out the boxes(set status = out of the selected boxes against this workorder)
             $sql2 = "UPDATE box SET status = 'Out' WHERE barcode IN ('$boxBarcodesString')";
-           
+
             if ($conn->query($sql2) === TRUE) {
-                // Redirect to the order page
-                header("Location: order.php");
-                exit();
+                //also update the status of items
+                $sql3 = "UPDATE item SET status = 'Out' WHERE barcode IN ('$boxBarcodesString')";
             } else {
                 echo "Error: " . $sql2 . "<br>" . $conn->error;
                 exit();
             }
-           } else {
+
+            if ($conn->query($sql3) === TRUE) {
+                // Redirect to the order page
+                header("Location: order.php");
+            } else {
+                echo "Error: " . $sql3 . "<br>" . $conn->error;
+                exit();
+            }
+        } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
             exit();
         }
@@ -835,7 +842,7 @@ if (isset($_POST['submit'])) {
                             emp_id: emp_id
                         },
                         success: function(response) {
-                            var response = JSON.parse(response); 
+                            var response = JSON.parse(response);
 
                             document.getElementById('designation').value = response.role;
                             console.log(response.role);

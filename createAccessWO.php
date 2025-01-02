@@ -85,9 +85,16 @@ if (isset($_POST['submit'])) {
             $sql2 = "UPDATE box SET status = 'Out' WHERE barcode IN ('$boxBarcodesString')";
            
             if ($conn->query($sql2) === TRUE) {
-                // Redirect to the order page
-                header("Location: access.php");
-                exit();
+ 
+                //update item status
+                $sql3 = "UPDATE item SET status = 'Out' WHERE barcode IN ('$boxBarcodesString')";
+                if ($conn->query($sql3) === TRUE) {
+                    header("Location: access.php");
+                    exit();
+                } else {    
+                    echo "Error: " . $sql3 . "<br>" . $conn->error;
+                    exit();
+                }
             } else {
                 echo "Error: " . $sql2 . "<br>" . $conn->error;
                 exit();

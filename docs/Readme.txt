@@ -1,85 +1,69 @@
-PHP Admin Panel Documentation
-Overview
-This project is a PHP-based admin panel designed to manage and streamline administrative tasks efficiently. It provides a responsive interface for CRUD operations and supports both desktop and mobile usage.
+# Warehouse Management System
 
-Features
-User Authentication: Secure login and registration.
-Dashboard: Quick overview of metrics and administrative tools.
-CRUD Operations: Manage data entries seamlessly.
-Responsive Design: Optimized for all devices.
-Data Management: Handle users, settings, and critical data.
+![Warehouse Management](https://example.com/your-image-url.jpg) <!-- Replace with an actual image URL -->
 
-Installation
-Prerequisites
-PHP 7.4 or higher
-MySQL or MariaDB
-Apache or Nginx web server
-Setup Instructions
-Clone the Repository:
-bash
-Copy code
-git clone https://github.com/kamranzafar4343/NiceAdmin.git
+A modern and efficient Warehouse Management System built with PHP, JavaScript, jQuery, and AJAX. This application aims to streamline administrative tasks and provide a user-friendly interface for managing warehouse operations.
 
+## Features
 
-Navigate to the Project Directory:
-bash
-Copy code
-cd NiceAdmin
+- **User Authentication**: Secure login and registration for users.
+- **Dashboard**: An intuitive dashboard providing a quick overview of key metrics.
+- **CRUD Operations**: Easily manage data entries with Create, Read, Update, and Delete functionalities.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **Data Management**: Comprehensive tools for handling users, settings, and critical data.
 
+![Dashboard Screenshot](https://example.com/dashboard-screenshot.jpg) <!-- Replace with an actual image URL -->
 
-Database Configuration:
-Create a new MySQL database and user.
-Import the schema from the catmarketing.sql file.
-Install Dependencies: If you are using Composer:
-bash
-Copy code
-composer install
+## Technology Stack
 
+- **Backend**: PHP 7.4 or higher
+- **Database**: MySQL or MariaDB
+- **Web Server**: Apache or Nginx
+- **Frontend**: JavaScript, jQuery, AJAX
 
-Configure Web Server:
-Point your web server to the project directory.
-Ensure proper permissions for uploads and logs.
-Access Admin Panel: Open a browser and visit:
-arduino
-Copy code
-http://localhost/index.php
+## Installation
 
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/kamranzafar4343/Warehouse-Management-System.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd Warehouse-Management-System
+   ```
+3. Set up the database and update the configuration file.
+4. Run the application on your local server.
 
+## Usage
 
-Usage
-Logging In
-Use the credentials set during setup to access the admin panel.
-Dashboard
-Access all administrative tools from the dashboard for seamless management.
-CRUD Operations
-Add, update, delete, and view records directly through the interface.
+- Access the application via your web browser.
+- Use your credentials to log in and explore the features.
 
-Folder Structure
-NiceAdmin/
-├── assets/        # Contains CSS, JS, and images
-├── vendor/        # Contains external libraries and dependencies
-├── docs/          # Project-related documentation
-├── uploads/       # File uploads storage
-├── config/        # Database configuration files
-├── index.php      # Main entry point
-└── ...            # Other feature-specific PHP files
+## Contributing
 
+Contributions are welcome! Please follow these steps:
 
-Contributing
-Fork the repository.
-Create a feature branch:
-bash
-Copy code
-git checkout -b feature-name
+1. Fork the repository.
+2. Create a new branch:
+   ```bash
+   git checkout -b feature/YourFeature
+   ```
+3. Make your changes and commit them:
+   ```bash
+   git commit -m "Add your feature"
+   ```
+4. Push to the branch:
+   ```bash
+   git push origin feature/YourFeature
+   ```
+5. Create a pull request.
 
+## License
 
-Commit changes:
-bash
-Copy code
-git commit -m "Add feature"
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
+## Acknowledgments
 
-Push and submit a pull request.
+- Thanks to all contributors and the open-source community for their support.
 
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
+![Footer Image](https://example.com/footer-image.jpg) <!-- Replace with an actual image URL -->
